@@ -1,0 +1,16 @@
+{
+  "React funciton components": {
+    "prefix": "rnfc",
+    "body": [
+      "import { View } from 'tamagui'",
+      "",
+      "const $1: React.FC = () => {",
+      "  return <View></View>",
+      "}",
+      "",
+      "export default $1",
+      ""
+    ],
+    "description": "React funciton components"
+  }
+}
