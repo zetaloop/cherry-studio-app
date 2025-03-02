@@ -1,21 +1,16 @@
-import { PanelLeftOpen } from '@tamagui/lucide-icons'
-import { useState } from 'react'
-import { Button, Text, View, XStack } from 'tamagui'
+import React, { Children } from 'react'
+import { Stack, XStack } from 'tamagui'
 
-import { useSafeArea } from '@/hooks/useSafeArea'
-
-import SideBar from '../SideBar'
-
-export const NavBar: React.FC = () => {
-  const insets = useSafeArea()
-  const [open, setOpen] = useState(false)
+export const NavBar: React.FC<{ children: React.ReactNode; itemsPosition: ('left' | 'right' | 'center')[] }> = ({
+  children,
+  itemsPosition = ['left']
+}) => {
+  const _children = Children.toArray(children)
   return (
-    <View position="absolute" top={0} left={0} paddingTop={insets.top}>
-      <XStack alignItems="center">
-        <Button onPress={() => setOpen(true)} icon={PanelLeftOpen} />
-        <SideBar isOpen={open} onClose={() => setOpen(false)} />
-        <Text>话题名称</Text>
-      </XStack>
-    </View>
+    <XStack width={'100%'} position="fixed" top={0} left={0} alignItems="center" justifyContent="space-between">
+      <Stack>{_children[itemsPosition.indexOf('left')]}</Stack>
+      <Stack>{_children[itemsPosition.indexOf('center')]}</Stack>
+      <Stack>{_children[itemsPosition.indexOf('right')]}</Stack>
+    </XStack>
   )
 }
