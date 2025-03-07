@@ -1,9 +1,7 @@
 import { Search } from '@tamagui/lucide-icons'
+import { useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, SizableText, XStack, YStack } from 'tamagui'
-
-import { Assistant } from '@/components/Assitant'
-import { NavBar } from '@/components/NavBar'
+import { Avatar, AvatarImage, Button, ListItem, SizableText, XStack, YGroup } from 'tamagui'
 
 const assistants = [
   {
@@ -24,19 +22,30 @@ const assistants = [
 ]
 
 const HomeScreen: React.FC = () => {
+  const router = useRouter()
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <NavBar itemsPosition={['center', 'right']}>
+      <XStack justifyContent="space-between" alignItems="center">
         <SizableText fontSize={20}>Assistant</SizableText>
-        <XStack>
-          <Button icon={Search} />
-        </XStack>
-      </NavBar>
-      <YStack width={'100%'}>
+        <Button icon={Search} />
+      </XStack>
+      <YGroup width={'100%'}>
         {assistants.map(item => (
-          <Assistant width={'100%'} key={item.name} {...item} />
+          <YGroup.Item key={item.name}>
+            <ListItem
+              hoverTheme
+              onPress={() => router.push(`/assistant/${item.name}`)}
+              icon={
+                <Avatar circular size="$4">
+                  <AvatarImage src={item.avatar} />
+                </Avatar>
+              }
+              title={item.name}
+              subTitle={item.message}
+            />
+          </YGroup.Item>
         ))}
-      </YStack>
+      </YGroup>
     </SafeAreaView>
   )
 }

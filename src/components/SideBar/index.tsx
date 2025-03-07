@@ -14,8 +14,6 @@ import {
   YStack
 } from 'tamagui'
 
-import Icon from '@/assets/images/icon.png'
-
 const Sidebar: React.FC<{
   isOpen: boolean
   onClose: () => void
@@ -48,7 +46,7 @@ const Sidebar: React.FC<{
           <XStack alignItems="center">
             <Avatar size="$3">
               <AvatarFallback backgroundColor="$blue5" />
-              <AvatarImage source={Icon} />
+              <AvatarImage source={require('@/assets/images/icon.png')} />
             </Avatar>
             <Text fontSize="$6" fontWeight="700" ml="$3">
               Cherry Studio

@@ -5,19 +5,24 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button } from 'tamagui'
 
 export default function TopicPage() {
-  const { id, topic } = useLocalSearchParams()
+  const { id, topic } = useLocalSearchParams<{
+    id: string
+    topic: string
+  }>()
 
   return (
     <SafeAreaView>
       <Link
         href={{
-          pathname: `/`,
+          pathname: `/assistant/[id]`,
           params: { id }
         }}
         asChild>
         <Button icon={ArrowLeft} />
       </Link>
-      <Text>topic - {topic}</Text>
+      <Text>
+        assistant - {id}/topic - {topic}
+      </Text>
     </SafeAreaView>
   )
 }

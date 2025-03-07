@@ -1,6 +1,6 @@
 import { TextArea, YStack } from 'tamagui'
 
-import { InputBarItems } from './InputBarItems'
+import { InputBarItems } from './input-bar-items'
 
 export const InputBar: React.FC = () => {
   return (
