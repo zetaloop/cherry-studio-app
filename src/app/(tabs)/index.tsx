@@ -1,7 +1,5 @@
-import { Search } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Avatar, AvatarImage, Button, ListItem, SizableText, XStack, YGroup } from 'tamagui'
+import { Avatar, AvatarImage, ListItem, View, YGroup } from 'tamagui'
 
 const assistants = [
   {
@@ -24,11 +22,7 @@ const assistants = [
 const HomeScreen: React.FC = () => {
   const router = useRouter()
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <XStack justifyContent="space-between" alignItems="center">
-        <SizableText fontSize={20}>Assistant</SizableText>
-        <Button icon={Search} />
-      </XStack>
+    <View style={{ flex: 1 }}>
       <YGroup width={'100%'}>
         {assistants.map(item => (
           <YGroup.Item key={item.name}>
@@ -46,7 +40,7 @@ const HomeScreen: React.FC = () => {
           </YGroup.Item>
         ))}
       </YGroup>
-    </SafeAreaView>
+    </View>
   )
 }
 

@@ -1,6 +1,7 @@
 import { Settings } from '@tamagui/lucide-icons'
 import { Link } from 'expo-router'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import type { StackProps, TabLayout, TabsTabProps } from 'tamagui'
 import {
@@ -18,10 +19,12 @@ import {
   YStack
 } from 'tamagui'
 
-type TabType = '智能体' | '知识库' | '文件'
+type TabType = 'agents' | 'knowledge' | 'files'
 
 export default function ProfilePage() {
-  const tabs: TabType[] = ['智能体', '知识库', '文件']
+  const { t } = useTranslation()
+
+  const tabs: TabType[] = ['agents', 'knowledge', 'files']
 
   const [tabState, setTabState] = useState<{
     currentTab: TabType
@@ -30,7 +33,7 @@ export default function ProfilePage() {
     prevActiveAt: TabLayout | null
   }>({
     activeAt: null,
-    currentTab: '智能体',
+    currentTab: 'agents',
     intentAt: null,
     prevActiveAt: null
   })
@@ -78,12 +81,12 @@ export default function ProfilePage() {
           {/* 用户头像 */}
           <Avatar circular size="$12">
             <AvatarFallback backgroundColor="$blue5" />
-            <AvatarImage source={{ uri: 'https://picsum.photos/200/200?mountain=1' }} alt="用户头像" />
+            <AvatarImage source={{ uri: 'https://picsum.photos/200/200?mountain=1' }} alt={t('profile.avatar')} />
           </Avatar>
 
           {/* 用户名 */}
           <YStack alignItems="center" gap={4}>
-            <H4>User</H4>
+            <H4>{'username'}</H4>
           </YStack>
 
           {/* 编辑个人资料按钮 */}
@@ -94,7 +97,7 @@ export default function ProfilePage() {
             borderWidth={1}
             borderRadius="$4"
             paddingHorizontal="$6">
-            编辑个人资料
+            {t('profile.editProfile')}
           </Button>
 
           {/* 使用带动画效果的 Tabs 组件 */}
@@ -153,7 +156,7 @@ export default function ProfilePage() {
                     <Text
                       color={currentTab === tab ? 'black' : '$gray9'}
                       fontWeight={currentTab === tab ? 'bold' : 'normal'}>
-                      {tab}
+                      {t(`${tab}.title`)}
                     </Text>
                   </Tabs.Tab>
                 ))}
@@ -164,19 +167,19 @@ export default function ProfilePage() {
             <AnimatePresence exitBeforeEnter custom={{ direction }} initial={false}>
               <AnimatedYStack key={currentTab}>
                 <Tabs.Content value={currentTab} forceMount width="100%">
-                  {currentTab === '智能体' ? (
+                  {currentTab === 'agents' ? (
                     <YStack alignItems="center" paddingVertical="$8" gap={12} width="100%">
                       <Text fontSize="$6" color="$yellow10">
                         😜
                       </Text>
-                      <Text color="$gray8">点击创建第一个AI智能体</Text>
+                      <Text color="$gray8">{t('profile.createFirstAgent')}</Text>
                       <Button backgroundColor="$blue9" color="white" borderRadius="$4" paddingHorizontal="$6">
-                        去创建
+                        {t('profile.create')}
                       </Button>
                     </YStack>
                   ) : (
                     <YStack alignItems="center" paddingVertical="$8" width="100%">
-                      <Text color="$gray8">暂无{currentTab}内容</Text>
+                      <Text color="$gray8">{t('profile.noContent', { type: t(`${currentTab}.title`) })}</Text>
                     </YStack>
                   )}
                 </Tabs.Content>

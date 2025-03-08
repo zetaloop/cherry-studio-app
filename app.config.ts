@@ -33,7 +33,8 @@ export default {
           resizeMode: 'contain',
           backgroundColor: '#ffffff'
         }
-      ]
+      ],
+      'expo-localization'
     ],
     experiments: {
       typedRoutes: true
