@@ -4,7 +4,7 @@ export default {
     slug: 'cherry-studio',
     version: '1.0.0',
     orientation: 'portrait',
-    icon: './src/assets/images/icon.png',
+    icon: './src/assets/images/favicon.png',
     scheme: 'cherry-studio',
     userInterfaceStyle: 'automatic',
     newArchEnabled: true,
@@ -21,7 +21,7 @@ export default {
     web: {
       bundler: 'metro',
       output: 'static',
-      favicon: './assets/images/favicon.png'
+      favicon: './src/assets/images/favicon.png'
     },
     plugins: [
       'expo-router',
