@@ -13,25 +13,24 @@ export default function SettingsPage() {
       <ScrollView>
         <YStack padding="$4" gap={4} flex={1}>
           <Text fontSize="$6" fontWeight="bold">
-            设置
+            {t('settings.title')}
           </Text>
 
-          {/* <SettingItem title="模型服务" href="" /> */}
-          {/* <SettingItem title="默认模型" href="" /> */}
-          {/* <SettingItem title="网络搜索" href="" /> */}
-          <SettingItem title={t('settings.general.title')} href="/settings/general-settings" />
-          {/* <SettingItem title="显示设置" href="" /> */}
-          {/* <SettingItem title="快捷方式" href="" /> */}
-          {/* <SettingItem title="快捷助手" href="" /> */}
-          {/* <SettingItem title="数据设置" href="" /> */}
-          {/* <SettingItem title="关于我们" href="" /> */}
+          <YStack gap={4} flex={1} marginTop={16}>
+            <SettingItem title={t('settings.provider.title')} href="/settings/providers" />
+            <SettingItem title={t('settings.model')} href="/settings/model" />
+            <SettingItem title={t('settings.websearch.title')} href="/settings/websearch-settings" />
+            <SettingItem title={t('settings.general.title')} href="/settings/general-settings" />
+            <SettingItem title={t('settings.display.title')} href="/settings/display" />
+            <SettingItem title={t('settings.data.title')} href="/settings/data" />
+            <SettingItem title={t('settings.about.title')} href="/settings/about-settings" />
+          </YStack>
         </YStack>
       </ScrollView>
     </SafeAreaView>
   )
 }
 
-// 设置项组件
 function SettingItem({ title, href }: { title: string; href: ComponentProps<typeof Link>['href'] }) {
   return (
     <Link href={href} asChild>

@@ -38,9 +38,7 @@ export default function ProfilePage() {
     prevActiveAt: null
   })
 
-  // 修改 setCurrentTab 函数的定义
   const setCurrentTab = (value: string) => {
-    // 将 string 类型转换为 TabType 类型
     const currentTab = value as TabType
     setTabState({ ...tabState, currentTab })
   }

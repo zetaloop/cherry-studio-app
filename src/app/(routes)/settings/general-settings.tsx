@@ -2,13 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { ScrollView, Text, XStack, YStack } from 'tamagui'
 
-// eslint-disable-next-line import/no-unresolved
+import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '@/components/settings'
 import { Select } from '@/components/ui/select'
-// eslint-disable-next-line import/no-unresolved
 import i18n, { getLanguage } from '@/i18n'
-// eslint-disable-next-line import/no-unresolved
 import { LanguageVarious } from '@/types'
 
 const languagesOptions: { value: LanguageVarious; label: string; flag: string }[] = [
@@ -41,42 +38,38 @@ export default function SettingsPage() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView>
-        <YStack padding="$4" gap={16} flex={1}>
-          <Text fontSize="$6" fontWeight="bold">
-            {t('settings.general.title')}
-          </Text>
+      <SettingContainer>
+        <SettingTitle>{t('settings.general.title')}</SettingTitle>
 
-          <YStack backgroundColor="$background" padding="$4" borderRadius="$4" gap={16}>
-            <XStack justifyContent="space-between" alignItems="center">
-              <Text fontSize="$4">{t('common.language')}</Text>
-              <Select
-                label={t('common.language')}
-                value={language}
-                onValueChange={handleLanguageChange}
-                placeholder="..."
-                items={languagesOptions}
-              />
-            </XStack>
+        <SettingDivider />
 
-            <XStack justifyContent="space-between" alignItems="center">
-              <Text fontSize="$4">{t('settings.proxy.title')}</Text>
+        <SettingRow>
+          <SettingRowTitle>{t('common.language')}</SettingRowTitle>
+          <Select
+            label={t('common.language')}
+            value={language}
+            onValueChange={handleLanguageChange}
+            placeholder="..."
+            items={languagesOptions}
+          />
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
 
-              <Select
-                label={t('settings.proxy.title')}
-                value={proxyMode}
-                onValueChange={setProxyMode}
-                placeholder="..."
-                items={[
-                  { value: 'system', label: t('settings.proxy.mode.system') },
-                  { value: 'none', label: t('settings.proxy.mode.none') },
-                  { value: 'custom', label: t('settings.proxy.mode.custom') }
-                ]}
-              />
-            </XStack>
-          </YStack>
-        </YStack>
-      </ScrollView>
+          <Select
+            label={t('settings.proxy.title')}
+            value={proxyMode}
+            onValueChange={setProxyMode}
+            placeholder="..."
+            items={[
+              { value: 'system', label: t('settings.proxy.mode.system') },
+              { value: 'none', label: t('settings.proxy.mode.none') },
+              { value: 'custom', label: t('settings.proxy.mode.custom') }
+            ]}
+          />
+        </SettingRow>
+      </SettingContainer>
     </SafeAreaView>
   )
 }
