@@ -3,9 +3,9 @@ import { Adapt, Select, Sheet } from 'tamagui'
 
 const ISelect: React.FC<{
   label?: string
-  placeholder: string
-  value: string
-  onValueChange: (value: string) => void
+  placeholder?: string
+  value?: string
+  onValueChange?: (value: string) => void
   items: { value: string; label: string }[]
 }> = ({ label, placeholder, value, onValueChange, items }) => {
   return (
