@@ -5,8 +5,8 @@ const MInput: React.FC<
     icon?: React.ReactNode
     iconPosition?: 'left' | 'right'
   }
-> = ({ icon, iconPosition = 'right', ...props }) => (
-  <View position="relative">
+> = ({ flex, flexGrow, icon, iconPosition = 'right', ...props }) => (
+  <View position="relative" flex={flex} flexGrow={flexGrow}>
     <Input
       {...props}
       paddingLeft={iconPosition === 'left' ? 36 : props.paddingLeft}

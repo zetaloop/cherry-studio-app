@@ -1,9 +1,12 @@
-import { CircleMinus, Eye, EyeOff, Plus, Settings } from '@tamagui/lucide-icons'
+import { Eye, EyeOff, Plus, Settings } from '@tamagui/lucide-icons'
 import { Link } from 'expo-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Input, ScrollView, Separator, Text, View, XStack, YStack } from 'tamagui'
+import { Button, Input, ScrollView, Text, XStack, YStack } from 'tamagui'
+import { View } from 'tamagui'
+
+import { ProviderGroup } from '@/components/settings/providers'
 
 export default function OpenAIProviderPage() {
   const { t } = useTranslation()
@@ -12,9 +15,12 @@ export default function OpenAIProviderPage() {
   const [apiUrl, setApiUrl] = useState('https://api.openai.com')
   const [selectedModel, setSelectedModel] = useState('gpt-4o')
 
-  const models = [
+  const gpt_models = [
     { name: 'GPT-4o', value: 'gpt-4o' },
-    { name: 'GPT-4o-mini', value: 'gpt-4o-mini' },
+    { name: 'GPT-4o-mini', value: 'gpt-4o-mini' }
+  ]
+
+  const o1_models = [
     { name: 'o1-mini', value: 'o1-mini' },
     { name: 'o1-preview', value: 'o1-preview' }
   ]
@@ -33,14 +39,14 @@ export default function OpenAIProviderPage() {
 
           <YStack gap={8}>
             <Text fontSize="$4" fontWeight="bold">
-              API 密钥
+              {t('settings.provider.api_key')}
             </Text>
             <XStack alignItems="center" gap={8}>
               <Input
                 flex={1}
                 value={apiKey}
                 onChangeText={setApiKey}
-                placeholder="请输入 API 密钥"
+                placeholder={t('settings.provider.api_key')}
                 secureTextEntry={!showApiKey}
               />
               <Button
@@ -57,9 +63,20 @@ export default function OpenAIProviderPage() {
 
           <YStack gap={8}>
             <Text fontSize="$4" fontWeight="bold">
-              API 地址
+              {t('settings.provider.api_host')}
             </Text>
-            <Input value={apiUrl} onChangeText={setApiUrl} placeholder="https://api.openai.com" />
+            <XStack borderWidth="$0.5" borderColor="$gray5" borderRadius="$4" overflow="hidden">
+              <Input
+                borderWidth={0}
+                borderRightWidth="$1"
+                borderRadius={0}
+                flexGrow={1}
+                value={apiUrl}
+                onChangeText={setApiUrl}
+                placeholder={t('settings.provider.api_host')}
+              />
+              <Button borderRadius={0}>检查</Button>
+            </XStack>
             <Text fontSize="$2" color="$gray10">
               /v1/chat/completions 将自动添加到用户输入地址
             </Text>
@@ -69,31 +86,17 @@ export default function OpenAIProviderPage() {
             <Text fontSize="$4" fontWeight="bold">
               {t('common.model')}
             </Text>
-            <YStack backgroundColor="$gray2" borderRadius="$4" padding="$2">
-              {models.map((model, index) => (
-                <YStack key={model.value}>
-                  <XStack padding="$2" alignItems="center" justifyContent="space-between">
-                    <XStack gap={8} alignItems="center">
-                      <View
-                        width={24}
-                        height={24}
-                        borderRadius={12}
-                        backgroundColor={model.value.startsWith('gpt') ? '$purple5' : '$yellow5'}
-                      />
-                      <Text>{model.name}</Text>
-                      <Button backgroundColor="$colorTransparent" size="$2" circular icon={<Settings size={16} />} />
-                    </XStack>
-                    <Button
-                      backgroundColor="$colorTransparent"
-                      size="$2"
-                      circular
-                      icon={<CircleMinus color="$red10" size={16} />}
-                    />
-                  </XStack>
-                  {index < models.length - 1 && <Separator />}
-                </YStack>
-              ))}
-            </YStack>
+
+            <ProviderGroup
+              models={gpt_models}
+              group_name="GPT-4o"
+              icon={<View width={24} height={24} borderRadius={12} backgroundColor="$purple5" />}
+            />
+            <ProviderGroup
+              models={o1_models}
+              group_name="o1"
+              icon={<View width={24} height={24} borderRadius={12} backgroundColor="$yellow5" />}
+            />
           </YStack>
 
           <Text fontSize="$2" color="$gray10">
