@@ -1,4 +1,4 @@
-import { Plus, Search } from '@tamagui/lucide-icons'
+import { ArrowLeft, Plus, Search } from '@tamagui/lucide-icons'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -22,6 +22,7 @@ export default function AssistantPage() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <XStack justifyContent="space-between" alignItems="center" padding="$2">
+        <Button icon={ArrowLeft} onPress={() => router.back()} />
         <SizableText fontSize={20} fontWeight="bold">
           {t('chat.topics.title')}
         </SizableText>

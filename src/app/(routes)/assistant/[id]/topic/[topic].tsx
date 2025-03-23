@@ -1,28 +1,39 @@
 import { ArrowLeft } from '@tamagui/lucide-icons'
-import { Link, useLocalSearchParams } from 'expo-router'
-import { Text } from 'react-native'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button } from 'tamagui'
+import { Button, Stack, Text, View, XStack, YStack } from 'tamagui'
+
+import { InputBar } from '@/components/input-bar/index'
+import { topics } from '@/config/mock/messages'
 
 export default function TopicPage() {
   const { id, topic } = useLocalSearchParams<{
     id: string
     topic: string
   }>()
+  const router = useRouter()
 
   return (
-    <SafeAreaView>
-      <Link
-        href={{
-          pathname: `/assistant/[id]`,
-          params: { id }
-        }}
-        asChild>
-        <Button icon={ArrowLeft} />
-      </Link>
-      <Text>
-        assistant - {id}/topic - {topic}
-      </Text>
+    <SafeAreaView
+      style={{
+        flex: 1
+      }}>
+      <XStack justifyContent="space-between" alignItems="center" padding="$2">
+        <Button icon={ArrowLeft} onPress={() => router.back()} />
+        <Text>
+          {id}-{topic}
+        </Text>
+      </XStack>
+      <YStack>
+        {topics[topic]!.map(item => (
+          <Stack key={item.key} marginLeft={item.send ? 'auto' : ''}>
+            <Text>{item.message}</Text>
+          </Stack>
+        ))}
+      </YStack>
+      <View position="absolute" bottom={0} left={0} right={0}>
+        <InputBar />
+      </View>
     </SafeAreaView>
   )
 }
