@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router'
-import { Avatar, AvatarImage, ListItem, View, YGroup } from 'tamagui'
+import { Link, useRouter } from 'expo-router'
+import { Avatar, AvatarImage, ListItem, View, XStack, YGroup } from 'tamagui'
 
 const assistants = [
   {
@@ -40,6 +40,9 @@ const HomeScreen: React.FC = () => {
           </YGroup.Item>
         ))}
       </YGroup>
+      <XStack>
+        <Link href={'/welcome'}>welcome</Link>
+      </XStack>
     </View>
   )
 }

@@ -13,7 +13,7 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: './assets/images/adaptive-icon.png',
+        foregroundImage: './src/assets/images/adaptive-icon.png',
         backgroundColor: '#ffffff'
       },
       package: 'com.anonymous.cherrystudio'

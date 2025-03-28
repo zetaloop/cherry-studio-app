@@ -5,7 +5,7 @@
       "import { View } from 'tamagui'",
       "",
       "const $1: React.FC = () => {",
-      "  return <View></View>",
+      "  return <View>$2</View>",
       "}",
       "",
       "export default $1",
