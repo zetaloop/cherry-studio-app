@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
 import { Animated, Dimensions, Image, TouchableOpacity } from 'react-native'
@@ -48,7 +49,8 @@ export default function WelcomePage() {
   const indicatorWidths = useRef(carouselItems.map((_, index) => new Animated.Value(index === 0 ? 24 : 8))).current
 
   const handleStart = () => {
-    router.push('/')
+    router.replace('/(tabs)')
+    AsyncStorage.setItem('accessToken', 'true')
   }
 
   const handlePageSelected = (e: any) => {

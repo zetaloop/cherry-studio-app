@@ -8,8 +8,9 @@ const App: React.FC = () => {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+      <Stack.Screen name="index" />
+      <Stack.Screen name="(routes)/welcome/index" />
+      <Stack.Screen name="+not-found" />
     </Stack>
   )
 }
