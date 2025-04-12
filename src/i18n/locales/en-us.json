@@ -902,6 +902,9 @@
       "createFirstAgent": "Click to create the first AI intelligent body",
       "noContent": "No {{type}} content yet",
       "title": "mine"
+    },
+    "home": {
+      "title": "front page"
     }
   }
 }

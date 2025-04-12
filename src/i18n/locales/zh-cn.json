@@ -902,6 +902,9 @@
       "createFirstAgent": "点击创建第一个AI智能体",
       "create": "去创建",
       "noContent": "暂无{{type}}内容"
+    },
+    "home": {
+      "title": "首页"
     }
   }
 }

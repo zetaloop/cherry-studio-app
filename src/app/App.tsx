@@ -10,6 +10,8 @@ const App: React.FC = () => {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="(routes)/welcome/index" />
+      <Stack.Screen name="(routes)/assistant/index" />
+      <Stack.Screen name="(routes)/settings/index" />
       <Stack.Screen name="+not-found" />
     </Stack>
   )

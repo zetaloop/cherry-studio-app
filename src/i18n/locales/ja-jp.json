@@ -902,6 +902,9 @@
       "createFirstAgent": "クリックして、最初のAIインテリジェントボディを作成します",
       "noContent": "NO {{type}}コンテンツはまだありません",
       "title": "私の"
+    },
+    "home": {
+      "title": "フロントページ"
     }
   }
 }

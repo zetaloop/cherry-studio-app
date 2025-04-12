@@ -902,6 +902,9 @@
       "createFirstAgent": "點擊創建第一個AI智能體",
       "noContent": "暫無{{type}}內容",
       "title": "我的"
+    },
+    "home": {
+      "title": "首頁"
     }
   }
 }

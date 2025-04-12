@@ -1,7 +1,6 @@
-import { MessageCircleMore, Plus, Search, User } from '@tamagui/lucide-icons'
+import { MessageCircleMore, User } from '@tamagui/lucide-icons'
 import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { Button, XStack } from 'tamagui'
 
 export default function TabLayout() {
   const { t } = useTranslation()
@@ -10,13 +9,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: t('assistants.title'),
-          headerRight: () => (
-            <XStack gap={4} paddingRight={10}>
-              <Button size="$3" backgroundColor="transparent" icon={Search} />
-              <Button size="$3" backgroundColor="transparent" icon={Plus} />
-            </XStack>
-          ),
+          title: t('home.title'),
+          headerShown: false,
           tabBarIcon: ({ color }) => <MessageCircleMore size={28} color={color} />
         }}
       />
