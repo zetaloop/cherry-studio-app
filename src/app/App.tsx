@@ -1,5 +1,10 @@
-import { SplashScreen, Stack } from 'expo-router'
-import { useEffect } from 'react'
+import { SplashScreen } from 'expo-router'
+import React, { useEffect } from 'react'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+
+import { AppNavigation } from '@/navigation/AppNavigation'
+import { persistor } from '@/store'
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -7,13 +12,11 @@ const App: React.FC = () => {
   }, [])
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="(routes)/welcome/index" />
-      <Stack.Screen name="(routes)/assistant/index" />
-      <Stack.Screen name="(routes)/settings/index" />
-      <Stack.Screen name="+not-found" />
-    </Stack>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <AppNavigation></AppNavigation>
+      </PersistGate>
+    </Provider>
   )
 }
 

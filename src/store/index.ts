@@ -3,19 +3,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 
+import app from './app'
 import runtime from './runtime'
 
-const rootReducer = combineReducers({
-  runtime
-})
+const rootReducer = combineReducers({ app, runtime })
 
 const persistedReducer = persistReducer(
-  {
-    key: 'cherry-studio',
-    storage: AsyncStorage,
-    version: 1,
-    blacklist: ['runtime']
-  },
+  { key: 'cherry-studio', storage: AsyncStorage, version: 1, blacklist: ['runtime'] },
   rootReducer
 )
 
@@ -24,9 +18,7 @@ const store = configureStore({
   reducer: persistedReducer as typeof rootReducer,
   middleware: getDefaultMiddleware => {
     return getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-      }
+      serializableCheck: { ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER] }
     })
   },
   devTools: true
