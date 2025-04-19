@@ -68,7 +68,10 @@
       "collapse": "Collapse",
       "manage": "Manage",
       "select_model": "Select Model",
-      "show.all": "Show All"
+      "show.all": "Show All",
+      "web_search": "Search online",
+      "image_generate": "Image generation",
+      "placeholder": "Ask something casually"
     },
     "chat": {
       "add.assistant.title": "Add Assistant",

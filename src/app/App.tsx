@@ -7,8 +7,8 @@ const App: React.FC = () => {
   }, [])
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
+    <Stack screenOptions={{ headerShown: false }} initialRouteName="(routes)/home/index">
+      <Stack.Screen name="(routes)/home/index" />
       <Stack.Screen name="(routes)/welcome/index" />
       <Stack.Screen name="(routes)/assistant/index" />
       <Stack.Screen name="(routes)/settings/index" />

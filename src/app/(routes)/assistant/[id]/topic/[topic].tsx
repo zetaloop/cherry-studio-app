@@ -3,7 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Stack, Text, View, XStack, YStack } from 'tamagui'
 
-import { InputBar } from '@/components/input-bar/index'
+import { MessageInput } from '@/components/message-input'
 import { topics } from '@/config/mock/messages'
 
 export default function TopicPage() {
@@ -32,7 +32,7 @@ export default function TopicPage() {
         ))}
       </YStack>
       <View position="absolute" bottom={0} left={0} right={0}>
-        <InputBar />
+        <MessageInput />
       </View>
     </SafeAreaView>
   )

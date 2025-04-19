@@ -16,5 +16,5 @@ export default function IndexPage() {
     subscription()
   }, [])
 
-  return <>{loading ? <></> : <Redirect href={!isAccessed ? '/(routes)/welcome' : '/(tabs)'} />}</>
+  return <>{loading ? <></> : <Redirect href={!isAccessed ? '/(routes)/welcome' : '/(routes)/home'} />}</>
 }
