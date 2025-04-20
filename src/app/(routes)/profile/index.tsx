@@ -1,5 +1,5 @@
+import { Link } from '@react-navigation/native'
 import { Settings } from '@tamagui/lucide-icons'
-import { Link } from 'expo-router'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -69,7 +69,7 @@ export default function ProfilePage() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <XStack justifyContent="flex-end" padding="$2">
-        <Link href="/settings" asChild>
+        <Link screen="Settings">
           <Button size="$3" circular icon={<Settings size={20} />} backgroundColor="$colorTransparent" color="$gray9" />
         </Link>
       </XStack>

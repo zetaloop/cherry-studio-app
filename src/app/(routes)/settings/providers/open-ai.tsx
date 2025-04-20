@@ -1,11 +1,11 @@
 import { Eye, EyeOff, Plus, Settings } from '@tamagui/lucide-icons'
-import { Link } from 'expo-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Input, ScrollView, Text, XStack, YStack } from 'tamagui'
 import { View } from 'tamagui'
 
+import ExternalLink from '@/components/external-link'
 import { ProviderGroup } from '@/components/settings/providers'
 
 export default function OpenAIProviderPage() {
@@ -101,13 +101,8 @@ export default function OpenAIProviderPage() {
 
           <Text fontSize="$2" color="$gray10">
             查看
-            <Link href={'https://platform.openai.com/docs'}>
-              <Text color={'$blue10'}>OpenAI 文档</Text>
-            </Link>
-            和
-            <Link href={'https://platform.openai.com/docs/models'}>
-              <Text color={'$blue10'}>模型</Text>
-            </Link>
+            <ExternalLink href={'https://platform.openai.com/docs'}>OpenAI 文档</ExternalLink>和
+            <ExternalLink href={'https://platform.openai.com/docs/models'}>模型</ExternalLink>
             了解更多信息
           </Text>
 

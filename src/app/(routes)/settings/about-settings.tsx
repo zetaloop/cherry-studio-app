@@ -1,9 +1,9 @@
 import { Github } from '@tamagui/lucide-icons'
-import { Link } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, XStack, YStack } from 'tamagui'
 
+import ExternalLink from '@/components/external-link'
 import {
   SettingContainer,
   SettingDivider,
@@ -22,9 +22,9 @@ export default function AboutPage() {
           <SettingTitle>
             {t('settings.about.title')}
             <XStack>
-              <Link href="https://github.com/kangfenmao/cherry-studio">
+              <ExternalLink href="https://github.com/kangfenmao/cherry-studio">
                 <Github marginRight={4} size={20} />
-              </Link>
+              </ExternalLink>
             </XStack>
           </SettingTitle>
           <SettingDivider />

@@ -1,5 +1,5 @@
+import { Link } from '@react-navigation/native'
 import { Search, Star } from '@tamagui/lucide-icons'
-import { Link } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -26,7 +26,7 @@ export default function ProviderSettingsPage() {
           <YGroup marginVertical={16} alignSelf="center" bordered size="$4">
             {mock_providers.map(provider => (
               <YGroup.Item key={provider.href}>
-                <Link href={`/settings/providers/open-ai`} asChild>
+                <Link screen="ModelSettings">
                   <ListItem hoverTheme icon={Star} title={provider.label} />
                 </Link>
               </YGroup.Item>

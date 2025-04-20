@@ -1,10 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useRouter } from 'expo-router'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { useEffect, useRef, useState } from 'react'
 import { Animated, Dimensions, Image, TouchableOpacity } from 'react-native'
 import PagerView from 'react-native-pager-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, View, XStack, YStack } from 'tamagui'
+
+import { useAppDispatch } from '@/store'
+import { setWelcomeShown } from '@/store/app'
 
 const { width } = Dimensions.get('window')
 
@@ -42,15 +45,18 @@ const carouselItems = [
 ]
 
 export default function WelcomePage() {
-  const router = useRouter()
+  const navigation = useNavigation()
+  const dispatch = useAppDispatch()
+
   const [activeIndex, setActiveIndex] = useState(0)
   const pagerRef = useRef<PagerView>(null)
   // 为每个指示器创建动画值
   const indicatorWidths = useRef(carouselItems.map((_, index) => new Animated.Value(index === 0 ? 24 : 8))).current
 
   const handleStart = () => {
-    router.replace('/(tabs)')
+    navigation.dispatch(StackActions.replace('Home'))
     AsyncStorage.setItem('accessToken', 'true')
+    dispatch(setWelcomeShown(true))
   }
 
   const handlePageSelected = (e: any) => {
@@ -106,14 +112,7 @@ export default function WelcomePage() {
             onPageSelected={handlePageSelected}>
             {carouselItems.map(item => (
               <YStack key={item.id} alignItems="center" justifyContent="center" padding={20}>
-                <Image
-                  source={item.image}
-                  style={{
-                    width: width * 0.6,
-                    height: width * 0.6,
-                    resizeMode: 'contain'
-                  }}
-                />
+                <Image source={item.image} style={{ width: width * 0.6, height: width * 0.6, resizeMode: 'contain' }} />
                 <Text fontSize={20} fontWeight="bold" marginTop={20}>
                   {item.title}
                 </Text>

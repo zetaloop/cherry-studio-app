@@ -1,6 +1,5 @@
+import { useNavigation } from '@react-navigation/native'
 import { Bot, ChevronRight, Cloud, Database, Info, Monitor, Search, Settings } from '@tamagui/lucide-icons'
-import { Link } from 'expo-router'
-import { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, XStack, YStack } from 'tamagui'
@@ -13,7 +12,7 @@ export default function SettingsPage() {
     items: {
       title: string
       details: string
-      href: ComponentProps<typeof Link>['href']
+      screen: string
       icon: React.ReactNode
     }[]
   }[] = [
@@ -22,19 +21,19 @@ export default function SettingsPage() {
       items: [
         {
           title: t('settings.provider.title'),
-          href: '/settings/model',
+          screen: 'ProvidersSettings',
           details: '配置AI模型服务器和参数',
           icon: <Cloud size={24} />
         },
         {
           title: t('settings.model'),
-          href: '/settings/websearch-settings',
+          screen: 'ModelSettings',
           details: '选择默认使用的AI模型',
           icon: <Bot size={24} />
         },
         {
           title: t('settings.websearch.title'),
-          href: '/settings/providers',
+          screen: 'WebSearchSettings',
           details: '网络搜索引擎设置与权限',
           icon: <Search size={24} />
         }
@@ -45,13 +44,13 @@ export default function SettingsPage() {
       items: [
         {
           title: t('settings.general.title'),
-          href: '/settings/general-settings',
+          screen: 'GeneralSettings',
           details: '应用语言、主题、启动设置等',
           icon: <Settings size={24} />
         },
         {
           title: t('settings.display.title'),
-          href: '/settings/display',
+          screen: 'DisplaySettings',
           details: '字体、字号、界面样式等',
           icon: <Monitor size={24} />
         }
@@ -62,13 +61,13 @@ export default function SettingsPage() {
       items: [
         {
           title: t('settings.data.title'),
-          href: '/settings/data',
+          screen: 'DataSettings',
           details: '数据备份、WebDAV、Obsidian配置',
           icon: <Database size={24} />
         },
         {
           title: t('settings.about.title'),
-          href: '/settings/about-settings',
+          screen: 'AboutSettings',
           details: '版本信息与法律声明',
           icon: <Info size={24} />
         }
@@ -92,7 +91,7 @@ export default function SettingsPage() {
                     key={item.title}
                     title={item.title}
                     details={item.details}
-                    href={item.href}
+                    screen={item.screen}
                     icon={item.icon}
                   />
                 ))}
@@ -119,36 +118,37 @@ function SettingGroup({ title, children }: { title: string; children: React.Reac
 function SettingItem({
   title,
   details,
-  href,
+  screen,
   icon
 }: {
   title: string
   details: string
-  href: ComponentProps<typeof Link>['href']
+  screen: string
   icon: React.ReactNode
 }) {
+  const navigation = useNavigation()
   return (
-    <Link href={href} asChild>
-      <XStack
-        height={70}
-        backgroundColor="$background"
-        padding="$4"
-        borderRadius="$4"
-        justifyContent="space-between"
-        alignItems="center"
-        pressStyle={{ opacity: 0.8 }}
-        hoverStyle={{ backgroundColor: '#2A2A2A' }}>
-        <XStack alignItems="center" gap={12}>
-          {icon}
-          <YStack gap={4}>
-            <Text fontSize="$5">{title}</Text>
-            <Text fontSize="$2" color="#aaa">
-              {details}
-            </Text>
-          </YStack>
-        </XStack>
-        <ChevronRight size={20} color="#aaa" />
+    <XStack
+      height={70}
+      backgroundColor="$background"
+      padding="$4"
+      borderRadius="$4"
+      justifyContent="space-between"
+      alignItems="center"
+      pressStyle={{ opacity: 0.8 }}
+      hoverStyle={{ backgroundColor: '#2A2A2A' }}
+      // @ts-expect-error navigate type mismatch
+      onPress={() => navigation.navigate(screen)}>
+      <XStack alignItems="center" gap={12}>
+        {icon}
+        <YStack gap={4}>
+          <Text fontSize="$5">{title}</Text>
+          <Text fontSize="$2" color="#aaa">
+            {details}
+          </Text>
+        </YStack>
       </XStack>
-    </Link>
+      <ChevronRight size={20} color="#aaa" />
+    </XStack>
   )
 }
