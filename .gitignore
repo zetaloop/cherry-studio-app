@@ -57,3 +57,15 @@ android
 
 #.env
 .env
+
+
+
+# Cheyne
+*.txt
+app.config.ts
+package-lock.json
+
+COMMIT_MESSAGE.md
+README_START.md
+screenshot.png
+TOP_ENTRY_IMPLEMENTATION.md
