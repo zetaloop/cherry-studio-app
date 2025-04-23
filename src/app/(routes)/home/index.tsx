@@ -14,7 +14,7 @@ const HomeScreen: React.FC = () => {
 
         {/* 主要内容区域 */}
         <YStack flex={1} justifyContent="center" alignItems="center">
-          <Link screen="Settings">
+          <Link screen="Settings" params={{}}>
             <Stack>
               <Text>Go to Settings</Text>
             </Stack>
@@ -22,7 +22,17 @@ const HomeScreen: React.FC = () => {
         </YStack>
 
         {/* 底部输入框 */}
-        <View position="absolute" bottom={0} left={0} right={0} paddingBottom="$2" backgroundColor="$background">
+        <View
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          paddingHorizontal="$2"
+          paddingBottom="$2"
+          backgroundColor="$background"
+          borderTopWidth={1}
+          borderTopColor="$borderColor"
+        >
           <MessageInput />
         </View>
       </YStack>

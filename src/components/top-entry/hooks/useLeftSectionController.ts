@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { SortType, Topic, addTopic, deleteTopic, setCurrentTopic, setTopicSortType, setTopicsListOpen, updateTopic } from '../../../store/top-entry'
-import { createNewTopic, searchTopics, sortTopics } from '../config'
+import { createNewTopic, sortTopics } from '../config'
 
 export const useLeftSectionController = () => {
   const dispatch = useAppDispatch()
@@ -21,9 +21,21 @@ export const useLeftSectionController = () => {
   const currentTopic = topics.find(t => t.id === currentTopicId) || (topics.length > 0 ? topics[0] : null)
 
   // 筛选和排序后的主题列表
-  const filteredTopics = searchQuery.trim() !== ''
-    ? searchTopics(topics, searchQuery)
-    : sortTopics(topics, topicSortType)
+  const filteredTopics = useMemo(() => {
+    // 直接在组件内部实现搜索逻辑，不依赖外部函数
+    if (searchQuery.trim() !== '') {
+      const query = searchQuery.toLowerCase().trim()
+      const results = topics.filter(
+        topic =>
+          topic.name.toLowerCase().includes(query) ||
+          (topic.content && topic.content.toLowerCase().includes(query))
+      )
+      console.log('搜索查询:', searchQuery, '结果数量:', results.length, '第一个结果:', results[0]?.name)
+      return results
+    }
+    // 否则按照指定的排序方式排序主题
+    return sortTopics(topics, topicSortType)
+  }, [topics, searchQuery, topicSortType])
 
   // 每次打开侧边栏时清除搜索
   useEffect(() => {
@@ -144,6 +156,7 @@ export const useLeftSectionController = () => {
     saveTopic,
     removeTopic,
     exportTopicAsMarkdown,
-    exportTopicAsImage
+    exportTopicAsImage,
+    topics // 添加返回topics
   }
 }

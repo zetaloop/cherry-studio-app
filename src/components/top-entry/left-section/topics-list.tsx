@@ -1,10 +1,15 @@
 import { Download, FileImage, Trash2 } from '@tamagui/lucide-icons'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ScrollView, Separator, Text, XStack, YStack } from 'tamagui'
 import { useLeftSectionController } from '../hooks/useLeftSectionController'
+import { Topic } from '../../../store/top-entry'
 
-export const TopicsList: React.FC = () => {
+interface TopicsListProps {
+  searchQuery?: string
+}
+
+export const TopicsList: React.FC<TopicsListProps> = ({ searchQuery: externalSearchQuery }) => {
   const { t } = useTranslation()
   const {
     filteredTopics,
@@ -12,8 +17,30 @@ export const TopicsList: React.FC = () => {
     selectTopic,
     removeTopic,
     exportTopicAsMarkdown,
-    exportTopicAsImage
+    exportTopicAsImage,
+    searchQuery,
+    topics
   } = useLeftSectionController()
+
+  // 使用外部传入的 searchQuery 进行过滤
+  const displayTopics = useMemo(() => {
+    // 添加调试日志
+    console.log('TopicsList 渲染，外部searchQuery:', externalSearchQuery, '内部searchQuery:', searchQuery)
+
+    // 优先使用外部传入的 searchQuery
+    const effectiveQuery = externalSearchQuery !== undefined ? externalSearchQuery : searchQuery
+
+    if (effectiveQuery && effectiveQuery.trim() !== '') {
+      const query = effectiveQuery.toLowerCase().trim()
+      return topics.filter(
+        (topic: Topic) =>
+          topic.name.toLowerCase().includes(query) ||
+          (topic.content && topic.content.toLowerCase().includes(query))
+      )
+    }
+
+    return filteredTopics
+  }, [externalSearchQuery, searchQuery, filteredTopics, topics])
 
   return (
     <YStack flex={1} width="100%">
@@ -23,8 +50,8 @@ export const TopicsList: React.FC = () => {
       <Separator />
       <ScrollView flex={1} showsVerticalScrollIndicator={true} marginTop="$2">
         <YStack gap="$2">
-          {filteredTopics.length > 0 ? (
-            filteredTopics.map(topic => (
+          {displayTopics.length > 0 ? (
+            displayTopics.map((topic: Topic) => (
               <YStack key={topic.id} marginBottom="$2">
                 <XStack
                   justifyContent="space-between"
