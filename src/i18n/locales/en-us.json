@@ -80,6 +80,13 @@
       "artifacts.button.preview": "Preview",
       "artifacts.preview.openExternal.error.content": "Error opening the external browser.",
       "assistant.search.placeholder": "Search",
+      "assistant.market": "Assistant Market",
+      "assistant.sort": {
+        "title": "Sort Assistants",
+        "alphabetical": "Alphabetical",
+        "recent_use": "Recently Used",
+        "recent_add": "Recently Added"
+      },
       "deeply_thought": "Deeply thought ({{secounds}} seconds)",
       "default.description": "Hello, I'm Default Assistant. You can start chatting with me right away",
       "default.name": "Default Assistant",
@@ -151,6 +158,10 @@
       "topics.export.word": "Export as Word",
       "topics.export.yuque": "Export to Yuque",
       "topics.list": "Topic List",
+      "topics.search": {
+        "placeholder": "Search topics...",
+        "empty": "No topics found"
+      },
       "topics.move_to": "Move to",
       "topics.pinned": "Pinned Topics",
       "topics.prompt": "Topic Prompts",
