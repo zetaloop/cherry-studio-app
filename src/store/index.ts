@@ -5,8 +5,9 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, R
 
 import app from './app'
 import runtime from './runtime'
+import topEntry from './top-entry'
 
-const rootReducer = combineReducers({ app, runtime })
+const rootReducer = combineReducers({ app, runtime, topEntry })
 
 const persistedReducer = persistReducer(
   { key: 'cherry-studio', storage: AsyncStorage, version: 1, blacklist: ['runtime'] },

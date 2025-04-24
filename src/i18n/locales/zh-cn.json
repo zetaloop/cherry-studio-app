@@ -80,6 +80,13 @@
       "artifacts.button.preview": "预览",
       "artifacts.preview.openExternal.error.content": "外部浏览器打开出错",
       "assistant.search.placeholder": "搜索",
+      "assistant.market": "助手市场",
+      "assistant.sort": {
+        "title": "排序助手",
+        "alphabetical": "按字母排序",
+        "recent_use": "最近使用",
+        "recent_add": "最近添加"
+      },
       "deeply_thought": "已深度思考（用时 {{secounds}} 秒）",
       "default.description": "你好，我是默认助手。你可以立刻开始跟我聊天。",
       "default.name": "默认助手",
@@ -151,6 +158,10 @@
       "topics.export.word": "导出为 Word",
       "topics.export.yuque": "导出到语雀",
       "topics.list": "话题列表",
+      "topics.search": {
+        "placeholder": "搜索话题...",
+        "empty": "未找到话题"
+      },
       "topics.move_to": "移动到",
       "topics.pinned": "固定话题",
       "topics.prompt": "话题提示词",
