@@ -1,9 +1,11 @@
+import { AtSign, Save } from '@tamagui/lucide-icons'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Avatar, AvatarFallback, AvatarImage, Button, Input, Separator, Text, TextArea, XStack, YStack } from 'tamagui'
-import { AtSign, Save } from '@tamagui/lucide-icons'
+
+import { Assistant } from '@/store/top-entry'
+
 import { useMiddleSectionController } from '../hooks/useMiddleSectionController'
-import { Assistant } from '../../../store/top-entry'
 
 interface AssistantEditorProps {
   onClose: () => void
@@ -55,11 +57,7 @@ export const AssistantEditor: React.FC<AssistantEditorProps> = ({ onClose }) => 
           <Text fontSize="$2" color="$gray10">
             {t('common.name')}
           </Text>
-          <Input
-            size="$3"
-            value={assistantData.name}
-            onChangeText={(value) => handleChange('name', value)}
-          />
+          <Input size="$3" value={assistantData.name} onChangeText={value => handleChange('name', value)} />
         </YStack>
       </XStack>
 
@@ -71,7 +69,7 @@ export const AssistantEditor: React.FC<AssistantEditorProps> = ({ onClose }) => 
           size="$3"
           numberOfLines={3}
           value={assistantData.description}
-          onChangeText={(value) => handleChange('description', value)}
+          onChangeText={value => handleChange('description', value)}
         />
       </YStack>
 
@@ -92,20 +90,10 @@ export const AssistantEditor: React.FC<AssistantEditorProps> = ({ onClose }) => 
       </YStack>
 
       <XStack justifyContent="flex-end" gap="$2" marginTop="$2">
-        <Button
-          size="$3"
-          backgroundColor="$gray4"
-          borderRadius="$4"
-          onPress={onClose}>
+        <Button size="$3" backgroundColor="$gray4" borderRadius="$4" onPress={onClose}>
           {t('common.cancel')}
         </Button>
-        <Button
-          size="$3"
-          backgroundColor="$blue9"
-          color="white"
-          borderRadius="$4"
-          gap="$1"
-          onPress={handleSave}>
+        <Button size="$3" backgroundColor="$blue9" color="white" borderRadius="$4" gap="$1" onPress={handleSave}>
           <Save size={16} />
           <Text color="white">{t('common.save')}</Text>
         </Button>

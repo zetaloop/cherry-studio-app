@@ -1,11 +1,11 @@
 import { ArrowLeft } from '@tamagui/lucide-icons'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Button, XStack } from 'tamagui'
 
+import { useTopEntryState } from './hooks/useTopEntryState'
 import { LeftSection } from './left-section'
 import { MiddleSection } from './middle-section'
 import { RightSection } from './right-section'
-import { useTopEntryState } from './hooks/useTopEntryState'
 
 interface TopEntryProps {
   onBack?: () => void

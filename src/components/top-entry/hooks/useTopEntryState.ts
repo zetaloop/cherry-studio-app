@@ -1,19 +1,9 @@
 import { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../store'
-import {
-  DEFAULT_ASSISTANTS,
-  DEFAULT_TOPICS,
-  getCurrentAssistant,
-  getCurrentTopic
-} from '../config'
-import {
-  Assistant,
-  Topic,
-  setAssistants,
-  setTopics,
-  setCurrentAssistant,
-  setCurrentTopic,
-} from '../../../store/top-entry'
+
+import { useAppDispatch, useAppSelector } from '@/store'
+import { Assistant, setAssistants, setCurrentAssistant, setCurrentTopic, setTopics, Topic } from '@/store/top-entry'
+
+import { DEFAULT_ASSISTANTS, DEFAULT_TOPICS, getCurrentAssistant, getCurrentTopic } from '../config'
 
 export const useTopEntryState = () => {
   const dispatch = useAppDispatch()
@@ -24,6 +14,7 @@ export const useTopEntryState = () => {
     // 如果没有助手数据，加载默认数据
     if (topEntryState.assistants.length === 0) {
       dispatch(setAssistants(DEFAULT_ASSISTANTS))
+
       if (DEFAULT_ASSISTANTS.length > 0) {
         dispatch(setCurrentAssistant(DEFAULT_ASSISTANTS[0].id))
       }
@@ -32,6 +23,7 @@ export const useTopEntryState = () => {
     // 如果没有主题数据，加载默认数据
     if (topEntryState.topics.length === 0) {
       dispatch(setTopics(DEFAULT_TOPICS))
+
       if (DEFAULT_TOPICS.length > 0) {
         dispatch(setCurrentTopic(DEFAULT_TOPICS[0].id))
       }
@@ -39,16 +31,10 @@ export const useTopEntryState = () => {
   }, [dispatch])
 
   // 获取当前助手
-  const currentAssistant = getCurrentAssistant(
-    topEntryState.assistants,
-    topEntryState.currentAssistantId
-  )
+  const currentAssistant = getCurrentAssistant(topEntryState.assistants, topEntryState.currentAssistantId)
 
   // 获取当前主题
-  const currentTopic = getCurrentTopic(
-    topEntryState.topics,
-    topEntryState.currentTopicId
-  )
+  const currentTopic = getCurrentTopic(topEntryState.topics, topEntryState.currentTopicId)
 
   return {
     ...topEntryState,

@@ -2,7 +2,9 @@ import { AlignCenter, Clock, Plus } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, RadioGroup, Separator, Text, XStack, YStack } from 'tamagui'
-import { SortType } from '../../../store/top-entry'
+
+import { SortType } from '@/store/top-entry'
+
 import { useMiddleSectionController } from '../hooks/useMiddleSectionController'
 
 interface SortOptionsProps {
@@ -55,11 +57,7 @@ export const SortOptions: React.FC<SortOptionsProps> = ({ onClose }) => {
       </RadioGroup>
 
       <XStack justifyContent="flex-end" marginTop="$2">
-        <Button
-          size="$3"
-          backgroundColor="$gray4"
-          borderRadius="$4"
-          onPress={onClose}>
+        <Button size="$3" backgroundColor="$gray4" borderRadius="$4" onPress={onClose}>
           {t('common.cancel')}
         </Button>
       </XStack>

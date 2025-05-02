@@ -72,6 +72,7 @@ const topEntrySlice = createSlice({
     },
     updateAssistant(state, action: PayloadAction<Assistant>) {
       const index = state.assistants.findIndex(a => a.id === action.payload.id)
+
       if (index !== -1) {
         state.assistants[index] = action.payload
       }
@@ -83,6 +84,7 @@ const topEntrySlice = createSlice({
       state.currentAssistantId = action.payload
       // 更新lastUsed时间
       const index = state.assistants.findIndex(a => a.id === action.payload)
+
       if (index !== -1) {
         state.assistants[index].lastUsed = Date.now()
       }
@@ -100,6 +102,7 @@ const topEntrySlice = createSlice({
     },
     updateTopic(state, action: PayloadAction<Topic>) {
       const index = state.topics.findIndex(t => t.id === action.payload.id)
+
       if (index !== -1) {
         state.topics[index] = action.payload
       }
@@ -111,6 +114,7 @@ const topEntrySlice = createSlice({
       state.currentTopicId = action.payload
       // 更新lastUsed时间
       const index = state.topics.findIndex(t => t.id === action.payload)
+
       if (index !== -1) {
         state.topics[index].lastUsed = Date.now()
       }

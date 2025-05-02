@@ -9,7 +9,7 @@ const extendedConfig = {
     color: {
       ...config.tokens.color,
       borderColor: 'rgba(0, 0, 0, 0.1)',
-      borderColorDark: 'rgba(255, 255, 255, 0.15)',
+      borderColorDark: 'rgba(255, 255, 255, 0.15)'
     }
   }
 }

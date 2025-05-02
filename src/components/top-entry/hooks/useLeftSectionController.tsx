@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTopicsStore } from '../../../stores/topicsStore'
+import { useCallback, useMemo, useState } from 'react'
+
+import { useTopicsStore } from '@/store/topics-store'
 
 export const useLeftSectionController = () => {
   const [isTopicsListOpen, setIsTopicsListOpen] = useState(false)
@@ -26,10 +27,7 @@ export const useLeftSectionController = () => {
     [setCurrentTopic]
   )
 
-  const currentTopic = useMemo(
-    () => topics.find(topic => topic.id === currentTopicId),
-    [topics, currentTopicId]
-  )
+  const currentTopic = useMemo(() => topics.find(topic => topic.id === currentTopicId), [topics, currentTopicId])
 
   // 过滤主题列表
   const filteredTopics = useMemo(() => {
@@ -40,30 +38,35 @@ export const useLeftSectionController = () => {
     const query = searchQuery.toLowerCase().trim()
     return topics.filter(
       topic =>
-        topic.name.toLowerCase().includes(query) ||
-        (topic.content && topic.content.toLowerCase().includes(query))
+        topic.name.toLowerCase().includes(query) || (topic.content && topic.content.toLowerCase().includes(query))
     )
   }, [topics, searchQuery])
 
   // 导出主题为Markdown
-  const exportTopicAsMarkdown = useCallback((topicId: string) => {
-    const topic = topics.find(t => t.id === topicId)
-    if (!topic) return
+  const exportTopicAsMarkdown = useCallback(
+    (topicId: string) => {
+      const topic = topics.find(t => t.id === topicId)
+      if (!topic) return
 
-    // 实现导出功能
-    console.log('导出为Markdown:', topic.name)
-    // 这里应该添加实际的导出逻辑
-  }, [topics])
+      // 实现导出功能
+      console.log('导出为Markdown:', topic.name)
+      // 这里应该添加实际的导出逻辑
+    },
+    [topics]
+  )
 
   // 导出主题为图片
-  const exportTopicAsImage = useCallback((topicId: string) => {
-    const topic = topics.find(t => t.id === topicId)
-    if (!topic) return
+  const exportTopicAsImage = useCallback(
+    (topicId: string) => {
+      const topic = topics.find(t => t.id === topicId)
+      if (!topic) return
 
-    // 实现导出功能
-    console.log('导出为图片:', topic.name)
-    // 这里应该添加实际的导出逻辑
-  }, [topics])
+      // 实现导出功能
+      console.log('导出为图片:', topic.name)
+      // 这里应该添加实际的导出逻辑
+    },
+    [topics]
+  )
 
   // 删除主题
   const removeTopic = useCallback((topicId: string) => {

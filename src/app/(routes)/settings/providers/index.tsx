@@ -26,7 +26,7 @@ export default function ProviderSettingsPage() {
           <YGroup marginVertical={16} alignSelf="center" bordered size="$4">
             {mock_providers.map(provider => (
               <YGroup.Item key={provider.href}>
-                <Link screen="ModelSettings">
+                <Link screen="OpenAiSettings">
                   <ListItem hoverTheme icon={Star} title={provider.label} />
                 </Link>
               </YGroup.Item>

@@ -2,6 +2,7 @@ import { Plus } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, XStack } from 'tamagui'
+
 import { useRightSectionController } from '../hooks/useRightSectionController'
 
 export const RightSection: React.FC = () => {

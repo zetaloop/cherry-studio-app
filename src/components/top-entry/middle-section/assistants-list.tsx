@@ -1,7 +1,8 @@
+import { Search, Trash } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Avatar, AvatarFallback, AvatarImage, Input, ScrollView, Separator, Text, XStack, YStack } from 'tamagui'
-import { Search, Trash } from '@tamagui/lucide-icons'
+import { Input, ScrollView, Separator, Text, XStack, YStack } from 'tamagui'
+
 import { useMiddleSectionController } from '../hooks/useMiddleSectionController'
 
 interface AssistantsListProps {
@@ -10,13 +11,8 @@ interface AssistantsListProps {
 
 export const AssistantsList: React.FC<AssistantsListProps> = ({ onClose }) => {
   const { t } = useTranslation()
-  const {
-    filteredAssistants,
-    searchQuery,
-    setSearchQuery,
-    selectAssistant,
-    removeAssistant
-  } = useMiddleSectionController()
+  const { filteredAssistants, searchQuery, setSearchQuery, selectAssistant, removeAssistant } =
+    useMiddleSectionController()
 
   return (
     <YStack gap="$2" width="100%">
@@ -45,11 +41,7 @@ export const AssistantsList: React.FC<AssistantsListProps> = ({ onClose }) => {
                 borderRadius="$2"
                 hoverStyle={{ backgroundColor: '$backgroundHover' }}
                 pressStyle={{ backgroundColor: '$backgroundPress' }}>
-                <XStack
-                  flex={1}
-                  alignItems="center"
-                  gap="$2"
-                  onPress={() => selectAssistant(assistant.id)}>
+                <XStack flex={1} alignItems="center" gap="$2" onPress={() => selectAssistant(assistant.id)}>
                   {/* <Avatar circular size="$3">
                     <AvatarFallback backgroundColor="$blue5" />
                     <AvatarImage src={assistant.avatar} />
