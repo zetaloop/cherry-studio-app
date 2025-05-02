@@ -2,8 +2,10 @@ import { Download, FileImage, Trash2 } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ScrollView, Separator, Text, XStack, YStack } from 'tamagui'
+
+import { Topic } from '@/store/top-entry'
+
 import { useLeftSectionController } from '../hooks/useLeftSectionController'
-import { Topic } from '../../../store/top-entry'
 
 interface TopicsSearchProps {
   onClose: () => void
@@ -11,14 +13,8 @@ interface TopicsSearchProps {
 
 export const TopicsSearch: React.FC<TopicsSearchProps> = ({ onClose }) => {
   const { t } = useTranslation()
-  const {
-    filteredTopics,
-    selectTopic,
-    currentTopic,
-    exportTopicAsMarkdown,
-    exportTopicAsImage,
-    removeTopic
-  } = useLeftSectionController()
+  const { filteredTopics, selectTopic, currentTopic, exportTopicAsMarkdown, exportTopicAsImage, removeTopic } =
+    useLeftSectionController()
 
   // 注意：移除了自动关闭的useEffect，避免循环问题
 
@@ -50,12 +46,13 @@ export const TopicsSearch: React.FC<TopicsSearchProps> = ({ onClose }) => {
                   pressStyle={{ backgroundColor: '$backgroundPress' }}
                   onPress={() => handleSelectTopic(topic.id)}>
                   <YStack flex={1}>
-                    <Text fontSize="$4" fontWeight={currentTopic?.id === topic.id ? "600" : "400"}>
+                    <Text fontSize="$4" fontWeight={currentTopic?.id === topic.id ? '600' : '400'}>
                       {topic.name}
                     </Text>
                     {topic.content && (
                       <Text fontSize="$2" color="$gray10" numberOfLines={1} marginTop="$1">
-                        {topic.content.slice(0, 40)}{topic.content.length > 40 ? '...' : ''}
+                        {topic.content.slice(0, 40)}
+                        {topic.content.length > 40 ? '...' : ''}
                       </Text>
                     )}
                   </YStack>
@@ -102,4 +99,3 @@ export const TopicsSearch: React.FC<TopicsSearchProps> = ({ onClose }) => {
     </YStack>
   )
 }
-Id

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../store'
-import { setCurrentTopic as setCurrentTopicAction, deleteTopic, updateTopic, addTopic } from '../store/top-entry'
+import { addTopic, deleteTopic, setCurrentTopic as setCurrentTopicAction, updateTopic } from '../store/top-entry'
 
 export const useTopicsStore = () => {
   const dispatch = useAppDispatch()
@@ -15,18 +15,21 @@ export const useTopicsStore = () => {
 
   const updateTopicContent = (topicId: string, content: string) => {
     const topic = topics.find(t => t.id === topicId)
+
     if (topic) {
       dispatch(updateTopic({ ...topic, content }))
     }
   }
 
   const createTopic = (topic: { name: string; content: string }) => {
-    dispatch(addTopic({
-      id: Date.now().toString(),
-      name: topic.name,
-      content: topic.content,
-      createdAt: Date.now()
-    }))
+    dispatch(
+      addTopic({
+        id: Date.now().toString(),
+        name: topic.name,
+        content: topic.content,
+        createdAt: Date.now()
+      })
+    )
   }
 
   return {

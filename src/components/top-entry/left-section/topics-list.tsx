@@ -2,8 +2,10 @@ import { Download, FileImage, Trash2 } from '@tamagui/lucide-icons'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ScrollView, Separator, Text, XStack, YStack } from 'tamagui'
+
+import { Topic } from '@/store/top-entry'
+
 import { useLeftSectionController } from '../hooks/useLeftSectionController'
-import { Topic } from '../../../store/top-entry'
 
 interface TopicsListProps {
   searchQuery?: string
@@ -34,8 +36,7 @@ export const TopicsList: React.FC<TopicsListProps> = ({ searchQuery: externalSea
       const query = effectiveQuery.toLowerCase().trim()
       return topics.filter(
         (topic: Topic) =>
-          topic.name.toLowerCase().includes(query) ||
-          (topic.content && topic.content.toLowerCase().includes(query))
+          topic.name.toLowerCase().includes(query) || (topic.content && topic.content.toLowerCase().includes(query))
       )
     }
 
@@ -63,12 +64,13 @@ export const TopicsList: React.FC<TopicsListProps> = ({ searchQuery: externalSea
                   pressStyle={{ backgroundColor: '$backgroundPress' }}
                   onPress={() => selectTopic(topic.id)}>
                   <YStack flex={1}>
-                    <Text fontSize="$4" fontWeight={currentTopic?.id === topic.id ? "600" : "400"}>
+                    <Text fontSize="$4" fontWeight={currentTopic?.id === topic.id ? '600' : '400'}>
                       {topic.name}
                     </Text>
                     {topic.content && (
                       <Text fontSize="$2" color="$gray10" numberOfLines={1} marginTop="$1">
-                        {topic.content.slice(0, 40)}{topic.content.length > 40 ? '...' : ''}
+                        {topic.content.slice(0, 40)}
+                        {topic.content.length > 40 ? '...' : ''}
                       </Text>
                     )}
                   </YStack>

@@ -2,7 +2,7 @@ import { List, Search, X } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform } from 'react-native'
-import { Button, XStack, YStack, AnimatePresence, Overlay, Input } from 'tamagui'
+import { AnimatePresence, Button, Input, Overlay, XStack, YStack } from 'tamagui'
 
 import { useLeftSectionController } from '../hooks/useLeftSectionController'
 import { TopicsList } from './topics-list'
@@ -11,13 +11,8 @@ import { TopicsList } from './topics-list'
 export const LeftSection: React.FC = () => {
   // const theme = useTheme() // 未使用，暂时注释
   const { t } = useTranslation()
-  const {
-    isTopicsListOpen,
-    toggleTopicsList,
-    closeTopicsList,
-    searchQuery,
-    setSearchQuery
-  } = useLeftSectionController()
+  const { isTopicsListOpen, toggleTopicsList, closeTopicsList, searchQuery, setSearchQuery } =
+    useLeftSectionController()
 
   const [showSearchInput, setShowSearchInput] = useState(false)
   const screenWidth = Dimensions.get('window').width
@@ -27,16 +22,16 @@ export const LeftSection: React.FC = () => {
   const getLeftOffset = () => {
     // 为不同平台返回不同的偏移值  根据平台进行调整
     if (Platform.OS === 'ios') {
-      return -18; // iOS设备偏移量
+      return -18 // iOS设备偏移量
     } else if (Platform.OS === 'android') {
-      return -16; // Android设备偏移量（可能需要调整）
+      return -16 // Android设备偏移量（可能需要调整）
     } else {
-      return -18; // Web平台偏移量
+      return -18 // Web平台偏移量
     }
   }
 
   // 计算安全的偏移值
-  const leftOffset = getLeftOffset();
+  const leftOffset = getLeftOffset()
 
   // 调整侧边栏位置
   const sidebarTop = 0
@@ -108,8 +103,7 @@ export const LeftSection: React.FC = () => {
             shadowOffset={{ width: 2, height: 0 }}
             shadowOpacity={0.1}
             shadowRadius={10}
-            elevation={5}
-          >
+            elevation={5}>
             <YStack flex={1} width="100%" paddingLeft="$3" gap="$2">
               <XStack justifyContent="space-between" alignItems="center">
                 <XStack gap="$2" alignItems="center">
@@ -125,7 +119,7 @@ export const LeftSection: React.FC = () => {
                     backgroundColor="transparent"
                     onPress={handleToggleSearch}
                     pressStyle={{ opacity: 0.7 }}
-                    icon={<Search size={18} color={showSearchInput ? "$blue9" : "$gray10"} />}
+                    icon={<Search size={18} color={showSearchInput ? '$blue9' : '$gray10'} />}
                   />
                 </XStack>
               </XStack>
@@ -139,14 +133,13 @@ export const LeftSection: React.FC = () => {
                     gap="$2"
                     animation="quick"
                     enterStyle={{ opacity: 0, y: -10 }}
-                    exitStyle={{ opacity: 0, y: -10 }}
-                  >
+                    exitStyle={{ opacity: 0, y: -10 }}>
                     <Input
                       flex={1}
                       size="$3"
                       placeholder={t('history.search.placeholder')}
                       value={searchQuery}
-                      onChangeText={(text) => {
+                      onChangeText={text => {
                         console.log('搜索输入框文字变化:', text)
                         // 设置搜索查询
                         setSearchQuery(text)

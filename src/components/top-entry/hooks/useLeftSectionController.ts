@@ -1,16 +1,22 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../store'
-import { SortType, Topic, addTopic, deleteTopic, setCurrentTopic, setTopicSortType, setTopicsListOpen, updateTopic } from '../../../store/top-entry'
+import { useEffect, useMemo, useState } from 'react'
+
+import { useAppDispatch, useAppSelector } from '@/store'
+import {
+  addTopic,
+  deleteTopic,
+  setCurrentTopic,
+  setTopicsListOpen,
+  setTopicSortType,
+  SortType,
+  Topic,
+  updateTopic
+} from '@/store/top-entry'
+
 import { createNewTopic, sortTopics } from '../config'
 
 export const useLeftSectionController = () => {
   const dispatch = useAppDispatch()
-  const {
-    topics,
-    currentTopicId,
-    topicSortType,
-    isTopicsListOpen
-  } = useAppSelector(state => state.topEntry)
+  const { topics, currentTopicId, topicSortType, isTopicsListOpen } = useAppSelector(state => state.topEntry)
 
   // 本地状态
   const [searchQuery, setSearchQuery] = useState('')
@@ -27,12 +33,12 @@ export const useLeftSectionController = () => {
       const query = searchQuery.toLowerCase().trim()
       const results = topics.filter(
         topic =>
-          topic.name.toLowerCase().includes(query) ||
-          (topic.content && topic.content.toLowerCase().includes(query))
+          topic.name.toLowerCase().includes(query) || (topic.content && topic.content.toLowerCase().includes(query))
       )
       console.log('搜索查询:', searchQuery, '结果数量:', results.length, '第一个结果:', results[0]?.name)
       return results
     }
+
     // 否则按照指定的排序方式排序主题
     return sortTopics(topics, topicSortType)
   }, [topics, searchQuery, topicSortType])
@@ -60,6 +66,7 @@ export const useLeftSectionController = () => {
     if (!isTopicsListOpen) {
       setSearchQuery('')
     }
+
     dispatch(setTopicsListOpen(!isTopicsListOpen))
   }
 
@@ -76,7 +83,7 @@ export const useLeftSectionController = () => {
 
   // 编辑主题
   const startEditTopic = (topic: Topic) => {
-    setEditingTopic({...topic})
+    setEditingTopic({ ...topic })
     setIsEditMode(true)
   }
 
@@ -109,6 +116,7 @@ export const useLeftSectionController = () => {
     // 如果删除的是当前主题，选择第一个
     if (topicId === currentTopicId && topics.length > 1) {
       const remainingTopics = topics.filter(t => t.id !== topicId)
+
       if (remainingTopics.length > 0) {
         dispatch(setCurrentTopic(remainingTopics[0].id))
       }

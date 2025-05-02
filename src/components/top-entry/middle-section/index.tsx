@@ -1,7 +1,7 @@
-import { ChevronDown, Edit3, Plus, ArrowDownUp } from '@tamagui/lucide-icons'
+import { ArrowDownUp, ChevronDown, Edit3, Plus } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Avatar, AvatarFallback, AvatarImage, Button, Popover, Text, XStack, YStack } from 'tamagui'
+import { Button, Popover, Text, XStack, YStack } from 'tamagui'
 
 import { useMiddleSectionController } from '../hooks/useMiddleSectionController'
 import { AssistantEditor } from './assistant-editor'
@@ -51,28 +51,16 @@ export const MiddleSection: React.FC = () => {
 
   return (
     <XStack alignItems="center" justifyContent="center" gap="$2">
-      <Popover
-        open={isAssistantsListOpen}
-        onOpenChange={toggleAssistantsList}
-        placement="bottom"
-        size="$5">
+      <Popover open={isAssistantsListOpen} onOpenChange={toggleAssistantsList} placement="bottom" size="$5">
         <Popover.Trigger asChild>
-          <XStack
-            alignItems="center"
-            justifyContent="center"
-            gap="$1.5"
-            pressStyle={{ opacity: 0.7 }}
-            cursor="pointer">
+          <XStack alignItems="center" justifyContent="center" gap="$1.5" pressStyle={{ opacity: 0.7 }} cursor="pointer">
             {currentAssistant && (
               <>
                 {/* <Avatar circular size="$3">
                   <AvatarFallback backgroundColor="$blue5" />
                   <AvatarImage src={currentAssistant.avatar} />
                 </Avatar> */}
-                <Text
-                  fontSize="$5"
-                  fontWeight="500"
-                  color="$gray12">
+                <Text fontSize="$5" fontWeight="500" color="$gray12">
                   {currentAssistant.name}
                 </Text>
                 <ChevronDown size={16} color="$gray10" />
@@ -81,13 +69,7 @@ export const MiddleSection: React.FC = () => {
           </XStack>
         </Popover.Trigger>
 
-        <Popover.Content
-          borderWidth={1}
-          borderColor="$borderColor"
-          padding="$3"
-          minWidth={280}
-          width="auto"
-          elevate>
+        <Popover.Content borderWidth={1} borderColor="$borderColor" padding="$3" minWidth={280} width="auto" elevate>
           <YStack gap="$2" width="100%">
             <XStack gap="$2" justifyContent="flex-end">
               <Button
@@ -119,33 +101,15 @@ export const MiddleSection: React.FC = () => {
       </Popover>
 
       {/* 排序选项弹窗 */}
-      <Popover
-        open={showSortOptions}
-        onOpenChange={setShowSortOptions}
-        placement="right"
-        size="$5">
-        <Popover.Content
-          borderWidth={1}
-          borderColor="$borderColor"
-          padding="$3"
-          width={280}
-          elevate>
+      <Popover open={showSortOptions} onOpenChange={setShowSortOptions} placement="right" size="$5">
+        <Popover.Content borderWidth={1} borderColor="$borderColor" padding="$3" width={280} elevate>
           <SortOptions onClose={handleCloseSortOptions} />
         </Popover.Content>
       </Popover>
 
       {/* 编辑助手弹窗 */}
-      <Popover
-        open={showEditor}
-        onOpenChange={setShowEditor}
-        placement="right"
-        size="$5">
-        <Popover.Content
-          borderWidth={1}
-          borderColor="$borderColor"
-          padding="$3"
-          width={320}
-          elevate>
+      <Popover open={showEditor} onOpenChange={setShowEditor} placement="right" size="$5">
+        <Popover.Content borderWidth={1} borderColor="$borderColor" padding="$3" width={320} elevate>
           <AssistantEditor onClose={handleCloseEditor} />
         </Popover.Content>
       </Popover>

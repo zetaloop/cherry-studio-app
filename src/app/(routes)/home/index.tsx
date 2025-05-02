@@ -1,6 +1,6 @@
-import { Stack, Text, View, YStack } from 'tamagui'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Link } from '@react-navigation/native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Stack, Text, View, YStack } from 'tamagui'
 
 import { MessageInput } from '@/components/message-input'
 import { TopEntry } from '@/components/top-entry'
@@ -31,8 +31,7 @@ const HomeScreen: React.FC = () => {
           paddingBottom="$2"
           backgroundColor="$background"
           borderTopWidth={1}
-          borderTopColor="$borderColor"
-        >
+          borderTopColor="$borderColor">
           <MessageInput />
         </View>
       </YStack>

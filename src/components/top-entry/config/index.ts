@@ -2,9 +2,9 @@ import { Assistant, SortType, Topic } from '../../../store/top-entry'
 
 // 创建一个简单的ID生成函数，不依赖crypto
 const generateId = () => {
-  const timestamp = Date.now().toString(36);
-  const randomStr = Math.random().toString(36).substring(2, 10);
-  return `${timestamp}-${randomStr}`;
+  const timestamp = Date.now().toString(36)
+  const randomStr = Math.random().toString(36).substring(2, 10)
+  return `${timestamp}-${randomStr}`
 }
 
 // 默认助手数据
@@ -96,7 +96,12 @@ export const sortTopics = (topics: Topic[], sortType: SortType): Topic[] => {
 }
 
 // 创建新助手
-export const createNewAssistant = (name: string, description: string, model: string, avatar: string = 'https://picsum.photos/200/200'): Assistant => {
+export const createNewAssistant = (
+  name: string,
+  description: string,
+  model: string,
+  avatar: string = 'https://picsum.photos/200/200'
+): Assistant => {
   return {
     id: generateId(),
     name,
@@ -138,9 +143,7 @@ export const searchTopics = (topics: Topic[], query: string): Topic[] => {
 
   const lowerQuery = query.toLowerCase()
   return topics.filter(
-    topic =>
-      topic.name.toLowerCase().includes(lowerQuery) ||
-      topic.content.toLowerCase().includes(lowerQuery)
+    topic => topic.name.toLowerCase().includes(lowerQuery) || topic.content.toLowerCase().includes(lowerQuery)
   )
 }
 
