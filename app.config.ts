@@ -35,7 +35,10 @@ export default {
           backgroundColor: '#ffffff'
         }
       ],
-      'expo-localization'
+      'expo-localization',
+      'expo-asset',
+      'expo-font',
+      'expo-web-browser'
     ],
     experiments: {
       typedRoutes: true
