@@ -81,7 +81,7 @@ export default function SettingsPage() {
               icon={<ArrowLeft size={24} />}
               onPress={() => navigation.goBack()}
             />
-            <Text color="$color12" fontSize="$6" fontWeight="bold">
+            <Text fontSize="$6" fontWeight="bold">
               {t('settings.title')}
             </Text>
             <XStack width={44} /> {/* 用于占位，使标题居中 */}
@@ -110,10 +110,10 @@ interface SettingGroupProps {
 function SettingGroup({ title, children }: SettingGroupProps) {
   return (
     <YStack gap={8}>
-      <Text color="$color12" fontSize="$4" fontWeight="bold" opacity={0.7}>
+      <Text fontSize="$4" fontWeight="bold" opacity={0.7}>
         {title}
       </Text>
-      <YStack backgroundColor="$gray3" gap={8} paddingVertical={12} borderRadius={9}>
+      <YStack backgroundColor="$gray2" gap={8} paddingVertical={12} borderRadius={9}>
         {children}
       </YStack>
     </YStack>
@@ -143,9 +143,7 @@ function SettingItem({ title, screen, icon }: SettingItemProps) {
       <XStack alignItems="center" gap={12}>
         {typeof icon === 'string' ? <Text>{icon}</Text> : icon}
         <YStack>
-          <Text color="$color12" fontSize="$5">
-            {title}
-          </Text>
+          <Text fontSize="$5">{title}</Text>
         </YStack>
       </XStack>
       <ChevronRight size={24} color="$colorFocus" />
