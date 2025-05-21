@@ -6,6 +6,8 @@ import { TamaguiProvider } from '@tamagui/core'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
+import React from 'react'
+import { useColorScheme } from 'react-native'
 import { Provider } from 'react-redux'
 import { PortalProvider } from 'tamagui'
 
@@ -18,13 +20,15 @@ import App from './App'
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme()
+
   useEffect(() => {
     SplashScreen.hideAsync()
   }, [])
 
   return (
     <Provider store={store}>
-      <TamaguiProvider config={tamaguiConfig}>
+      <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme ?? 'light'}>
         <PortalProvider>
           <ThemeProvider value={DefaultTheme}>
             <App />

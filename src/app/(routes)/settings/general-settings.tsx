@@ -1,7 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useTheme } from 'tamagui'
 
 import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '@/components/settings'
 import { Select } from '@/components/ui/select'
@@ -20,6 +22,7 @@ export default function SettingsPage() {
   const { t } = useTranslation()
   const [language, setLanguage] = useState('zh-CN')
   const [proxyMode, setProxyMode] = useState('system')
+  const theme = useTheme()
 
   useEffect(() => {
     const initLanguage = async () => {
@@ -37,7 +40,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <SettingContainer>
         <SettingTitle>{t('settings.general.title')}</SettingTitle>
 

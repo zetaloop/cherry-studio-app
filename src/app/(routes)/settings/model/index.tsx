@@ -1,7 +1,8 @@
 import { Edit3, Languages, MessageCircleMore, Settings } from '@tamagui/lucide-icons'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Text, XStack } from 'tamagui'
+import { Button, Text, useTheme, XStack } from 'tamagui'
 
 import { SettingContainer, SettingDescription, SettingGroup, SettingTitle } from '@/components/settings'
 import { Select } from '@/components/ui/select'
@@ -27,8 +28,9 @@ const mock_models = [
 
 export default function ModelSettingsPage() {
   const { t } = useTranslation()
+  const theme = useTheme()
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <SettingContainer>
         <SettingGroup>
           <SettingTitle>

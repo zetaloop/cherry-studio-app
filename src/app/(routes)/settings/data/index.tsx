@@ -1,7 +1,8 @@
 import { Folder, Save } from '@tamagui/lucide-icons'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, XStack } from 'tamagui'
+import { Button, useTheme, XStack } from 'tamagui'
 
 import {
   SettingContainer,
@@ -15,8 +16,9 @@ import { NotionSettings, WebDavSettings, Yuque } from '@/components/settings/dat
 
 export default function DataSettingsPage() {
   const { t } = useTranslation()
+  const theme = useTheme()
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <SettingContainer>
         <SettingGroup>
           <SettingTitle>{t('settings.data.title')}</SettingTitle>

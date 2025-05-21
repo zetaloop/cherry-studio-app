@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import React from 'react'
 
 import HomeScreen from '@/app/(routes)/home'
 import SettingsPage from '@/app/(routes)/settings'
 import AboutSettingsPage from '@/app/(routes)/settings/about-settings'
 import DataSettingsPage from '@/app/(routes)/settings/data'
-import DisplaySettingsPage from '@/app/(routes)/settings/display'
 import GeneralSettingsPage from '@/app/(routes)/settings/general-settings'
 import ModelSettingsPage from '@/app/(routes)/settings/model'
 import ProvidersSettingsPage from '@/app/(routes)/settings/providers'
@@ -24,7 +24,6 @@ export const AppNavigation: React.FC = () => {
       <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
       <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="DataSettings" component={DataSettingsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="DisplaySettings" component={DisplaySettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ModelSettings" component={ModelSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ProvidersSettings" component={ProvidersSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="OpenAiSettings" component={OpenAiSettingsPage} />
