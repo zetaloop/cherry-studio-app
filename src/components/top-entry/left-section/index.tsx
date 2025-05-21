@@ -54,12 +54,12 @@ export const LeftSection: React.FC = () => {
       {/* 主题列表按钮 */}
       <Button
         size="$3"
-        backgroundColor="transparent"
+        backgroundColor="$colorTransparent"
         borderRadius="$4"
         paddingHorizontal="$2"
-        onPress={toggleTopicsList}>
-        <List size={20} color="$blue9" />
-      </Button>
+        onPress={toggleTopicsList}
+        icon={<List size={20} />}
+      />
 
       {/* 侧边栏覆盖层 */}
       <AnimatePresence>

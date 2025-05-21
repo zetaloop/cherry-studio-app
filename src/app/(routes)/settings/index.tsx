@@ -74,7 +74,13 @@ export default function SettingsPage() {
       <ScrollView backgroundColor="$background">
         <YStack padding="$4" gap={4} flex={1}>
           <XStack justifyContent="space-between" alignItems="center">
-            <Button size="$2" circular icon={<ArrowLeft size={24} />} onPress={() => navigation.goBack()} />
+            <Button
+              size="$2"
+              backgroundColor="$colorTransparent"
+              circular
+              icon={<ArrowLeft size={24} />}
+              onPress={() => navigation.goBack()}
+            />
             <Text color="$color12" fontSize="$6" fontWeight="bold">
               {t('settings.title')}
             </Text>
