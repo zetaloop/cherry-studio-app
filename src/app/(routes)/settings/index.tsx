@@ -5,18 +5,22 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, ScrollView, Text, XStack, YStack } from 'tamagui'
 
+interface SettingItemConfig {
+  title: string
+  screen: string
+  icon: React.ReactElement
+}
+
+interface SettingGroupConfig {
+  title: string
+  items: SettingItemConfig[]
+}
+
 export default function SettingsPage() {
   const { t } = useTranslation()
   const navigation = useNavigation()
 
-  const settingsItems: {
-    title: string
-    items: {
-      title: string
-      screen: string
-      icon: React.ReactNode
-    }[]
-  }[] = [
+  const settingsItems: SettingGroupConfig[] = [
     {
       title: t('settings.modelAndService'),
       items: [
@@ -69,11 +73,11 @@ export default function SettingsPage() {
       <ScrollView>
         <YStack padding="$4" gap={4} flex={1}>
           <XStack justifyContent="space-between" alignItems="center">
-            <Button size="$2" circular icon={<ArrowLeft size={18} />} onPress={() => navigation.goBack()} />
+            <Button size="$2" circular icon={<ArrowLeft size={24} />} onPress={() => navigation.goBack()} />
             <Text fontSize="$6" fontWeight="bold">
               {t('settings.title')}
             </Text>
-            <XStack width={44} />
+            <XStack width={44} /> {/* 用于占位，使标题居中 */}
           </XStack>
 
           <YStack gap={24} flex={1} marginTop={16}>
@@ -91,7 +95,12 @@ export default function SettingsPage() {
   )
 }
 
-function SettingGroup({ title, children }: { title: string; children: React.ReactNode }) {
+interface SettingGroupProps {
+  title: string
+  children: React.ReactNode
+}
+
+function SettingGroup({ title, children }: SettingGroupProps) {
   return (
     <YStack gap={8}>
       <Text fontSize="$4" fontWeight="bold" opacity={0.7}>
@@ -104,7 +113,13 @@ function SettingGroup({ title, children }: { title: string; children: React.Reac
   )
 }
 
-function SettingItem({ title, screen, icon }: { title: string; screen: string; icon: React.ReactNode }) {
+interface SettingItemProps {
+  title: string
+  screen: string
+  icon: React.ReactElement
+}
+
+function SettingItem({ title, screen, icon }: SettingItemProps) {
   const navigation = useNavigation()
   return (
     <XStack
@@ -116,16 +131,16 @@ function SettingItem({ title, screen, icon }: { title: string; screen: string; i
       justifyContent="space-between"
       alignItems="center"
       pressStyle={{ opacity: 0.8 }}
-      hoverStyle={{ backgroundColor: '#2A2A2A' }}
+      hoverStyle={{ backgroundColor: '$backgroundHover' }}
       // @ts-expect-error navigate type mismatch
-      onPress={() => navigation.navigate(screen)}>
+      onPress={() => navigation.navigate(screen as any)}>
       <XStack alignItems="center" gap={12}>
-        {icon}
-        <YStack gap={16}>
+        {typeof icon === 'string' ? <Text>{icon}</Text> : icon}
+        <YStack>
           <Text fontSize="$5">{title}</Text>
         </YStack>
       </XStack>
-      <ChevronRight size={24} color="#aaa" />
+      <ChevronRight size={24} color="$colorFocus" />
     </XStack>
   )
 }
