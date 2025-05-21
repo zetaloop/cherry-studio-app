@@ -107,7 +107,7 @@ function SettingGroup({ title, children }: SettingGroupProps) {
       <Text color="$color12" fontSize="$4" fontWeight="bold" opacity={0.7}>
         {title}
       </Text>
-      <YStack backgroundColor="$background" gap={8} paddingVertical={12} borderRadius={9}>
+      <YStack backgroundColor="$gray3" gap={8} paddingVertical={12} borderRadius={9}>
         {children}
       </YStack>
     </YStack>
@@ -125,7 +125,6 @@ function SettingItem({ title, screen, icon }: SettingItemProps) {
   return (
     <XStack
       height={44}
-      backgroundColor="$background"
       paddingHorizontal={16}
       paddingVertical={12}
       borderRadius={9}
