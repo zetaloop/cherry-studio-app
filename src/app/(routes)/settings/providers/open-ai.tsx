@@ -30,7 +30,7 @@ export default function OpenAIProviderPage() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         <YStack gap={24} flex={1}>
           <Text fontSize="$6" fontWeight="bold">

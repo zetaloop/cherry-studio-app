@@ -3,7 +3,7 @@ import { ArrowLeft, ChevronRight, Cloud, Globe, HardDrive, Info, Package, Settin
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, ScrollView, Text, XStack, YStack } from 'tamagui'
+import { Button, ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
 interface SettingItemConfig {
   title: string
@@ -18,6 +18,7 @@ interface SettingGroupConfig {
 
 export default function SettingsPage() {
   const { t } = useTranslation()
+  const theme = useTheme()
   const navigation = useNavigation()
 
   const settingsItems: SettingGroupConfig[] = [
@@ -69,12 +70,12 @@ export default function SettingsPage() {
   ]
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+      <ScrollView backgroundColor="$background">
         <YStack padding="$4" gap={4} flex={1}>
           <XStack justifyContent="space-between" alignItems="center">
             <Button size="$2" circular icon={<ArrowLeft size={24} />} onPress={() => navigation.goBack()} />
-            <Text fontSize="$6" fontWeight="bold">
+            <Text color="$color12" fontSize="$6" fontWeight="bold">
               {t('settings.title')}
             </Text>
             <XStack width={44} /> {/* 用于占位，使标题居中 */}
@@ -103,7 +104,7 @@ interface SettingGroupProps {
 function SettingGroup({ title, children }: SettingGroupProps) {
   return (
     <YStack gap={8}>
-      <Text fontSize="$4" fontWeight="bold" opacity={0.7}>
+      <Text color="$color12" fontSize="$4" fontWeight="bold" opacity={0.7}>
         {title}
       </Text>
       <YStack backgroundColor="$background" gap={8} paddingVertical={12} borderRadius={9}>
@@ -137,7 +138,9 @@ function SettingItem({ title, screen, icon }: SettingItemProps) {
       <XStack alignItems="center" gap={12}>
         {typeof icon === 'string' ? <Text>{icon}</Text> : icon}
         <YStack>
-          <Text fontSize="$5">{title}</Text>
+          <Text color="$color12" fontSize="$5">
+            {title}
+          </Text>
         </YStack>
       </XStack>
       <ChevronRight size={24} color="$colorFocus" />
