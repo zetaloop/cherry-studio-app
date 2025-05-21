@@ -841,7 +841,8 @@
           "title": "Tavily"
         },
         "title": "网络搜索"
-      }
+      },
+      "modelAndService":"AI模型与服务"
     },
     "translate": {
       "any.language": "任意语言",

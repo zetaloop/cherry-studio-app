@@ -597,7 +597,7 @@
       "about.releases.button": "Releases",
       "about.releases.title": "Release Notes",
       "about.social.title": "Social Accounts",
-      "about.title": "About",
+      "about.title": "About Us",
       "about.updateAvailable": "Found new version {{version}}",
       "about.updateError": "Update error",
       "about.updateNotAvailable": "You are using the latest version",
@@ -841,7 +841,9 @@
         "blacklist_tooltip": "Please use the following format (separated by line breaks)\nexample.com\nhttps://www.example.com\nhttps://example.com\n*://*.example.com",
         "search_max_result": "Number of search results",
         "search_result_default": "Default"
-      }
+      },
+      "modelAndService":"AI Models & Services",
+      "dataAndSecurity":"Data & Security"
     },
     "translate": {
       "any.language": "Any language",
