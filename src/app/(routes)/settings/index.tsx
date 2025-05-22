@@ -141,7 +141,7 @@ function SettingItem({ title, screen, icon }: SettingItemProps) {
       // @ts-expect-error navigate type mismatch
       onPress={() => navigation.navigate(screen as any)}>
       <XStack alignItems="center" gap={12}>
-        {typeof icon === 'string' ? <Text>{icon}</Text> : icon}
+        {icon}
         <YStack>
           <Text fontSize="$5">{title}</Text>
         </YStack>
