@@ -49,3 +49,21 @@ export type Metrics = {
   time_first_token_millsec?: number
   time_thinking_millsec?: number
 }
+
+export type Provider = {
+  id: string
+  type: ProviderType
+  name: string
+  apiKey: string
+  apiHost: string
+  apiVersion?: string
+  models: Model[]
+  enabled?: boolean
+  isSystem?: boolean
+  isAuthed?: boolean
+  rateLimit?: number
+  isNotSupportArrayContent?: boolean
+  notes?: string
+}
+
+export type ProviderType = 'openai' | 'openai-response' | 'anthropic' | 'gemini' | 'qwenlm' | 'azure-openai'
