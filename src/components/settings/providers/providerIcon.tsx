@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Image, useThemeName } from 'tamagui'
 
 import { Provider } from '@/types/agent'
@@ -103,7 +103,14 @@ const PROVIDER_ICONS_LIGHT = {
 
 export const ProviderIcon: React.FC<ProviderIconProps> = ({ provider }) => {
   const theme = useThemeName()
-  const PROVIDER_ICONS = theme === 'dark' ? PROVIDER_ICONS_DARK : PROVIDER_ICONS_LIGHT
-  const iconSource = PROVIDER_ICONS[provider.id as keyof typeof PROVIDER_ICONS] || PROVIDER_ICONS.default
+
+  const providerIcons = useMemo(() => {
+    return theme === 'dark' ? PROVIDER_ICONS_DARK : PROVIDER_ICONS_LIGHT
+  }, [theme])
+
+  const iconSource = useMemo(() => {
+    return providerIcons[provider.id as keyof typeof providerIcons] || providerIcons.default
+  }, [providerIcons, provider.id])
+
   return <Image width={20} height={20} source={iconSource} />
 }
