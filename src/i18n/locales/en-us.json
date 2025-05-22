@@ -124,7 +124,8 @@
         "title": "Web Search"
       },
       "modelAndService": "AI Models & Services",
-      "dataAndSecurity": "Data & Security"
+      "dataAndSecurity": "Data & Security",
+      "general.title": " General Settings"
     },
     "profile": {
       "editProfile": "Edit profile",
