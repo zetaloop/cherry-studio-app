@@ -1,4 +1,3 @@
-// import { Link } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native'
 import { ArrowLeft, Plus } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
@@ -15,13 +14,13 @@ const mock_providers = []
 export default function ProviderSettingsPage() {
   const { t } = useTranslation()
   const theme = useTheme()
-  const navigation = useNavigation()
+  const navigation = useNavigation<any>()
   const [searchQuery, setSearchQuery] = useState('')
 
   const isLargeScreen = useWidth(768)
 
   const onAddModel = () => {
-    console.log('onAddModel')
+    navigation.navigate('ProviderListPage' as any)
   }
 
   return (

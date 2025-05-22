@@ -69,7 +69,7 @@ export default function ProfilePage() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <XStack justifyContent="flex-end" padding="$2">
-        <Link screen="Settings">
+        <Link screen="Settings" params={{ id: 'Settings' }}>
           <Button size="$3" circular icon={<Settings size={20} />} backgroundColor="$colorTransparent" color="$gray9" />
         </Link>
       </XStack>
