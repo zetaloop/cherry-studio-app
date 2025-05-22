@@ -3,11 +3,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, useStore } from 'react-redux'
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 
+import agents from './agent'
 import app from './app'
+import messageBlocksReducer from './message-block'
 import runtime from './runtime'
 import topEntry from './top-entry'
 
-const rootReducer = combineReducers({ app, runtime, topEntry })
+const rootReducer = combineReducers({ app, runtime, topEntry, agents, messageBlocks: messageBlocksReducer })
 
 const persistedReducer = persistReducer(
   { key: 'cherry-studio', storage: AsyncStorage, version: 1, blacklist: ['runtime'] },

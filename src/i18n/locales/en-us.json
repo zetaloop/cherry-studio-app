@@ -26,6 +26,7 @@
       "placeholder": "Ask something casually"
     },
     "chat": {
+      "default.name": "Default",
       "topics": {
         "title": "Topics",
         "list": "List",

@@ -84,7 +84,7 @@ export default function SettingsPage() {
             <Text fontSize="$6" fontWeight="bold">
               {t('settings.title')}
             </Text>
-            <XStack width={44} /> {/* 用于占位，使标题居中 */}
+            <XStack width={44} />
           </XStack>
 
           <YStack gap={24} flex={1} marginTop={16}>

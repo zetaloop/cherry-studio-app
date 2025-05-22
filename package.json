@@ -16,7 +16,9 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.51.0",
     "@expo/vector-icons": "^14.1.0",
+    "@google/genai": "^1.0.1",
     "@react-native-async-storage/async-storage": "2.1.2",
     "@react-native-community/datetimepicker": "8.3.0",
     "@react-navigation/bottom-tabs": "^7.0.0",
@@ -26,12 +28,15 @@
     "@tamagui/babel-plugin": "^1.123.17",
     "@tamagui/core": "^1.123.17",
     "@tamagui/lucide-icons": "^1.125.1",
+    "@types/lodash": "^4.17.17",
     "dayjs": "^1.11.13",
+    "dexie": "^4.0.11",
     "expo": "^53.0.9",
     "expo-asset": "~11.1.5",
     "expo-blur": "~14.1.4",
     "expo-constants": "~17.1.6",
     "expo-dev-client": "~5.1.8",
+    "expo-file-system": "~18.1.10",
     "expo-font": "~13.3.1",
     "expo-haptics": "~14.1.4",
     "expo-linear-gradient": "~14.1.4",
@@ -44,12 +49,15 @@
     "expo-system-ui": "~5.0.7",
     "expo-web-browser": "~14.1.6",
     "i18next": "^24.2.2",
+    "lodash": "^4.17.21",
+    "openai": "^4.102.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-i18next": "^15.4.1",
     "react-native": "0.79.2",
     "react-native-device-info": "^14.0.4",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-get-random-values": "^1.11.0",
     "react-native-pager-view": "6.7.1",
     "react-native-qrcode-styled": "^0.3.3",
     "react-native-reanimated": "~3.17.4",
@@ -60,7 +68,8 @@
     "react-native-webview": "13.13.5",
     "react-redux": "^9.2.0",
     "redux-persist": "^6.0.0",
-    "tamagui": "^1.123.17"
+    "tamagui": "^1.123.17",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -87,6 +96,5 @@
     "react-test-renderer": "18.3.1",
     "typescript": "^5.3.3"
   },
-  "private": true,
-  "packageManager": "yarn@4.6.0"
+  "private": true
 }
