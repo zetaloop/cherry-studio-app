@@ -5,3 +5,9 @@
 ## TODO
 - [] provider logo light mode
 - [] redux
+
+
+## database
+### Expo SQLite + Drizzle
+
+### Redux
