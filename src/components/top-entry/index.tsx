@@ -32,7 +32,7 @@ export const TopEntry: React.FC<TopEntryProps> = ({ onBack }) => {
             circular
             icon={<ArrowLeft size={24} />}
             onPress={onBack}
-            backgroundColor="$colorTransparent"
+            chromeless
           />
         )}
         <LeftSection />

@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
-import { ArrowLeft, ChevronRight, Cloud, Globe, HardDrive, Info, Package, Settings } from '@tamagui/lucide-icons'
+import { ChevronRight, Cloud, Globe, HardDrive, Info, Package, Settings } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
+import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
+
+import { HeaderBar } from '@/components/settings/headerBar'
 
 interface SettingItemConfig {
   title: string
@@ -27,7 +29,7 @@ export default function SettingsPage() {
       items: [
         {
           title: t('settings.provider.title'),
-          screen: 'ProvidersSettings',
+          screen: 'ProvidersPage',
           icon: <Cloud size={24} />
         },
         {
@@ -73,19 +75,7 @@ export default function SettingsPage() {
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <ScrollView backgroundColor="$background">
         <YStack padding="$4" gap={4} flex={1}>
-          <XStack justifyContent="space-between" alignItems="center">
-            <Button
-              size="$2"
-              backgroundColor="$colorTransparent"
-              circular
-              icon={<ArrowLeft size={24} />}
-              onPress={() => navigation.goBack()}
-            />
-            <Text fontSize="$6" fontWeight="bold">
-              {t('settings.title')}
-            </Text>
-            <XStack width={44} />
-          </XStack>
+          <HeaderBar title={t('settings.title')} onBackPress={() => navigation.goBack()} />
 
           <YStack gap={24} flex={1} marginTop={16}>
             {settingsItems.map(group => (

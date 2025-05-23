@@ -70,7 +70,7 @@ export default function ProfilePage() {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <XStack justifyContent="flex-end" padding="$2">
         <Link screen="Settings" params={{ id: 'Settings' }}>
-          <Button size="$3" circular icon={<Settings size={20} />} backgroundColor="$colorTransparent" color="$gray9" />
+          <Button size="$3" circular icon={<Settings size={20} />} chromeless color="$gray9" />
         </Link>
       </XStack>
 
@@ -88,13 +88,7 @@ export default function ProfilePage() {
           </YStack>
 
           {/* 编辑个人资料按钮 */}
-          <Button
-            size="$3"
-            backgroundColor="$colorTransparent"
-            borderColor="$gray5"
-            borderWidth={1}
-            borderRadius="$4"
-            paddingHorizontal="$6">
+          <Button size="$3" chromeless borderColor="$gray5" borderWidth={1} borderRadius="$4" paddingHorizontal="$6">
             {t('profile.editProfile')}
           </Button>
 

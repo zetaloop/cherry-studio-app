@@ -1,4 +1,5 @@
 import { CircleMinus, Settings } from '@tamagui/lucide-icons'
+import React from 'react'
 import { Button, Separator, Text, XStack, YStack } from 'tamagui'
 
 export const ProviderGroup: React.FC<{
@@ -22,14 +23,9 @@ export const ProviderGroup: React.FC<{
             <XStack gap={8} alignItems="center">
               {icon}
               <Text>{model.name}</Text>
-              <Button backgroundColor="$colorTransparent" size="$2" circular icon={<Settings size={16} />} />
+              <Button chromeless size="$2" circular icon={<Settings size={16} />} />
             </XStack>
-            <Button
-              backgroundColor="$colorTransparent"
-              size="$2"
-              circular
-              icon={<CircleMinus color="$red10" size={16} />}
-            />
+            <Button chromeless size="$2" circular icon={<CircleMinus color="$red10" size={16} />} />
           </XStack>
           {index < models.length - 1 && <Separator />}
         </YStack>
