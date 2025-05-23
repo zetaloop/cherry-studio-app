@@ -1,11 +1,13 @@
+import { useNavigation } from '@react-navigation/native'
 import { ChevronRight } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, XStack } from 'tamagui'
 
 import { Provider } from '@/types/agent'
+import { NavigationProps } from '@/types/naviagate'
 
-import { ProviderIcon } from './providerIcon'
+import { ProviderIcon } from '../../ui/providerIcon'
 
 interface ProviderItemProps {
   provider: Provider
@@ -13,13 +15,24 @@ interface ProviderItemProps {
 
 export const ProviderItem: React.FC<ProviderItemProps> = ({ provider }) => {
   const { t } = useTranslation()
+  const navigation = useNavigation<NavigationProps>()
+
   return (
-    <XStack height={45} paddingVertical={12} paddingHorizontal={16} alignItems="center" justifyContent="space-between">
+    <XStack
+      height={45}
+      paddingVertical={12}
+      paddingHorizontal={16}
+      alignItems="center"
+      justifyContent="space-between"
+      onPress={() => navigation.navigate('ProviderSettingsPage', { providerId: provider.id })}
+      pressStyle={{ opacity: 0.8 }}
+      hoverStyle={{ backgroundColor: '$backgroundHover' }}>
       <XStack gap={5} alignItems="center">
         <ProviderIcon provider={provider} />
         <Text>{provider.name}</Text>
       </XStack>
       <XStack gap={10} alignItems="center">
+        {/* todo 弄清楚added文本的含义 added !== enabled */}
         {provider.enabled && (
           <Text
             paddingVertical={2}

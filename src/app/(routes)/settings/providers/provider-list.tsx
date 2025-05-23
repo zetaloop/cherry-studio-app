@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
-import { ArrowLeft, Plus } from '@tamagui/lucide-icons'
+import { Plus } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
+import { ScrollView, Text, useTheme, YStack } from 'tamagui'
 
+import { HeaderBar } from '@/components/settings/headerBar'
 import { ProviderItem } from '@/components/settings/providers/providerItem'
 import { SearchInput } from '@/components/ui/searchInput'
 import { useAllProviders } from '@/hooks/use-providers'
@@ -33,25 +34,15 @@ export default function ProviderListPage() {
         padding="$4"
         overflow="hidden" // 防止内容溢出
       >
-        <XStack justifyContent="space-between" alignItems="center">
-          <Button
-            size="$2"
-            backgroundColor="$colorTransparent"
-            circular
-            icon={<ArrowLeft size={24} />}
-            onPress={() => navigation.goBack()}
-          />
-          <Text fontSize="$6" fontWeight="bold">
-            {t('settings.provider.list.title')}
-          </Text>
-          <Button
-            size="$2"
-            backgroundColor="$colorTransparent"
-            circular
-            icon={<Plus size={24} />}
-            onPress={onAddProvider}
-          />
-        </XStack>
+        <HeaderBar
+          title={t('settings.provider.list.title')}
+          onBackPress={() => navigation.goBack()}
+          rightButton={{
+            icon: <Plus size={24} />,
+            onPress: onAddProvider
+          }}
+        />
+
         <SearchInput placeholder={t('settings.provider.search')} value={searchQuery} onChangeText={setSearchQuery} />
         <YStack flex={1} gap={8}>
           <Text>{t('settings.provider.title')}</Text>

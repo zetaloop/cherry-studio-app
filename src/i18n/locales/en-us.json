@@ -46,12 +46,27 @@
       "language": "Language",
       "model": "Model",
       "name": "Name",
-      "save": "Save"
+      "save": "Save",
+      "manage": "Manage",
+      "enabled": "Enabled"
     },
     "history": {
       "topics.empty": " No topics found",
       "search.placeholder": "Search topics or messages...",
       "search.topics.empty": "No topics found, press Enter to search all messages"
+    },
+    "models": {
+      "type": {
+        "embedding": "Embedding",
+        "free": "Free",
+        "function_calling": "Tool",
+        "reasoning": "Reasoning",
+        "rerank": "Rerank",
+        "select": "Select Model Types",
+        "text": "Text",
+        "vision": "Vision",
+        "websearch": "WebSearch"
+      }
     },
     "settings": {
       "about.contact.button": "Email",
@@ -84,7 +99,10 @@
       "models.empty.add_model": "Let's add your first model",
       "models.translate_model": "Translate Model",
       "models.translate_model_description": "Model used for translation service",
+      "models.search": "Search Models...",
+      "models.title": "Models",
       "provider": {
+        "api_service": "API Service",
         "list.title": "Provider List",
         "add.name": "Provider Name",
         "add.name.placeholder": "Example: OpenAI",

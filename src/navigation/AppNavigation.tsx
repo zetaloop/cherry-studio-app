@@ -7,13 +7,15 @@ import AboutSettingsPage from '@/app/(routes)/settings/about-settings'
 import DataSettingsPage from '@/app/(routes)/settings/data'
 import GeneralSettingsPage from '@/app/(routes)/settings/general-settings'
 import ModelSettingsPage from '@/app/(routes)/settings/model'
-import ProvidersSettingsPage from '@/app/(routes)/settings/providers'
+import ProvidersPage from '@/app/(routes)/settings/providers'
 import ProviderListPage from '@/app/(routes)/settings/providers/provider-list'
+import ProviderSettingsPage from '@/app/(routes)/settings/providers/provider-settings'
 import WebSearchSettingsPage from '@/app/(routes)/settings/websearch-settings'
 import WelcomePage from '@/app/(routes)/welcome'
 import { useAppSelector } from '@/store'
+import { RootStackParamList } from '@/types/naviagate'
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export const AppNavigation: React.FC = () => {
   const welcomeShown = useAppSelector(state => state.app.welcomeShown)
@@ -25,11 +27,12 @@ export const AppNavigation: React.FC = () => {
       <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="DataSettings" component={DataSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ModelSettings" component={ModelSettingsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="ProvidersSettings" component={ProvidersSettingsPage} />
+      <Stack.Screen options={{ headerShown: false }} name="ProvidersPage" component={ProvidersPage} />
       <Stack.Screen options={{ headerShown: false }} name="AboutSettings" component={AboutSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="GeneralSettings" component={GeneralSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="WebSearchSettings" component={WebSearchSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ProviderListPage" component={ProviderListPage} />
+      <Stack.Screen options={{ headerShown: false }} name="ProviderSettingsPage" component={ProviderSettingsPage} />
     </Stack.Navigator>
   )
 }

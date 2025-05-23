@@ -54,7 +54,7 @@ export const LeftSection: React.FC = () => {
       {/* 主题列表按钮 */}
       <Button
         size="$3"
-        backgroundColor="$colorTransparent"
+        chromeless
         borderRadius="$4"
         paddingHorizontal="$2"
         onPress={toggleTopicsList}

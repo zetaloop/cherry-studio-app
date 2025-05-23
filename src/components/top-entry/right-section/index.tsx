@@ -14,7 +14,7 @@ export const RightSection: React.FC = () => {
       <Button
         size={20}
         circular
-        backgroundColor="$colorTransparent"
+        chromeless
         icon={<SquarePen size={20} />}
         onPress={createNewTopicHandler}
       />
