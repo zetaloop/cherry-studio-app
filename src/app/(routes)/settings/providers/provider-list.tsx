@@ -15,7 +15,7 @@ export default function ProviderListPage() {
   const theme = useTheme()
   const navigation = useNavigation()
 
-  const providers = useAllProviders()
+  const { providers } = useAllProviders()
   const [searchQuery, setSearchQuery] = useState('')
 
   const onAddProvider = () => {}
@@ -48,12 +48,13 @@ export default function ProviderListPage() {
           <Text>{t('settings.provider.title')}</Text>
           <ScrollView
             flex={1}
+            borderRadius={9}
             backgroundColor="$gray2"
             contentContainerStyle={{
               paddingTop: 2
             }}>
             {providers.map(p => (
-              <ProviderItem key={p.id} provider={p} />
+              <ProviderItem key={p.id} provider={p} mode="checked" />
             ))}
           </ScrollView>
         </YStack>
