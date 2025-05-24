@@ -1,8 +1,9 @@
 import { ArrowLeft, Plus, Search } from '@tamagui/lucide-icons'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Avatar, AvatarImage, Button, ListItem, ScrollView, SizableText, XStack, YGroup } from 'tamagui'
+import { Avatar, AvatarImage, Button, ListItem, ScrollView, SizableText, useTheme, XStack, YGroup } from 'tamagui'
 
 // 模拟聊天列表数据
 const mockChats = [
@@ -18,9 +19,10 @@ export default function AssistantPage() {
   const { t } = useTranslation()
   const { id } = useLocalSearchParams<{ id: string }>()
   const router = useRouter()
+  const theme = useTheme()
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <XStack justifyContent="space-between" alignItems="center" padding="$2">
         <Button icon={ArrowLeft} onPress={() => router.back()} />
         <SizableText fontSize={20} fontWeight="bold">
