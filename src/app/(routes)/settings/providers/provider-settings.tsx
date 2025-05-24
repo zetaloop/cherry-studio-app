@@ -166,7 +166,7 @@ export default function ProviderSettingsPage() {
                 </Accordion>
               ) : (
                 <Text textAlign="center" color="$gray10" paddingVertical={24}>
-                  {searchText ? t('settings.models.no_results') : t('settings.models.no_models')}
+                  {searchText ? t('settings.models.no_results') : t('models.no_models')}
                 </Text>
               )}
             </YStack>

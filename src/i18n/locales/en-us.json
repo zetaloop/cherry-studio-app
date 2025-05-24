@@ -56,7 +56,9 @@
       "search.topics.empty": "No topics found, press Enter to search all messages"
     },
     "models": {
+      "no_models": "No models available",
       "type": {
+        "all": "All",
         "embedding": "Embedding",
         "free": "Free",
         "function_calling": "Tool",

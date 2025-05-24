@@ -1,6 +1,72 @@
 import { SYSTEM_MODELS } from '@/config/models'
 import { Provider } from '@/types/agent'
 
+export const MOCK_AIHUBMIX_MODELS = [
+  {
+    id: 'o3-mini',
+    name: 'o3-mini',
+    provider: 'aihubmix',
+    group: 'o3',
+    owned_by: 'custom'
+  },
+  {
+    id: 'gpt-4.1',
+    name: 'gpt-4.1',
+    provider: 'aihubmix',
+    group: 'gpt',
+    owned_by: 'custom'
+  },
+  {
+    id: 'gemini-2.5-flash-preview-04-17',
+    name: 'gemini-2.5-flash-preview-04-17',
+    provider: 'aihubmix',
+    group: 'gemini',
+    owned_by: 'custom'
+  },
+  {
+    id: 'claude-sonnet-4-20250514',
+    name: 'claude-sonnet-4-20250514',
+    provider: 'aihubmix',
+    group: 'claude',
+    owned_by: 'custom'
+  },
+  {
+    id: 'DeepSeek-R1',
+    name: 'DeepSeek-R1',
+    provider: 'aihubmix',
+    group: 'deepseek',
+    owned_by: 'custom'
+  },
+  {
+    id: 'Qwen/Qwen3-235B-A22B',
+    name: 'Qwen/Qwen3-235B-A22B',
+    provider: 'aihubmix',
+    group: 'qwen',
+    owned_by: 'custom'
+  },
+  {
+    id: 'jina-reranker-m0',
+    name: 'jina-reranker-m0',
+    provider: 'aihubmix',
+    group: 'jina',
+    owned_by: 'custom'
+  },
+  {
+    id: 'moonshot-v1-8k',
+    name: 'moonshot-v1-8k',
+    provider: 'aihubmix',
+    group: 'moonshot',
+    owned_by: 'moonshot'
+  },
+  {
+    id: 'grok-3-mini-beta',
+    name: 'grok-3-mini-beta',
+    provider: 'aihubmix',
+    group: 'grok',
+    owned_by: 'custom'
+  }
+]
+
 export const INITIAL_PROVIDERS: Provider[] = [
   {
     id: 'silicon',
@@ -18,8 +84,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
     type: 'openai',
     apiKey: '',
     apiHost: 'https://aihubmix.com',
-    models: [],
-    // models: SYSTEM_MODELS.aihubmix,
+    models: MOCK_AIHUBMIX_MODELS,
     isSystem: true,
     enabled: false
   },

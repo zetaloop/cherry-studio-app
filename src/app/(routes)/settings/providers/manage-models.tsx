@@ -4,7 +4,7 @@ import { debounce, groupBy, uniqBy } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Accordion, Button, ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
+import { Accordion, Button, ScrollView, Tabs, Text, useTheme, YStack } from 'tamagui'
 
 import { HeaderBar } from '@/components/settings/headerBar'
 import { ModelGroup } from '@/components/settings/providers/modelGroup'
@@ -120,6 +120,24 @@ export default function ManageModelsPage() {
     return Object.entries(modelGroups).sort(([a], [b]) => a.localeCompare(b))
   }, [modelGroups])
 
+  const tabConfigs = [
+    { value: 'all', label: t('models.type.all') },
+    { value: 'reasoning', label: t('models.type.reasoning') },
+    { value: 'vision', label: t('models.type.vision') },
+    { value: 'websearch', label: t('models.type.websearch') },
+    { value: 'free', label: t('models.type.free') },
+    { value: 'embedding', label: t('models.type.embedding') },
+    { value: 'rerank', label: t('models.type.rerank') },
+    { value: 'function_calling', label: t('models.type.function_calling') }
+  ]
+
+  // 添加通用 tab 样式函数
+  const getTabStyle = (tabValue: string) => ({
+    height: '100%',
+    backgroundColor: actualFilterType === tabValue ? '$background' : 'transparent',
+    borderRadius: 15
+  })
+
   const onAddModel = useCallback(
     (model: Model) => {
       console.log('[ManageModelsPage] onAddModel', model)
@@ -180,8 +198,25 @@ export default function ManageModelsPage() {
       }}>
       <YStack backgroundColor="$background" flex={1} gap={24} padding="$4">
         <HeaderBar title={provider.name} onBackPress={() => navigation.goBack()} />
-        {/* filter bar */}
-        <XStack></XStack>
+        {/* Filter Tabs */}
+        <Tabs
+          defaultValue="all"
+          value={actualFilterType}
+          onValueChange={setActualFilterType}
+          orientation="horizontal"
+          flexDirection="column"
+          height={34}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <Tabs.List aria-label="Model filter tabs" gap="10" flexDirection="row">
+              {tabConfigs.map(({ value, label }) => (
+                <Tabs.Tab key={value} value={value} {...getTabStyle(value)}>
+                  <Text>{label}</Text>
+                </Tabs.Tab>
+              ))}
+            </Tabs.List>
+          </ScrollView>
+        </Tabs>
+
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
           <YStack flex={1} gap={24}>
             {/* Search Card */}
@@ -257,7 +292,7 @@ export default function ManageModelsPage() {
                 </Accordion>
               ) : (
                 <Text textAlign="center" color="$gray10" paddingVertical={24}>
-                  {searchText ? t('settings.models.no_results') : t('settings.models.no_models')}
+                  {searchText ? t('settings.models.no_results') : t('models.no_models')}
                 </Text>
               )}
             </YStack>
