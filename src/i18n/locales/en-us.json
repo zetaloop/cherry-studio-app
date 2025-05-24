@@ -56,7 +56,9 @@
       "search.topics.empty": "No topics found, press Enter to search all messages"
     },
     "models": {
+      "no_models": "No models available",
       "type": {
+        "all": "All",
         "embedding": "Embedding",
         "free": "Free",
         "function_calling": "Tool",
@@ -118,7 +120,8 @@
         "delete.title": "Delete Provider",
         "title": "Model Provider",
         "search": "Search Providers...",
-        "enabled": "Added"
+        "enabled": "On",
+        "checked": "Checked"
       },
       "proxy.title": "Proxy Address",
       "theme.auto": "Auto",

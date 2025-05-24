@@ -42,8 +42,8 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (isVisionModel(model)) {
       result.push({
         key: 'vision',
-        color: 'rgba(0, 185, 107, 1)',
-        icon: <Eye size={size} color="rgba(0, 185, 107, 1)" />,
+        color: '$foregroundGreen',
+        icon: <Eye size={size} color="$foregroundGreen" />,
         label: t('models.type.vision')
       })
     }
@@ -51,8 +51,8 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (isWebSearchModel(model)) {
       result.push({
         key: 'websearch',
-        color: 'rgba(28, 128, 254, 1)',
-        icon: <Globe size={size} color="rgba(28, 128, 254, 1)" />,
+        color: '$foregroundBlue',
+        icon: <Globe size={size} color="$foregroundBlue" />,
         label: t('models.type.websearch')
       })
     }
@@ -60,8 +60,8 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (showReasoning && isReasoningModel(model)) {
       result.push({
         key: 'reasoning',
-        color: 'rgba(114, 105, 255, 1)',
-        icon: <Lightbulb size={size} color="rgba(114, 105, 255, 1)" />,
+        color: '$foregroundPurple',
+        icon: <Lightbulb size={size} color="$foregroundPurple" />,
         label: t('models.type.reasoning')
       })
     }
@@ -69,8 +69,8 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (showToolsCalling && isFunctionCallingModel(model)) {
       result.push({
         key: 'function_calling',
-        color: 'rgba(242, 136, 57, 1)',
-        icon: <Wrench size={size} color="rgba(242, 136, 57, 1)" />,
+        color: '$foregroundOrange',
+        icon: <Wrench size={size} color="$foregroundOrange" />,
         label: t('models.type.function_calling')
       })
     }
@@ -79,7 +79,7 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (isEmbeddingModel(model)) {
       result.push({
         key: 'embedding',
-        color: 'rgba(242, 136, 57, 1)',
+        color: '$foregroundOrange',
         icon: null,
         label: t('models.type.embedding')
       })
@@ -88,7 +88,7 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (showFree && isFreeModel(model)) {
       result.push({
         key: 'free',
-        color: 'rgba(0, 185, 107, 1)',
+        color: '$foregroundGreen',
         icon: null,
         label: t('models.type.free')
       })
@@ -97,7 +97,7 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (isRerankModel(model)) {
       result.push({
         key: 'rerank',
-        color: 'rgba(28, 128, 254, 1)',
+        color: '$foregroundBlue',
         icon: null,
         label: t('models.type.rerank')
       })

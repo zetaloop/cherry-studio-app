@@ -12,5 +12,6 @@ export type RootStackParamList = {
   WebSearchSettings: undefined
   ProviderListPage: undefined
   ProviderSettingsPage: { providerId: string }
+  ManageModelsPage: { providerId: string }
 }
 export type NavigationProps = StackNavigationProp<RootStackParamList>

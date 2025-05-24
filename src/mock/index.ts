@@ -1,16 +1,71 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { uniqBy } from 'lodash'
-
 import { SYSTEM_MODELS } from '@/config/models'
-import { Model, Provider } from '@/types/agent'
+import { Provider } from '@/types/agent'
 
-export interface LlmState {
-  providers: Provider[]
-  defaultModel: Model
-  topicNamingModel: Model
-  translateModel: Model
-  quickAssistantModel: Model
-}
+export const MOCK_AIHUBMIX_MODELS = [
+  {
+    id: 'o3-mini',
+    name: 'o3-mini',
+    provider: 'aihubmix',
+    group: 'o3',
+    owned_by: 'custom'
+  },
+  {
+    id: 'gpt-4.1',
+    name: 'gpt-4.1',
+    provider: 'aihubmix',
+    group: 'gpt',
+    owned_by: 'custom'
+  },
+  {
+    id: 'gemini-2.5-flash-preview-04-17',
+    name: 'gemini-2.5-flash-preview-04-17',
+    provider: 'aihubmix',
+    group: 'gemini',
+    owned_by: 'custom'
+  },
+  {
+    id: 'claude-sonnet-4-20250514',
+    name: 'claude-sonnet-4-20250514',
+    provider: 'aihubmix',
+    group: 'claude',
+    owned_by: 'custom'
+  },
+  {
+    id: 'DeepSeek-R1',
+    name: 'DeepSeek-R1',
+    provider: 'aihubmix',
+    group: 'deepseek',
+    owned_by: 'custom'
+  },
+  {
+    id: 'Qwen/Qwen3-235B-A22B',
+    name: 'Qwen/Qwen3-235B-A22B',
+    provider: 'aihubmix',
+    group: 'qwen',
+    owned_by: 'custom'
+  },
+  {
+    id: 'jina-reranker-m0',
+    name: 'jina-reranker-m0',
+    provider: 'aihubmix',
+    group: 'jina',
+    owned_by: 'custom'
+  },
+  {
+    id: 'moonshot-v1-8k',
+    name: 'moonshot-v1-8k',
+    provider: 'aihubmix',
+    group: 'moonshot',
+    owned_by: 'moonshot'
+  },
+  {
+    id: 'grok-3-mini-beta',
+    name: 'grok-3-mini-beta',
+    provider: 'aihubmix',
+    group: 'grok',
+    owned_by: 'custom'
+  }
+]
 
 export const INITIAL_PROVIDERS: Provider[] = [
   {
@@ -21,7 +76,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://api.siliconflow.cn',
     models: SYSTEM_MODELS.silicon,
     isSystem: true,
-    enabled: true
+    enabled: true,
+    checked: true
   },
   {
     id: 'aihubmix',
@@ -29,9 +85,10 @@ export const INITIAL_PROVIDERS: Provider[] = [
     type: 'openai',
     apiKey: '',
     apiHost: 'https://aihubmix.com',
-    models: SYSTEM_MODELS.aihubmix,
+    models: MOCK_AIHUBMIX_MODELS,
     isSystem: true,
-    enabled: false
+    enabled: false,
+    checked: true
   },
   {
     id: 'ocoolai',
@@ -61,7 +118,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://openrouter.ai/api/v1/',
     models: SYSTEM_MODELS.openrouter,
     isSystem: true,
-    enabled: false
+    enabled: false,
+    checked: true
   },
   {
     id: 'ppio',
@@ -141,7 +199,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://api.anthropic.com/',
     models: SYSTEM_MODELS.anthropic,
     isSystem: true,
-    enabled: false
+    enabled: true,
+    checked: true
   },
   {
     id: 'openai',
@@ -151,7 +210,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://api.openai.com',
     models: SYSTEM_MODELS.openai,
     isSystem: true,
-    enabled: false
+    enabled: false,
+    checked: true
   },
   {
     id: 'azure-openai',
@@ -172,7 +232,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://generativelanguage.googleapis.com',
     models: SYSTEM_MODELS.gemini,
     isSystem: true,
-    enabled: false
+    enabled: true,
+    checked: true
   },
   {
     id: 'zhipu',
@@ -446,107 +507,3 @@ export const INITIAL_PROVIDERS: Provider[] = [
     enabled: false
   }
 ]
-
-const initialState: LlmState = {
-  defaultModel: SYSTEM_MODELS.silicon[1],
-  topicNamingModel: SYSTEM_MODELS.silicon[2],
-  translateModel: SYSTEM_MODELS.silicon[3],
-  quickAssistantModel: SYSTEM_MODELS.silicon[1],
-  providers: INITIAL_PROVIDERS
-}
-
-export const moveProvider = (providers: Provider[], id: string, position: number) => {
-  const index = providers.findIndex(p => p.id === id)
-  if (index === -1) return providers
-
-  const provider = providers[index]
-  const newProviders = [...providers]
-  newProviders.splice(index, 1)
-  newProviders.splice(position - 1, 0, provider)
-  return newProviders
-}
-
-const llmSlice = createSlice({
-  name: 'llm',
-  initialState: initialState,
-  reducers: {
-    updateProvider: (state, action: PayloadAction<Provider>) => {
-      state.providers = state.providers.map(p => (p.id === action.payload.id ? { ...p, ...action.payload } : p))
-    },
-    updateProviders: (state, action: PayloadAction<Provider[]>) => {
-      state.providers = action.payload
-    },
-    addProvider: (state, action: PayloadAction<Provider>) => {
-      state.providers.unshift(action.payload)
-    },
-    removeProvider: (state, action: PayloadAction<Provider>) => {
-      const providerIndex = state.providers.findIndex(p => p.id === action.payload.id)
-
-      if (providerIndex !== -1) {
-        state.providers.splice(providerIndex, 1)
-      }
-    },
-    addModel: (state, action: PayloadAction<{ providerId: string; model: Model }>) => {
-      state.providers = state.providers.map(p =>
-        p.id === action.payload.providerId
-          ? {
-              ...p,
-              models: uniqBy(p.models.concat(action.payload.model), 'id'),
-              enabled: true
-            }
-          : p
-      )
-    },
-    removeModel: (state, action: PayloadAction<{ providerId: string; model: Model }>) => {
-      state.providers = state.providers.map(p =>
-        p.id === action.payload.providerId
-          ? {
-              ...p,
-              models: p.models.filter(m => m.id !== action.payload.model.id)
-            }
-          : p
-      )
-    },
-    setDefaultModel: (state, action: PayloadAction<{ model: Model }>) => {
-      state.defaultModel = action.payload.model
-    },
-    setTopicNamingModel: (state, action: PayloadAction<{ model: Model }>) => {
-      state.topicNamingModel = action.payload.model
-    },
-    setTranslateModel: (state, action: PayloadAction<{ model: Model }>) => {
-      state.translateModel = action.payload.model
-    },
-    updateModel: (
-      state,
-      action: PayloadAction<{
-        providerId: string
-        model: Model
-      }>
-    ) => {
-      const provider = state.providers.find(p => p.id === action.payload.providerId)
-
-      if (provider) {
-        const modelIndex = provider.models.findIndex(m => m.id === action.payload.model.id)
-
-        if (modelIndex !== -1) {
-          provider.models[modelIndex] = action.payload.model
-        }
-      }
-    }
-  }
-})
-
-export const {
-  updateProvider,
-  updateProviders,
-  addProvider,
-  removeProvider,
-  addModel,
-  removeModel,
-  setDefaultModel,
-  setTopicNamingModel,
-  setTranslateModel,
-  updateModel
-} = llmSlice.actions
-
-export default llmSlice.reducer
