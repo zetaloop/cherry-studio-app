@@ -39,16 +39,12 @@ English | [中文](./README-zh.md)
 
    ```bash
      bun install
-     # Or
-     npm install
    ```
 
 4. **Start the app**
 
    ```bash
      bun run start
-     # Or
-     npx expo start
    ```
 
 In the output, you'll find options to open the app in a
