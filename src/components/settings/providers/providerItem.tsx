@@ -11,11 +11,16 @@ import { ProviderIcon } from '../../ui/providerIcon'
 
 interface ProviderItemProps {
   provider: Provider
+  mode?: 'enabled' | 'checked' // 添加 mode 属性来区分显示模式
 }
 
-export const ProviderItem: React.FC<ProviderItemProps> = ({ provider }) => {
+export const ProviderItem: React.FC<ProviderItemProps> = ({ provider, mode = 'enabled' }) => {
   const { t } = useTranslation()
   const navigation = useNavigation<NavigationProps>()
+
+  // 根据模式决定显示条件和文本
+  const shouldShowStatus = mode === 'enabled' ? provider.enabled : provider.checked
+  const statusText = mode === 'enabled' ? t('settings.provider.enabled') : t('settings.provider.checked') // 假设你有这个翻译键
 
   return (
     <XStack
@@ -32,16 +37,15 @@ export const ProviderItem: React.FC<ProviderItemProps> = ({ provider }) => {
         <Text>{provider.name}</Text>
       </XStack>
       <XStack gap={10} alignItems="center">
-        {/* todo 弄清楚added文本的含义 added !== enabled */}
-        {provider.enabled && (
+        {shouldShowStatus && (
           <Text
             paddingVertical={2}
             paddingHorizontal={8}
             borderRadius={8}
-            backgroundColor="$gray4"
-            fontWeight="bold"
+            backgroundColor="$backgroundGreen"
+            color="$foregroundGreen"
             fontSize={14}>
-            {t('settings.provider.enabled')}
+            {statusText}
           </Text>
         )}
         <ChevronRight color="$white9" width={6} height={12} />

@@ -76,7 +76,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://api.siliconflow.cn',
     models: SYSTEM_MODELS.silicon,
     isSystem: true,
-    enabled: true
+    enabled: true,
+    checked: true
   },
   {
     id: 'aihubmix',
@@ -86,7 +87,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://aihubmix.com',
     models: MOCK_AIHUBMIX_MODELS,
     isSystem: true,
-    enabled: false
+    enabled: false,
+    checked: true
   },
   {
     id: 'ocoolai',
@@ -116,7 +118,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://openrouter.ai/api/v1/',
     models: SYSTEM_MODELS.openrouter,
     isSystem: true,
-    enabled: false
+    enabled: false,
+    checked: true
   },
   {
     id: 'ppio',
@@ -196,7 +199,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://api.anthropic.com/',
     models: SYSTEM_MODELS.anthropic,
     isSystem: true,
-    enabled: false
+    enabled: true,
+    checked: true
   },
   {
     id: 'openai',
@@ -206,7 +210,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://api.openai.com',
     models: SYSTEM_MODELS.openai,
     isSystem: true,
-    enabled: false
+    enabled: false,
+    checked: true
   },
   {
     id: 'azure-openai',
@@ -227,7 +232,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     apiHost: 'https://generativelanguage.googleapis.com',
     models: SYSTEM_MODELS.gemini,
     isSystem: true,
-    enabled: false
+    enabled: true,
+    checked: true
   },
   {
     id: 'zhipu',

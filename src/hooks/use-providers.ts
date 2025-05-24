@@ -1,7 +1,9 @@
 import { INITIAL_PROVIDERS } from '@/mock'
 
 export function useAllProviders() {
-  return INITIAL_PROVIDERS
+  return {
+    providers: INITIAL_PROVIDERS
+  }
 }
 
 export function useProvider(id: string) {

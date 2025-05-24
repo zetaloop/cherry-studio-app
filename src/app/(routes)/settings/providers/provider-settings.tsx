@@ -109,7 +109,7 @@ export default function ProviderSettingsPage() {
                 <XStack paddingVertical={12} paddingHorizontal={16} justifyContent="space-between" alignItems="center">
                   <Text>{t('settings.provider.api_service')}</Text>
                   <XStack>
-                    {provider.enabled && (
+                    {provider.checked && (
                       <Text
                         paddingVertical={2}
                         paddingHorizontal={8}
@@ -117,7 +117,7 @@ export default function ProviderSettingsPage() {
                         backgroundColor="$gray4"
                         fontWeight="bold"
                         fontSize={14}>
-                        {t('settings.provider.enabled')}
+                        {t('settings.provider.checked')}
                       </Text>
                     )}
                     <ChevronRight color="$white9" width={6} height={12} />

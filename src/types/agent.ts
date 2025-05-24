@@ -59,6 +59,7 @@ export type Provider = {
   apiVersion?: string
   models: Model[]
   enabled?: boolean
+  checked?: boolean
   isSystem?: boolean
   isAuthed?: boolean
   rateLimit?: number

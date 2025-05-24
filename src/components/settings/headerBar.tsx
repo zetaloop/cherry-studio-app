@@ -25,13 +25,7 @@ export function HeaderBar({ title, onBackPress, rightButton, rightButtons, showB
       {/* 左侧按钮 */}
       <XStack position="absolute" left={0} zIndex={1}>
         {showBackButton ? (
-          <Button
-            size="$2"
-            chromeless
-            circular
-            icon={<ArrowLeft size={24} />}
-            onPress={onBackPress}
-          />
+          <Button size="$2" chromeless circular icon={<ArrowLeft size={24} />} onPress={onBackPress} />
         ) : null}
       </XStack>
 
@@ -47,14 +41,7 @@ export function HeaderBar({ title, onBackPress, rightButton, rightButtons, showB
         {buttonsToRender.length > 0 ? (
           <XStack gap="$2">
             {buttonsToRender.map((button, index) => (
-              <Button
-                key={index}
-                size="$2"
-                chromeless
-                circular
-                icon={button.icon}
-                onPress={button.onPress}
-              />
+              <Button key={index} size="$2" chromeless circular icon={button.icon} onPress={button.onPress} />
             ))}
           </XStack>
         ) : null}

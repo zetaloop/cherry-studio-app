@@ -120,7 +120,8 @@
         "delete.title": "Delete Provider",
         "title": "Model Provider",
         "search": "Search Providers...",
-        "enabled": "Added"
+        "enabled": "On",
+        "checked": "Checked"
       },
       "proxy.title": "Proxy Address",
       "theme.auto": "Auto",
