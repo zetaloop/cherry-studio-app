@@ -9,17 +9,12 @@ interface CustomTagProps {
   children?: React.ReactNode
 }
 
-export const CustomTag: React.FC<CustomTagProps> = ({ size = 12, color = '#1677ff', icon, children }) => {
+export const CustomTag: React.FC<CustomTagProps> = ({ size = 12, color = '$background', icon, children }) => {
   const fontSize = Math.max(size - 2, 10)
   const padding = Math.max(size / 3, 4)
 
-  // 将颜色转换为背景色（20%透明度）
   const getBackgroundColor = (color: string) => {
-    if (color.startsWith('rgba')) {
-      return color.replace(/,\s*1\)$/, ', 0.2)')
-    }
-
-    return `${color}20`
+    return color.includes('foreground') ? color.replace('foreground', 'background') : color
   }
 
   return (
