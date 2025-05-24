@@ -18,7 +18,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     type: 'openai',
     apiKey: '',
     apiHost: 'https://aihubmix.com',
-    models: SYSTEM_MODELS.aihubmix,
+    models: [],
+    // models: SYSTEM_MODELS.aihubmix,
     isSystem: true,
     enabled: false
   },
