@@ -1,4 +1,4 @@
-import { Plus } from '@tamagui/lucide-icons'
+import { SquarePen } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, XStack } from 'tamagui'
@@ -12,10 +12,10 @@ export const RightSection: React.FC = () => {
   return (
     <XStack alignItems="center" justifyContent="flex-end">
       <Button
-        size="$3"
+        size={20}
         circular
-        backgroundColor="$blue9"
-        icon={<Plus size={20} color="white" />}
+        chromeless
+        icon={<SquarePen size={20} />}
         onPress={createNewTopicHandler}
       />
     </XStack>

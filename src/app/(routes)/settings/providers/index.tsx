@@ -1,40 +1,49 @@
-import { Link } from '@react-navigation/native'
-import { Search, Star } from '@tamagui/lucide-icons'
-import React from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { Plus } from '@tamagui/lucide-icons'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, ListItem, ScrollView, YGroup, YStack } from 'tamagui'
+import { useTheme, YStack } from 'tamagui'
 
-import { Input } from '@/components/ui/input'
+import { HeaderBar } from '@/components/settings/headerBar'
+import { EmptyModelView } from '@/components/settings/providers/emptyModelView'
+import { SearchInput } from '@/components/ui/searchInput'
 import { useWidth } from '@/hooks/use-width'
+import { NavigationProps } from '@/types/naviagate'
 
-const mock_providers = [{ href: 'open-ai', label: 'openAI' }]
+const mock_providers = []
 
-export default function ProviderSettingsPage() {
+export default function ProvidersPage() {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const navigation = useNavigation<NavigationProps>()
+  const [searchQuery, setSearchQuery] = useState('')
 
   const isLargeScreen = useWidth(768)
+
+  const onAddModel = () => {
+    navigation.navigate('ProviderListPage' as any)
+  }
 
   return (
     <SafeAreaView
       style={{
-        padding: 16
+        flex: 1,
+        backgroundColor: theme.background.val
       }}>
-      <Input placeholder={t('settings.provider.search')} size="$4" borderWidth={2} icon={<Search />} />
-      <YStack>
-        <ScrollView>
-          <YGroup marginVertical={16} alignSelf="center" bordered size="$4">
-            {mock_providers.map(provider => (
-              <YGroup.Item key={provider.href}>
-                <Link screen="OpenAiSettings">
-                  <ListItem hoverTheme icon={Star} title={provider.label} />
-                </Link>
-              </YGroup.Item>
-            ))}
-          </YGroup>
-        </ScrollView>
+      <YStack backgroundColor="$background" flex={1} gap={24} padding="$4">
+        <HeaderBar
+          title={t('settings.provider.title')}
+          onBackPress={() => navigation.goBack()}
+          rightButton={{
+            icon: <Plus size={24} />,
+            onPress: onAddModel
+          }}
+        />
+
+        <SearchInput placeholder={t('settings.provider.search')} value={searchQuery} onChangeText={setSearchQuery} />
+        {mock_providers.length === 0 ? <EmptyModelView onAddModel={onAddModel} /> : <YStack />}
       </YStack>
-      <Button variant="outlined">+添加</Button>
     </SafeAreaView>
   )
 }

@@ -38,7 +38,8 @@ export default {
       'expo-localization',
       'expo-asset',
       'expo-font',
-      'expo-web-browser'
+      'expo-web-browser',
+      'expo-sqlite'
     ],
     experiments: {
       typedRoutes: true

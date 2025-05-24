@@ -1,16 +1,26 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, useStore } from 'react-redux'
+import devToolsEnhancer from 'redux-devtools-expo-dev-plugin'
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 
+import agents from './agent'
 import app from './app'
+import llm from './llm'
+import messageBlocksReducer from './message-block'
 import runtime from './runtime'
 import topEntry from './top-entry'
 
-const rootReducer = combineReducers({ app, runtime, topEntry })
+const rootReducer = combineReducers({ app, runtime, topEntry, agents, messageBlocks: messageBlocksReducer, llm })
 
 const persistedReducer = persistReducer(
-  { key: 'cherry-studio', storage: AsyncStorage, version: 1, blacklist: ['runtime'] },
+  {
+    key: 'cherry-studio',
+    storage: AsyncStorage,
+    version: 1,
+    blacklist: ['runtime']
+    // migrate
+  },
   rootReducer
 )
 
@@ -22,7 +32,8 @@ const store = configureStore({
       serializableCheck: { ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER] }
     })
   },
-  devTools: true
+  devTools: false,
+  enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(devToolsEnhancer())
 })
 
 export type RootState = ReturnType<typeof rootReducer>

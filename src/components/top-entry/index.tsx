@@ -19,7 +19,7 @@ export const TopEntry: React.FC<TopEntryProps> = ({ onBack }) => {
     <XStack
       justifyContent="space-between"
       alignItems="center"
-      paddingHorizontal="$4"
+      paddingHorizontal="$3"
       paddingVertical="$3"
       backgroundColor="$background"
       borderBottomWidth={1}
@@ -30,9 +30,9 @@ export const TopEntry: React.FC<TopEntryProps> = ({ onBack }) => {
           <Button
             size="$3"
             circular
-            icon={<ArrowLeft size={16} color="$blue9" />}
+            icon={<ArrowLeft size={24} />}
             onPress={onBack}
-            backgroundColor="transparent"
+            chromeless
           />
         )}
         <LeftSection />

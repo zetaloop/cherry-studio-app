@@ -1,14 +1,16 @@
 import { Link } from '@react-navigation/native'
+import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Stack, Text, View, YStack } from 'tamagui'
+import { Stack, Text, useTheme, View, YStack } from 'tamagui'
 
 import { MessageInput } from '@/components/message-input'
 import { TopEntry } from '@/components/top-entry'
 
 const HomeScreen: React.FC = () => {
+  const theme = useTheme()
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <YStack flex={1}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+      <YStack backgroundColor="$background" flex={1}>
         {/* 顶部导航组件 */}
         <TopEntry />
 
@@ -16,7 +18,7 @@ const HomeScreen: React.FC = () => {
         <YStack flex={1} justifyContent="center" alignItems="center">
           <Link screen="Settings" params={{}}>
             <Stack>
-              <Text>Go to Settings</Text>
+              <Text color="$color12">Go to Settings</Text>
             </Stack>
           </Link>
         </YStack>
