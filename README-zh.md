@@ -39,16 +39,12 @@
 
    ```bash
      bun install
-     # 或
-     npm install
    ```
 
 4. **运行**
 
    ```bash
      bun run start
-     # 或
-     npx expo start
    ```
 
 在输出中，您将找到以
