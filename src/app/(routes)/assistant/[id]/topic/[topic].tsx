@@ -1,10 +1,10 @@
 import { ArrowLeft } from '@tamagui/lucide-icons'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Stack, Text, View, XStack, YStack } from 'tamagui'
+import { Button, Text, View, XStack, YStack } from 'tamagui'
 
 import { MessageInput } from '@/components/message-input'
-import { topics } from '@/config/mock/messages'
 
 export default function TopicPage() {
   const { id, topic } = useLocalSearchParams<{
@@ -24,13 +24,7 @@ export default function TopicPage() {
           {id}-{topic}
         </Text>
       </XStack>
-      <YStack>
-        {topics[topic]!.map(item => (
-          <Stack key={item.key} marginLeft={item.send ? 'auto' : ''}>
-            <Text>{item.message}</Text>
-          </Stack>
-        ))}
-      </YStack>
+      <YStack></YStack>
       <View position="absolute" bottom={0} left={0} right={0}>
         <MessageInput />
       </View>

@@ -8,6 +8,7 @@ import DataSettingsPage from '@/app/(routes)/settings/data'
 import GeneralSettingsPage from '@/app/(routes)/settings/general-settings'
 import ModelSettingsPage from '@/app/(routes)/settings/model'
 import ProvidersPage from '@/app/(routes)/settings/providers'
+import ManageModelsPage from '@/app/(routes)/settings/providers/manage-models'
 import ProviderListPage from '@/app/(routes)/settings/providers/provider-list'
 import ProviderSettingsPage from '@/app/(routes)/settings/providers/provider-settings'
 import WebSearchSettingsPage from '@/app/(routes)/settings/websearch-settings'
@@ -33,6 +34,7 @@ export const AppNavigation: React.FC = () => {
       <Stack.Screen options={{ headerShown: false }} name="WebSearchSettings" component={WebSearchSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ProviderListPage" component={ProviderListPage} />
       <Stack.Screen options={{ headerShown: false }} name="ProviderSettingsPage" component={ProviderSettingsPage} />
+      <Stack.Screen options={{ headerShown: false }} name="ManageModelsPage" component={ManageModelsPage} />
     </Stack.Navigator>
   )
 }

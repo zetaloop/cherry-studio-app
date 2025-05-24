@@ -3,15 +3,14 @@ import { Plus } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useTheme, YStack } from 'tamagui'
+import { ScrollView, Text, useTheme, YStack } from 'tamagui'
 
 import { HeaderBar } from '@/components/settings/headerBar'
 import { EmptyModelView } from '@/components/settings/providers/emptyModelView'
+import { ProviderItem } from '@/components/settings/providers/providerItem'
 import { SearchInput } from '@/components/ui/searchInput'
-import { useWidth } from '@/hooks/use-width'
+import { useAllProviders } from '@/hooks/use-providers'
 import { NavigationProps } from '@/types/naviagate'
-
-const mock_providers = []
 
 export default function ProvidersPage() {
   const { t } = useTranslation()
@@ -19,9 +18,9 @@ export default function ProvidersPage() {
   const navigation = useNavigation<NavigationProps>()
   const [searchQuery, setSearchQuery] = useState('')
 
-  const isLargeScreen = useWidth(768)
+  const { providers } = useAllProviders()
 
-  const onAddModel = () => {
+  const onAddProvider = () => {
     navigation.navigate('ProviderListPage' as any)
   }
 
@@ -37,12 +36,32 @@ export default function ProvidersPage() {
           onBackPress={() => navigation.goBack()}
           rightButton={{
             icon: <Plus size={24} />,
-            onPress: onAddModel
+            onPress: onAddProvider
           }}
         />
 
         <SearchInput placeholder={t('settings.provider.search')} value={searchQuery} onChangeText={setSearchQuery} />
-        {mock_providers.length === 0 ? <EmptyModelView onAddModel={onAddModel} /> : <YStack />}
+
+        {providers.length === 0 ? (
+          <EmptyModelView onAddModel={onAddProvider} />
+        ) : (
+          <YStack gap={8} paddingVertical={8}>
+            <Text>{t('settings.provider.title')}</Text>
+            <ScrollView
+              backgroundColor="$gray2"
+              borderRadius={9}
+              contentContainerStyle={{
+                paddingTop: 2
+              }}>
+              {/* 此处providers应该显示key检测通过 但可能未开启 */}
+              {providers
+                .filter(p => p.checked)
+                .map(p => (
+                  <ProviderItem key={p.id} provider={p} mode="enabled" />
+                ))}
+            </ScrollView>
+          </YStack>
+        )}
       </YStack>
     </SafeAreaView>
   )

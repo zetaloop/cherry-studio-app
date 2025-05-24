@@ -4,14 +4,11 @@ import { useDispatch, useSelector, useStore } from 'react-redux'
 import devToolsEnhancer from 'redux-devtools-expo-dev-plugin'
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 
-import agents from './agent'
 import app from './app'
-import llm from './llm'
-import messageBlocksReducer from './message-block'
 import runtime from './runtime'
 import topEntry from './top-entry'
 
-const rootReducer = combineReducers({ app, runtime, topEntry, agents, messageBlocks: messageBlocksReducer, llm })
+const rootReducer = combineReducers({ app, runtime, topEntry })
 
 const persistedReducer = persistReducer(
   {
