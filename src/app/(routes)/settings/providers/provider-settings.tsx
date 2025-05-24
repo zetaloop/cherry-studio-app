@@ -24,7 +24,7 @@ export default function ProviderSettingsPage() {
   const [searchText, setSearchText] = useState('')
 
   const { providerId } = route.params
-  const { provider, updateProvider } = useProvider(providerId)
+  const { provider } = useProvider(providerId)
 
   // 根据搜索文本过滤和分组模型
   const modelGroups = useMemo(() => {
@@ -86,7 +86,7 @@ export default function ProviderSettingsPage() {
                   <Text>{t('common.enabled')}</Text>
                   <CustomSwitch
                     checked={provider.enabled}
-                    onCheckedChange={checked => updateProvider({ ...provider, enabled: checked })}
+                    // onCheckedChange={checked => updateProvider({ ...provider, enabled: checked })}
                   />
                 </XStack>
                 <XStack paddingVertical={12} paddingHorizontal={16} justifyContent="space-between" alignItems="center">
