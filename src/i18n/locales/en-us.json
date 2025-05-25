@@ -94,15 +94,18 @@
         "data.title": "Data Directory",
         "title": "Data Settings"
       },
-      "models.default_assistant_model": "Default Assistant Model",
-      "models.default_assistant_model_description": "Model used when creating a new assistant, if the assistant is not set, this model will be used",
-      "models.empty": "No Model yet...",
-      "models.empty.tooltip": "The page you were looking for is beyond our reach. Sorry for the inconvenience.",
-      "models.empty.add_model": "Let's add your first model",
-      "models.translate_model": "Translate Model",
-      "models.translate_model_description": "Model used for translation service",
-      "models.search": "Search Models...",
-      "models.title": "Models",
+      "models": {
+        "default_model": "Default Model",
+        "default_assistant_model": "Default Assistant Model",
+        "default_assistant_model_description": "Model used when creating a new assistant, if the assistant is not set, this model will be used",
+        "empty": "No Model yet...",
+        "empty.tooltip": "The page you were looking for is beyond our reach. Sorry for the inconvenience.",
+        "empty.add_model": "Let's add your first model",
+        "translate_model": "Translate Model",
+        "translate_model_description": "Model used for translation service",
+        "search": "Search Models...",
+        "title": "Models"
+      },
       "provider": {
         "api_service": "API Service",
         "list.title": "Provider List",
@@ -121,7 +124,13 @@
         "title": "Model Provider",
         "search": "Search Providers...",
         "enabled": "On",
-        "checked": "Checked"
+        "checked": "Checked",
+        "auth": {
+          "title": "{{provider}} Service",
+          "login": "Log in",
+          "balance_recharge": "Balance Recharge",
+          "free_bills": "Free Bills"
+        }
       },
       "proxy.title": "Proxy Address",
       "theme.auto": "Auto",

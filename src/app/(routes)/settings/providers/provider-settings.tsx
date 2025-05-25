@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Accordion, Button, ScrollView, Separator, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { HeaderBar } from '@/components/settings/headerBar'
+import AuthCard from '@/components/settings/providers/authCard'
 import { ModelGroup } from '@/components/settings/providers/modelGroup'
 import { SearchInput } from '@/components/ui/searchInput'
 import { CustomSwitch } from '@/components/ui/switch'
@@ -95,18 +96,31 @@ export default function ProviderSettingsPage() {
 
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
           <YStack flex={1} gap={24}>
+            {/* Auth Card */}
+            <AuthCard provider={provider} />
+
             {/* Manage Card */}
             <YStack gap={8}>
               <Text>{t('common.manage')}</Text>
               <YStack gap={8} backgroundColor="$gray2" borderRadius={8} paddingVertical={8}>
-                <XStack paddingVertical={12} paddingHorizontal={16} justifyContent="space-between" alignItems="center">
+                <XStack
+                  paddingVertical={12}
+                  paddingLeft={16}
+                  paddingRight={20}
+                  justifyContent="space-between"
+                  alignItems="center">
                   <Text>{t('common.enabled')}</Text>
                   <CustomSwitch
                     checked={provider.enabled}
                     // onCheckedChange={checked => updateProvider({ ...provider, enabled: checked })}
                   />
                 </XStack>
-                <XStack paddingVertical={12} paddingHorizontal={16} justifyContent="space-between" alignItems="center">
+                <XStack
+                  paddingVertical={12}
+                  paddingLeft={16}
+                  paddingRight={20}
+                  justifyContent="space-between"
+                  alignItems="center">
                   <Text>{t('settings.provider.api_service')}</Text>
                   <XStack>
                     {provider.checked && (
