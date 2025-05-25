@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { ArrowUpRight, Github, Rss } from '@tamagui/lucide-icons'
+import { ArrowUpRight, Copyright, Github, Globe, Mail, Rss } from '@tamagui/lucide-icons'
 import * as ExpoLinking from 'expo-linking'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,6 +13,15 @@ export default function AboutPage() {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigation = useNavigation()
+
+  const openLink = async (url: string) => {
+    try {
+      await ExpoLinking.openURL(url)
+    } catch (error) {
+      console.error('Failed to open link:', error)
+    }
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <SettingContainer>
@@ -21,7 +30,7 @@ export default function AboutPage() {
           onBackPress={() => navigation.goBack()}
           rightButton={{
             icon: <Github size={24} />,
-            onPress: async () => await ExpoLinking.openURL('https://github.com/CherryHQ/cherry-studio-app')
+            onPress: async () => await openLink('https://github.com/CherryHQ/cherry-studio-app')
           }}
         />
         <YStack gap={24} flex={1} marginTop={16}>
@@ -48,12 +57,40 @@ export default function AboutPage() {
               </YStack>
             </SettingRow>
           </SettingGroup>
-
           <SettingGroup>
-            <SettingRow>
+            <SettingRow onPress={async () => await openLink('https://github.com/CherryHQ/cherry-studio-app/releases/')}>
               <XStack alignItems="center" gap={10}>
                 <Rss size={20} />
                 <Text>{t('settings.about.releases.title')}</Text>
+              </XStack>
+              <ArrowUpRight size={16} />
+            </SettingRow>
+            <SettingRow onPress={async () => await openLink('https://www.cherry-ai.com/')}>
+              <XStack alignItems="center" gap={10}>
+                <Globe size={20} />
+                <Text>{t('settings.about.website.title')}</Text>
+              </XStack>
+              <ArrowUpRight size={16} />
+            </SettingRow>
+            <SettingRow onPress={async () => await openLink('https://github.com/CherryHQ/cherry-studio-app/issues/')}>
+              <XStack alignItems="center" gap={10}>
+                <Github size={20} />
+                <Text>{t('settings.about.feedback.title')}</Text>
+              </XStack>
+              <ArrowUpRight size={16} />
+            </SettingRow>
+            <SettingRow
+              onPress={async () => await openLink('https://github.com/CherryHQ/cherry-studio/blob/main/LICENSE/')}>
+              <XStack alignItems="center" gap={10}>
+                <Copyright size={20} />
+                <Text>{t('settings.about.license.title')}</Text>
+              </XStack>
+              <ArrowUpRight size={16} />
+            </SettingRow>
+            <SettingRow onPress={async () => await openLink('https://docs.cherry-ai.com/contact-us/questions/')}>
+              <XStack alignItems="center" gap={10}>
+                <Mail size={20} />
+                <Text>{t('settings.about.contact.title')}</Text>
               </XStack>
               <ArrowUpRight size={16} />
             </SettingRow>
