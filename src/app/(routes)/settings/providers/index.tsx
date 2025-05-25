@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Keyboard } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, YStack } from 'tamagui'
 
@@ -30,7 +31,7 @@ export default function ProvidersPage() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
-      <YStack backgroundColor="$background" flex={1} gap={24} padding="$4">
+      <YStack backgroundColor="$background" flex={1} gap={24} padding="$4" onPress={Keyboard.dismiss}>
         <HeaderBar
           title={t('settings.provider.title')}
           onBackPress={() => navigation.goBack()}

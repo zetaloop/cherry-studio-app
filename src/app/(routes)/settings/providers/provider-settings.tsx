@@ -67,6 +67,10 @@ export default function ProviderSettingsPage() {
     navigation.navigate('ManageModelsPage', { providerId })
   }, [navigation, providerId])
 
+  const onApiService = useCallback(() => {
+    navigation.navigate('ApiServicePage', { providerId })
+  }, [])
+
   const onSettingModel = useCallback((model: Model) => {
     console.log('[ProviderSettingsPage] onSettingModel', model)
   }, [])
@@ -120,7 +124,8 @@ export default function ProviderSettingsPage() {
                   paddingLeft={16}
                   paddingRight={20}
                   justifyContent="space-between"
-                  alignItems="center">
+                  alignItems="center"
+                  onPress={onApiService}>
                   <Text>{t('settings.provider.api_service')}</Text>
                   <XStack>
                     {provider.checked && (

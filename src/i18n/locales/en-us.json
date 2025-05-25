@@ -118,6 +118,8 @@
         "api.url.tip": "Ending with / ignores v1, ending with # forces use of input address",
         "api_host": "API Host",
         "api_key": "API Key",
+        "api_key.placeholder": "Please enter API key",
+        "api_key.get": "Get API Key",
         "api_key.tip": "Multiple keys separated by commas",
         "delete.content": "Are you sure you want to delete this provider?",
         "delete.title": "Delete Provider",
