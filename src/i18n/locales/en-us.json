@@ -1,7 +1,7 @@
 {
   "translation": {
     "agents": {
-      "search.no_results": "  No agents found"
+      "search.no_results": "No agents found"
     },
     "assistants": {
       "edit": {
