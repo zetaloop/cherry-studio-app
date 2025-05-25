@@ -151,10 +151,6 @@
         }
       },
       "proxy.title": "Proxy Address",
-      "theme.auto": "Auto",
-      "theme.dark": "Dark",
-      "theme.light": "Light",
-      "theme.title": "Theme",
       "theme.window.style.opaque": "Opaque Window",
       "theme.window.style.title": "Window Style",
       "theme.window.style.transparent": "Transparent Window",
@@ -173,7 +169,17 @@
       },
       "modelAndService": "AI Models & Services",
       "dataAndSecurity": "Data & Security",
-      "general.title": "General Settings"
+      "general": {
+        "title": "General Settings",
+        "display.title": "Display Settings",
+        "theme.auto": "Auto",
+        "theme.dark": "Dark",
+        "theme.light": "Light",
+        "theme.title": "Theme",
+        "privacy.title": "Privacy Settings",
+        "privacy.anonymous": "Anonymous report errors and statistics",
+        "language.title": "Language"
+      }
     },
     "profile": {
       "editProfile": "Edit profile",
