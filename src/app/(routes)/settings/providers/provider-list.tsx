@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Keyboard } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, YStack } from 'tamagui'
 
@@ -33,7 +34,7 @@ export default function ProviderListPage() {
         gap={24}
         padding="$4"
         overflow="hidden" // 防止内容溢出
-      >
+        onPress={Keyboard.dismiss}>
         <HeaderBar
           title={t('settings.provider.list.title')}
           onBackPress={() => navigation.goBack()}

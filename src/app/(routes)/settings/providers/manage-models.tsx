@@ -3,6 +3,7 @@ import { Minus, Plus } from '@tamagui/lucide-icons'
 import { debounce, groupBy, uniqBy } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Keyboard } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Accordion, Button, ScrollView, Tabs, Text, useTheme, YStack } from 'tamagui'
 
@@ -196,7 +197,7 @@ export default function ManageModelsPage() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
-      <YStack backgroundColor="$background" flex={1} gap={24} padding="$4">
+      <YStack backgroundColor="$background" flex={1} gap={24} padding="$4" onPress={Keyboard.dismiss}>
         <HeaderBar title={provider.name} onBackPress={() => navigation.goBack()} />
         {/* Filter Tabs */}
         <Tabs

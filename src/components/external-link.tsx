@@ -7,10 +7,11 @@ interface ExternalLinkProps {
   href: string
   children: React.ReactNode
   color?: 'unset' | GetThemeValueForKey<'color'> | OpaqueColorValue
+  size?: number
   onError?: (error: Error) => void
 }
 
-const ExternalLink: React.FC<ExternalLinkProps> = ({ href, children, color = '$blue10', onError }) => {
+const ExternalLink: React.FC<ExternalLinkProps> = ({ href, children, color = '$blue10', size, onError }) => {
   const handlePress = async () => {
     const supported = await ExpoLinking.canOpenURL(href)
 
@@ -20,6 +21,8 @@ const ExternalLink: React.FC<ExternalLinkProps> = ({ href, children, color = '$b
       } catch (error) {
         const message = `无法打开链接: ${error instanceof Error ? error.message : String(error)}`
         console.error(message, error)
+
+        // ...existing code...
 
         if (onError) {
           onError(error instanceof Error ? error : new Error(String(error)))
@@ -39,9 +42,25 @@ const ExternalLink: React.FC<ExternalLinkProps> = ({ href, children, color = '$b
     }
   }
 
-  const content = typeof children === 'string' ? <Text color={color}>{children}</Text> : children
+  const content =
+    typeof children === 'string' ? (
+      <Text alignItems="center" justifyContent="center" color={color} fontSize={size}>
+        {children}
+      </Text>
+    ) : (
+      children
+    )
 
-  return <Button onPress={handlePress}>{content}</Button>
+  return (
+    <Button
+      size={size ? size + 5 : undefined}
+      alignItems="center"
+      justifyContent="center"
+      backgroundColor="$colorTransparent"
+      onPress={handlePress}>
+      {content}
+    </Button>
+  )
 }
 
 export default ExternalLink

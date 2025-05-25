@@ -13,5 +13,6 @@ export type RootStackParamList = {
   ProviderListPage: undefined
   ProviderSettingsPage: { providerId: string }
   ManageModelsPage: { providerId: string }
+  ApiServicePage: { providerId: string }
 }
 export type NavigationProps = StackNavigationProp<RootStackParamList>
