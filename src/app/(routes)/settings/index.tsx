@@ -5,7 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
+import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
+import { NavigationProps } from '@/types/naviagate'
 
 interface SettingItemConfig {
   title: string
@@ -21,7 +23,7 @@ interface SettingGroupConfig {
 export default function SettingsPage() {
   const { t } = useTranslation()
   const theme = useTheme()
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProps>()
 
   const settingsItems: SettingGroupConfig[] = [
     {
@@ -74,19 +76,19 @@ export default function SettingsPage() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <ScrollView backgroundColor="$background">
-        <YStack padding="$4" gap={4} flex={1}>
+        <SettingContainer>
           <HeaderBar title={t('settings.title')} onBackPress={() => navigation.goBack()} />
 
           <YStack gap={24} flex={1} marginTop={16}>
             {settingsItems.map(group => (
-              <SettingGroup key={group.title} title={group.title}>
+              <Group key={group.title} title={group.title}>
                 {group.items.map(item => (
                   <SettingItem key={item.title} title={item.title} screen={item.screen} icon={item.icon} />
                 ))}
-              </SettingGroup>
+              </Group>
             ))}
           </YStack>
-        </YStack>
+        </SettingContainer>
       </ScrollView>
     </SafeAreaView>
   )
@@ -97,15 +99,11 @@ interface SettingGroupProps {
   children: React.ReactNode
 }
 
-function SettingGroup({ title, children }: SettingGroupProps) {
+function Group({ title, children }: SettingGroupProps) {
   return (
     <YStack gap={8}>
-      <Text fontSize="$4" fontWeight="bold" opacity={0.7}>
-        {title}
-      </Text>
-      <YStack backgroundColor="$gray2" gap={8} paddingVertical={12} borderRadius={9}>
-        {children}
-      </YStack>
+      <SettingGroupTitle>{title}</SettingGroupTitle>
+      <SettingGroup>{children}</SettingGroup>
     </YStack>
   )
 }
@@ -117,19 +115,9 @@ interface SettingItemProps {
 }
 
 function SettingItem({ title, screen, icon }: SettingItemProps) {
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProps>()
   return (
-    <XStack
-      height={44}
-      paddingHorizontal={16}
-      paddingVertical={12}
-      borderRadius={9}
-      justifyContent="space-between"
-      alignItems="center"
-      pressStyle={{ opacity: 0.8 }}
-      hoverStyle={{ backgroundColor: '$backgroundHover' }}
-      // @ts-expect-error navigate type mismatch
-      onPress={() => navigation.navigate(screen as any)}>
+    <SettingRow onPress={() => navigation.navigate(screen as any)}>
       <XStack alignItems="center" gap={12}>
         {icon}
         <YStack>
@@ -137,6 +125,6 @@ function SettingItem({ title, screen, icon }: SettingItemProps) {
         </YStack>
       </XStack>
       <ChevronRight size={24} color="$colorFocus" />
-    </XStack>
+    </SettingRow>
   )
 }

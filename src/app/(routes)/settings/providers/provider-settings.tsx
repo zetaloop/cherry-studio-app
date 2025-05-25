@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Accordion, Button, ScrollView, Separator, Text, useTheme, XStack, YStack } from 'tamagui'
 
+import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import AuthCard from '@/components/settings/providers/authCard'
 import { ModelGroup } from '@/components/settings/providers/modelGroup'
@@ -82,7 +83,7 @@ export default function ProviderSettingsPage() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
-      <YStack backgroundColor="$background" flex={1} gap={24} padding="$4">
+      <SettingContainer>
         <HeaderBar
           title={provider.name}
           onBackPress={() => navigation.goBack()}
@@ -105,27 +106,16 @@ export default function ProviderSettingsPage() {
 
             {/* Manage Card */}
             <YStack gap={8}>
-              <Text>{t('common.manage')}</Text>
-              <YStack gap={8} backgroundColor="$gray2" borderRadius={8} paddingVertical={8}>
-                <XStack
-                  paddingVertical={12}
-                  paddingLeft={16}
-                  paddingRight={20}
-                  justifyContent="space-between"
-                  alignItems="center">
+              <SettingGroupTitle>{t('common.manage')}</SettingGroupTitle>
+              <SettingGroup>
+                <SettingRow>
                   <Text>{t('common.enabled')}</Text>
                   <CustomSwitch
                     checked={provider.enabled}
                     // onCheckedChange={checked => updateProvider({ ...provider, enabled: checked })}
                   />
-                </XStack>
-                <XStack
-                  paddingVertical={12}
-                  paddingLeft={16}
-                  paddingRight={20}
-                  justifyContent="space-between"
-                  alignItems="center"
-                  onPress={onApiService}>
+                </SettingRow>
+                <SettingRow onPress={onApiService}>
                   <Text>{t('settings.provider.api_service')}</Text>
                   <XStack>
                     {provider.checked && (
@@ -141,8 +131,8 @@ export default function ProviderSettingsPage() {
                     )}
                     <ChevronRight color="$white9" width={6} height={12} />
                   </XStack>
-                </XStack>
-              </YStack>
+                </SettingRow>
+              </SettingGroup>
             </YStack>
 
             <Separator />
@@ -153,7 +143,7 @@ export default function ProviderSettingsPage() {
             {/* Model List Card with Accordion */}
             <YStack flex={1}>
               <XStack justifyContent="space-between" alignItems="center" marginBottom={16}>
-                <Text>{t('settings.models.title')}</Text>
+                <SettingGroupTitle>{t('settings.models.title')}</SettingGroupTitle>
                 <Button size={14} chromeless icon={<HeartPulse size={14} />} />
               </XStack>
 
@@ -191,7 +181,7 @@ export default function ProviderSettingsPage() {
             </YStack>
           </YStack>
         </ScrollView>
-      </YStack>
+      </SettingContainer>
     </SafeAreaView>
   )
 }

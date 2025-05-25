@@ -41,6 +41,8 @@
       }
     },
     "common": {
+      "cherry_studio": "Cherry Studio",
+      "cherry_studio_description": "A Powerful AI assistant for producer",
       "cancel": "Cancel",
       "description": "Description",
       "language": "Language",
@@ -71,17 +73,30 @@
       }
     },
     "settings": {
-      "about.contact.button": "Email",
-      "about.contact.title": "Contact",
-      "about.feedback.button": "Feedback",
-      "about.feedback.title": "Feedback",
-      "about.license.button": "License",
-      "about.license.title": "License",
-      "about.releases.button": "Releases",
-      "about.releases.title": "Release Notes",
-      "about.title": "About Us",
-      "about.website.button": "Website",
-      "about.website.title": "Official Website",
+      "about": {
+        "title": "About Us",
+        "header": "About & Feedback",
+        "contact": {
+          "title": "Contact",
+          "button": "Email"
+        },
+        "feedback": {
+          "title": "Feedback",
+          "button": "Feedback"
+        },
+        "license": {
+          "title": "License",
+          "button": "License"
+        },
+        "releases": {
+          "title": "Release Notes",
+          "button": "Releases"
+        },
+        "website": {
+          "title": "Official Website",
+          "button": "Website"
+        }
+      },
       "data": {
         "app_data": "App Data",
         "app_logs": "App Logs",
@@ -158,7 +173,7 @@
       },
       "modelAndService": "AI Models & Services",
       "dataAndSecurity": "Data & Security",
-      "general.title": " General Settings"
+      "general.title": "General Settings"
     },
     "profile": {
       "editProfile": "Edit profile",

@@ -2,11 +2,11 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Keyboard } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Input, Stack, Text, useTheme, XStack, YStack } from 'tamagui'
+import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/external-link'
+import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { useProvider } from '@/hooks/use-providers'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
@@ -29,12 +29,12 @@ export default function ApiServicePage() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
-      <YStack backgroundColor="$background" flex={1} gap={24} padding="$4 " onPress={Keyboard.dismiss}>
+      <SettingContainer>
         <HeaderBar title={t('settings.provider.api_service')} onBackPress={() => navigation.goBack()} />
 
         <YStack gap={8}>
           <XStack paddingHorizontal={10} height={20} justifyContent="space-between" alignItems="center">
-            <Text>{t('settings.provider.api_key')}</Text>
+            <SettingGroupTitle>{t('settings.provider.api_key')}</SettingGroupTitle>
             <Button size={16} icon={<ShieldCheck size={16} />} backgroundColor="$colorTransparent" circular />
           </XStack>
 
@@ -60,8 +60,8 @@ export default function ApiServicePage() {
             </Stack>
           </XStack>
           <XStack justifyContent="space-between">
-            <Text fontSize={12}>{t('settings.provider.api_key.tip')}</Text>
-            <ExternalLink href="https://github.com/kangfenmao/cherry-studio" size={12}>
+            <SettingHelpText>{t('settings.provider.api_key.tip')}</SettingHelpText>
+            <ExternalLink href="" size={12}>
               {t('settings.provider.api_key.get')}
             </ExternalLink>
           </XStack>
@@ -69,11 +69,11 @@ export default function ApiServicePage() {
 
         <YStack gap={8}>
           <XStack paddingHorizontal={10} height={20} alignItems="center">
-            <Text>{t('settings.provider.api_host')}</Text>
+            <SettingGroupTitle>{t('settings.provider.api_host')}</SettingGroupTitle>
           </XStack>
           <Input placeholder={t('settings.provider.api_host')} />
         </YStack>
-      </YStack>
+      </SettingContainer>
     </SafeAreaView>
   )
 }

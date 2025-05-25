@@ -2,10 +2,10 @@ import { useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Keyboard } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { ScrollView, Text, useTheme, YStack } from 'tamagui'
+import { ScrollView, useTheme, YStack } from 'tamagui'
 
+import { SettingContainer, SettingGroupTitle } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { EmptyModelView } from '@/components/settings/providers/emptyModelView'
 import { ProviderItem } from '@/components/settings/providers/providerItem'
@@ -22,7 +22,7 @@ export default function ProvidersPage() {
   const { providers } = useAllProviders()
 
   const onAddProvider = () => {
-    navigation.navigate('ProviderListPage' as any)
+    navigation.navigate('ProviderListPage')
   }
 
   return (
@@ -31,7 +31,7 @@ export default function ProvidersPage() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
-      <YStack backgroundColor="$background" flex={1} gap={24} padding="$4" onPress={Keyboard.dismiss}>
+      <SettingContainer>
         <HeaderBar
           title={t('settings.provider.title')}
           onBackPress={() => navigation.goBack()}
@@ -47,7 +47,7 @@ export default function ProvidersPage() {
           <EmptyModelView onAddModel={onAddProvider} />
         ) : (
           <YStack gap={8} paddingVertical={8}>
-            <Text>{t('settings.provider.title')}</Text>
+            <SettingGroupTitle>{t('settings.provider.title')}</SettingGroupTitle>
             <ScrollView
               backgroundColor="$gray2"
               borderRadius={9}
@@ -63,7 +63,7 @@ export default function ProvidersPage() {
             </ScrollView>
           </YStack>
         )}
-      </YStack>
+      </SettingContainer>
     </SafeAreaView>
   )
 }

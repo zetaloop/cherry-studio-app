@@ -5,6 +5,8 @@ import { Text, XStack, YStack } from 'tamagui'
 
 import { Provider } from '@/types/agent'
 
+import { SettingGroup, SettingGroupTitle, SettingRow } from '..'
+
 interface ServiceSectionProps {
   provider: Provider
   onLoginPress?: () => void
@@ -36,41 +38,41 @@ const AuthCard: React.FC<ServiceSectionProps> = ({
   }
 
   const renderLoginItem = () => (
-    <YStack backgroundColor="$gray2" borderRadius={9}>
-      <XStack flex={1} justifyContent="space-between" paddingVertical={12} paddingLeft={16} paddingRight={20}>
+    <SettingGroup>
+      <SettingRow>
         <XStack gap={10}>
           <UserRoundPlus size={16} />
           <Text>{t('settings.provider.auth.login')}</Text>
         </XStack>
         <ArrowUpRight size={16} />
-      </XStack>
-    </YStack>
+      </SettingRow>
+    </SettingGroup>
   )
 
   const renderLoggedInItems = () => (
     <>
       <YStack backgroundColor="$gray2" borderRadius={9}>
-        <XStack flex={1} justifyContent="space-between" paddingVertical={12} paddingLeft={16} paddingRight={20}>
+        <SettingRow>
           <XStack gap={10}>
             <CircleDollarSign size={16} />
             <Text>{t('settings.provider.auth.balance_recharge')}</Text>
           </XStack>
           <ArrowUpRight size={16} />
-        </XStack>
-        <XStack flex={1} justifyContent="space-between" paddingVertical={12} paddingLeft={16} paddingRight={20}>
+        </SettingRow>
+        <SettingRow>
           <XStack gap={10}>
             <ReceiptText size={16} />
             <Text>{t('settings.provider.auth.free_bills')}</Text>
           </XStack>
           <ArrowUpRight size={16} />
-        </XStack>
+        </SettingRow>
       </YStack>
     </>
   )
 
   return (
     <YStack gap={8}>
-      <Text>{t('settings.provider.auth.title', { provider: provider.name })}</Text>
+      <SettingGroupTitle>{t('settings.provider.auth.title', { provider: provider.name })}</SettingGroupTitle>
       <YStack>{provider.isAuthed ? renderLoggedInItems() : renderLoginItem()}</YStack>
     </YStack>
   )
