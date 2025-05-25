@@ -79,7 +79,7 @@ export default function SettingsPage() {
         <SettingContainer>
           <HeaderBar title={t('settings.title')} onBackPress={() => navigation.goBack()} />
 
-          <YStack gap={24} flex={1} marginTop={16}>
+          <YStack gap={24} flex={1}>
             {settingsItems.map(group => (
               <Group key={group.title} title={group.title}>
                 {group.items.map(item => (
