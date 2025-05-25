@@ -1,4 +1,5 @@
 import { ChevronDown } from '@tamagui/lucide-icons'
+import React from 'react'
 import { Adapt, Select, Sheet } from 'tamagui'
 
 const ISelect: React.FC<{
