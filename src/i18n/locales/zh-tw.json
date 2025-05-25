@@ -76,13 +76,18 @@
         "data.title": "資料目錄",
         "title": "資料設定"
       },
-      "models.default_assistant_model": "預設助理模型",
-      "models.default_assistant_model_description": "建立新助理時使用的模型，如果未設定助理，將使用此模型。",
-      "models.empty": "還沒有模型...",
-      "models.empty.tooltip": "您正在尋找的頁面超出了我們的範圍。對於帶來的不便，我們深感歉意。",
-      "models.empty.add_model": "讓我們添加你的第一個模型",
-      "models.translate_model": "翻譯模型",
-      "models.translate_model_description": "用於翻譯服務的模型",
+      "models": {
+        "default_model": "預設模型",
+        "default_assistant_model": "預設助理模型",
+        "default_assistant_model_description": "建立新助理時使用的模型，如果未設定助理，將使用此模型。",
+        "empty": "還沒有模型...",
+        "empty.tooltip": "您正在尋找的頁面超出了我們的範圍。對於帶來的不便，我們深感歉意。",
+        "empty.add_model": "讓我們添加你的第一個模型",
+        "translate_model": "翻譯模型",
+        "translate_model_description": "用於翻譯服務的模型",
+        "search": "搜尋模型...",
+        "title": "模型"
+      },
       "provider": {
         "add.name": "提供者名稱",
         "add.name.placeholder": "示例：OpenAI",

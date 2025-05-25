@@ -76,13 +76,18 @@
         "data.title": "データディレクトリ",
         "title": "データ設定"
       },
-      "models.default_assistant_model": "デフォルトアシスタントモデル",
-      "models.default_assistant_model_description": "新しいアシスタントを作成する際に使用するモデル。アシスタントが設定されていない場合、このモデルが使用されます。",
-      "models.empty": "まだモデルがありません...",
-      "models.empty.tooltip": "お探しのページは見つかりませんでした。ご不便をおかけして申し訳ありません。",
-      "models.empty.add_model": "最初のモデルを追加しましょう。",
-      "models.translate_model": "モデルを翻訳する",
-      "models.translate_model_description": "翻訳サービスのために使用されるモデル",
+      "models": {
+        "default_model": "デフォルトモデル",
+        "default_assistant_model": "デフォルトアシスタントモデル",
+        "default_assistant_model_description": "新しいアシスタントを作成する際に使用するモデル。アシスタントが設定されていない場合、このモデルが使用されます。",
+        "empty": "まだモデルがありません...",
+        "empty.tooltip": "お探しのページは見つかりませんでした。ご不便をおかけして申し訳ありません。",
+        "empty.add_model": "最初のモデルを追加しましょう。",
+        "translate_model": "モデルを翻訳する",
+        "translate_model_description": "翻訳サービスのために使用されるモデル",
+        "search": "モデルを検索...",
+        "title": "モデル"
+      },
       "provider": {
         "add.name": "プロバイダー名",
         "add.name.placeholder": "例：OpenAI",

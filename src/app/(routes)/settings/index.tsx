@@ -33,7 +33,7 @@ export default function SettingsPage() {
           icon: <Cloud size={24} />
         },
         {
-          title: t('settings.model'),
+          title: t('settings.models.default_model'),
           screen: 'ModelSettings',
           icon: <Package size={24} />
         },
