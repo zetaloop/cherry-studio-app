@@ -8,6 +8,7 @@ import { Provider } from '@/types/agent'
 import { NavigationProps } from '@/types/naviagate'
 
 import { ProviderIcon } from '../../ui/providerIcon'
+import { SettingRow } from '..'
 
 interface ProviderItemProps {
   provider: Provider
@@ -23,15 +24,7 @@ export const ProviderItem: React.FC<ProviderItemProps> = ({ provider, mode = 'en
   const statusText = mode === 'enabled' ? t('settings.provider.enabled') : t('settings.provider.checked') // 假设你有这个翻译键
 
   return (
-    <XStack
-      height={45}
-      paddingVertical={12}
-      paddingHorizontal={16}
-      alignItems="center"
-      justifyContent="space-between"
-      onPress={() => navigation.navigate('ProviderSettingsPage', { providerId: provider.id })}
-      pressStyle={{ opacity: 0.8 }}
-      hoverStyle={{ backgroundColor: '$backgroundHover' }}>
+    <SettingRow onPress={() => navigation.navigate('ProviderSettingsPage', { providerId: provider.id })}>
       <XStack gap={5} alignItems="center">
         <ProviderIcon provider={provider} />
         <Text>{provider.name}</Text>
@@ -50,6 +43,6 @@ export const ProviderItem: React.FC<ProviderItemProps> = ({ provider, mode = 'en
         )}
         <ChevronRight color="$white9" width={6} height={12} />
       </XStack>
-    </XStack>
+    </SettingRow>
   )
 }

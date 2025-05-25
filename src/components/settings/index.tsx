@@ -1,25 +1,14 @@
-import { Separator, styled } from 'tamagui'
-import { ScrollView, Text, View } from 'tamagui'
+import { Keyboard } from 'react-native'
+import { Separator, styled, XStack, YStack } from 'tamagui'
+import { Text, View } from 'tamagui'
 
-export const SettingContainer = styled(ScrollView, {
+export const SettingContainer = styled(YStack, {
   flex: 1,
-  paddingHorizontal: 20,
-  paddingTop: 15,
-  paddingBottom: 20,
-  contentContainerStyle: {
-    paddingBottom: 30
-  },
-
-  variants: {
-    theme: {
-      dark: {
-        backgroundColor: 'transparent'
-      },
-      light: {
-        backgroundColor: 'var(--color-background-soft)'
-      }
-    }
-  }
+  padding: '$4',
+  gap: '24',
+  backgroundColor: '$background',
+  onPress: Keyboard.dismiss,
+  overflow: 'hidden'
 })
 
 export const SettingTitle = styled(Text, {
@@ -54,13 +43,13 @@ export const SettingDivider = styled(Separator, {
   borderBlockStartColor: 'var(--color-border)'
 })
 
-export const SettingRow = styled(View, {
-  display: 'flex',
-  flexDirection: 'row',
+export const SettingRow = styled(XStack, {
+  borderRadius: 9,
   justifyContent: 'space-between',
   alignItems: 'center',
-  minHeight: 24,
-  marginVertical: 8
+  paddingVertical: 12,
+  paddingLeft: 16,
+  paddingRight: 20
 })
 
 export const SettingRowTitle = styled(Text, {
@@ -78,25 +67,18 @@ export const SettingHelpTextRow = styled(View, {
 
 export const SettingHelpText = styled(Text, {
   fontSize: 11,
-  color: 'var(--color-text)',
   opacity: 0.4
 })
 
-export const SettingGroup = styled(View, {
-  marginBottom: 20,
-  borderRadius: 8,
-  borderWidth: 0.5,
-  borderColor: 'var(--color-border)',
-  padding: 16,
+export const SettingGroup = styled(YStack, {
+  gap: 8,
+  paddingVertical: 8,
+  borderRadius: 9,
+  backgroundColor: '$gray2'
+})
 
-  variants: {
-    theme: {
-      dark: {
-        background: '#00000010'
-      },
-      light: {
-        background: 'var(--color-background)'
-      }
-    }
-  }
+export const SettingGroupTitle = styled(Text, {
+  fontSize: '$4',
+  fontWeight: 'bold',
+  opacity: 0.7
 })

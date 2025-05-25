@@ -22,8 +22,6 @@ const ExternalLink: React.FC<ExternalLinkProps> = ({ href, children, color = '$b
         const message = `无法打开链接: ${error instanceof Error ? error.message : String(error)}`
         console.error(message, error)
 
-        // ...existing code...
-
         if (onError) {
           onError(error instanceof Error ? error : new Error(String(error)))
         } else {
