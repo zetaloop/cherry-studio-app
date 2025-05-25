@@ -33,7 +33,7 @@ export default function AboutPage() {
             onPress: async () => await openLink('https://github.com/CherryHQ/cherry-studio-app')
           }}
         />
-        <YStack gap={24} flex={1} marginTop={16}>
+        <YStack gap={24} flex={1}>
           {/* Logo and Description */}
           <SettingGroup>
             <SettingRow gap={18}>
