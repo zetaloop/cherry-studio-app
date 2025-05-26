@@ -69,7 +69,7 @@ export function ISelect<T = any>({
     <Select value={value} onValueChange={handleValueChange} native={native}>
       <Select.Trigger width={width} iconAfter={ChevronRight}>
         {selectedDisplayInfo ? (
-          <XStack flex={1} justifyContent="space-between" alignItems="center" gap="$2">
+          <XStack paddingVertical={8} flex={1} justifyContent="space-between" alignItems="center" gap="$2">
             <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
               {selectedDisplayInfo.groupLabel}
             </Text>
@@ -78,7 +78,7 @@ export function ISelect<T = any>({
             </Text>
           </XStack>
         ) : (
-          <Select.Value placeholder={placeholder} />
+          <Select.Value paddingVertical={8} placeholder={placeholder} />
         )}
       </Select.Trigger>
 
