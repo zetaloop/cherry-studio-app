@@ -2,6 +2,19 @@ import type { WebSearchResultBlock } from '@anthropic-ai/sdk/resources'
 import type { GroundingMetadata } from '@google/genai'
 import type OpenAI from 'openai'
 
+export type WebSearchProvider = {
+  id: string
+  name: string
+  apiKey?: string
+  apiHost?: string
+  engines?: string[]
+  url?: string
+  basicAuthUsername?: string
+  basicAuthPassword?: string
+  contentLimit?: number
+  usingBrowser?: boolean
+}
+
 export enum WebSearchSource {
   WEBSEARCH = 'websearch',
   OPENAI = 'openai',
@@ -48,4 +61,12 @@ export interface Citation {
   showFavicon?: boolean
   type?: string
   metadata?: Record<string, any>
+}
+
+// blacklist subscription
+export interface SubscribeSource {
+  key: number
+  url: string
+  name: string
+  blacklist?: string[]
 }

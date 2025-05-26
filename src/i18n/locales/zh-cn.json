@@ -76,13 +76,18 @@
         "data.title": "数据目录",
         "title": "数据设置"
       },
-      "models.default_assistant_model": "默认助手模型",
-      "models.default_assistant_model_description": "创建新助手时使用的模型，如果未设置助手，将使用此模型。",
-      "models.empty": "尚未有模型...",
-      "models.empty.tooltip": "您查找的页面超出了我们的范围。给您带来的不便，我们深表歉意。",
-      "models.empty.add_model": "让我们添加你的第一个模型。",
-      "models.translate_model": "翻译模型",
-      "models.translate_model_description": "用于翻译服务的模型",
+      "models": {
+        "default_model": "默认模型",
+        "default_assistant_model": "默认助手模型",
+        "default_assistant_model_description": "创建新助手时使用的模型，如果未设置助手，将使用此模型。",
+        "empty": "尚未有模型...",
+        "empty.tooltip": "您查找的页面超出了我们的范围。给您带来的不便，我们深表歉意。",
+        "empty.add_model": "让我们添加你的第一个模型。",
+        "translate_model": "翻译模型",
+        "translate_model_description": "用于翻译服务的模型",
+        "search": "搜索模型...",
+        "title": "模型"
+      },
       "provider": {
         "add.name": "提供者名称",
         "add.name.placeholder": "示例：OpenAI",

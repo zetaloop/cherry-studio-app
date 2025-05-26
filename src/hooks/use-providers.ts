@@ -6,6 +6,13 @@ export function useAllProviders() {
   }
 }
 
+export function useProviders() {
+  const providers = INITIAL_PROVIDERS.filter(provider => provider.enabled)
+  return {
+    providers: providers
+  }
+}
+
 export function useProvider(id: string) {
   const provider = INITIAL_PROVIDERS.find(p => p.id === id)
 
