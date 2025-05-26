@@ -19,7 +19,7 @@ interface ProviderSectionProps {
   selectOptions: ProviderGroup[]
 }
 
-export function ProviderSection({ selectedProvider, onProviderChange, selectOptions }: ProviderSectionProps) {
+export default function ProviderSection({ selectedProvider, onProviderChange, selectOptions }: ProviderSectionProps) {
   const { t } = useTranslation()
 
   return (
