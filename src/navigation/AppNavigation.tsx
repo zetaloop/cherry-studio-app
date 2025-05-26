@@ -12,7 +12,7 @@ import ApiServicePage from '@/app/(routes)/settings/providers/api-service'
 import ManageModelsPage from '@/app/(routes)/settings/providers/manage-models'
 import ProviderListPage from '@/app/(routes)/settings/providers/provider-list'
 import ProviderSettingsPage from '@/app/(routes)/settings/providers/provider-settings'
-import WebSearchSettingsPage from '@/app/(routes)/settings/websearch-settings'
+import WebSearchSettingsPage from '@/app/(routes)/settings/websearch'
 import WelcomePage from '@/app/(routes)/welcome'
 import { useAppSelector } from '@/store'
 import { RootStackParamList } from '@/types/naviagate'
@@ -23,7 +23,7 @@ export const AppNavigation: React.FC = () => {
   const welcomeShown = useAppSelector(state => state.app.welcomeShown)
 
   return (
-    <Stack.Navigator initialRouteName="GeneralSettings">
+    <Stack.Navigator initialRouteName="WebSearchSettings">
       {!welcomeShown && <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomePage} />}
       <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
       <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsPage} />

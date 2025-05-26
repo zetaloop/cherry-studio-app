@@ -165,7 +165,16 @@
         "tavily": {
           "api_key.placeholder": "Enter Tavily API Key"
         },
-        "title": "Web Search"
+        "title": "Web Search",
+        "selectPlaceholder": "Please Select Web Search Provider...",
+        "searchWithDates": "Search with dates included",
+        "overrideSearchService": "Override search service",
+        "searchCount": "Search Count",
+        "contentLengthLimit": "Content Length Limit",
+        "blacklist.title": "Blacklist",
+        "blacklist_placeholder": "Please use the following format (separated by newlines)\nPattern matching: *://*.example.com/*\nRegular expression: /example\\.(net|org)/",
+        "blacklist_description": "Results from the following websites will not appear in search results",
+        "subscribe": "Blacklist Subscription"
       },
       "modelAndService": "AI Models & Services",
       "dataAndSecurity": "Data & Security",
