@@ -11,13 +11,7 @@ export const RightSection: React.FC = () => {
 
   return (
     <XStack alignItems="center" justifyContent="flex-end">
-      <Button
-        size={20}
-        circular
-        chromeless
-        icon={<SquarePen size={20} />}
-        onPress={createNewTopicHandler}
-      />
+      <Button size={24} circular chromeless icon={<SquarePen size={24} />} onPress={createNewTopicHandler} />
     </XStack>
   )
 }

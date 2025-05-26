@@ -15,7 +15,7 @@ interface BlacklistSectionProps {
   onAddSubscription: () => void
 }
 
-export function BlacklistSection({
+export default function BlacklistSection({
   blacklistText,
   onBlacklistTextChange,
   subscriptions,
@@ -36,15 +36,11 @@ export function BlacklistSection({
         </Text>
       </XStack>
       <XStack gap={10} alignItems="center">
-        <Button
-          size={14}
-          backgroundColor="$colorTransparent"
-          icon={<RefreshCcw size={14} />}
-          onPress={onRefreshAllSubscriptions}
-        />
+        <Button size={14} chromeless icon={<RefreshCcw size={14} />} onPress={onRefreshAllSubscriptions} />
         <Button
           size={14}
           circular
+          chromeless
           backgroundColor="$backgroundGreen"
           icon={<Plus size={14} color="$foregroundGreen" />}
           onPress={onAddSubscription}
@@ -105,7 +101,7 @@ export function BlacklistSection({
                       <Text>{source.url}</Text>
                       <Button
                         size={14}
-                        backgroundColor="$colorTransparent"
+                        chromeless
                         icon={<RefreshCcw size={14} />}
                         pressStyle={{ opacity: 0.7 }}
                         onPress={() => onRefreshSubscription(source)}

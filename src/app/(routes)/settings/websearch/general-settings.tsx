@@ -16,7 +16,7 @@ interface GeneralSettingsProps {
   onContentLimitChange: (value: string) => void
 }
 
-export function GeneralSettings({
+export default function GeneralSettings({
   searchWithDates,
   onSearchWithDatesChange,
   overrideSearchService,
