@@ -11,16 +11,17 @@ import { StatusBar } from 'expo-status-bar'
 import { Suspense } from 'react'
 import { useEffect } from 'react'
 import React from 'react'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, Dimensions } from 'react-native'
 import { useColorScheme } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Provider } from 'react-redux'
 import { PortalProvider } from 'tamagui'
 
+import AppNavigator from '@/navigation/AppNavigation'
 import store from '@/store'
 
 import migrations from '../../drizzle/migrations'
 import tamaguiConfig from '../../tamagui.config'
-import App from './App'
 
 export const DATABASE_NAME = 'test'
 
@@ -33,6 +34,7 @@ export default function RootLayout() {
   const expoDb = openDatabaseSync(DATABASE_NAME)
   const db = drizzle(expoDb)
   const { success, error } = useMigrations(db, migrations)
+  const screenWidth = Dimensions.get('window').width
 
   useEffect(() => {
     if (success) {
@@ -47,19 +49,21 @@ export default function RootLayout() {
   }, [])
 
   return (
-    <Suspense fallback={<ActivityIndicator size="large" />}>
-      <SQLiteProvider databaseName={DATABASE_NAME} options={{ enableChangeListener: true }} useSuspense>
-        <Provider store={store}>
-          <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme ?? 'light'}>
-            <PortalProvider>
-              <ThemeProvider value={DefaultTheme}>
-                <App />
-                <StatusBar style="auto" />
-              </ThemeProvider>
-            </PortalProvider>
-          </TamaguiProvider>
-        </Provider>
-      </SQLiteProvider>
-    </Suspense>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Suspense fallback={<ActivityIndicator size="large" />}>
+        <SQLiteProvider databaseName={DATABASE_NAME} options={{ enableChangeListener: true }} useSuspense>
+          <Provider store={store}>
+            <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme ?? 'light'}>
+              <PortalProvider>
+                <ThemeProvider value={DefaultTheme}>
+                  <AppNavigator />
+                  <StatusBar style="auto" />
+                </ThemeProvider>
+              </PortalProvider>
+            </TamaguiProvider>
+          </Provider>
+        </SQLiteProvider>
+      </Suspense>
+    </GestureHandlerRootView>
   )
 }
