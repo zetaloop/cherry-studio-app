@@ -49,8 +49,8 @@ export default function SettingsPage() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+      <HeaderBar title={t('settings.general.title')} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
-        <HeaderBar title={t('settings.general.title')} onBackPress={() => navigation.goBack()} />
         <YStack gap={24} flex={1}>
           {/* Display settings */}
           <YStack gap={8}>

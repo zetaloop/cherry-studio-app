@@ -197,8 +197,8 @@ export default function ManageModelsPage() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
+      <HeaderBar title={provider.name} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
-        <HeaderBar title={provider.name} onBackPress={() => navigation.goBack()} />
         {/* Filter Tabs */}
         <Tabs
           defaultValue="all"

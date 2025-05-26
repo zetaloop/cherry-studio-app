@@ -83,22 +83,21 @@ export default function ProviderSettingsPage() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
+      <HeaderBar
+        title={provider.name}
+        onBackPress={() => navigation.goBack()}
+        rightButtons={[
+          {
+            icon: <Settings2 size={24} />,
+            onPress: onManageModel
+          },
+          {
+            icon: <Plus size={24} />,
+            onPress: onAddModel
+          }
+        ]}
+      />
       <SettingContainer>
-        <HeaderBar
-          title={provider.name}
-          onBackPress={() => navigation.goBack()}
-          rightButtons={[
-            {
-              icon: <Settings2 size={24} />,
-              onPress: onManageModel
-            },
-            {
-              icon: <Plus size={24} />,
-              onPress: onAddModel
-            }
-          ]}
-        />
-
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
           <YStack flex={1} gap={24}>
             {/* Auth Card */}

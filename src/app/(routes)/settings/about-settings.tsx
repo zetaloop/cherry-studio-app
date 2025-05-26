@@ -24,15 +24,15 @@ export default function AboutPage() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+      <HeaderBar
+        title={t('settings.about.header')}
+        onBackPress={() => navigation.goBack()}
+        rightButton={{
+          icon: <Github size={24} />,
+          onPress: async () => await openLink('https://github.com/CherryHQ/cherry-studio-app')
+        }}
+      />
       <SettingContainer>
-        <HeaderBar
-          title={t('settings.about.header')}
-          onBackPress={() => navigation.goBack()}
-          rightButton={{
-            icon: <Github size={24} />,
-            onPress: async () => await openLink('https://github.com/CherryHQ/cherry-studio-app')
-          }}
-        />
         <YStack gap={24} flex={1}>
           {/* Logo and Description */}
           <SettingGroup>

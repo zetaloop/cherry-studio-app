@@ -1,12 +1,14 @@
+import { ChevronDown, RefreshCcw } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Input, ScrollView, Slider, Text, TextArea, useTheme, XStack, YStack } from 'tamagui'
+import { Accordion, Button, Input, ScrollView, Slider, Square, Text, TextArea, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow, SettingRowTitle } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { WebSearchSelect } from '@/components/settings/websearch/websearchSelect'
 import { CustomSwitch } from '@/components/ui/switch'
+import { SubscribeSource } from '@/types/websearch'
 
 const selectOptions = [
   {
@@ -27,6 +29,8 @@ const selectOptions = [
   }
 ]
 
+const blacklistSubscription: SubscribeSource[] = [{ key: 1, url: 'https://git.io/ublacklist', name: 'git.io' }]
+
 export default function WebSearchSettingsPage() {
   const { t } = useTranslation()
   const theme = useTheme()
@@ -42,9 +46,9 @@ export default function WebSearchSettingsPage() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
-      <SettingContainer>
-        <HeaderBar title={t('settings.websearch.title')} />
-        <ScrollView>
+      <HeaderBar title={t('settings.websearch.title')} />
+      <ScrollView flex={1}>
+        <SettingContainer>
           <YStack gap={24} flex={1}>
             <WebSearchSelect
               value={selectedProvider}
@@ -56,7 +60,6 @@ export default function WebSearchSettingsPage() {
               selectOptions={selectOptions}
               placeholder={t('settings.websearch.selectPlaceholder')}
             />
-
             <YStack gap={8} paddingVertical={8}>
               <SettingGroupTitle>{t('settings.general.title')}</SettingGroupTitle>
               <SettingGroup>
@@ -98,7 +101,6 @@ export default function WebSearchSettingsPage() {
                 </SettingRow>
               </SettingGroup>
             </YStack>
-
             <YStack gap={8} paddingVertical={8}>
               <SettingGroupTitle>{t('settings.websearch.blacklist.title')}</SettingGroupTitle>
               <SettingGroup>
@@ -113,9 +115,66 @@ export default function WebSearchSettingsPage() {
                 {t('settings.websearch.blacklist_description')}
               </Text>
             </YStack>
+            {/* Replace the existing blacklist section with the Accordion */}
+            <Accordion type="single" collapsable width="100%">
+              <Accordion.Item value="blacklist-subscription" marginBottom={8}>
+                <Accordion.Trigger
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  paddingVertical={12}
+                  paddingHorizontal={16}
+                  backgroundColor="$gray2"
+                  borderRadius={9}
+                  borderBottomLeftRadius={0}
+                  borderBottomRightRadius={0}>
+                  {({ open }: { open: boolean }) => (
+                    <>
+                      <XStack gap={10} alignItems="center">
+                        <Square animation="quick" rotate={open ? '0deg' : '-90deg'}>
+                          <ChevronDown size={14} />
+                        </Square>
+                        <Text fontSize={14} fontWeight="bold">
+                          {t('settings.websearch.subscribe.title')}
+                        </Text>
+                      </XStack>
+                    </>
+                  )}
+                </Accordion.Trigger>
+                <Accordion.HeightAnimator animation="quicker">
+                  <Accordion.Content
+                    exitStyle={{ opacity: 0 }}
+                    backgroundColor="$gray1"
+                    borderBottomLeftRadius={9}
+                    borderBottomRightRadius={9}
+                    borderTopWidth={1}
+                    borderTopColor="$gray4"
+                    width="100%"
+                    paddingHorizontal={0}
+                    overflow="hidden">
+                    <YStack borderColor="white" width="100%" paddingVertical={8} gap={8} pointerEvents="box-none">
+                      {blacklistSubscription.map(source => (
+                        <SettingRow key={source.key}>
+                          <Text>{source.name}</Text>
+                          <XStack justifyContent="center" alignContent="center">
+                            <Text>{source.url}</Text>
+                            <Button
+                              size={14}
+                              backgroundColor="$colorTransparent"
+                              icon={<RefreshCcw size={14} />}
+                              pressStyle={{ opacity: 0.7 }}
+                            />
+                          </XStack>
+                        </SettingRow>
+                      ))}
+                    </YStack>
+                  </Accordion.Content>
+                </Accordion.HeightAnimator>
+              </Accordion.Item>
+            </Accordion>
           </YStack>
-        </ScrollView>
-      </SettingContainer>
+        </SettingContainer>
+      </ScrollView>
     </SafeAreaView>
   )
 }

@@ -29,9 +29,8 @@ export default function ApiServicePage() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
+      <HeaderBar title={t('settings.provider.api_service')} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
-        <HeaderBar title={t('settings.provider.api_service')} onBackPress={() => navigation.goBack()} />
-
         <YStack gap={8}>
           <XStack paddingHorizontal={10} height={20} justifyContent="space-between" alignItems="center">
             <SettingGroupTitle>{t('settings.provider.api_key')}</SettingGroupTitle>
