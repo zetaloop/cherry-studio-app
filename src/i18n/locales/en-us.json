@@ -247,6 +247,9 @@
       "qiniu": "Qiniu",
       "tokenflux": "TokenFlux"
     },
-    "home": {}
+    "home": {},
+    "menu": {
+      "search_placeholder": "Search..."
+    }
   }
 }

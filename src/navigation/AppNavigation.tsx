@@ -1,42 +1,60 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import 'react-native-reanimated'
+import '@/i18n'
+
+import {
+  createDrawerNavigator,
+  DrawerContentComponentProps,
+  DrawerContentScrollView,
+  DrawerItemList
+} from '@react-navigation/drawer'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Dimensions } from 'react-native'
+import { useTheme } from 'tamagui'
 
-import HomeScreen from '@/app/(routes)/home'
-import SettingsPage from '@/app/(routes)/settings'
-import AboutSettingsPage from '@/app/(routes)/settings/about-settings'
-import DataSettingsPage from '@/app/(routes)/settings/data'
-import GeneralSettingsPage from '@/app/(routes)/settings/general-settings'
-import ModelSettingsPage from '@/app/(routes)/settings/model'
-import ProvidersPage from '@/app/(routes)/settings/providers'
-import ApiServicePage from '@/app/(routes)/settings/providers/api-service'
-import ManageModelsPage from '@/app/(routes)/settings/providers/manage-models'
-import ProviderListPage from '@/app/(routes)/settings/providers/provider-list'
-import ProviderSettingsPage from '@/app/(routes)/settings/providers/provider-settings'
-import WebSearchSettingsPage from '@/app/(routes)/settings/websearch'
-import WelcomePage from '@/app/(routes)/welcome'
-import { useAppSelector } from '@/store'
-import { RootStackParamList } from '@/types/naviagate'
+import HomeScreen from '@/app/(routes)'
+import { SearchInput } from '@/components/ui/searchInput'
 
-const Stack = createNativeStackNavigator<RootStackParamList>()
+const Drawer = createDrawerNavigator()
 
-export const AppNavigation: React.FC = () => {
-  const welcomeShown = useAppSelector(state => state.app.welcomeShown)
+function CustomDrawerContent(props: DrawerContentComponentProps) {
+  const { t } = useTranslation()
+  return (
+    <DrawerContentScrollView
+      {...props}
+      contentContainerStyle={{
+        backgroundColor: 'transparent',
+        padding: 20
+      }}>
+      <DrawerItemList {...props} />
+      <SearchInput placeholder={t('menu.search_placeholder')} />
+    </DrawerContentScrollView>
+  )
+}
+
+export default function AppNavigator() {
+  const theme = useTheme()
+  const screenWidth = Dimensions.get('window').width
 
   return (
-    <Stack.Navigator>
-      {!welcomeShown && <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomePage} />}
-      <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
-      <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="DataSettings" component={DataSettingsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="ModelSettings" component={ModelSettingsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="ProvidersPage" component={ProvidersPage} />
-      <Stack.Screen options={{ headerShown: false }} name="AboutSettings" component={AboutSettingsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="GeneralSettings" component={GeneralSettingsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="WebSearchSettings" component={WebSearchSettingsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="ProviderListPage" component={ProviderListPage} />
-      <Stack.Screen options={{ headerShown: false }} name="ProviderSettingsPage" component={ProviderSettingsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="ManageModelsPage" component={ManageModelsPage} />
-      <Stack.Screen options={{ headerShown: false }} name="ApiServicePage" component={ApiServicePage} />
-    </Stack.Navigator>
+    <Drawer.Navigator
+      drawerContent={props => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        drawerStyle: {
+          width: screenWidth * 0.7,
+          backgroundColor: theme.background.val // Use Tamagui theme background
+        }
+      }}>
+      <Drawer.Screen
+        name="Home"
+        options={{
+          headerShown: false,
+          drawerItemStyle: {
+            display: 'none'
+          }
+        }}
+        component={HomeScreen}
+      />
+    </Drawer.Navigator>
   )
 }
