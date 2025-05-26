@@ -73,7 +73,7 @@ export function ISelect<T = any>({
             <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
               {selectedDisplayInfo.groupLabel}
             </Text>
-            <Text flexShrink={0} numberOfLines={1} ellipsizeMode="tail">
+            <Text flexShrink={0} numberOfLines={1} maxWidth="60%" ellipsizeMode="tail">
               {selectedDisplayInfo.itemLabel}
             </Text>
           </XStack>

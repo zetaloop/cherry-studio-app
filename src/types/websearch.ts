@@ -62,3 +62,11 @@ export interface Citation {
   type?: string
   metadata?: Record<string, any>
 }
+
+// blacklist subscription
+export interface SubscribeSource {
+  key: number
+  url: string
+  name: string
+  blacklist?: string[]
+}

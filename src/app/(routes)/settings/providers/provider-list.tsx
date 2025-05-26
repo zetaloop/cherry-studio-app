@@ -28,16 +28,15 @@ export default function ProviderListPage() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
+      <HeaderBar
+        title={t('settings.provider.list.title')}
+        onBackPress={() => navigation.goBack()}
+        rightButton={{
+          icon: <Plus size={24} />,
+          onPress: onAddProvider
+        }}
+      />
       <SettingContainer>
-        <HeaderBar
-          title={t('settings.provider.list.title')}
-          onBackPress={() => navigation.goBack()}
-          rightButton={{
-            icon: <Plus size={24} />,
-            onPress: onAddProvider
-          }}
-        />
-
         <SearchInput placeholder={t('settings.provider.search')} value={searchQuery} onChangeText={setSearchQuery} />
 
         <YStack flex={1} gap={8}>

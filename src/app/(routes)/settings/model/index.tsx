@@ -31,7 +31,7 @@ export default function ModelSettingsPage() {
       options: sortBy(p.models, 'name')
         .filter(m => !isEmbeddingModel(m))
         .map(m => ({
-          label: `${m.name} | ${p.isSystem ? t(`provider.${p.id}`) : p.name}`,
+          label: `${m.name}`,
           value: getModelUniqId(m),
           model: m
         }))
@@ -59,9 +59,8 @@ export default function ModelSettingsPage() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+      <HeaderBar title={t('settings.models.default_model')} onBackPress={() => navigation.goBack()} />
       <YStack padding="$4" backgroundColor="$background" flex={1} gap={24}>
-        <HeaderBar title={t('settings.models.default_model')} onBackPress={() => navigation.goBack()} />
-
         <YStack gap={8}>
           <XStack justifyContent="space-between" height={20}>
             <Text>{t('settings.models.default_assistant_model')}</Text>

@@ -75,10 +75,9 @@ export default function SettingsPage() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
-      <ScrollView backgroundColor="$background">
+      <HeaderBar title={t('settings.title')} onBackPress={() => navigation.goBack()} />
+      <ScrollView flex={1} backgroundColor="$background">
         <SettingContainer>
-          <HeaderBar title={t('settings.title')} onBackPress={() => navigation.goBack()} />
-
           <YStack gap={24} flex={1}>
             {settingsItems.map(group => (
               <Group key={group.title} title={group.title}>
