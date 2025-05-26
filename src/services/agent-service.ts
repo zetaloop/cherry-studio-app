@@ -3,6 +3,7 @@ import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 
 import i18n from '@/i18n'
+import { INITIAL_PROVIDERS } from '@/mock'
 import { Agent, Model, Provider, Topic } from '@/types/agent'
 
 export function getDefaultAgent(): Agent {
@@ -33,11 +34,11 @@ export function getDefaultProvider() {
 }
 
 export function getDefaultModel() {
-  return store.getState().llm.defaultModel
+  return INITIAL_PROVIDERS[0].models[0]
 }
 
 export function getProviderByModel(model?: Model): Provider {
-  const providers = store.getState().llm.providers
+  const providers = INITIAL_PROVIDERS
   const providerId = model ? model.provider : getDefaultProvider().id
   return providers.find(p => p.id === providerId) as Provider
 }

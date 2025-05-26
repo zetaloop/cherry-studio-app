@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { Dimensions } from 'react-native'
 import { useTheme } from 'tamagui'
 
-import HomeScreen from '@/app/(routes)'
+import AppStackWithPersist from '@/app/(routes)/_layout'
 import { SearchInput } from '@/components/ui/searchInput'
 
 const Drawer = createDrawerNavigator()
@@ -46,14 +46,14 @@ export default function AppNavigator() {
         }
       }}>
       <Drawer.Screen
-        name="Home"
+        name="Main" // 您可以根据需要命名，例如 "Main" 或 "HomeStack"
         options={{
           headerShown: false,
           drawerItemStyle: {
-            display: 'none'
+            display: 'none' // 如果不希望这个主导航栈在抽屉菜单中显示为一个可选项
           }
         }}
-        component={HomeScreen}
+        component={AppStackWithPersist} // 使用 _layout.tsx 中导出的导航器
       />
     </Drawer.Navigator>
   )
