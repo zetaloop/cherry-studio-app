@@ -53,9 +53,7 @@ export const SettingRow = styled(XStack, {
 })
 
 export const SettingRowTitle = styled(Text, {
-  fontSize: 14,
-  lineHeight: 18,
-  color: 'var(--color-text-1)'
+  fontSize: 14
 })
 
 export const SettingHelpTextRow = styled(View, {
@@ -78,7 +76,6 @@ export const SettingGroup = styled(YStack, {
 })
 
 export const SettingGroupTitle = styled(Text, {
-  fontSize: '$4',
   fontWeight: 'bold',
   opacity: 0.7
 })
