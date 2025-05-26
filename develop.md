@@ -6,6 +6,7 @@
 - [x] provider logo light mode
 - [ ] logo performance problem 
 - [ ] manage model page optimize performance
+- [ ] model select component optimize performance 
 
 
 ## database

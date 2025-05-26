@@ -1,14 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useEffect, useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { useState } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useTheme } from 'tamagui'
+import { Text, useTheme, YStack } from 'tamagui'
 
-import { SettingContainer, SettingDivider, SettingRow, SettingRowTitle, SettingTitle } from '@/components/settings'
-import { Select } from '@/components/ui/select'
-import i18n, { getLanguage } from '@/i18n'
+import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
+import { HeaderBar } from '@/components/settings/headerBar'
+import { CustomSwitch } from '@/components/ui/switch'
+import i18n from '@/i18n'
 import { LanguageVarious } from '@/types'
+import { NavigationProps } from '@/types/naviagate'
 
 const languagesOptions: { value: LanguageVarious; label: string; flag: string }[] = [
   { value: 'zh-CN', label: '中文', flag: '🇨🇳' },
@@ -18,20 +21,19 @@ const languagesOptions: { value: LanguageVarious; label: string; flag: string }[
   { value: 'ru-RU', label: 'Русский', flag: '🇷🇺' }
 ]
 
+const themeOptions = [
+  { value: 'light', label: '浅色' },
+  { value: 'dark', label: '深色' },
+  { value: 'system', label: '跟随系统' }
+]
+
 export default function SettingsPage() {
   const { t } = useTranslation()
   const [language, setLanguage] = useState('zh-CN')
+  const [currentTheme, setCurrentTheme] = useState('system')
   const [proxyMode, setProxyMode] = useState('system')
   const theme = useTheme()
-
-  useEffect(() => {
-    const initLanguage = async () => {
-      const currentLang = await getLanguage()
-      setLanguage(currentLang)
-    }
-
-    initLanguage()
-  }, [])
+  const navigation = useNavigation<NavigationProps>()
 
   const handleLanguageChange = async (value: string) => {
     setLanguage(value)
@@ -39,39 +41,48 @@ export default function SettingsPage() {
     await i18n.changeLanguage(value)
   }
 
+  const handleThemeChange = async (value: string) => {
+    setCurrentTheme(value)
+    await AsyncStorage.setItem('theme', value)
+    // 这里需要调用主题切换的逻辑
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+      <HeaderBar title={t('settings.general.title')} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
-        <SettingTitle>{t('settings.general.title')}</SettingTitle>
+        <YStack gap={24} flex={1}>
+          {/* Display settings */}
+          <YStack gap={8}>
+            <SettingGroupTitle>{t('settings.general.display.title')}</SettingGroupTitle>
+            <SettingGroup>
+              <SettingRow>
+                <Text>{t('settings.general.theme.title')}</Text>
+              </SettingRow>
+            </SettingGroup>
+          </YStack>
 
-        <SettingDivider />
+          {/* General settings */}
+          <YStack gap={8}>
+            <SettingGroupTitle>{t('settings.general.title')}</SettingGroupTitle>
+            <SettingGroup>
+              <SettingRow>
+                <Text>{t('settings.general.language.title')}</Text>
+              </SettingRow>
+            </SettingGroup>
+          </YStack>
 
-        <SettingRow>
-          <SettingRowTitle>{t('common.language')}</SettingRowTitle>
-          <Select
-            label={t('common.language')}
-            value={language}
-            onValueChange={handleLanguageChange}
-            placeholder="..."
-            items={languagesOptions}
-          />
-        </SettingRow>
-        <SettingDivider />
-        <SettingRow>
-          <SettingRowTitle>{t('settings.proxy.title')}</SettingRowTitle>
-
-          <Select
-            label={t('settings.proxy.title')}
-            value={proxyMode}
-            onValueChange={setProxyMode}
-            placeholder="..."
-            items={[
-              { value: 'system', label: t('settings.proxy.mode.system') },
-              { value: 'none', label: t('settings.proxy.mode.none') },
-              { value: 'custom', label: t('settings.proxy.mode.custom') }
-            ]}
-          />
-        </SettingRow>
+          {/* Privacy settings */}
+          <YStack gap={8}>
+            <SettingGroupTitle>{t('settings.general.display.title')}</SettingGroupTitle>
+            <SettingGroup>
+              <SettingRow>
+                <Text>{t('settings.general.privacy.anonymous')}</Text>
+                <CustomSwitch />
+              </SettingRow>
+            </SettingGroup>
+          </YStack>
+        </YStack>
       </SettingContainer>
     </SafeAreaView>
   )

@@ -77,7 +77,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     models: SYSTEM_MODELS.silicon,
     isSystem: true,
     enabled: true,
-    checked: true
+    checked: true,
+    isAuthed: false
   },
   {
     id: 'aihubmix',
@@ -88,7 +89,8 @@ export const INITIAL_PROVIDERS: Provider[] = [
     models: MOCK_AIHUBMIX_MODELS,
     isSystem: true,
     enabled: false,
-    checked: true
+    checked: true,
+    isAuthed: true
   },
   {
     id: 'ocoolai',

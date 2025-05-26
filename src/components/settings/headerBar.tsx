@@ -21,12 +21,14 @@ export function HeaderBar({ title, onBackPress, rightButton, rightButtons, showB
   const buttonsToRender = rightButtons || (rightButton ? [rightButton] : [])
 
   return (
-    <XStack position="relative" alignItems="center" height={24}>
+    <XStack paddingHorizontal="$4" alignItems="center" height={44} justifyContent="space-between">
       {/* 左侧按钮 */}
-      <XStack position="absolute" left={0} zIndex={1}>
+      <XStack alignItems="center" minWidth={40}>
         {showBackButton ? (
           <Button size="$2" chromeless circular icon={<ArrowLeft size={24} />} onPress={onBackPress} />
-        ) : null}
+        ) : (
+          <XStack width={40} /> // 占位，确保标题能正确居中
+        )}
       </XStack>
 
       {/* 居中标题 */}
@@ -37,14 +39,16 @@ export function HeaderBar({ title, onBackPress, rightButton, rightButtons, showB
       </XStack>
 
       {/* 右侧按钮 */}
-      <XStack position="absolute" right={0} zIndex={1}>
+      <XStack alignItems="center" minWidth={40} justifyContent="flex-end">
         {buttonsToRender.length > 0 ? (
           <XStack gap="$2">
             {buttonsToRender.map((button, index) => (
               <Button key={index} size="$2" chromeless circular icon={button.icon} onPress={button.onPress} />
             ))}
           </XStack>
-        ) : null}
+        ) : (
+          <XStack width={40} /> // 占位，确保标题能正确居中
+        )}
       </XStack>
     </XStack>
   )
