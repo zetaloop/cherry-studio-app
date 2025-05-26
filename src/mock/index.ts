@@ -1,4 +1,4 @@
-import { SYSTEM_MODELS } from '@/config/models'
+import { SYSTEM_MODELS } from '@/config/models/system-models'
 import { Provider } from '@/types/agent'
 
 export const MOCK_AIHUBMIX_MODELS = [

@@ -7,9 +7,9 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { SubscribeSource } from '@/types/websearch'
 
-import { BlacklistSection } from './blacklist'
-import { GeneralSettings } from './general-settings'
-import { ProviderSection } from './websearc-provider'
+import BlacklistSection from './blacklist'
+import GeneralSettings from './general-settings'
+import ProviderSection from './websearc-provider'
 
 const selectOptions = [
   {
