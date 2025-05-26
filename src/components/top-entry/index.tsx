@@ -1,17 +1,18 @@
 // components/TopEntry.tsx
-import React, { useState } from 'react'
+import { DrawerNavigationProp } from '@react-navigation/drawer'
+import { DrawerActions, ParamListBase, useNavigation } from '@react-navigation/native'
+import React from 'react'
 import { XStack } from 'tamagui'
 
-import { Sidebar } from '../SideBar'
 import { LeftSection } from './left-section'
 import { MiddleSection } from './middle-section'
 import { RightSection } from './right-section'
 
 export const TopEntry = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const navigation = useNavigation<DrawerNavigationProp<ParamListBase>>()
 
   const handleMenuPress = () => {
-    setSidebarOpen(true)
+    navigation.dispatch(DrawerActions.openDrawer())
   }
 
   return (
@@ -27,8 +28,6 @@ export const TopEntry = () => {
           <RightSection />
         </XStack>
       </XStack>
-
-      <Sidebar open={sidebarOpen} onOpenChange={setSidebarOpen} />
     </>
   )
 }

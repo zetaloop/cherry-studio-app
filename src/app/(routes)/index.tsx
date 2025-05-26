@@ -6,8 +6,9 @@ import { Stack, Text, useTheme, View, YStack } from 'tamagui'
 import { MessageInput } from '@/components/message-input'
 import { TopEntry } from '@/components/top-entry'
 
-const HomeScreen: React.FC = () => {
+const HomeScreen = () => {
   const theme = useTheme()
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <YStack backgroundColor="$background" flex={1}>
