@@ -9,7 +9,7 @@ import { Button, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { HeaderBar } from '@/components/settings/headerBar'
 import { ModelSelect } from '@/components/settings/providers/modelSelect'
-import { isEmbeddingModel } from '@/config/models'
+import { isEmbeddingModel } from '@/config/models/embedding'
 import { useProviders } from '@/hooks/use-providers'
 import { Model } from '@/types/agent'
 import { getModelUniqId } from '@/utils/model'

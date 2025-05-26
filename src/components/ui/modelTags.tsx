@@ -3,15 +3,13 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, XStack } from 'tamagui'
 
-import {
-  isEmbeddingModel,
-  isFreeModel,
-  isFunctionCallingModel,
-  isReasoningModel,
-  isRerankModel,
-  isVisionModel,
-  isWebSearchModel
-} from '@/config/models'
+import { isFreeModel } from '@/config/models'
+import { isEmbeddingModel } from '@/config/models/embedding'
+import { isFunctionCallingModel } from '@/config/models/function-calling'
+import { isReasoningModel } from '@/config/models/reasoning'
+import { isRerankModel } from '@/config/models/rerank'
+import { isVisionModel } from '@/config/models/vision'
+import { isWebSearchModel } from '@/config/models/web-search'
 import { Model } from '@/types/agent'
 
 import { CustomTag } from './customTag'

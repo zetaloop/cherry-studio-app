@@ -10,17 +10,14 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { ModelGroup } from '@/components/settings/providers/modelGroup'
 import { SearchInput } from '@/components/ui/searchInput'
-import {
-  groupQwenModels,
-  isEmbeddingModel,
-  isFreeModel,
-  isFunctionCallingModel,
-  isReasoningModel,
-  isRerankModel,
-  isVisionModel,
-  isWebSearchModel
-} from '@/config/models'
+import { groupQwenModels, isFreeModel } from '@/config/models'
+import { isEmbeddingModel } from '@/config/models/embedding'
+import { isFunctionCallingModel } from '@/config/models/function-calling'
+import { isReasoningModel } from '@/config/models/reasoning'
+import { isRerankModel } from '@/config/models/rerank'
 import { AIHUBMIX_MODELS } from '@/config/models/system-models'
+import { isVisionModel } from '@/config/models/vision'
+import { isWebSearchModel } from '@/config/models/web-search'
 import { useProvider } from '@/hooks/use-providers'
 import { Model } from '@/types/agent'
 import { RootStackParamList } from '@/types/naviagate'
