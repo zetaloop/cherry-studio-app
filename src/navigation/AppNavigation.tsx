@@ -77,10 +77,16 @@ export default function AppNavigator() {
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
-      screenOptions={{
-        drawerStyle: {
-          width: screenWidth * 0.7,
-          backgroundColor: theme.background.val
+      screenOptions={({ route }) => {
+        const currentStackRouteName = route.name
+        const swipeEnabled = currentStackRouteName === 'Home'
+        console.log(`Current stack route: ${JSON.stringify(currentStackRouteName)}, swipeEnabled: ${false}`)
+        return {
+          drawerStyle: {
+            width: screenWidth * 0.7,
+            backgroundColor: theme.background.val
+          },
+          swipeEnabled: false
         }
       }}>
       <Drawer.Screen
