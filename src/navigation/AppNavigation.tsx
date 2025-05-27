@@ -2,6 +2,7 @@ import 'react-native-reanimated'
 import '@/i18n'
 
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerItemList } from '@react-navigation/drawer'
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
 import { Settings, Star } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +17,7 @@ const Drawer = createDrawerNavigator()
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { t } = useTranslation()
+
   return (
     <YStack flex={1} backgroundColor="transparent">
       <YStack gap={10} flex={1}>
@@ -64,7 +66,14 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
           </Avatar>
           <Text>{t('common.cherry_studio')}</Text>
         </XStack>
-        <Button icon={<Settings size={24} />} chromeless />
+        <Button
+          icon={<Settings size={24} />}
+          chromeless
+          onPress={() => {
+            props.navigation.navigate('Main', { screen: 'Settings' })
+            props.navigation.closeDrawer()
+          }}
+        />
       </XStack>
     </YStack>
   )
@@ -78,15 +87,14 @@ export default function AppNavigator() {
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={({ route }) => {
-        const currentStackRouteName = route.name
-        const swipeEnabled = currentStackRouteName === 'Home'
-        console.log(`Current stack route: ${JSON.stringify(currentStackRouteName)}, swipeEnabled: ${swipeEnabled}`)
+        const focusedNestedRouteName = getFocusedRouteNameFromRoute(route)
+
+        const swipeEnabled = focusedNestedRouteName === 'Home'
         return {
           drawerStyle: {
             width: screenWidth * 0.7,
             backgroundColor: theme.background.val
           },
-          // todo 需要排除home以外的路由
           swipeEnabled: swipeEnabled
         }
       }}>
