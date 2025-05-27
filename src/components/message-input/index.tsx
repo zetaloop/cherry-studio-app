@@ -1,49 +1,33 @@
-import { ArrowUp, AtSign, Globe, Image, Settings } from '@tamagui/lucide-icons'
-import { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, ScrollView, TextArea, TextAreaProps, XStack, YStack } from 'tamagui'
+import { TextArea, XStack, YStack } from 'tamagui'
 
-export const MessageInput: React.FC<TextAreaProps> = ({ width, ...props }) => {
+import { AddFileButton } from './addFileButton'
+import { MentionButton } from './mentionButton'
+import { ThinkButton } from './thinkButton'
+import { VoiceButton } from './voiceButton'
+import { WebsearchButton } from './websearchButton'
+
+export const MessageInput: React.FC = () => {
   const { t } = useTranslation()
-  const [msg, setMsg] = useState('')
-  return (
-    <YStack gap="$2" width="100%" padding="$2">
-      <XStack gap="$2" alignItems="center">
-        <TextArea
-          flex={1}
-          placeholder={t('button.placeholder')}
-          borderWidth="$0"
-          borderRadius="$10"
-          scrollbarWidth="thin"
-          onChangeText={setMsg}
-          minHeight={40}
-          maxHeight={120}
-          {...props}
-        />
-        <Button
-          size="$3"
-          backgroundColor="$primary"
-          borderRadius="$10"
-          icon={<ArrowUp color="$blue9" />}
-          disabled={!msg}
-        />
-      </XStack>
 
+  return (
+    <YStack gap={10}>
+      {/* message */}
       <XStack>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <XStack gap="$2">
-            <Button size="$3" backgroundColor="$gray4" borderRadius="$10" icon={<AtSign />}>
-              {t('button.select_model')}
-            </Button>
-            <Button size="$3" backgroundColor="$gray4" borderRadius="$10" icon={<Globe />}>
-              {t('button.web_search')}
-            </Button>
-            <Button size="$3" backgroundColor="$gray4" borderRadius="$10" icon={<Image />}>
-              {t('button.image_generate')}
-            </Button>
-            <Button size="$3" backgroundColor="$gray4" borderRadius="$10" icon={<Settings />} />
-          </XStack>
-        </ScrollView>
+        <TextArea placeholder={t('inputs.placeholder')} borderWidth={0} backgroundColor="$colorTransparent" flex={1} />
+      </XStack>
+      {/* button */}
+      <XStack justifyContent="space-between" alignItems="center">
+        <XStack gap={5} alignItems="center">
+          <AddFileButton />
+          <WebsearchButton />
+          <ThinkButton />
+        </XStack>
+        <XStack gap={5} alignItems="center">
+          <MentionButton />
+          <VoiceButton />
+        </XStack>
       </XStack>
     </YStack>
   )
