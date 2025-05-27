@@ -28,6 +28,8 @@
     },
     "chat": {
       "default.name": "Default",
+      "title": "Welcome to Cherry Studio!",
+      "welcome": "I'm your AI assistant for producers. You can create assistants, manage models, and more.",
       "topics": {
         "title": "Topics",
         "list": "List",

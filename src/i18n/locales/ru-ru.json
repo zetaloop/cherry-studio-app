@@ -23,7 +23,8 @@
       "select_model": "Выберите модель",
       "web_search": "Поиск в интернете",
       "image_generate": "Генерация изображений",
-      "placeholder": "Спроси что-нибудь небрежно"
+      "placeholder": "Спроси что-нибудь небрежно",
+      "start_check_model": "Начать"
     },
     "chat": {
       "topics": {
@@ -37,7 +38,10 @@
         "search": {
           "placeholder": "Поисковые помощники"
         }
-      }
+      },
+      "default.name": "По умолчанию",
+      "title": "Добро пожаловать в Cherry Studio!",
+      "welcome": "Я ваш ИИ-ассистент для продюсеров. Вы можете создавать ассистентов, управлять моделями и многое другое."
     },
     "common": {
       "cancel": "Отмена",
@@ -45,7 +49,11 @@
       "language": "Язык",
       "model": "Модель",
       "name": "Имя",
-      "save": "Сохранить"
+      "save": "Сохранить",
+      "cherry_studio": "Cherry Studio",
+      "cherry_studio_description": "Мощный ИИ-ассистент для продюсеров",
+      "manage": "Управление",
+      "enabled": "Включено"
     },
     "history": {
       "topics.empty": "Темы не найдены",
@@ -53,17 +61,6 @@
       "search.topics.empty": "Темы не найдены, нажмите Enter для поиска всех сообщений"
     },
     "settings": {
-      "about.contact.button": "Электронная почта",
-      "about.contact.title": "Контакт",
-      "about.feedback.button": "Обратная связь",
-      "about.feedback.title": "Обратная связь",
-      "about.license.button": "Лицензия",
-      "about.license.title": "Лицензия",
-      "about.releases.button": "Релизы",
-      "about.releases.title": "Примечания к выпуску",
-      "about.title": "О нас",
-      "about.website.button": "Веб-сайт",
-      "about.website.title": "Официальный сайт",
       "data": {
         "app_data": "Данные приложения",
         "app_logs": "Журналы приложений",
@@ -86,7 +83,8 @@
         "translate_model": "Перевод модели",
         "translate_model_description": "Модель, используемая для сервиса перевода",
         "search": "Поиск моделей...",
-        "title": "Модели"
+        "title": "Модели",
+        "topic_naming_model": "Именование тем"
       },
       "provider": {
         "add.name": "Имя провайдера",
@@ -102,13 +100,23 @@
         "delete.content": "Вы уверены, что хотите удалить этого поставщика?",
         "delete.title": "Удалить поставщика",
         "title": "Поставщик моделей",
-        "search": "Поисковые системы..."
+        "search": "Поисковые системы...",
+        "api_service": "API Сервис",
+        "list.title": "Список поставщиков",
+        "api_key.placeholder": "Пожалуйста, введите API ключ",
+        "api_key.get": "Получить API ключ",
+        "api_check.title": "Обнаружение",
+        "api_check.tooltip": "Выберите модель для обнаружения",
+        "enabled": "Вкл",
+        "checked": "Проверено",
+        "auth": {
+          "title": "Сервис {{provider}}",
+          "login": "Войти",
+          "balance_recharge": "Пополнение баланса",
+          "free_bills": "Бесплатные счета"
+        }
       },
       "proxy.title": "Адрес прокси",
-      "theme.auto": "Авто",
-      "theme.dark": "Темный",
-      "theme.light": "Свет",
-      "theme.title": "Тема",
       "theme.window.style.opaque": "Непрозрачное окно",
       "theme.window.style.title": "Стиль окна",
       "theme.window.style.transparent": "Прозрачное окно",
@@ -123,10 +131,54 @@
         "tavily": {
           "api_key.placeholder": "Введите ключ API Tavily"
         },
-        "title": "Веб-поиск"
+        "title": "Веб-поиск",
+        "selectPlaceholder": "Выберите поставщика веб-поиска...",
+        "searchWithDates": "Поиск с включением дат",
+        "overrideSearchService": "Переопределить поисковую службу",
+        "searchCount": "Количество поисков",
+        "contentLengthLimit": "Ограничение длины контента",
+        "blacklist.title": "Чёрный список",
+        "blacklist_placeholder": "Используйте следующий формат (разделение новой строкой)\nСопоставление шаблонов: *://*.example.com/*\nРегулярное выражение: /example\\.(net|org)/",
+        "blacklist_description": "Результаты со следующих сайтов не будут отображаться в результатах поиска",
+        "subscribe.title": "Подписка на чёрный список"
       },
       "modelAndService": "Модели и сервисы ИИ",
-      "dataAndSecurity": "Данные и безопасность"
+      "dataAndSecurity": "Данные и безопасность",
+      "about": {
+        "title": "О нас",
+        "header": "О программе и обратная связь",
+        "contact": {
+          "title": "Контакты",
+          "button": "Почта"
+        },
+        "feedback": {
+          "title": "Обратная связь",
+          "button": "Отзыв"
+        },
+        "license": {
+          "title": "Лицензия",
+          "button": "Лицензия"
+        },
+        "releases": {
+          "title": "Примечания к выпуску",
+          "button": "Релизы"
+        },
+        "website": {
+          "title": "Официальный сайт",
+          "button": "Сайт"
+        }
+      },
+      "general": {
+        "title": "Общие настройки",
+        "display.title": "Настройки отображения",
+        "theme.auto": "Авто",
+        "theme.dark": "Тёмная",
+        "theme.light": "Светлая",
+        "theme.title": "Тема",
+        "privacy.title": "Настройки конфиденциальности",
+        "privacy.anonymous": "Анонимно сообщать об ошибках и статистике",
+        "language.title": "Язык"
+      }
     },
     "profile": {
       "editProfile": "Редактировать профиль",
@@ -135,6 +187,79 @@
       "createFirstAgent": "Нажмите, чтобы создать первое интеллектуальное тело ИИ",
       "noContent": "Пока нет контента типа {{type}}"
     },
-    "home": {}
+    "home": {},
+    "inputs": {
+      "placeholder": "Отправить сообщение..."
+    },
+    "models": {
+      "no_models": "Нет доступных моделей",
+      "type": {
+        "all": "Все",
+        "embedding": "Встраивание",
+        "free": "Бесплатно",
+        "function_calling": "Инструмент",
+        "reasoning": "Рассуждение",
+        "rerank": "Переранжирование",
+        "select": "Выбрать типы моделей",
+        "text": "Текст",
+        "vision": "Зрение",
+        "websearch": "Веб-поиск"
+      }
+    },
+    "provider": {
+      "aihubmix": "AiHubMix",
+      "burncloud": "BurnCloud",
+      "alayanew": "Alaya NeW",
+      "anthropic": "Anthropic",
+      "azure-openai": "Azure OpenAI",
+      "baichuan": "Baichuan",
+      "baidu-cloud": "Baidu Cloud",
+      "copilot": "GitHub Copilot",
+      "dashscope": "Alibaba Cloud",
+      "deepseek": "DeepSeek",
+      "dmxapi": "DMXAPI",
+      "doubao": "Volcengine",
+      "fireworks": "Fireworks",
+      "gemini": "Gemini",
+      "gitee-ai": "Gitee AI",
+      "github": "GitHub Models",
+      "gpustack": "GPUStack",
+      "grok": "Grok",
+      "groq": "Groq",
+      "hunyuan": "Tencent Hunyuan",
+      "hyperbolic": "Hyperbolic",
+      "infini": "Infini",
+      "jina": "Jina",
+      "lmstudio": "LM Studio",
+      "minimax": "MiniMax",
+      "mistral": "Mistral",
+      "modelscope": "ModelScope",
+      "moonshot": "Moonshot",
+      "nvidia": "NVIDIA",
+      "o3": "O3",
+      "ocoolai": "ocoolAI",
+      "ollama": "Ollama",
+      "openai": "OpenAI",
+      "openrouter": "OpenRouter",
+      "perplexity": "Perplexity",
+      "ppio": "PPIO",
+      "qwenlm": "QwenLM",
+      "silicon": "SiliconFlow",
+      "stepfun": "StepFun",
+      "tencent-cloud-ti": "Tencent Cloud TI",
+      "together": "Together",
+      "xirang": "State Cloud Xirang",
+      "yi": "Yi",
+      "zhinao": "360AI",
+      "zhipu": "ZHIPU AI",
+      "voyageai": "Voyage AI",
+      "qiniu": "Qiniu",
+      "tokenflux": "TokenFlux"
+    },
+    "menu": {
+      "search_placeholder": "Поиск...",
+      "recent_topics": "Недавние темы",
+      "see_all": "Показать все"
+    }
   }
 }
