@@ -23,7 +23,8 @@
       "select_model": "选择型号",
       "web_search": "在线搜索",
       "image_generate": "图像生成",
-      "placeholder": "随便问点什么"
+      "placeholder": "随便问点什么",
+      "start_check_model": "让我们开始"
     },
     "chat": {
       "topics": {
@@ -37,7 +38,10 @@
         "search": {
           "placeholder": "搜索助手"
         }
-      }
+      },
+      "default.name": "默认",
+      "title": "欢迎使用 Cherry Studio!",
+      "welcome": "我是您的生产力 AI 助手。您可以创建助手、管理模型等。"
     },
     "common": {
       "cancel": "取消",
@@ -45,7 +49,11 @@
       "language": "语言",
       "model": "模型",
       "name": "姓名",
-      "save": "保存"
+      "save": "保存",
+      "cherry_studio": "Cherry Studio",
+      "cherry_studio_description": "强大的 AI 生产力助手",
+      "manage": "管理",
+      "enabled": "已启用"
     },
     "history": {
       "topics.empty": "未找到主题",
@@ -53,17 +61,6 @@
       "search.topics.empty": "未找到主题，按 Enter 搜索所有消息"
     },
     "settings": {
-      "about.contact.button": "电子邮件",
-      "about.contact.title": "联系",
-      "about.feedback.button": "反馈",
-      "about.feedback.title": "反馈",
-      "about.license.button": "许可证",
-      "about.license.title": "许可证",
-      "about.releases.button": "发布",
-      "about.releases.title": "发布说明",
-      "about.title": "关于我们",
-      "about.website.button": "网站",
-      "about.website.title": "官方网站",
       "data": {
         "app_data": "应用数据",
         "app_logs": "应用日志",
@@ -86,7 +83,8 @@
         "translate_model": "翻译模型",
         "translate_model_description": "用于翻译服务的模型",
         "search": "搜索模型...",
-        "title": "模型"
+        "title": "模型",
+        "topic_naming_model": "主题命名"
       },
       "provider": {
         "add.name": "提供者名称",
@@ -102,13 +100,23 @@
         "delete.content": "您确定要删除此提供者吗？",
         "delete.title": "删除提供者",
         "title": "模型提供商",
-        "search": "搜索提供商..."
+        "search": "搜索提供商...",
+        "api_service": "API 服务",
+        "list.title": "提供商列表",
+        "api_key.placeholder": "请输入 API 密钥",
+        "api_key.get": "获取 API 密钥",
+        "api_check.title": "检测",
+        "api_check.tooltip": "选择用于检测的模型",
+        "enabled": "开启",
+        "checked": "已检查",
+        "auth": {
+          "title": "{{provider}}服务",
+          "login": "登录",
+          "balance_recharge": "余额充值",
+          "free_bills": "免费额度"
+        }
       },
       "proxy.title": "代理地址",
-      "theme.auto": "汽车",
-      "theme.dark": "黑暗",
-      "theme.light": "灯光",
-      "theme.title": "主题",
       "theme.window.style.opaque": "不透明窗口",
       "theme.window.style.title": "窗口样式",
       "theme.window.style.transparent": "透明窗口",
@@ -123,10 +131,54 @@
         "tavily": {
           "api_key.placeholder": "输入 Tavily API 密钥"
         },
-        "title": "网络搜索"
+        "title": "网络搜索",
+        "selectPlaceholder": "请选择网页搜索提供商...",
+        "searchWithDates": "包含日期搜索",
+        "overrideSearchService": "覆盖搜索服务",
+        "searchCount": "搜索数量",
+        "contentLengthLimit": "内容长度限制",
+        "blacklist.title": "黑名单",
+        "blacklist_placeholder": "请使用以下格式（按行分隔）\n模式匹配：*://*.example.com/*\n正则表达式：/example\\.(net|org)/",
+        "blacklist_description": "来自以下网站的结果将不会出现在搜索结果中",
+        "subscribe.title": "黑名单订阅"
       },
       "modelAndService": "AI模型与服务",
-      "dataAndSecurity": "数据与安全"
+      "dataAndSecurity": "数据与安全",
+      "about": {
+        "title": "关于我们",
+        "header": "关于 & 反馈",
+        "contact": {
+          "title": "联系我们",
+          "button": "邮件"
+        },
+        "feedback": {
+          "title": "反馈",
+          "button": "反馈"
+        },
+        "license": {
+          "title": "许可",
+          "button": "许可"
+        },
+        "releases": {
+          "title": "发行说明",
+          "button": "发行版本"
+        },
+        "website": {
+          "title": "官方网站",
+          "button": "网站"
+        }
+      },
+      "general": {
+        "title": "常规设置",
+        "display.title": "显示设置",
+        "theme.auto": "自动",
+        "theme.dark": "深色",
+        "theme.light": "浅色",
+        "theme.title": "主题",
+        "privacy.title": "隐私设置",
+        "privacy.anonymous": "匿名报告错误和统计",
+        "language.title": "语言"
+      }
     },
     "profile": {
       "editProfile": "编辑个人资料",
@@ -135,6 +187,79 @@
       "createFirstAgent": "点击创建第一个AI智能体",
       "noContent": "还没有{{type}}内容"
     },
-    "home": {}
+    "home": {},
+    "inputs": {
+      "placeholder": "发送消息..."
+    },
+    "models": {
+      "no_models": "暂无可用模型",
+      "type": {
+        "all": "全部",
+        "embedding": "嵌入",
+        "free": "免费",
+        "function_calling": "工具",
+        "reasoning": "推理",
+        "rerank": "重排",
+        "select": "选择模型类型",
+        "text": "文本",
+        "vision": "视觉",
+        "websearch": "网络搜索"
+      }
+    },
+    "provider": {
+      "aihubmix": "AiHubMix",
+      "burncloud": "BurnCloud",
+      "alayanew": "Alaya NeW",
+      "anthropic": "Anthropic",
+      "azure-openai": "Azure OpenAI",
+      "baichuan": "Baichuan",
+      "baidu-cloud": "Baidu Cloud",
+      "copilot": "GitHub Copilot",
+      "dashscope": "Alibaba Cloud",
+      "deepseek": "DeepSeek",
+      "dmxapi": "DMXAPI",
+      "doubao": "Volcengine",
+      "fireworks": "Fireworks",
+      "gemini": "Gemini",
+      "gitee-ai": "Gitee AI",
+      "github": "GitHub Models",
+      "gpustack": "GPUStack",
+      "grok": "Grok",
+      "groq": "Groq",
+      "hunyuan": "Tencent Hunyuan",
+      "hyperbolic": "Hyperbolic",
+      "infini": "Infini",
+      "jina": "Jina",
+      "lmstudio": "LM Studio",
+      "minimax": "MiniMax",
+      "mistral": "Mistral",
+      "modelscope": "ModelScope",
+      "moonshot": "Moonshot",
+      "nvidia": "Nvidia",
+      "o3": "O3",
+      "ocoolai": "ocoolAI",
+      "ollama": "Ollama",
+      "openai": "OpenAI",
+      "openrouter": "OpenRouter",
+      "perplexity": "Perplexity",
+      "ppio": "PPIO",
+      "qwenlm": "QwenLM",
+      "silicon": "SiliconFlow",
+      "stepfun": "StepFun",
+      "tencent-cloud-ti": "Tencent Cloud TI",
+      "together": "Together",
+      "xirang": "State Cloud Xirang",
+      "yi": "Yi",
+      "zhinao": "360AI",
+      "zhipu": "ZHIPU AI",
+      "voyageai": "Voyage AI",
+      "qiniu": "Qiniu",
+      "tokenflux": "TokenFlux"
+    },
+    "menu": {
+      "search_placeholder": "搜索...",
+      "recent_topics": "最近主题",
+      "see_all": "查看全部"
+    }
   }
 }

@@ -23,7 +23,8 @@
       "select_model": "モデルを選択してください。",
       "web_search": "オンラインで検索する",
       "image_generate": "画像生成",
-      "placeholder": "何かをカジュアルに尋ねる"
+      "placeholder": "何かをカジュアルに尋ねる",
+      "start_check_model": "始めましょう"
     },
     "chat": {
       "topics": {
@@ -37,7 +38,10 @@
         "search": {
           "placeholder": "検索アシスタント"
         }
-      }
+      },
+      "default.name": "デフォルト",
+      "title": "Cherry Studio へようこそ！",
+      "welcome": "私はあなたのAIプロダクション・アシスタントです。アシスタントの作成、モデルの管理などができます。"
     },
     "common": {
       "cancel": "キャンセル",
@@ -45,7 +49,11 @@
       "language": "言語",
       "model": "モデル",
       "name": "名前",
-      "save": "保存"
+      "save": "保存",
+      "cherry_studio": "Cherry Studio",
+      "cherry_studio_description": "パワフルなAIプロダクション・アシスタント",
+      "manage": "管理",
+      "enabled": "有効"
     },
     "history": {
       "topics.empty": "トピックが見つかりません。",
@@ -53,17 +61,6 @@
       "search.topics.empty": "トピックが見つかりません。すべてのメッセージを検索するには Enter キーを押してください。"
     },
     "settings": {
-      "about.contact.button": "メール",
-      "about.contact.title": "コンタクト",
-      "about.feedback.button": "フィードバック",
-      "about.feedback.title": "フィードバック",
-      "about.license.button": "ライセンス",
-      "about.license.title": "ライセンス",
-      "about.releases.button": "リリース",
-      "about.releases.title": "リリースノート",
-      "about.title": "私たちについて",
-      "about.website.button": "ウェブサイト",
-      "about.website.title": "公式サイト",
       "data": {
         "app_data": "アプリデータ",
         "app_logs": "アプリログ",
@@ -86,7 +83,8 @@
         "translate_model": "モデルを翻訳する",
         "translate_model_description": "翻訳サービスのために使用されるモデル",
         "search": "モデルを検索...",
-        "title": "モデル"
+        "title": "モデル",
+        "topic_naming_model": "トピック命名"
       },
       "provider": {
         "add.name": "プロバイダー名",
@@ -102,13 +100,23 @@
         "delete.content": "このプロバイダーを削除してもよろしいですか？",
         "delete.title": "プロバイダーの削除",
         "title": "モデルプロバイダー",
-        "search": "検索プロバイダー..."
+        "search": "検索プロバイダー...",
+        "api_service": "APIサービス",
+        "list.title": "プロバイダーリスト",
+        "api_key.placeholder": "APIキーを入力してください",
+        "api_key.get": "APIキーを取得",
+        "api_check.title": "検出",
+        "api_check.tooltip": "検出に使用するモデルを選択",
+        "enabled": "オン",
+        "checked": "確認済み",
+        "auth": {
+          "title": "{{provider}} サービス",
+          "login": "ログイン",
+          "balance_recharge": "残高チャージ",
+          "free_bills": "無料請求"
+        }
       },
       "proxy.title": "プロキシ アドレス",
-      "theme.auto": "オート",
-      "theme.dark": "ダーク",
-      "theme.light": "ライト",
-      "theme.title": "テーマ",
       "theme.window.style.opaque": "不透明ウィンドウ",
       "theme.window.style.title": "ウィンドウスタイル",
       "theme.window.style.transparent": "透明ウィンドウ",
@@ -123,10 +131,54 @@
         "tavily": {
           "api_key.placeholder": "Tavily API キーを入力してください。"
         },
-        "title": "Web検索"
+        "title": "Web検索",
+        "selectPlaceholder": "ウェブ検索プロバイダーを選択してください...",
+        "searchWithDates": "日付を含めて検索",
+        "overrideSearchService": "検索サービスを上書き",
+        "searchCount": "検索数",
+        "contentLengthLimit": "コンテンツ長の制限",
+        "blacklist.title": "ブラックリスト",
+        "blacklist_placeholder": "以下の形式を使用してください（改行で区切る）\nパターンマッチング：*://*.example.com/*\n正規表現：/example\\.(net|org)/",
+        "blacklist_description": "以下のウェブサイトからの結果は検索結果に表示されません",
+        "subscribe.title": "ブラックリスト購読"
       },
       "modelAndService": "AIモデル＆サービス",
-      "dataAndSecurity": "データ & セキュリティ"
+      "dataAndSecurity": "データ & セキュリティ",
+      "about": {
+        "title": "私たちについて",
+        "header": "概要 & フィードバック",
+        "contact": {
+          "title": "お問い合わせ",
+          "button": "メール"
+        },
+        "feedback": {
+          "title": "フィードバック",
+          "button": "フィードバック"
+        },
+        "license": {
+          "title": "ライセンス",
+          "button": "ライセンス"
+        },
+        "releases": {
+          "title": "リリースノート",
+          "button": "リリース"
+        },
+        "website": {
+          "title": "公式ウェブサイト",
+          "button": "ウェブサイト"
+        }
+      },
+      "general": {
+        "title": "一般設定",
+        "display.title": "表示設定",
+        "theme.auto": "自動",
+        "theme.dark": "ダーク",
+        "theme.light": "ライト",
+        "theme.title": "テーマ",
+        "privacy.title": "プライバシー設定",
+        "privacy.anonymous": "エラーと統計を匿名で報告",
+        "language.title": "言語"
+      }
     },
     "profile": {
       "editProfile": "プロフィールを編集する",
@@ -135,6 +187,79 @@
       "createFirstAgent": "最初のAIインテリジェントボディを作成するためにクリックしてください。",
       "noContent": "まだ{{type}}のコンテンツがありません。"
     },
-    "home": {}
+    "home": {},
+    "inputs": {
+      "placeholder": "メッセージを送信..."
+    },
+    "models": {
+      "no_models": "利用可能なモデルがありません",
+      "type": {
+        "all": "すべて",
+        "embedding": "埋め込み",
+        "free": "無料",
+        "function_calling": "ツール",
+        "reasoning": "推論",
+        "rerank": "リランク",
+        "select": "モデルタイプを選択",
+        "text": "テキスト",
+        "vision": "ビジョン",
+        "websearch": "ウェブ検索"
+      }
+    },
+    "provider": {
+      "aihubmix": "AiHubMix",
+      "burncloud": "BurnCloud",
+      "alayanew": "Alaya NeW",
+      "anthropic": "Anthropic",
+      "azure-openai": "Azure OpenAI",
+      "baichuan": "Baichuan",
+      "baidu-cloud": "Baidu Cloud",
+      "copilot": "GitHub Copilot",
+      "dashscope": "Alibaba Cloud",
+      "deepseek": "DeepSeek",
+      "dmxapi": "DMXAPI",
+      "doubao": "Volcengine",
+      "fireworks": "Fireworks",
+      "gemini": "Gemini",
+      "gitee-ai": "Gitee AI",
+      "github": "GitHub Models",
+      "gpustack": "GPUStack",
+      "grok": "Grok",
+      "groq": "Groq",
+      "hunyuan": "Tencent Hunyuan",
+      "hyperbolic": "Hyperbolic",
+      "infini": "Infini",
+      "jina": "Jina",
+      "lmstudio": "LM Studio",
+      "minimax": "MiniMax",
+      "mistral": "Mistral",
+      "modelscope": "ModelScope",
+      "moonshot": "Moonshot",
+      "nvidia": "NVIDIA",
+      "o3": "O3",
+      "ocoolai": "ocoolAI",
+      "ollama": "Ollama",
+      "openai": "OpenAI",
+      "openrouter": "OpenRouter",
+      "perplexity": "Perplexity",
+      "ppio": "PPIO",
+      "qwenlm": "QwenLM",
+      "silicon": "SiliconFlow",
+      "stepfun": "StepFun",
+      "tencent-cloud-ti": "Tencent Cloud TI",
+      "together": "Together",
+      "xirang": "State Cloud Xirang",
+      "yi": "Yi",
+      "zhinao": "360AI",
+      "zhipu": "ZHIPU AI",
+      "voyageai": "Voyage AI",
+      "qiniu": "Qiniu",
+      "tokenflux": "TokenFlux"
+    },
+    "menu": {
+      "search_placeholder": "検索...",
+      "recent_topics": "最近のトピック",
+      "see_all": "すべて表示"
+    }
   }
 }
