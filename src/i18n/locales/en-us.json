@@ -58,9 +58,7 @@
       "search.topics.empty": "No topics found, press Enter to search all messages"
     },
     "inputs": {
-      "placeholder": "Send Message...",
-      "websearch": "WebSearch",
-      "think": "Deep Think"
+      "placeholder": "Send Message..."
     },
     "models": {
       "no_models": "No models available",

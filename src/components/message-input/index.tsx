@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, XStack, YStack } from 'tamagui'
 
@@ -11,8 +10,6 @@ import { WebsearchButton } from './websearchButton'
 
 export const MessageInput: React.FC = () => {
   const { t } = useTranslation()
-  const [networkSearchSelected, setNetworkSearchSelected] = useState(true)
-  const [deepThinkSelected, setDeepThinkSelected] = useState(false)
 
   return (
     <YStack gap={10}>
@@ -24,11 +21,8 @@ export const MessageInput: React.FC = () => {
       <XStack justifyContent="space-between" alignItems="center">
         <XStack gap={5} alignItems="center">
           <AddFileButton />
-          <WebsearchButton
-            selected={networkSearchSelected}
-            onToggle={() => setNetworkSearchSelected(!networkSearchSelected)}
-          />
-          <ThinkButton selected={deepThinkSelected} onToggle={() => setDeepThinkSelected(!deepThinkSelected)} />
+          <WebsearchButton />
+          <ThinkButton />
         </XStack>
         <XStack gap={5} alignItems="center">
           <MentionButton />
