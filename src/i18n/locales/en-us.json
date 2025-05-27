@@ -130,7 +130,7 @@
         "api_service": "API Service",
         "list.title": "Provider List",
         "add.name": "Provider Name",
-        "add.name.placeholder": "Example: OpenAI",
+        "add.name.placeholder": "Required e.g. OpenAI",
         "add.title": "Add Provider",
         "add.type": "Provider Type",
         "api.url.preview": "Preview: {{url}}",
