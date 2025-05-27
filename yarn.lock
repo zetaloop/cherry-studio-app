@@ -2027,7 +2027,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/vector-icons@npm:^14.0.0, @expo/vector-icons@npm:^14.1.0":
+"@expo/vector-icons@npm:^14.0.0":
   version: 14.1.0
   resolution: "@expo/vector-icons@npm:14.1.0"
   peerDependencies:
@@ -2134,6 +2134,40 @@ __metadata:
   peerDependencies:
     "@modelcontextprotocol/sdk": ^1.11.0
   checksum: 10c0/1b908e4497ba6717598d93369ce54814059fb4879fb7fe9563059bae2298f4b8ceb50fd5ab3908b8fa04ccb90043d69ea824d530794e582476b8392c2d94303b
+  languageName: node
+  linkType: hard
+
+"@gorhom/bottom-sheet@npm:^5.1.5":
+  version: 5.1.5
+  resolution: "@gorhom/bottom-sheet@npm:5.1.5"
+  dependencies:
+    "@gorhom/portal": "npm:1.0.14"
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-native": "*"
+    react: "*"
+    react-native: "*"
+    react-native-gesture-handler: ">=2.16.1"
+    react-native-reanimated: ">=3.16.0"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-native":
+      optional: true
+  checksum: 10c0/6a04de85e5119cb5baa0be8c7aa671fc33124ac3dcd45a85852d2a339ef86e3032c69f65f15c7fb8ce052a50663fc5c37ef4445389746b9c38da83bad7babfbb
+  languageName: node
+  linkType: hard
+
+"@gorhom/portal@npm:1.0.14":
+  version: 1.0.14
+  resolution: "@gorhom/portal@npm:1.0.14"
+  dependencies:
+    nanoid: "npm:^3.3.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/86f33afc2ac2656a86a6f3fd1e41565419839576ede2c38333434a93a0a2fe4fb6fc18ab3360579427f2a1fc3b4564b933cc5ae1793a7e2825c93860a00b215f
   languageName: node
   linkType: hard
 
@@ -3013,7 +3047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/drawer@npm:^7.1.1":
+"@react-navigation/drawer@npm:^7.3.12":
   version: 7.3.12
   resolution: "@react-navigation/drawer@npm:7.3.12"
   dependencies:
@@ -6415,12 +6449,12 @@ __metadata:
   dependencies:
     "@anthropic-ai/sdk": "npm:^0.51.0"
     "@babel/core": "npm:^7.25.2"
-    "@expo/vector-icons": "npm:^14.1.0"
     "@google/genai": "npm:^1.0.1"
+    "@gorhom/bottom-sheet": "npm:^5.1.5"
     "@react-native-async-storage/async-storage": "npm:2.1.2"
     "@react-native-community/datetimepicker": "npm:8.3.0"
     "@react-navigation/bottom-tabs": "npm:^7.0.0"
-    "@react-navigation/drawer": "npm:^7.1.1"
+    "@react-navigation/drawer": "npm:^7.3.12"
     "@react-navigation/native": "npm:^7.0.0"
     "@react-navigation/native-stack": "npm:^7.3.13"
     "@react-navigation/stack": "npm:^7.3.2"
@@ -11863,7 +11897,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.3.11, nanoid@npm:^3.3.7":
+"nanoid@npm:^3.3.1, nanoid@npm:^3.3.11, nanoid@npm:^3.3.7":
   version: 3.3.11
   resolution: "nanoid@npm:3.3.11"
   bin:
