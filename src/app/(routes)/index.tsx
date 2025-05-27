@@ -28,8 +28,7 @@ const HomeScreen = () => {
 
           {/* 底部输入框 */}
           <View
-            left="$2"
-            right="$2"
+            marginHorizontal="$3"
             paddingHorizontal={16}
             paddingVertical={12}
             backgroundColor="$gray2"
