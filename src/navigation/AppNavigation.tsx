@@ -1,18 +1,15 @@
 import 'react-native-reanimated'
 import '@/i18n'
 
-import {
-  createDrawerNavigator,
-  DrawerContentComponentProps,
-  DrawerContentScrollView,
-  DrawerItemList
-} from '@react-navigation/drawer'
+import { createDrawerNavigator, DrawerContentComponentProps, DrawerItemList } from '@react-navigation/drawer'
+import { Settings, Star } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions } from 'react-native'
-import { useTheme } from 'tamagui'
+import { Avatar, Button, ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import AppStackWithPersist from '@/app/(routes)/_layout'
+import { SettingDivider } from '@/components/settings'
 import { SearchInput } from '@/components/ui/searchInput'
 
 const Drawer = createDrawerNavigator()
@@ -20,15 +17,56 @@ const Drawer = createDrawerNavigator()
 function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { t } = useTranslation()
   return (
-    <DrawerContentScrollView
-      {...props}
-      contentContainerStyle={{
-        backgroundColor: 'transparent',
-        padding: 20
-      }}>
-      <DrawerItemList {...props} />
-      <SearchInput placeholder={t('menu.search_placeholder')} />
-    </DrawerContentScrollView>
+    <YStack flex={1} backgroundColor="transparent">
+      <YStack gap={10} flex={1}>
+        <YStack paddingHorizontal={20} paddingTop={50} paddingBottom={10}>
+          <DrawerItemList {...props} />
+          <SearchInput placeholder={t('menu.search_placeholder')} />
+        </YStack>
+
+        <SettingDivider />
+
+        <ScrollView
+          flex={1}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+            paddingBottom: 20,
+            gap: 20
+          }}>
+          <YStack>
+            <XStack justifyContent="space-between" alignItems="center">
+              <XStack gap={5} alignItems="center">
+                <Star size={16} />
+                <Text>{t('menu.recent_topics')}</Text>
+              </XStack>
+              <Button chromeless size="$1" padding={0} pressStyle={{ opacity: 0.7 }}>
+                <Text fontSize={10} color="$foregroundGreen">
+                  {t('menu.see_all')}
+                </Text>
+              </Button>
+            </XStack>
+            {/* topics 将会放在这里 */}
+            {/* 示例内容，你可以替换为你的 topics 列表 */}
+            {/* 例如:
+          <Text>Topic 1</Text>
+          <Text>Topic 2</Text>
+          ... 更多 topics 来测试滚动 ...
+          */}
+          </YStack>
+        </ScrollView>
+      </YStack>
+
+      <XStack paddingHorizontal={20} paddingBottom={40} justifyContent="space-between" alignItems="center">
+        <XStack gap={10} alignItems="center">
+          <Avatar circular size={48}>
+            <Avatar.Image accessibilityLabel="Cam" src={require('@/assets/images/favicon.png')} />
+            <Avatar.Fallback delayMs={600} backgroundColor="$blue10" />
+          </Avatar>
+          <Text>{t('common.cherry_studio')}</Text>
+        </XStack>
+        <Button icon={<Settings size={24} />} chromeless />
+      </XStack>
+    </YStack>
   )
 }
 
@@ -42,15 +80,15 @@ export default function AppNavigator() {
       screenOptions={{
         drawerStyle: {
           width: screenWidth * 0.7,
-          backgroundColor: theme.background.val // Use Tamagui theme background
+          backgroundColor: theme.background.val
         }
       }}>
       <Drawer.Screen
-        name="Main" // 您可以根据需要命名，例如 "Main" 或 "HomeStack"
+        name="Main"
         options={{
           headerShown: false,
           drawerItemStyle: {
-            display: 'none' // 如果不希望这个主导航栈在抽屉菜单中显示为一个可选项
+            display: 'none'
           }
         }}
         component={AppStackWithPersist} // 使用 _layout.tsx 中导出的导航器

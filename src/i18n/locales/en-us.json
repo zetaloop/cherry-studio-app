@@ -249,7 +249,9 @@
     },
     "home": {},
     "menu": {
-      "search_placeholder": "Search..."
+      "search_placeholder": "Search...",
+      "recent_topics": "Recent Topics",
+      "see_all": "See All"
     }
   }
 }
