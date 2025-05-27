@@ -1,5 +1,6 @@
 import { Link } from '@react-navigation/native'
 import React from 'react'
+import { Keyboard } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Stack, Text, useTheme, View, YStack } from 'tamagui'
 
@@ -11,7 +12,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
-      <YStack backgroundColor="$background" flex={1}>
+      <YStack backgroundColor="$background" flex={1} onPress={Keyboard.dismiss}>
         {/* 顶部导航组件 */}
         <TopEntry />
 
@@ -28,13 +29,12 @@ const HomeScreen = () => {
         <View
           position="absolute"
           bottom={0}
-          left={0}
-          right={0}
-          paddingHorizontal="$2"
-          paddingBottom="$2"
-          backgroundColor="$background"
-          borderTopWidth={1}
-          borderTopColor="$borderColor">
+          left="$2"
+          right="$2"
+          paddingHorizontal={16}
+          paddingVertical={12}
+          backgroundColor="$gray2"
+          borderRadius={9}>
           <MessageInput />
         </View>
       </YStack>
