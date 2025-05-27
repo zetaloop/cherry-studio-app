@@ -80,13 +80,14 @@ export default function AppNavigator() {
       screenOptions={({ route }) => {
         const currentStackRouteName = route.name
         const swipeEnabled = currentStackRouteName === 'Home'
-        console.log(`Current stack route: ${JSON.stringify(currentStackRouteName)}, swipeEnabled: ${false}`)
+        console.log(`Current stack route: ${JSON.stringify(currentStackRouteName)}, swipeEnabled: ${swipeEnabled}`)
         return {
           drawerStyle: {
             width: screenWidth * 0.7,
             backgroundColor: theme.background.val
           },
-          swipeEnabled: false
+          // todo 需要排除home以外的路由
+          swipeEnabled: swipeEnabled
         }
       }}>
       <Drawer.Screen
