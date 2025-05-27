@@ -7,7 +7,9 @@
 - [ ] logo performance problem 
 - [ ] manage model page optimize performance
 - [ ] model select component optimize performance 
-- [ ] drawer disable swipeEnabled stack screen except home 
+- [x] drawer disable swipeEnabled stack screen except home 
+- [ ] model select component need change style
+- [ ] sheet keyboard cover input 
 
 
 ## database
