@@ -1,16 +1,16 @@
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import BottomSheet from '@gorhom/bottom-sheet'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { ChevronsRight, Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
+import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import { sortBy } from 'lodash'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Input, Stack, Text, useTheme, XStack, YStack } from 'tamagui'
+import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/external-link'
 import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
-import { ModelSelect } from '@/components/settings/providers/modelSelect'
+import { ApiCheckSheet } from '@/components/settings/providers/apiCheckSheet'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { useProvider } from '@/hooks/use-providers'
 import { Model } from '@/types/agent'
@@ -18,11 +18,6 @@ import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { getModelUniqId } from '@/utils/model'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ApiServicePage'>
-
-// 常量定义
-const BUTTON_HEIGHT = 60
-const BUTTON_WIDTH = 224
-const BUTTON_BORDER_RADIUS = 70
 
 export default function ApiServicePage() {
   const { t } = useTranslation()
@@ -37,7 +32,6 @@ export default function ApiServicePage() {
   const [apiHost, setApiHost] = useState('')
 
   const bottomSheetRef = useRef<BottomSheet>(null)
-  const snapPoints = useMemo(() => ['32%'], [])
 
   const { providerId } = route.params
   const { provider } = useProvider(providerId)
@@ -181,54 +175,16 @@ export default function ApiServicePage() {
         </YStack>
       </SettingContainer>
 
-      {/* Bottom Sheet */}
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        snapPoints={snapPoints}
-        enablePanDownToClose={true}
+      <ApiCheckSheet
+        bottomSheetRef={bottomSheetRef}
+        isOpen={isBottomSheetOpen}
         onClose={handleBottomSheetClose}
-        backgroundStyle={{
-          backgroundColor: theme.gray2.val
-        }}
-        handleIndicatorStyle={{
-          backgroundColor: theme.color.val
-        }}>
-        <BottomSheetView style={{ flex: 1 }}>
-          <YStack alignItems="center" paddingTop={10} paddingBottom={30} paddingHorizontal={20} gap={10}>
-            <XStack width="100%" alignItems="center" justifyContent="center">
-              <Text fontSize={24}>{t('settings.provider.api_check.title')}</Text>
-            </XStack>
-
-            <YStack width="100%" gap={5}>
-              <Text>{t('settings.provider.api_check.tooltip')}</Text>
-              <ModelSelect
-                value={selectedModel ? getModelUniqId(selectedModel) : undefined}
-                onValueChange={handleModelChange}
-                selectOptions={selectOptions}
-                placeholder={t('settings.models.empty')}
-              />
-            </YStack>
-
-            <XStack width="100%" alignItems="center" justifyContent="center">
-              <Button
-                height={BUTTON_HEIGHT}
-                width={BUTTON_WIDTH}
-                borderRadius={BUTTON_BORDER_RADIUS}
-                backgroundColor="$color1"
-                disabled={!selectedModel || !apiKey} // apiKey 是否存在的判断
-                onPress={handleStartModelCheck}>
-                <XStack width="100%" alignItems="center" justifyContent="space-between">
-                  <Text fontSize={18} fontWeight="bold">
-                    {t('button.start_check_model')}
-                  </Text>
-                  <ChevronsRight />
-                </XStack>
-              </Button>
-            </XStack>
-          </YStack>
-        </BottomSheetView>
-      </BottomSheet>
+        selectedModel={selectedModel}
+        onModelChange={handleModelChange}
+        selectOptions={selectOptions}
+        apiKey={apiKey}
+        onStartModelCheck={handleStartModelCheck}
+      />
     </SafeAreaView>
   )
 }

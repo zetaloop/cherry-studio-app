@@ -1,12 +1,14 @@
+import BottomSheet from '@gorhom/bottom-sheet'
 import { useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
-import React, { useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
+import { AddProviderSheet } from '@/components/settings/providers/addProviderSheet'
 import { ProviderItem } from '@/components/settings/providers/providerItem'
 import { SearchInput } from '@/components/ui/searchInput'
 import { useAllProviders } from '@/hooks/use-providers'
@@ -16,10 +18,39 @@ export default function ProviderListPage() {
   const theme = useTheme()
   const navigation = useNavigation()
 
+  const bottomSheetRef = useRef<BottomSheet>(null)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+
   const { providers } = useAllProviders()
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedProviderType, setSelectedProviderType] = useState<string | undefined>(undefined)
+  const [providerName, setProviderName] = useState('')
 
-  const onAddProvider = () => {}
+  const handleProviderTypeChange = (value: string) => {
+    setSelectedProviderType(value)
+  }
+
+  const handleProviderNameChange = (name: string) => {
+    setProviderName(name)
+  }
+
+  const handleOpenBottomSheet = useCallback(() => {
+    bottomSheetRef.current?.expand()
+    setIsBottomSheetOpen(true)
+  }, [])
+
+  const handleBottomSheetClose = useCallback(() => {
+    setIsBottomSheetOpen(false)
+  }, [])
+
+  const onAddProvider = () => {
+    handleOpenBottomSheet()
+  }
+
+  const handleAddProvider = () => {
+    console.log('Provider Name:', providerName)
+    console.log('Provider Type:', selectedProviderType)
+  }
 
   return (
     <SafeAreaView
@@ -50,6 +81,17 @@ export default function ProviderListPage() {
           </ScrollView>
         </YStack>
       </SettingContainer>
+
+      <AddProviderSheet
+        bottomSheetRef={bottomSheetRef}
+        isOpen={isBottomSheetOpen}
+        onClose={handleBottomSheetClose}
+        providerName={providerName}
+        onProviderNameChange={handleProviderNameChange}
+        selectedProviderType={selectedProviderType}
+        onProviderTypeChange={handleProviderTypeChange}
+        onAddProvider={handleAddProvider}
+      />
     </SafeAreaView>
   )
 }
