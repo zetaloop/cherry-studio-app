@@ -23,7 +23,8 @@
       "select_model": "選擇模型",
       "web_search": "在線搜尋",
       "image_generate": "圖像生成",
-      "placeholder": "隨便問些什麼"
+      "placeholder": "隨便問些什麼",
+      "start_check_model": "讓我們開始"
     },
     "chat": {
       "topics": {
@@ -37,7 +38,10 @@
         "search": {
           "placeholder": "搜尋助理"
         }
-      }
+      },
+      "default.name": "預設",
+      "title": "歡迎使用 Cherry Studio!",
+      "welcome": "我是您的生產力 AI 助手。您可以建立助理、管理模型等。"
     },
     "common": {
       "cancel": "取消",
@@ -45,7 +49,11 @@
       "language": "語言",
       "model": "模型",
       "name": "姓名",
-      "save": "儲存"
+      "save": "儲存",
+      "cherry_studio": "Cherry Studio",
+      "cherry_studio_description": "強大的 AI 生產力助手",
+      "manage": "管理",
+      "enabled": "已啟用"
     },
     "history": {
       "topics.empty": "未找到主題",
@@ -53,17 +61,6 @@
       "search.topics.empty": "未找到主題，按 Enter 鍵搜索所有訊息"
     },
     "settings": {
-      "about.contact.button": "電郵",
-      "about.contact.title": "聯絡",
-      "about.feedback.button": "回饋",
-      "about.feedback.title": "回饋",
-      "about.license.button": "授權",
-      "about.license.title": "授權",
-      "about.releases.button": "發行版",
-      "about.releases.title": "發行說明",
-      "about.title": "關於我們",
-      "about.website.button": "網站",
-      "about.website.title": "官方網站",
       "data": {
         "app_data": "App 資料",
         "app_logs": "App Logs",
@@ -86,7 +83,8 @@
         "translate_model": "翻譯模型",
         "translate_model_description": "用於翻譯服務的模型",
         "search": "搜尋模型...",
-        "title": "模型"
+        "title": "模型",
+        "topic_naming_model": "主題命名"
       },
       "provider": {
         "add.name": "提供者名稱",
@@ -102,13 +100,23 @@
         "delete.content": "您確定要刪除這個提供者嗎？",
         "delete.title": "刪除提供者",
         "title": "模型提供者",
-        "search": "搜尋提供者..."
+        "search": "搜尋提供者...",
+        "api_service": "API 服務",
+        "list.title": "提供商列表",
+        "api_key.placeholder": "請輸入 API 金鑰",
+        "api_key.get": "獲取 API 金鑰",
+        "api_check.title": "檢測",
+        "api_check.tooltip": "選擇用於檢測的模型",
+        "enabled": "開啟",
+        "checked": "已檢查",
+        "auth": {
+          "title": "{{provider}} 服務",
+          "login": "登入",
+          "balance_recharge": "餘額充值",
+          "free_bills": "免費帳單"
+        }
       },
       "proxy.title": "代理地址",
-      "theme.auto": "自動",
-      "theme.dark": "黑暗",
-      "theme.light": "輕",
-      "theme.title": "主題",
       "theme.window.style.opaque": "不透明窗口",
       "theme.window.style.title": "視窗樣式",
       "theme.window.style.transparent": "透明視窗",
@@ -123,10 +131,54 @@
         "tavily": {
           "api_key.placeholder": "輸入 Tavily API 金鑰"
         },
-        "title": "網絡搜索"
+        "title": "網絡搜索",
+        "selectPlaceholder": "請選擇網頁搜尋提供商...",
+        "searchWithDates": "包含日期搜尋",
+        "overrideSearchService": "覆蓋搜尋服務",
+        "searchCount": "搜尋數量",
+        "contentLengthLimit": "內容長度限制",
+        "blacklist.title": "黑名單",
+        "blacklist_placeholder": "請使用以下格式（按行分隔）\n模式匹配：*://*.example.com/*\n正則表達式：/example\\.(net|org)/",
+        "blacklist_description": "來自以下網站的結果將不會出現在搜尋結果中",
+        "subscribe.title": "黑名單訂閱"
       },
       "modelAndService": "AI 模型與服務",
-      "dataAndSecurity": "資料與安全性"
+      "dataAndSecurity": "資料與安全性",
+      "about": {
+        "title": "關於我們",
+        "header": "關於 & 意見回饋",
+        "contact": {
+          "title": "聯絡我們",
+          "button": "電子郵件"
+        },
+        "feedback": {
+          "title": "意見回饋",
+          "button": "意見回饋"
+        },
+        "license": {
+          "title": "授權",
+          "button": "授權"
+        },
+        "releases": {
+          "title": "發行說明",
+          "button": "發行版本"
+        },
+        "website": {
+          "title": "官方網站",
+          "button": "網站"
+        }
+      },
+      "general": {
+        "title": "常規設定",
+        "display.title": "顯示設定",
+        "theme.auto": "自動",
+        "theme.dark": "深色",
+        "theme.light": "淺色",
+        "theme.title": "主題",
+        "privacy.title": "隱私設定",
+        "privacy.anonymous": "匿名回報錯誤和統計",
+        "language.title": "語言"
+      }
     },
     "profile": {
       "editProfile": "編輯個人資料",
@@ -135,6 +187,79 @@
       "createFirstAgent": "點擊創建第一個AI智能體",
       "noContent": "尚未有 {{type}} 內容"
     },
-    "home": {}
+    "home": {},
+    "inputs": {
+      "placeholder": "傳送訊息..."
+    },
+    "models": {
+      "no_models": "暫無可用模型",
+      "type": {
+        "all": "全部",
+        "embedding": "嵌入",
+        "free": "免費",
+        "function_calling": "工具",
+        "reasoning": "推理",
+        "rerank": "重排",
+        "select": "選擇模型類型",
+        "text": "文字",
+        "vision": "視覺",
+        "websearch": "網路搜尋"
+      }
+    },
+    "provider": {
+      "aihubmix": "AiHubMix",
+      "burncloud": "BurnCloud",
+      "alayanew": "Alaya NeW",
+      "anthropic": "Anthropic",
+      "azure-openai": "Azure OpenAI",
+      "baichuan": "百川",
+      "baidu-cloud": "百度智慧雲",
+      "copilot": "GitHub Copilot",
+      "dashscope": "阿里雲",
+      "deepseek": "DeepSeek",
+      "dmxapi": "DMXAPI",
+      "doubao": "火山引擎",
+      "fireworks": "Fireworks",
+      "gemini": "Gemini",
+      "gitee-ai": "Gitee AI",
+      "github": "GitHub 模型",
+      "gpustack": "GPUStack",
+      "grok": "Grok",
+      "groq": "Groq",
+      "hunyuan": "騰訊混元",
+      "hyperbolic": "Hyperbolic",
+      "infini": "Infini",
+      "jina": "Jina",
+      "lmstudio": "LM Studio",
+      "minimax": "MiniMax",
+      "mistral": "Mistral",
+      "modelscope": "ModelScope",
+      "moonshot": "Moonshot",
+      "nvidia": "英偉達",
+      "o3": "O3",
+      "ocoolai": "ocoolAI",
+      "ollama": "Ollama",
+      "openai": "OpenAI",
+      "openrouter": "OpenRouter",
+      "perplexity": "Perplexity",
+      "ppio": "PPIO",
+      "qwenlm": "通義千問",
+      "silicon": "SiliconFlow",
+      "stepfun": "StepFun",
+      "tencent-cloud-ti": "騰訊雲 TI",
+      "together": "Together",
+      "xirang": "國雲羲朗",
+      "yi": "Yi",
+      "zhinao": "360智腦",
+      "zhipu": "智谱 AI",
+      "voyageai": "Voyage AI",
+      "qiniu": "七牛雲",
+      "tokenflux": "TokenFlux"
+    },
+    "menu": {
+      "search_placeholder": "搜尋...",
+      "recent_topics": "最近主題",
+      "see_all": "查看全部"
+    }
   }
 }
