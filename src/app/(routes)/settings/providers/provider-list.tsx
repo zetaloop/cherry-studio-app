@@ -19,7 +19,7 @@ export default function ProviderListPage() {
   const navigation = useNavigation()
 
   const bottomSheetRef = useRef<BottomSheet>(null)
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(true)
 
   const { providers } = useAllProviders()
   const [searchQuery, setSearchQuery] = useState('')

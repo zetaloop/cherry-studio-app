@@ -124,7 +124,6 @@ export default function ApiServicePage() {
               backgroundColor="$colorTransparent"
               circular
               onPress={handleOpenBottomSheet}
-              disabled={isBottomSheetOpen}
             />
           </XStack>
 
@@ -134,7 +133,6 @@ export default function ApiServicePage() {
               placeholder={t('settings.provider.api_key.placeholder')}
               secureTextEntry={!showApiKey}
               paddingRight={48}
-              editable={!isBottomSheetOpen}
               value={apiKey}
               onChangeText={handleApiKeyChange}
             />
@@ -166,12 +164,7 @@ export default function ApiServicePage() {
           <XStack paddingHorizontal={10} height={20} alignItems="center">
             <SettingGroupTitle>{t('settings.provider.api_host')}</SettingGroupTitle>
           </XStack>
-          <Input
-            placeholder={t('settings.provider.api_host')}
-            editable={!isBottomSheetOpen}
-            value={apiHost}
-            onChangeText={handleApiHostChange}
-          />
+          <Input placeholder={t('settings.provider.api_host')} value={apiHost} onChangeText={handleApiHostChange} />
         </YStack>
       </SettingContainer>
 
