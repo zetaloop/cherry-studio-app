@@ -1,10 +1,12 @@
 import BottomSheet from '@gorhom/bottom-sheet' // Keep this if bottomSheetRef type is needed, or import type directly
-import { Plus } from '@tamagui/lucide-icons'
+import { PenLine } from '@tamagui/lucide-icons'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input, Text, XStack, YStack } from 'tamagui'
 
+import { IconEditButton } from '@/components/ui/iconEditButton'
 import { ISheet } from '@/components/ui/sheet'
+import { DefaultProviderIcon } from '@/components/ui/svgIcons'
 
 import { ProviderSelect } from './providerSelect'
 
@@ -39,7 +41,13 @@ export function AddProviderSheet({
           <Text fontSize={24}>{t('settings.provider.add.title')}</Text>
         </XStack>
         <YStack width="100%" gap={24} justifyContent="center" alignItems="center">
-          <Button size={118} circular backgroundColor="$backgroundOrange" icon={<Plus />}></Button>
+          <IconEditButton
+            mainIcon={<DefaultProviderIcon />}
+            editIcon={<PenLine size={24} />}
+            onEditPress={() => {
+              // 处理编辑按钮点击事件
+            }}
+          />
           <YStack width="100%" gap={8}>
             <XStack gap={8}>
               <Text color="red">*</Text>
