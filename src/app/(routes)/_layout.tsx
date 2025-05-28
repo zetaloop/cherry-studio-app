@@ -25,7 +25,7 @@ const AppStackLayout: FC = () => {
   const welcomeShown = useAppSelector(state => state.app.welcomeShown)
 
   return (
-    <Stack.Navigator initialRouteName="ProviderListPage">
+    <Stack.Navigator>
       {!welcomeShown && <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomePage} />}
       <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
       <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsPage} />
