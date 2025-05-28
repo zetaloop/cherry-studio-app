@@ -27,11 +27,11 @@ export default function ApiServicePage() {
 
   const [showApiKey, setShowApiKey] = useState(false)
   const [selectedModel, setSelectedModel] = useState<Model | undefined>()
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
   const [apiKey, setApiKey] = useState('')
   const [apiHost, setApiHost] = useState('')
 
   const bottomSheetRef = useRef<BottomSheet>(null)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
   const { providerId } = route.params
   const { provider } = useProvider(providerId)
