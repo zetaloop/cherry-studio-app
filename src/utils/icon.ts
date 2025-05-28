@@ -124,23 +124,49 @@ const PROVIDER_ICONS_LIGHT = {
   default: require('@/assets/images/llmIcons/light/openai.png')
 }
 
+// 添加缓存
+const modelIconCache = new Map<string, any>()
+const providerIconCache = new Map<string, any>()
+
 export function getModelIcon(modelId: string, isDark: boolean): any {
+  const cacheKey = `${modelId}-${isDark}`
+
+  // 检查缓存
+  if (modelIconCache.has(cacheKey)) {
+    return modelIconCache.get(cacheKey)
+  }
+
   const modelIcons = isDark ? MODEL_ICONS_DARK : MODEL_ICONS_LIGHT
+  let result = null
 
   for (const key in modelIcons) {
     const regex = new RegExp(key, 'i')
 
     if (regex.test(modelId)) {
-      return modelIcons[key as keyof typeof modelIcons]
+      result = modelIcons[key as keyof typeof modelIcons]
+      break
     }
   }
 
-  return null
+  // 缓存结果
+  modelIconCache.set(cacheKey, result)
+  return result
 }
 
 export function getProviderIcon(providerId: string, isDark: boolean): any {
+  const cacheKey = `${providerId}-${isDark}`
+
+  // 检查缓存
+  if (providerIconCache.has(cacheKey)) {
+    return providerIconCache.get(cacheKey)
+  }
+
   const providerIcons = isDark ? PROVIDER_ICONS_DARK : PROVIDER_ICONS_LIGHT
-  return providerIcons[providerId as keyof typeof providerIcons] || providerIcons.default
+  const result = providerIcons[providerId as keyof typeof providerIcons] || providerIcons.default
+
+  // 缓存结果
+  providerIconCache.set(cacheKey, result)
+  return result
 }
 
 export function getModelOrProviderIcon(modelId: string, providerId: string, isDark: boolean): any {
