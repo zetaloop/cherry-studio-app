@@ -126,7 +126,14 @@
         "translate_model_description": "Model used for translation service",
         "search": "Search Models...",
         "title": "Models",
-        "topic_naming_model": "Topic Naming"
+        "topic_naming_model": "Topic Naming",
+        "add.model": "Add Model",
+        "add.model.id": "Model ID",
+        "add.model.id.placeholder": "Required e.g. gpt-4o",
+        "add.model.name": "Model Name",
+        "add.model.name.placeholder": "Optional e.g. GPT-4o",
+        "add.model.group": "Model Group",
+        "add.model.group.placeholder": "Optional e.g. OpenAI"
       },
       "provider": {
         "api_service": "API Service",

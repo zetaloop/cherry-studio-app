@@ -1,13 +1,15 @@
+import BottomSheet from '@gorhom/bottom-sheet'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ChevronRight, HeartPulse, Plus, Settings, Settings2 } from '@tamagui/lucide-icons'
 import { debounce, groupBy } from 'lodash'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Accordion, Button, ScrollView, Separator, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
+import { AddModelSheet } from '@/components/settings/providers/addModelSheet'
 import AuthCard from '@/components/settings/providers/authCard'
 import { ModelGroup } from '@/components/settings/providers/modelGroup'
 import { SearchInput } from '@/components/ui/searchInput'
@@ -24,7 +26,17 @@ export default function ProviderSettingsPage() {
   const navigation = useNavigation<NavigationProps>()
   const route = useRoute<ProviderSettingsRouteProp>()
   const [searchText, setSearchText] = useState('')
-  const [debouncedSearchText, setDebouncedSearchText] = useState('') // Add debounced search text
+  const [debouncedSearchText, setDebouncedSearchText] = useState('')
+
+  const bottomSheetRef = useRef<BottomSheet>(null)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+  const handleOpenBottomSheet = useCallback(() => {
+    bottomSheetRef.current?.expand()
+    setIsBottomSheetOpen(true)
+  }, [])
+  const handleBottomSheetClose = useCallback(() => {
+    setIsBottomSheetOpen(false)
+  }, [])
 
   const { providerId } = route.params
   const { provider } = useProvider(providerId)
@@ -60,7 +72,7 @@ export default function ProviderSettingsPage() {
 
   const onAddModel = useCallback(() => {
     // 添加模型逻辑
-    console.log('[ProviderSettingsPage] onAddModel')
+    handleOpenBottomSheet()
   }, [])
 
   const onManageModel = useCallback(() => {
@@ -181,6 +193,7 @@ export default function ProviderSettingsPage() {
           </YStack>
         </ScrollView>
       </SettingContainer>
+      <AddModelSheet bottomSheetRef={bottomSheetRef} isOpen={isBottomSheetOpen} onClose={handleBottomSheetClose} />
     </SafeAreaView>
   )
 }
