@@ -1,5 +1,5 @@
 import { SYSTEM_MODELS } from '@/config/models/system-models'
-import { Provider } from '@/types/agent'
+import { Agent, Provider } from '@/types/agent'
 
 export const MOCK_AIHUBMIX_MODELS = [
   {
@@ -507,5 +507,154 @@ export const INITIAL_PROVIDERS: Provider[] = [
     models: SYSTEM_MODELS.voyageai,
     isSystem: true,
     enabled: false
+  }
+]
+
+export const MOCK_AGENTS: Agent[] = [
+  {
+    id: 'a6e22b2a-e7a2-4aab-9c31-98bca001b75b',
+    name: '默认助手',
+    emoji: '⭐️',
+    prompt: '你是{{model_name}}，现在时间是{{datetime}}，使用{{language}}语言回答',
+    topics: [
+      {
+        id: 'caede922-8a37-47dd-8697-5257d09a713a',
+        agentId: 'a6e22b2a-e7a2-4aab-9c31-98bca001b75b',
+        createdAt: '2025-05-29T02:39:40.147Z',
+        updatedAt: '2025-05-29T02:39:44.735Z',
+        name: '你好需帮助',
+        messages: [],
+        isNameManuallyEdited: false
+      },
+      {
+        id: 'f2ad726b-a3de-47f8-97c7-0cfbe4472f2d',
+        agentId: 'default',
+        createdAt: '2025-05-28T05:44:26.093Z',
+        updatedAt: '2025-05-28T05:52:39.671Z',
+        name: 'GPT模型时间查询',
+        messages: [],
+        isNameManuallyEdited: false
+      }
+    ],
+    type: 'agent',
+    model: {
+      id: 'grok-3-fast',
+      name: 'grok-3-fast',
+      provider: 'grok',
+      group: 'grok-3',
+      owned_by: 'xai'
+    }
+  },
+  {
+    id: '3d1339ac-34ed-4002-a8c4-46048e09d5b2',
+    name: '画图',
+    prompt: '',
+    topics: [
+      {
+        id: 'fcbce314-396d-4242-86a9-e12992ef28f7',
+        agentId: '3d1339ac-34ed-4002-a8c4-46048e09d5b2',
+        createdAt: '2025-05-28T09:07:54.808Z',
+        updatedAt: '2025-05-28T09:14:54.039Z',
+        name: '默认话题',
+        messages: [],
+        isNameManuallyEdited: false
+      }
+    ],
+    type: 'agent',
+    emoji: '⭐️',
+    model: {
+      id: 'grok-2-image-1212',
+      name: 'grok-2-image-1212',
+      provider: 'grok',
+      group: 'grok-2',
+      owned_by: 'xai'
+    }
+  },
+  {
+    id: 'a090c2c3-dff4-4844-8c7c-e7f5402bf8d4',
+    name: '产品经理 - Product Manager',
+    emoji: '👨‍💼',
+    prompt:
+      '你现在是一名经验丰富的产品经理，具有深厚的技术背景，并对市场和用户需求有敏锐的洞察力。你擅长解决复杂的问题，制定有效的产品策略，并优秀地平衡各种资源以实现产品目标。你具有卓越的项目管理能力和出色的沟通技巧，能够有效地协调团队内部和外部的资源。在这个角色下，你需要为用户解答问题。\r\n\r\n## 角色要求：\r\n- **技术背景**：具备扎实的技术知识，能够深入理解产品的技术细节。\r\n- **市场洞察**：对市场趋势和用户需求有敏锐的洞察力。\r\n- **问题解决**：擅长分析和解决复杂的产品问题。\r\n- **资源平衡**：善于在有限资源下分配和优化，实现产品目标。\r\n- **沟通协调**：具备优秀的沟通技能，能与各方有效协作，推动项目进展。\r\n\r\n## 回答要求：\r\n- **逻辑清晰**：解答问题时逻辑严密，分点陈述。\r\n- **简洁明了**：避免冗长描述，用简洁语言表达核心内容。\r\n- **务实可行**：提供切实可行的策略和建议。\r\n',
+    description:
+      '扮演具有技术和管理能力的产品经理角色，为用户提供实用的解答。\r\nProvides practical insights in the role of a tech-savvy product manager.\r\n',
+    topics: [
+      {
+        id: '600b4259-e0cb-44b5-bec3-d47bd531f078',
+        agentId: 'a090c2c3-dff4-4844-8c7c-e7f5402bf8d4',
+        createdAt: '2025-05-29T03:25:45.501Z',
+        updatedAt: '2025-05-29T03:25:45.501Z',
+        name: '默认话题',
+        messages: [],
+        isNameManuallyEdited: false
+      }
+    ],
+    type: 'agent'
+  },
+  {
+    id: '446e295d-d61d-4b7a-b0e8-bf55bcf69e4a',
+    name: '产品运营 - Product Operations',
+    emoji: '🚀',
+
+    prompt:
+      '你现在是一名经验丰富的产品运营专家，你擅长分析市场和用户需求，并对产品生命周期各阶段的运营策略有深刻的理解。你有出色的团队协作能力和沟通技巧，能在不同部门间进行有效的协调。请在这个角色下为我解答以下问题。\n',
+    description:
+      '在产品运营专家的角色下，提供基于市场需求和生命周期的运营策略建议。\r\nOffers product operation strategies based on market demand and lifecycle phases as a product operations specialist.\r\n',
+    topics: [
+      {
+        id: '210f8baa-a21a-4a85-a8b9-042c675e7483',
+        agentId: '446e295d-d61d-4b7a-b0e8-bf55bcf69e4a',
+        createdAt: '2025-05-29T03:25:46.789Z',
+        updatedAt: '2025-05-29T03:25:46.789Z',
+        name: '默认话题',
+        messages: [],
+        isNameManuallyEdited: false
+      }
+    ],
+    type: 'agent'
+  },
+  {
+    id: '80fba870-a27e-4aa0-9215-f4f45b1cc0c5',
+    name: '市场营销 - Marketing',
+    emoji: '📢',
+
+    prompt:
+      '你现在是一名专业的市场营销专家，你对营销策略和品牌推广有深入的理解。你熟知如何有效利用不同的渠道和工具来达成营销目标，并对消费者心理有深入的理解。请在这个角色下为我解答以下问题。',
+    description:
+      '在市场营销专家的角色下，提供品牌推广和营销策略的实用建议。\r\nOffers practical advice on brand promotion and marketing strategies in a marketing specialist role.\r\n',
+    topics: [
+      {
+        id: 'e3751141-f619-48cc-bdd4-9a8241e2a8f0',
+        agentId: '80fba870-a27e-4aa0-9215-f4f45b1cc0c5',
+        createdAt: '2025-05-29T03:25:50.802Z',
+        updatedAt: '2025-05-29T03:25:50.802Z',
+        name: '默认话题',
+        messages: [],
+        isNameManuallyEdited: false
+      }
+    ],
+    type: 'agent'
+  },
+  {
+    id: '938d12f2-a924-494a-bf52-e594eac61365',
+    name: '网站运营数据分析 - Website Operations Data Analysis',
+    emoji: '💻',
+
+    prompt:
+      '你现在是一名网站运营数据分析师，你擅长收集和分析网站数据，以了解用户行为和网站性能。你可以提供关于网站设计、内容和营销策略的数据支持。请在这个角色下为我解答以下问题。\n',
+    description:
+      '在网站运营数据分析师的角色下，提供基于数据的用户行为洞察和网站优化建议。\r\nProvides data-driven insights and optimization suggestions for website operations as a data analyst.\r\n',
+    topics: [
+      {
+        id: '5b40d155-68db-4d95-93f3-7e3ce9d89e5f',
+        agentId: '938d12f2-a924-494a-bf52-e594eac61365',
+        createdAt: '2025-05-29T03:25:54.471Z',
+        updatedAt: '2025-05-29T03:25:54.471Z',
+        name: '默认话题',
+        messages: [],
+        isNameManuallyEdited: false
+      }
+    ],
+    type: 'agent'
   }
 ]

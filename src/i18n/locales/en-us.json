@@ -1,7 +1,9 @@
 {
   "translation": {
     "agents": {
-      "search.no_results": "No agents found"
+      "search.no_results": "No agents found",
+      "title": "Agents",
+      "title.recent": "Recent Agents"
     },
     "assistants": {
       "edit": {
@@ -24,7 +26,9 @@
       "web_search": "Search online",
       "image_generate": "Image generation",
       "placeholder": "Ask something casually",
-      "start_check_model": "Let's Start"
+      "start_check_model": "Let's Start",
+      "save": "Save",
+      "recents": "Recents"
     },
     "chat": {
       "default.name": "Default",
@@ -53,7 +57,8 @@
       "name": "Name",
       "save": "Save",
       "manage": "Manage",
-      "enabled": "Enabled"
+      "enabled": "Enabled",
+      "search_placeholder": "Search..."
     },
     "history": {
       "topics.empty": " No topics found",
@@ -264,9 +269,20 @@
     },
     "home": {},
     "menu": {
+      "agent": {
+        "title": "Agent",
+        "recent": "Recent Agents"
+      },
+      "topic": {
+        "title": "Topic",
+        "recent": "Recent Topics"
+      },
       "search_placeholder": "Search...",
-      "recent_topics": "Recent Topics",
       "see_all": "See All"
+    },
+    "topics": {
+      "title": "Topic",
+      "title.recent": "Recent Topics"
     }
   }
 }
