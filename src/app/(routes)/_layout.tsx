@@ -20,13 +20,16 @@ import { persistor } from '@/store'
 import { useAppSelector } from '@/store'
 import { RootStackParamList } from '@/types/naviagate'
 
+import AgentPage from './agent'
+import TopicPage from './topic'
+
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const AppStackLayout: FC = () => {
   const welcomeShown = useAppSelector(state => state.app.welcomeShown)
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="AgentPage">
       {!welcomeShown && <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomePage} />}
       <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
       <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsPage} />
@@ -41,6 +44,8 @@ const AppStackLayout: FC = () => {
       <Stack.Screen options={{ headerShown: false }} name="ProviderSettingsPage" component={ProviderSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ManageModelsPage" component={ManageModelsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ApiServicePage" component={ApiServicePage} />
+      <Stack.Screen options={{ headerShown: false }} name="TopicPage" component={TopicPage} />
+      <Stack.Screen options={{ headerShown: false }} name="AgentPage" component={AgentPage} />
     </Stack.Navigator>
   )
 }
