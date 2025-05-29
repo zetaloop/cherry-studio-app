@@ -17,7 +17,8 @@ export type Agent = {
 
 export type Topic = {
   id: string
-  assistantId: string
+  // assistantId -> agentId
+  agentId: string
   name: string
   createdAt: string
   updatedAt: string

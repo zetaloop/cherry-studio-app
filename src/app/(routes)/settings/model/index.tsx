@@ -1,4 +1,3 @@
-// ...existing code...
 import { useNavigation } from '@react-navigation/native'
 import { Settings2 } from '@tamagui/lucide-icons'
 import { sortBy } from 'lodash'
