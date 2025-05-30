@@ -13,7 +13,31 @@ export type Agent = {
   emoji?: string
   description?: string
   model?: Model
+  settings?: Partial<AgentSettings>
 }
+
+export type AgentSettings = {
+  contextCount: number
+  temperature: number
+  topP: number
+  maxTokens: number | undefined
+  enableMaxTokens: boolean
+  streamOutput: boolean
+  hideMessages: boolean
+  defaultModel?: Model
+  customParameters?: AgentSettingCustomParameters[]
+  reasoning_effort?: ReasoningEffortOptions
+  qwenThinkMode?: boolean
+  toolUseMode?: 'function' | 'prompt'
+}
+
+export type AgentSettingCustomParameters = {
+  name: string
+  value: string | number | boolean | object
+  type: 'string' | 'number' | 'boolean' | 'json'
+}
+
+export type ReasoningEffortOptions = 'low' | 'medium' | 'high' | 'auto'
 
 export type Topic = {
   id: string
