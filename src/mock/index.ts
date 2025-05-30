@@ -537,13 +537,7 @@ export const MOCK_AGENTS: Agent[] = [
       }
     ],
     type: 'agent',
-    model: {
-      id: 'grok-3-fast',
-      name: 'grok-3-fast',
-      provider: 'grok',
-      group: 'grok-3',
-      owned_by: 'xai'
-    }
+    model: { group: 'deepseek-ai', id: 'deepseek-ai/DeepSeek-R1', name: 'deepseek-ai/DeepSeek-R1', provider: 'silicon' }
   },
   {
     id: '3d1339ac-34ed-4002-a8c4-46048e09d5b2',
@@ -562,13 +556,7 @@ export const MOCK_AGENTS: Agent[] = [
     ],
     type: 'agent',
     emoji: '⭐️',
-    model: {
-      id: 'grok-2-image-1212',
-      name: 'grok-2-image-1212',
-      provider: 'grok',
-      group: 'grok-2',
-      owned_by: 'xai'
-    }
+    model: { group: 'deepseek-ai', id: 'deepseek-ai/DeepSeek-R1', name: 'deepseek-ai/DeepSeek-R1', provider: 'silicon' }
   },
   {
     id: 'a090c2c3-dff4-4844-8c7c-e7f5402bf8d4',
