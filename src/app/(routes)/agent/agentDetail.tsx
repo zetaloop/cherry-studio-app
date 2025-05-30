@@ -2,11 +2,14 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { KeyboardAvoidingView, Platform } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Input, styled, Tabs, Text, TextArea, useTheme, XStack, YStack } from 'tamagui'
+import { Button, ScrollView, styled, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
 
-import { SettingContainer, SettingRowTitle } from '@/components/settings'
+import { ModelTabContent } from '@/components/agent/modelTabContent'
+import { PresetTabContent } from '@/components/agent/presetTabContent'
+import { PromptTabContent } from '@/components/agent/promptTabContent'
+import { ToolTabContent } from '@/components/agent/toolTabContent'
+import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { AvatarEditButton } from '@/components/ui/avatarEditButton'
 import { DefaultProviderIcon } from '@/components/ui/svgIcons'
@@ -23,8 +26,7 @@ export default function AgentDetailPage() {
 
   const { agentId, mode } = route.params
   const { agent } = useAgent(agentId)
-  const [activeTab, setActiveTab] = useState('prompt')
-  const [isEditing, setIsEditing] = useState(false)
+  const [activeTab, setActiveTab] = useState('model')
 
   const onAddTopic = () => {
     // Navigate to the topic creation page or open a modal
@@ -38,7 +40,7 @@ export default function AgentDetailPage() {
         onBackPress={() => navigation.goBack()}
       />
       {/* todo KeyboardAvoidingView bug */}
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
         <SettingContainer>
           <XStack justifyContent="center" alignItems="center">
             <AvatarEditButton
@@ -77,51 +79,19 @@ export default function AgentDetailPage() {
             </Tabs.List>
             <YStack flex={1} paddingTop={30}>
               <Tabs.Content value="prompt" flex={1} gap={30}>
-                <YStack width="100%" gap={8}>
-                  <SettingRowTitle paddingHorizontal={10}>{t('common.name')}</SettingRowTitle>
-                  <Input padding={15} placeholder={t('agents.name')} value={agent?.name} />
-                </YStack>
-                <YStack width="100%" gap={8} flex={1}>
-                  <SettingRowTitle paddingHorizontal={10}>{t('common.prompt')}</SettingRowTitle>
-                  <TextArea
-                    flex={1}
-                    padding={15}
-                    placeholder={t('common.prompt')}
-                    value={agent?.prompt}
-                    editable={isEditing}
-                    onFocus={() => setIsEditing(true)}
-                    onBlur={() => setIsEditing(false)}
-                    onPress={() => setIsEditing(true)}
-                    multiline
-                  />
-                </YStack>
+                <PromptTabContent agent={agent} />
               </Tabs.Content>
 
-              <Tabs.Content value="model" flex={1}>
-                <YStack flex={1} padding="$4">
-                  <Text fontSize="$4" fontWeight="$6" marginBottom="$2">
-                    Model Configuration
-                  </Text>
-                  <Text color="$gray10">Select and configure the AI model for your agent.</Text>
-                </YStack>
+              <Tabs.Content value="model" flex={1} gap={30}>
+                <ModelTabContent agent={agent} />
               </Tabs.Content>
 
-              <Tabs.Content value="preset" flex={1}>
-                <YStack flex={1} padding="$4">
-                  <Text fontSize="$4" fontWeight="$6" marginBottom="$2">
-                    Preset Management
-                  </Text>
-                  <Text color="$gray10">Manage and apply presets for quick configuration.</Text>
-                </YStack>
+              <Tabs.Content value="preset" flex={1} gap={30}>
+                <PresetTabContent agent={agent} />
               </Tabs.Content>
 
-              <Tabs.Content value="tool" flex={1}>
-                <YStack flex={1} padding="$4">
-                  <Text fontSize="$4" fontWeight="$6" marginBottom="$2">
-                    Knowledge Base
-                  </Text>
-                  <Text color="$gray10">Upload and manage tool documents for your agent.</Text>
-                </YStack>
+              <Tabs.Content value="tool" flex={1} gap={30}>
+                <ToolTabContent agent={agent} />
               </Tabs.Content>
             </YStack>
           </Tabs>
@@ -131,7 +101,7 @@ export default function AgentDetailPage() {
             </Button>
           </XStack>
         </SettingContainer>
-      </KeyboardAvoidingView>
+      </ScrollView>
     </SafeAreaView>
   )
 }

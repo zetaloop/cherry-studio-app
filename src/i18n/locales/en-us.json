@@ -8,7 +8,18 @@
       "title.edit": "Edit Agent",
       "name": "Agent Name",
       "create": "Create Agent",
-      "save": "Save Agent"
+      "save": "Save Agent",
+      "settings.temperature": "Temperature",
+      "settings.top_p": "Top P",
+      "settings.context": "Context",
+      "settings.stream_output": "Stream Output",
+      "settings.max_tokens": "Enable Max Tokens Limit",
+      "settings.max_tokens_value": "Max Tokens Limits",
+      "settings.reasoning": "Reasoning Effort",
+      "settings.reasoning.auto": "Auto",
+      "settings.reasoning.low": "Low",
+      "settings.reasoning.medium": "Medium",
+      "settings.reasoning.high": "High"
     },
     "assistants": {
       "edit": {

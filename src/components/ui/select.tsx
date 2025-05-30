@@ -67,7 +67,7 @@ export function ISelect<T = any>({
 
   return (
     <Select value={value} onValueChange={handleValueChange} native={native}>
-      <Select.Trigger width={width} iconAfter={ChevronRight}>
+      <Select.Trigger borderWidth={0} width={width} iconAfter={ChevronRight}>
         {selectedDisplayInfo ? (
           <XStack paddingVertical={8} flex={1} justifyContent="space-between" alignItems="center" gap="$2">
             <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
