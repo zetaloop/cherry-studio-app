@@ -10,11 +10,12 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { SearchInput } from '@/components/ui/searchInput'
 import { MOCK_AGENTS } from '@/mock'
+import { NavigationProps } from '@/types/naviagate'
 
 export default function AgentPage() {
   const { t } = useTranslation()
   const theme = useTheme()
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProps>()
 
   // 筛选状态
   const [showTags, setShowTags] = useState(false)
@@ -22,7 +23,7 @@ export default function AgentPage() {
   const [showRecents, setShowRecents] = useState(false)
 
   const onAddAgent = () => {
-    console.log('Navigate to add topic page')
+    navigation.navigate('AgentDetailPage', { agentId: undefined, mode: 'create' })
   }
 
   const handleRecentFilter = () => {
