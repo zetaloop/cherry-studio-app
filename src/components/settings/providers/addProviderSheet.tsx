@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input, Text, XStack, YStack } from 'tamagui'
 
-import { IconEditButton } from '@/components/ui/iconEditButton'
+import { AvatarEditButton } from '@/components/ui/avatarEditButton'
 import { ISheet } from '@/components/ui/sheet'
 import { DefaultProviderIcon } from '@/components/ui/svgIcons'
 
@@ -41,8 +41,8 @@ export function AddProviderSheet({
           <Text fontSize={24}>{t('settings.provider.add.title')}</Text>
         </XStack>
         <YStack width="100%" gap={24} justifyContent="center" alignItems="center">
-          <IconEditButton
-            mainIcon={<DefaultProviderIcon />}
+          <AvatarEditButton
+            content={<DefaultProviderIcon />}
             editIcon={<PenLine size={24} />}
             onEditPress={() => {
               // 处理编辑按钮点击事件

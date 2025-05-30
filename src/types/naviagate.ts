@@ -16,5 +16,6 @@ export type RootStackParamList = {
   ApiServicePage: { providerId: string }
   TopicPage: undefined
   AgentPage: undefined
+  AgentDetailPage: { agentId?: string; mode: 'create' | 'edit' }
 }
 export type NavigationProps = StackNavigationProp<RootStackParamList>

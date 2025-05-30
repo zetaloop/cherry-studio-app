@@ -3,7 +3,12 @@
     "agents": {
       "search.no_results": "No agents found",
       "title": "Agents",
-      "title.recent": "Recent Agents"
+      "title.recent": "Recent Agents",
+      "title.create": "Create Agent",
+      "title.edit": "Edit Agent",
+      "name": "Agent Name",
+      "create": "Create Agent",
+      "save": "Save Agent"
     },
     "assistants": {
       "edit": {
@@ -58,7 +63,10 @@
       "save": "Save",
       "manage": "Manage",
       "enabled": "Enabled",
-      "search_placeholder": "Search..."
+      "search_placeholder": "Search...",
+      "prompt": "Prompt",
+      "preset": "Preset",
+      "tool": "Tool"
     },
     "history": {
       "topics.empty": " No topics found",

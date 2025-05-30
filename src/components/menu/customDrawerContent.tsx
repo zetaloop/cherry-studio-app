@@ -26,7 +26,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           <DrawerItemList {...props} />
         </YStack>
 
-        <Tabs defaultValue="agents" orientation="horizontal" flexDirection="column" flex={1}>
+        <Tabs defaultValue="agent" orientation="horizontal" flexDirection="column" flex={1}>
           <Tabs.List aria-label="Assistant and Topics">
             <Tabs.Tab
               borderBottomWidth={4}
