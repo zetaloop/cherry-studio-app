@@ -21,6 +21,7 @@ import { useAppSelector } from '@/store'
 import { RootStackParamList } from '@/types/naviagate'
 
 import AgentPage from './agent'
+import AgentDetailPage from './agent/agentDetail'
 import TopicPage from './topic'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -29,7 +30,7 @@ const AppStackLayout: FC = () => {
   const welcomeShown = useAppSelector(state => state.app.welcomeShown)
 
   return (
-    <Stack.Navigator initialRouteName="AgentPage">
+    <Stack.Navigator>
       {!welcomeShown && <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomePage} />}
       <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
       <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsPage} />
@@ -46,6 +47,7 @@ const AppStackLayout: FC = () => {
       <Stack.Screen options={{ headerShown: false }} name="ApiServicePage" component={ApiServicePage} />
       <Stack.Screen options={{ headerShown: false }} name="TopicPage" component={TopicPage} />
       <Stack.Screen options={{ headerShown: false }} name="AgentPage" component={AgentPage} />
+      <Stack.Screen options={{ headerShown: false }} name="AgentDetailPage" component={AgentDetailPage} />
     </Stack.Navigator>
   )
 }

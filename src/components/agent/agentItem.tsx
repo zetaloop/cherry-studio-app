@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import { Trash2 } from '@tamagui/lucide-icons'
 import { FC, useRef } from 'react' // Added useRef
 import React from 'react'
@@ -8,6 +9,7 @@ import { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanima
 import { Button, Text, XStack, YStack } from 'tamagui'
 
 import { Agent } from '@/types/agent'
+import { NavigationProps } from '@/types/naviagate'
 
 interface AgentItemProps {
   agent: Agent
@@ -44,6 +46,7 @@ function RenderRightActions(progress: SharedValue<number>, swipeableMethods: Swi
 
 const AgentItem: FC<AgentItemProps> = ({ agent }) => {
   const swipeableRef = useRef(null)
+  const navigation = useNavigation<NavigationProps>()
 
   const renderRightActions = (
     progress: SharedValue<number>,
@@ -51,6 +54,10 @@ const AgentItem: FC<AgentItemProps> = ({ agent }) => {
     swipeableMethods: SwipeableMethods
   ) => {
     return RenderRightActions(progress, swipeableMethods, agent)
+  }
+
+  const editAgent = () => {
+    navigation.navigate('AgentDetailPage', { agentId: agent.id, mode: 'edit' })
   }
 
   return (
@@ -61,7 +68,8 @@ const AgentItem: FC<AgentItemProps> = ({ agent }) => {
         justifyContent="space-between"
         alignItems="center"
         paddingVertical={3}
-        paddingHorizontal={20}>
+        paddingHorizontal={20}
+        onPress={editAgent}>
         <XStack gap={14} flex={1} width="60%">
           <Text fontSize={22}>{agent.emoji}</Text>
           <YStack gap={2} flex={1}>
