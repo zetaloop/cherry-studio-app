@@ -10,6 +10,8 @@
 - [x] drawer disable swipeEnabled stack screen except home 
 - [ ] model select component need change style
 - [ ] sheet keyboard cover input 
+- [ ] change active tab style
+- [ ] fix KeyboardAvoidingView bug
 
 
 ## database
