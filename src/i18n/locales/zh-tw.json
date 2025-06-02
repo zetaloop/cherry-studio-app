@@ -1,7 +1,25 @@
 {
   "translation": {
     "agents": {
-      "search.no_results": "未找到代理人"
+      "search.no_results": "未找到代理人",
+      "title": "智能體",
+      "title.recent": "最近的智能體",
+      "title.create": "創建智能體",
+      "title.edit": "編輯智能體",
+      "name": "智能體名稱",
+      "create": "創建智能體",
+      "save": "保存智能體",
+      "settings.temperature": "溫度",
+      "settings.top_p": "Top P",
+      "settings.context": "上下文",
+      "settings.stream_output": "串流輸出",
+      "settings.max_tokens": "啟用最大權杖限制",
+      "settings.max_tokens_value": "最大權杖限制",
+      "settings.reasoning": "推理強度",
+      "settings.reasoning.auto": "自動",
+      "settings.reasoning.low": "低",
+      "settings.reasoning.medium": "中",
+      "settings.reasoning.high": "高"
     },
     "assistants": {
       "edit": {
@@ -24,7 +42,9 @@
       "web_search": "在線搜尋",
       "image_generate": "圖像生成",
       "placeholder": "隨便問些什麼",
-      "start_check_model": "讓我們開始"
+      "start_check_model": "讓我們開始",
+      "save": "保存",
+      "recents": "最近"
     },
     "chat": {
       "topics": {
@@ -53,7 +73,11 @@
       "cherry_studio": "Cherry Studio",
       "cherry_studio_description": "強大的 AI 生產力助手",
       "manage": "管理",
-      "enabled": "已啟用"
+      "enabled": "已啟用",
+      "search_placeholder": "搜尋...",
+      "prompt": "提示詞",
+      "preset": "預設",
+      "tool": "工具"
     },
     "history": {
       "topics.empty": "未找到主題",
@@ -84,7 +108,14 @@
         "translate_model_description": "用於翻譯服務的模型",
         "search": "搜尋模型...",
         "title": "模型",
-        "topic_naming_model": "主題命名"
+        "topic_naming_model": "主題命名",
+        "add.model": "添加模型",
+        "add.model.id": "模型 ID",
+        "add.model.id.placeholder": "必填 例如 gpt-4o",
+        "add.model.name": "模型名稱",
+        "add.model.name.placeholder": "可選 例如 GPT-4o",
+        "add.model.group": "模型組",
+        "add.model.group.placeholder": "可選 例如 OpenAI"
       },
       "provider": {
         "add.name": "提供者名稱",
@@ -258,8 +289,19 @@
     },
     "menu": {
       "search_placeholder": "搜尋...",
-      "recent_topics": "最近主題",
-      "see_all": "查看全部"
+      "see_all": "查看全部",
+      "agent": {
+        "title": "智能體",
+        "recent": "最近的智能體"
+      },
+      "topic": {
+        "title": "主題",
+        "recent": "最近的主題"
+      }
+    },
+    "topics": {
+      "title": "主題",
+      "title.recent": "最近的主題"
     }
   }
 }
