@@ -62,10 +62,10 @@ const AgentItem: FC<AgentItemProps> = ({ agent }) => {
 
   // get the newest update time from agent's topics
   const updateTime = new Date(
-    agent.topics.reduce((latest, topic) => {
+    agent.topics?.reduce((latest, topic) => {
       const topicUpdateTime = new Date(topic.updatedAt).getTime()
       return topicUpdateTime > latest ? topicUpdateTime : latest
-    }, 0)
+    }, 0) ?? Date.now()
   ).toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: '2-digit',
@@ -94,7 +94,7 @@ const AgentItem: FC<AgentItemProps> = ({ agent }) => {
           </YStack>
         </XStack>
         <Button disabled circular backgroundColor="$gray8" size={20}>
-          <Text>{agent.topics.length}</Text>
+          <Text>{agent.topics?.length ?? 1}</Text>
         </Button>
       </XStack>
     </ReanimatedSwipeable>

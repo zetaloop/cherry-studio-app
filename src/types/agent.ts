@@ -7,8 +7,9 @@ export type Agent = {
   id: string
   name: string
   prompt: string
-  topics: Topic[]
-  type: string
+  topics?: Topic[]
+  type?: string
+  group?: string[]
   // tranform to image?
   emoji?: string
   description?: string
