@@ -30,6 +30,7 @@
     "@tamagui/accordion": "^1.126.13",
     "@tamagui/babel-plugin": "^1.123.17",
     "@tamagui/core": "^1.123.17",
+    "@tamagui/linear-gradient": "^1.126.13",
     "@tamagui/lucide-icons": "^1.125.1",
     "@types/lodash": "^4.17.17",
     "babel-plugin-inline-import": "^3.0.0",
