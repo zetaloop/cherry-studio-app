@@ -1,7 +1,25 @@
 {
   "translation": {
     "agents": {
-      "search.no_results": "エージェントが見つかりませんでした。"
+      "search.no_results": "エージェントが見つかりませんでした。",
+      "title": "エージェント",
+      "title.recent": "最近のエージェント",
+      "title.create": "エージェントを作成",
+      "title.edit": "エージェントを編集",
+      "name": "エージェント名",
+      "create": "エージェントを作成",
+      "save": "エージェントを保存",
+      "settings.temperature": "温度",
+      "settings.top_p": "トップP",
+      "settings.context": "コンテキスト",
+      "settings.stream_output": "ストリーム出力",
+      "settings.max_tokens": "最大トークン制限を有効にする",
+      "settings.max_tokens_value": "最大トークン制限",
+      "settings.reasoning": "推論の努力",
+      "settings.reasoning.auto": "自動",
+      "settings.reasoning.low": "低",
+      "settings.reasoning.medium": "中",
+      "settings.reasoning.high": "高"
     },
     "assistants": {
       "edit": {
@@ -24,7 +42,9 @@
       "web_search": "オンラインで検索する",
       "image_generate": "画像生成",
       "placeholder": "何かをカジュアルに尋ねる",
-      "start_check_model": "始めましょう"
+      "start_check_model": "始めましょう",
+      "save": "保存",
+      "recents": "最近"
     },
     "chat": {
       "topics": {
@@ -53,7 +73,11 @@
       "cherry_studio": "Cherry Studio",
       "cherry_studio_description": "パワフルなAIプロダクション・アシスタント",
       "manage": "管理",
-      "enabled": "有効"
+      "enabled": "有効",
+      "search_placeholder": "検索...",
+      "prompt": "プロンプト",
+      "preset": "プリセット",
+      "tool": "ツール"
     },
     "history": {
       "topics.empty": "トピックが見つかりません。",
@@ -84,7 +108,14 @@
         "translate_model_description": "翻訳サービスのために使用されるモデル",
         "search": "モデルを検索...",
         "title": "モデル",
-        "topic_naming_model": "トピック命名"
+        "topic_naming_model": "トピック命名",
+        "add.model": "モデルを追加",
+        "add.model.id": "モデルID",
+        "add.model.id.placeholder": "必須 例: gpt-4o",
+        "add.model.name": "モデル名",
+        "add.model.name.placeholder": "任意 例: GPT-4o",
+        "add.model.group": "モデルグループ",
+        "add.model.group.placeholder": "任意 例: OpenAI"
       },
       "provider": {
         "add.name": "プロバイダー名",
@@ -258,8 +289,19 @@
     },
     "menu": {
       "search_placeholder": "検索...",
-      "recent_topics": "最近のトピック",
-      "see_all": "すべて表示"
+      "see_all": "すべて表示",
+      "agent": {
+        "title": "エージェント",
+        "recent": "最近のエージェント"
+      },
+      "topic": {
+        "title": "トピック",
+        "recent": "最近のトピック"
+      }
+    },
+    "topics": {
+      "title": "トピック",
+      "title.recent": "最近のトピック"
     }
   }
 }
