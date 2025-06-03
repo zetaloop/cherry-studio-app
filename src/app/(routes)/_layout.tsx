@@ -6,6 +6,7 @@ import HomeScreen from '@/app/(routes)'
 import SettingsPage from '@/app/(routes)/settings'
 import AboutSettingsPage from '@/app/(routes)/settings/about-settings'
 import DataSettingsPage from '@/app/(routes)/settings/data'
+import BasicDataSettingsPage from '@/app/(routes)/settings/data/basic-data'
 import GeneralSettingsPage from '@/app/(routes)/settings/general-settings'
 import ModelSettingsPage from '@/app/(routes)/settings/model'
 import ProvidersPage from '@/app/(routes)/settings/providers'
@@ -29,11 +30,12 @@ const AppStackLayout: FC = () => {
   const welcomeShown = useAppSelector(state => state.app.welcomeShown)
 
   return (
-    <Stack.Navigator initialRouteName="AgentPage">
+    <Stack.Navigator initialRouteName="Home">
       {!welcomeShown && <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomePage} />}
       <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
       <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="DataSettings" component={DataSettingsPage} />
+      <Stack.Screen options={{ headerShown: false }} name="BasicDataSettings" component={BasicDataSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ModelSettings" component={ModelSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ProvidersPage" component={ProvidersPage} />
       <Stack.Screen options={{ headerShown: false }} name="AboutSettings" component={AboutSettingsPage} />

@@ -1,7 +1,25 @@
 {
   "translation": {
     "agents": {
-      "search.no_results": "Агентов не найдено"
+      "search.no_results": "Агентов не найдено",
+      "title": "Агенты",
+      "title.recent": "Недавние агенты",
+      "title.create": "Создать агента",
+      "title.edit": "Редактировать агента",
+      "name": "Имя агента",
+      "create": "Создать агента",
+      "save": "Сохранить агента",
+      "settings.temperature": "Температура",
+      "settings.top_p": "Top P",
+      "settings.context": "Контекст",
+      "settings.stream_output": "Потоковый вывод",
+      "settings.max_tokens": "Включить ограничение токенов",
+      "settings.max_tokens_value": "Ограничение токенов",
+      "settings.reasoning": "Усилие рассуждения",
+      "settings.reasoning.auto": "Авто",
+      "settings.reasoning.low": "Низкий",
+      "settings.reasoning.medium": "Средний",
+      "settings.reasoning.high": "Высокий"
     },
     "assistants": {
       "edit": {
@@ -24,7 +42,9 @@
       "web_search": "Поиск в интернете",
       "image_generate": "Генерация изображений",
       "placeholder": "Спроси что-нибудь небрежно",
-      "start_check_model": "Начать"
+      "start_check_model": "Начать",
+      "save": "Сохранить",
+      "recents": "Недавние"
     },
     "chat": {
       "topics": {
@@ -53,7 +73,11 @@
       "cherry_studio": "Cherry Studio",
       "cherry_studio_description": "Мощный ИИ-ассистент для продюсеров",
       "manage": "Управление",
-      "enabled": "Включено"
+      "enabled": "Включено",
+      "search_placeholder": "Поиск...",
+      "prompt": "Промпт",
+      "preset": "Пресет",
+      "tool": "Инструмент"
     },
     "history": {
       "topics.empty": "Темы не найдены",
@@ -84,7 +108,14 @@
         "translate_model_description": "Модель, используемая для сервиса перевода",
         "search": "Поиск моделей...",
         "title": "Модели",
-        "topic_naming_model": "Именование тем"
+        "topic_naming_model": "Именование тем",
+        "add.model": "Добавить модель",
+        "add.model.id": "ID модели",
+        "add.model.id.placeholder": "Обязательно, например gpt-4o",
+        "add.model.name": "Имя модели",
+        "add.model.name.placeholder": "Необязательно, например GPT-4o",
+        "add.model.group": "Группа моделей",
+        "add.model.group.placeholder": "Необязательно, например OpenAI"
       },
       "provider": {
         "add.name": "Имя провайдера",
@@ -258,8 +289,19 @@
     },
     "menu": {
       "search_placeholder": "Поиск...",
-      "recent_topics": "Недавние темы",
-      "see_all": "Показать все"
+      "see_all": "Показать все",
+      "agent": {
+        "title": "Агент",
+        "recent": "Недавние агенты"
+      },
+      "topic": {
+        "title": "Тема",
+        "recent": "Недавние темы"
+      }
+    },
+    "topics": {
+      "title": "Тема",
+      "title.recent": "Недавние темы"
     }
   }
 }

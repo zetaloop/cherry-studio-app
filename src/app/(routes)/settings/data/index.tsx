@@ -1,86 +1,121 @@
-import { Folder, Save } from '@tamagui/lucide-icons'
+import { Book, BookMarked, BookOpenCheck, ChevronRight, Globe, HardDrive, NotebookPen } from '@tamagui/lucide-icons'
+import { useNavigation } from 'expo-router'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, useTheme, XStack } from 'tamagui'
+import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
-import {
-  SettingContainer,
-  SettingDivider,
-  SettingGroup,
-  SettingRow,
-  SettingRowTitle,
-  SettingTitle
-} from '@/components/settings'
-import { NotionSettings, WebDavSettings, Yuque } from '@/components/settings/data'
+import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
+import { HeaderBar } from '@/components/settings/headerBar'
+import { NavigationProps } from '@/types/naviagate'
+
+interface SettingItemConfig {
+  title: string
+  screen: string
+  icon: React.ReactElement
+}
+
+interface SettingGroupConfig {
+  title: string
+  items: SettingItemConfig[]
+}
 
 export default function DataSettingsPage() {
-  const { t } = useTranslation()
   const theme = useTheme()
+  const navigation = useNavigation<NavigationProps>()
+
+  const settingsItems: SettingGroupConfig[] = [
+    {
+      title: ' ',
+      items: [
+        {
+          title: 'Basic Data Settings',
+          screen: 'BasicDataSettings',
+          icon: <HardDrive size={24} />
+        }
+      ]
+    },
+    {
+      title: 'Cloud Backup Settings',
+      items: [
+        {
+          title: 'WebDAV',
+          screen: 'webdav',
+          icon: <Globe size={24} />
+        },
+        {
+          title: 'Nutstore Configuration',
+          screen: 'nutstore',
+          icon: <BookOpenCheck size={24} />
+        }
+      ]
+    },
+    {
+      title: 'Third-party Connections',
+      items: [
+        {
+          title: 'Notion',
+          screen: 'notion',
+          icon: <BookMarked size={24} />
+        },
+        {
+          title: 'Yuque',
+          screen: 'yuque',
+          icon: <Book size={24} />
+        },
+        {
+          title: 'Joplin',
+          screen: 'joplin',
+          icon: <NotebookPen size={24} />
+        }
+      ]
+    }
+  ]
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
-      <SettingContainer>
-        <SettingGroup>
-          <SettingTitle>{t('settings.data.title')}</SettingTitle>
-          <SettingDivider />
-          <SettingRow>
-            <SettingRowTitle>{t('settings.general.backup.title')}</SettingRowTitle>
-            <XStack>
-              <Button variant="outlined" icon={<Save />}>
-                {t('settings.general.backup.button')}
-              </Button>
-              <Button variant="outlined" icon={<Folder />}>
-                {t('settings.general.restore.button')}
-              </Button>
-            </XStack>
-          </SettingRow>
-          <SettingDivider />
-          <SettingRow>
-            <SettingRowTitle>{t('settings.general.reset.title')}</SettingRowTitle>
-            <Button variant="outlined" color={'red'}>
-              {t('settings.general.reset.button')}
-            </Button>
-          </SettingRow>
-        </SettingGroup>
+      <HeaderBar title="Data Settings" onBackPress={() => navigation.goBack()} />
 
-        <SettingGroup>
-          <WebDavSettings />
-        </SettingGroup>
-
-        <SettingGroup>
-          <NotionSettings />
-        </SettingGroup>
-
-        <SettingGroup>
-          <Yuque />
-        </SettingGroup>
-
-        <SettingGroup>
-          <SettingTitle>{t('settings.data.data.title')}</SettingTitle>
-          <SettingDivider />
-          <SettingRow>
-            <SettingRowTitle>{t('settings.data.app_data')}</SettingRowTitle>
-          </SettingRow>
-          <SettingDivider />
-          <SettingRow>
-            <SettingRowTitle>{t('settings.data.app_logs')}</SettingRowTitle>
-          </SettingRow>
-          <SettingDivider />
-          <SettingRow>
-            <SettingRowTitle>{t('settings.data.app_knowledge')}</SettingRowTitle>
-            <Button variant="outlined" color={'red'}>
-              {t('settings.data.app_knowledge.remove_all')}
-            </Button>
-          </SettingRow>
-          <SettingDivider />
-          <SettingRow>
-            <SettingRowTitle>{t('settings.data.clear_cache.title')}</SettingRowTitle>
-            <Button variant="outlined" color={'red'}>
-              {t('settings.data.clear_cache.button')}
-            </Button>
-          </SettingRow>
-        </SettingGroup>
-      </SettingContainer>
+      <ScrollView flex={1} backgroundColor="$background">
+        <SettingContainer>
+          <YStack gap={24} flex={1}>
+            {settingsItems.map(group => (
+              <Group key={group.title} title={group.title}>
+                {group.items.map(item => (
+                  <SettingItem key={item.title} title={item.title} screen={item.screen} icon={item.icon} />
+                ))}
+              </Group>
+            ))}
+          </YStack>
+        </SettingContainer>
+      </ScrollView>
     </SafeAreaView>
   )
+}
+
+function Group({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <YStack gap={8}>
+      {title.trim() !== '' && <SettingGroupTitle>{title}</SettingGroupTitle>}
+      <SettingGroup>{children}</SettingGroup>
+    </YStack>
+  )
+}
+
+function SettingItem({ title, screen, icon }: SettingItemProps) {
+  const navigation = useNavigation<NavigationProps>()
+  return (
+    <SettingRow onPress={() => navigation.navigate(screen as any)}>
+      <XStack alignItems="center" gap={12}>
+        {icon}
+        <Text fontSize="$5">{title}</Text>
+      </XStack>
+      <ChevronRight size={24} color="$colorFocus" />
+    </SettingRow>
+  )
+}
+
+interface SettingItemProps {
+  title: string
+  screen: string
+  icon: React.ReactElement
 }

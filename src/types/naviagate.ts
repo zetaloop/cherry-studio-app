@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Home: undefined
   Settings: undefined
   DataSettings: undefined
+  BasicDataSettings: undefined
   ModelSettings: undefined
   ProvidersPage: undefined
   AboutSettings: undefined
