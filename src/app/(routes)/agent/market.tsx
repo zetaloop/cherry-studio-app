@@ -1,138 +1,178 @@
 import { useNavigation } from '@react-navigation/native'
-import { ArrowUpRight, BookmarkMinus } from '@tamagui/lucide-icons'
-import React, { useEffect, useMemo, useState } from 'react'
+import { BookmarkMinus } from '@tamagui/lucide-icons'
+import { debounce } from 'lodash'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { ScrollView, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
+import { ScrollView, Tabs, Text, useTheme } from 'tamagui'
 
-import AgentItemCard from '@/components/agent/agentItemCard'
-import AgentItemRow from '@/components/agent/agentItemRow'
+import AllAgentsTab from '@/components/agent/market/allAgentsTab'
+import CategoryAgentsTab from '@/components/agent/market/categoryAgentsTab'
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { SearchInput } from '@/components/ui/searchInput'
 import { getSystemAgents } from '@/mock'
-import { Agent } from '@/types/agent'
 import { groupByCategories } from '@/utils/agents'
+interface TabConfig {
+  value: string
+  label: string
+}
+
+type FilterType = 'all' | string
 
 export default function AgentMarketPage() {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigation = useNavigation()
 
-  const [actualFilterType, setActualFilterType] = useState('career')
-  const [agentGroups, setAgentGroups] = useState<Record<string, Agent[]>>({})
-
-  const tabConfigs = [
-    { value: 'all', label: t('agents.market.groups.all') },
-    { value: 'career', label: t('agents.market.groups.career') },
-    { value: 'business', label: t('agents.market.groups.business') },
-    { value: 'tools', label: t('agents.market.groups.tools') },
-    { value: 'language', label: t('agents.market.groups.language') }
-  ]
-
-  // 添加通用 tab 样式函数
-  const getTabStyle = (tabValue: string) => ({
-    height: '100%',
-    backgroundColor: actualFilterType === tabValue ? '$background' : 'transparent',
-    borderRadius: 15
-  })
+  const [actualFilterType, setActualFilterType] = useState<FilterType>('all')
+  const [searchText, setSearchText] = useState('')
+  const [debouncedSearchText, setDebouncedSearchText] = useState('')
 
   const systemAgents = useMemo(() => getSystemAgents(), [])
 
-  const filterAgents = useMemo(() => {
-    if (actualFilterType === 'all') {
+  const debouncedSetSearchText = useMemo(() => debounce(setDebouncedSearchText, 300), [])
+
+  useEffect(() => {
+    debouncedSetSearchText(searchText)
+
+    return () => {
+      debouncedSetSearchText.cancel()
+    }
+  }, [searchText, debouncedSetSearchText])
+
+  // Filter agents by search text first
+  const baseFilteredAgents = useMemo(() => {
+    if (!debouncedSearchText) {
       return systemAgents
     }
 
-    return systemAgents.filter(agent => agent.group && agent.group.includes(actualFilterType))
-  }, [actualFilterType, systemAgents])
+    const lowerSearchText = debouncedSearchText.toLowerCase().trim()
 
-  // 处理箭头点击事件
-  const handleArrowClick = (groupKey: string) => {
+    if (!lowerSearchText) {
+      return systemAgents
+    }
+
+    return systemAgents.filter(
+      agent =>
+        (agent.name && agent.name.toLowerCase().includes(lowerSearchText)) ||
+        (agent.id && agent.id.toLowerCase().includes(lowerSearchText))
+    )
+  }, [systemAgents, debouncedSearchText])
+
+  const agentGroupsForDisplay = useMemo(() => groupByCategories(baseFilteredAgents), [baseFilteredAgents])
+
+  const agentGroupsForTabs = useMemo(() => groupByCategories(systemAgents), [systemAgents])
+
+  // 过滤代理逻辑 for CategoryAgentsTab
+  const filterAgents = useMemo(() => {
+    if (actualFilterType === 'all') {
+      return baseFilteredAgents
+    }
+
+    return baseFilteredAgents.filter(agent => agent.group && agent.group.includes(actualFilterType))
+  }, [actualFilterType, baseFilteredAgents])
+
+  const tabConfigs = useMemo(() => {
+    const groupKeys = Object.keys(agentGroupsForTabs).sort()
+
+    const allTab: TabConfig = {
+      value: 'all',
+      label: t('agents.market.groups.all')
+    }
+
+    const dynamicTabs: TabConfig[] = groupKeys.map(groupKey => ({
+      value: groupKey,
+      label: t(`agents.market.groups.${groupKey}`, groupKey.charAt(0).toUpperCase() + groupKey.slice(1))
+    }))
+
+    return [allTab, ...dynamicTabs]
+  }, [agentGroupsForTabs, t])
+
+  const getTabStyle = useCallback(
+    (tabValue: string) => ({
+      height: '100%',
+      backgroundColor: actualFilterType === tabValue ? '$background' : 'transparent',
+      borderRadius: 15
+    }),
+    [actualFilterType]
+  )
+
+  const handleArrowClick = useCallback((groupKey: string) => {
     if (groupKey) {
       setActualFilterType(groupKey)
     }
-  }
+  }, [])
 
-  useEffect(() => {
-    const systemAgentsGroupList = groupByCategories(systemAgents)
-    const agentsGroupList = {
-      ...systemAgentsGroupList
-    } as Record<string, Agent[]>
-    setAgentGroups(agentsGroupList)
-  }, [systemAgents])
+  const handleBackPress = useCallback(() => {
+    navigation.goBack()
+  }, [navigation])
+
+  const handleBookmarkPress = useCallback(() => {
+    console.log('Bookmark pressed')
+  }, [])
+
+  const renderTabList = useMemo(
+    () => (
+      <Tabs.List gap={10} flexDirection="row" height={34}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {tabConfigs.map(({ value, label }) => (
+            <Tabs.Tab key={value} value={value} {...getTabStyle(value)}>
+              <Text>{label}</Text>
+            </Tabs.Tab>
+          ))}
+        </ScrollView>
+      </Tabs.List>
+    ),
+    [tabConfigs, getTabStyle]
+  )
+
+  const renderTabContents = useMemo(
+    () => (
+      <>
+        <Tabs.Content value={'all'} flex={1}>
+          <AllAgentsTab agentGroups={agentGroupsForDisplay} onArrowClick={handleArrowClick} />
+        </Tabs.Content>
+        {tabConfigs
+          .filter(({ value }) => value !== 'all')
+          .map(({ value }) => (
+            <Tabs.Content key={value} value={value} flex={1}>
+              <CategoryAgentsTab agents={filterAgents} />
+            </Tabs.Content>
+          ))}
+      </>
+    ),
+    [tabConfigs, agentGroupsForDisplay, handleArrowClick, filterAgents]
+  )
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar
         title={t('agents.market.title')}
-        onBackPress={() => navigation.goBack()}
+        onBackPress={handleBackPress}
         rightButton={{
           icon: <BookmarkMinus size={24} />,
-          onPress: () => console.log('Bookmark pressed')
+          onPress: handleBookmarkPress
         }}
       />
       <SettingContainer>
-        <SearchInput placeholder={t('agents.market.search_placeholder')} />
+        <SearchInput
+          placeholder={t('agents.market.search_placeholder')}
+          value={searchText}
+          onChangeText={setSearchText}
+        />
 
         <Tabs
-          gap={24}
-          defaultValue="all"
+          gap={10}
+          defaultValue={'all'}
           value={actualFilterType}
           onValueChange={setActualFilterType}
           orientation="horizontal"
           flexDirection="column"
           flex={1}>
-          <Tabs.List gap="10" flexDirection="row" height={34}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {tabConfigs.map(({ value, label }) => (
-                <Tabs.Tab key={value} value={value} {...getTabStyle(value)}>
-                  <Text>{label}</Text>
-                </Tabs.Tab>
-              ))}
-            </ScrollView>
-          </Tabs.List>
-          {/* todo fix scrollview bug */}
-          {/* 有时可以滚动有时不可以 */}
-          <Tabs.Content value="all" flex={1}>
-            <ScrollView flex={1}>
-              <YStack gap={16}>
-                {Object.keys(agentGroups).map((groupKey, index) => (
-                  <YStack key={index} gap={16}>
-                    <XStack justifyContent="space-between" alignItems="center" paddingHorizontal={20}>
-                      <Text>{groupKey}</Text>
-                      <XStack onPress={() => handleArrowClick(groupKey)}>
-                        <ArrowUpRight size={18} />
-                      </XStack>
-                    </XStack>
-                    <XStack flex={1}>
-                      <ScrollView flex={1} horizontal>
-                        <XStack gap={30}>
-                          {agentGroups[groupKey].map(agent => (
-                            <AgentItemCard key={agent.id} agent={agent} />
-                          ))}
-                        </XStack>
-                      </ScrollView>
-                    </XStack>
-                  </YStack>
-                ))}
-              </YStack>
-            </ScrollView>
-          </Tabs.Content>
-          {tabConfigs.map(
-            ({ value }) =>
-              value !== 'all' && (
-                <Tabs.Content key={value} value={value} flex={1}>
-                  <ScrollView flex={1}>
-                    <YStack gap={10}>
-                      {filterAgents.map(agent => (
-                        <AgentItemRow key={agent.id} agent={agent} />
-                      ))}
-                    </YStack>
-                  </ScrollView>
-                </Tabs.Content>
-              )
-          )}
+          {renderTabList}
+          {/* TODO: 有时可以滚动有时不可以 */}
+          {renderTabContents}
         </Tabs>
       </SettingContainer>
     </SafeAreaView>
