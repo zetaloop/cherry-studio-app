@@ -18,5 +18,6 @@ export type RootStackParamList = {
   TopicPage: undefined
   AgentPage: undefined
   AgentDetailPage: { agentId?: string; mode: 'create' | 'edit' }
+  AgentMarketPage: undefined
 }
 export type NavigationProps = StackNavigationProp<RootStackParamList>
