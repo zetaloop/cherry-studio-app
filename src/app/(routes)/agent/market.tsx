@@ -1,17 +1,20 @@
+import BottomSheet from '@gorhom/bottom-sheet'
 import { useNavigation } from '@react-navigation/native'
 import { BookmarkMinus } from '@tamagui/lucide-icons'
 import { debounce } from 'lodash'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Tabs, Text, useTheme } from 'tamagui'
 
+import AgentItemSheet from '@/components/agent/market/agentItemSheet'
 import AllAgentsTab from '@/components/agent/market/allAgentsTab'
 import CategoryAgentsTab from '@/components/agent/market/categoryAgentsTab'
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { SearchInput } from '@/components/ui/searchInput'
 import { getSystemAgents } from '@/mock'
+import { Agent } from '@/types/agent'
 import { groupByCategories } from '@/utils/agents'
 interface TabConfig {
   value: string
@@ -24,6 +27,18 @@ export default function AgentMarketPage() {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigation = useNavigation()
+
+  const bottomSheetRef = useRef<BottomSheet>(null)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
+  const handleBottomSheetClose = useCallback(() => {
+    setIsBottomSheetOpen(false)
+    setSelectedAgent(null)
+  }, [])
+  const handleAgentItemPress = useCallback((agent: Agent) => {
+    setSelectedAgent(agent)
+    setIsBottomSheetOpen(true)
+  }, [])
 
   const [actualFilterType, setActualFilterType] = useState<FilterType>('all')
   const [searchText, setSearchText] = useState('')
@@ -131,13 +146,22 @@ export default function AgentMarketPage() {
     () => (
       <>
         <Tabs.Content value={'all'} flex={1}>
-          <AllAgentsTab agentGroups={agentGroupsForDisplay} onArrowClick={handleArrowClick} />
+          <AllAgentsTab
+            agentGroups={agentGroupsForDisplay}
+            onArrowClick={handleArrowClick}
+            setIsBottomSheetOpen={setIsBottomSheetOpen}
+            onAgentPress={handleAgentItemPress}
+          />
         </Tabs.Content>
         {tabConfigs
           .filter(({ value }) => value !== 'all')
           .map(({ value }) => (
             <Tabs.Content key={value} value={value} flex={1}>
-              <CategoryAgentsTab agents={filterAgents} />
+              <CategoryAgentsTab
+                agents={filterAgents}
+                setIsBottomSheetOpen={setIsBottomSheetOpen}
+                onAgentPress={handleAgentItemPress}
+              />
             </Tabs.Content>
           ))}
       </>
@@ -175,6 +199,14 @@ export default function AgentMarketPage() {
           {renderTabContents}
         </Tabs>
       </SettingContainer>
+      {selectedAgent && (
+        <AgentItemSheet
+          bottomSheetRef={bottomSheetRef}
+          isOpen={isBottomSheetOpen}
+          onClose={handleBottomSheetClose}
+          agent={selectedAgent}
+        />
+      )}
     </SafeAreaView>
   )
 }
