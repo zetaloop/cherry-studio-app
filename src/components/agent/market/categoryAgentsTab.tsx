@@ -7,10 +7,14 @@ import { Agent } from '@/types/agent'
 
 interface CategoryAgentsTabProps {
   agents: Agent[]
+  setIsBottomSheetOpen: (isOpen: boolean) => void
+  onAgentPress: (agent: Agent) => void
 }
 
-const CategoryAgentsTab: React.FC<CategoryAgentsTabProps> = ({ agents }) => {
-  const renderItem = ({ item }: { item: Agent }) => <AgentItemRow agent={item} />
+const CategoryAgentsTab: React.FC<CategoryAgentsTabProps> = ({ agents, setIsBottomSheetOpen, onAgentPress }) => {
+  const renderItem = ({ item }: { item: Agent }) => (
+    <AgentItemRow agent={item} setIsBottomSheetOpen={setIsBottomSheetOpen} onAgentPress={onAgentPress} />
+  )
 
   return (
     <YStack flex={1}>

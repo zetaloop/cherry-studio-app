@@ -11,6 +11,8 @@ import { Agent } from '@/types/agent'
 interface AllAgentsTabProps {
   agentGroups: Record<string, Agent[]>
   onArrowClick: (groupKey: string) => void
+  setIsBottomSheetOpen: (isOpen: boolean) => void
+  onAgentPress: (agent: Agent) => void
 }
 
 interface GroupItem {
@@ -19,7 +21,12 @@ interface GroupItem {
   agents: Agent[]
 }
 
-const AllAgentsTab: React.FC<AllAgentsTabProps> = ({ agentGroups, onArrowClick }) => {
+const AllAgentsTab: React.FC<AllAgentsTabProps> = ({
+  agentGroups,
+  onArrowClick,
+  setIsBottomSheetOpen,
+  onAgentPress
+}) => {
   // 将分组数据转换为扁平化的列表数据
   const flatData = useMemo(() => {
     return Object.keys(agentGroups).map(
@@ -45,7 +52,12 @@ const AllAgentsTab: React.FC<AllAgentsTabProps> = ({ agentGroups, onArrowClick }
         <ScrollView flex={1} horizontal showsHorizontalScrollIndicator={false}>
           <XStack gap={30}>
             {item.agents.map(agent => (
-              <AgentItemCard key={agent.id} agent={agent} />
+              <AgentItemCard
+                key={agent.id}
+                agent={agent}
+                setIsBottomSheetOpen={setIsBottomSheetOpen}
+                onAgentPress={onAgentPress}
+              />
             ))}
           </XStack>
         </ScrollView>
