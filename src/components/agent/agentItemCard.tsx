@@ -1,6 +1,6 @@
 import { BookmarkMinus } from '@tamagui/lucide-icons'
 import React from 'react'
-import { Button, Text, View, XStack, YStack } from 'tamagui'
+import { Button, Text, XStack, YStack } from 'tamagui'
 
 import { Agent } from '@/types/agent'
 
@@ -10,7 +10,7 @@ interface AgentItemCardProps {
 
 const AgentItemCard = ({ agent }: AgentItemCardProps) => {
   return (
-    <View
+    <YStack
       paddingHorizontal={14}
       paddingTop={30}
       paddingBottom={10}
@@ -47,7 +47,7 @@ const AgentItemCard = ({ agent }: AgentItemCardProps) => {
             ))}
         </XStack>
       </YStack>
-    </View>
+    </YStack>
   )
 }
 

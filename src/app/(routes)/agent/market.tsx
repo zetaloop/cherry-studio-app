@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import AgentItemCard from '@/components/agent/agentItemCard'
+import AgentItemRow from '@/components/agent/agentItemRow'
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { SearchInput } from '@/components/ui/searchInput'
@@ -18,7 +19,7 @@ export default function AgentMarketPage() {
   const theme = useTheme()
   const navigation = useNavigation()
 
-  const [actualFilterType, setActualFilterType] = useState('all')
+  const [actualFilterType, setActualFilterType] = useState('career')
   const [agentGroups, setAgentGroups] = useState<Record<string, Agent[]>>({})
 
   const tabConfigs = [
@@ -45,6 +46,13 @@ export default function AgentMarketPage() {
 
     return systemAgents.filter(agent => agent.group && agent.group.includes(actualFilterType))
   }, [actualFilterType, systemAgents])
+
+  // 处理箭头点击事件
+  const handleArrowClick = (groupKey: string) => {
+    if (groupKey) {
+      setActualFilterType(groupKey)
+    }
+  }
 
   useEffect(() => {
     const systemAgentsGroupList = groupByCategories(systemAgents)
@@ -87,16 +95,18 @@ export default function AgentMarketPage() {
           {/* todo fix scrollview bug */}
           {/* 有时可以滚动有时不可以 */}
           <Tabs.Content value="all" flex={1}>
-            <ScrollView flex={1} showsVerticalScrollIndicator={true}>
+            <ScrollView flex={1}>
               <YStack gap={16}>
                 {Object.keys(agentGroups).map((groupKey, index) => (
                   <YStack key={index} gap={16}>
                     <XStack justifyContent="space-between" alignItems="center" paddingHorizontal={20}>
                       <Text>{groupKey}</Text>
-                      <ArrowUpRight size={18} />
+                      <XStack onPress={() => handleArrowClick(groupKey)}>
+                        <ArrowUpRight size={18} />
+                      </XStack>
                     </XStack>
                     <XStack flex={1}>
-                      <ScrollView flex={1} horizontal showsHorizontalScrollIndicator={true}>
+                      <ScrollView flex={1} horizontal>
                         <XStack gap={30}>
                           {agentGroups[groupKey].map(agent => (
                             <AgentItemCard key={agent.id} agent={agent} />
@@ -109,6 +119,20 @@ export default function AgentMarketPage() {
               </YStack>
             </ScrollView>
           </Tabs.Content>
+          {tabConfigs.map(
+            ({ value }) =>
+              value !== 'all' && (
+                <Tabs.Content key={value} value={value} flex={1}>
+                  <ScrollView flex={1}>
+                    <YStack gap={10}>
+                      {filterAgents.map(agent => (
+                        <AgentItemRow key={agent.id} agent={agent} />
+                      ))}
+                    </YStack>
+                  </ScrollView>
+                </Tabs.Content>
+              )
+          )}
         </Tabs>
       </SettingContainer>
     </SafeAreaView>
