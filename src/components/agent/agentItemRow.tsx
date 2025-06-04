@@ -7,9 +7,16 @@ import { Agent } from '@/types/agent'
 
 interface AgentItemRowProps {
   agent: Agent
+  setIsBottomSheetOpen: (isOpen: boolean) => void
+  onAgentPress: (agent: Agent) => void
 }
 
-const AgentItemRow: FC<AgentItemRowProps> = ({ agent }) => {
+const AgentItemRow: FC<AgentItemRowProps> = ({ agent, setIsBottomSheetOpen, onAgentPress }) => {
+  const handlePress = () => {
+    onAgentPress(agent)
+    setIsBottomSheetOpen(true)
+  }
+
   return (
     <XStack
       paddingVertical={10}
@@ -18,7 +25,8 @@ const AgentItemRow: FC<AgentItemRowProps> = ({ agent }) => {
       alignItems="center"
       borderWidth={1}
       borderColor="$gray8"
-      borderRadius={8}>
+      borderRadius={8}
+      onPress={handlePress}>
       <XStack gap={14} flex={1} marginRight={10} maxWidth="75%">
         <Text fontSize={35}>{agent.emoji}</Text>
         <YStack gap={4} flex={1} maxWidth="100%">

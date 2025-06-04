@@ -29,7 +29,8 @@
           "business": "Business",
           "tools": "Tools",
           "language": "Language"
-        }
+        },
+        "button.chat": "Chat Now"
       }
     },
     "assistants": {
