@@ -22,14 +22,6 @@ export default function AgentMarketPage() {
   const [actualFilterType, setActualFilterType] = useState('career')
   const [agentGroups, setAgentGroups] = useState<Record<string, Agent[]>>({})
 
-  const tabConfigs = [
-    { value: 'all', label: t('agents.market.groups.all') },
-    { value: 'career', label: t('agents.market.groups.career') },
-    { value: 'business', label: t('agents.market.groups.business') },
-    { value: 'tools', label: t('agents.market.groups.tools') },
-    { value: 'language', label: t('agents.market.groups.language') }
-  ]
-
   // 添加通用 tab 样式函数
   const getTabStyle = (tabValue: string) => ({
     height: '100%',
@@ -56,11 +48,21 @@ export default function AgentMarketPage() {
 
   useEffect(() => {
     const systemAgentsGroupList = groupByCategories(systemAgents)
-    const agentsGroupList = {
-      ...systemAgentsGroupList
-    } as Record<string, Agent[]>
-    setAgentGroups(agentsGroupList)
+
+    setAgentGroups(systemAgentsGroupList)
   }, [systemAgents])
+
+  const tabConfigs = useMemo(() => {
+    // 对 agentGroups 的键进行排序，以确保标签顺序的一致性
+    const groupKeys = Object.keys(agentGroups).sort()
+
+    const dynamicTabs = groupKeys.map(groupKey => ({
+      value: groupKey,
+      label: t(`agents.market.groups.${groupKey}`, groupKey.charAt(0).toUpperCase() + groupKey.slice(1))
+    }))
+
+    return [{ value: 'all', label: t('agents.market.groups.all') }, ...dynamicTabs]
+  }, [agentGroups, t])
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
