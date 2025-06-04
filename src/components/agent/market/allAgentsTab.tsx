@@ -1,7 +1,9 @@
+import MaskedView from '@react-native-masked-view/masked-view'
 import { FlashList } from '@shopify/flash-list'
 import { ArrowUpRight } from '@tamagui/lucide-icons'
 import React, { useMemo } from 'react'
 import { ScrollView, Text, XStack, YStack } from 'tamagui'
+import { LinearGradient } from 'tamagui/linear-gradient'
 
 import AgentItemCard from '@/components/agent/agentItemCard'
 import { Agent } from '@/types/agent'
@@ -32,9 +34,11 @@ const AllAgentsTab: React.FC<AllAgentsTabProps> = ({ agentGroups, onArrowClick }
   const renderGroupItem = ({ item }: { item: GroupItem }) => (
     <YStack gap={16}>
       <XStack justifyContent="space-between" alignItems="center" paddingHorizontal={20}>
-        <Text>{item.groupKey}</Text>
+        <Text>{item.groupKey.charAt(0).toUpperCase() + item.groupKey.slice(1)}</Text>
         <XStack onPress={() => onArrowClick(item.groupKey)}>
-          <ArrowUpRight size={18} />
+          <MaskedView style={{ width: 18, height: 18 }} maskElement={<ArrowUpRight size={18} color="black" />}>
+            <LinearGradient colors={['#BAF4A5', '#315923']} start={[1, 0]} end={[0, 1]} style={{ flex: 1 }} />
+          </MaskedView>
         </XStack>
       </XStack>
       <XStack flex={1}>
