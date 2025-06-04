@@ -15,7 +15,8 @@
 - [ ] sheet keyboard cover input
 - [ ] change active tab style
 - [ ] fix KeyboardAvoidingView bug
-- [ ] fix scrollview bug(agent market)
+- [ ] fix scrollview bug(agent market) 有时候无法滚动
+- [ ] fix scrollview bug(agent item sheet) scrollview占据空间不固定
 
 ## database
 

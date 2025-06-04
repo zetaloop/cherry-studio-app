@@ -4,11 +4,20 @@ import { Button, Text, XStack, YStack } from 'tamagui'
 
 import { Agent } from '@/types/agent'
 
+import GroupTag from './market/groupTag'
+
 interface AgentItemCardProps {
   agent: Agent
+  setIsBottomSheetOpen: (isOpen: boolean) => void
+  onAgentPress: (agent: Agent) => void
 }
 
-const AgentItemCard = ({ agent }: AgentItemCardProps) => {
+const AgentItemCard = ({ agent, setIsBottomSheetOpen, onAgentPress }: AgentItemCardProps) => {
+  const handlePress = () => {
+    onAgentPress(agent)
+    setIsBottomSheetOpen(true)
+  }
+
   return (
     <YStack
       paddingHorizontal={14}
@@ -18,7 +27,8 @@ const AgentItemCard = ({ agent }: AgentItemCardProps) => {
       width={148}
       borderRadius={20}
       borderWidth={1}
-      borderColor="white">
+      borderColor="white"
+      onPress={handlePress}>
       <Button position="absolute" top={10} right={13} size="$2" circular chromeless zIndex={1}>
         <BookmarkMinus size={20} color="white" />
       </Button>
@@ -33,17 +43,14 @@ const AgentItemCard = ({ agent }: AgentItemCardProps) => {
         <XStack gap={10}>
           {agent.group &&
             agent.group.map((group, index) => (
-              <Text
-                borderRadius={20}
-                paddingVertical={2}
-                paddingHorizontal={4}
+              <GroupTag
                 key={index}
+                group={group}
                 fontSize={8}
                 color="$foregroundGreen"
                 borderWidth={1}
-                borderColor="$backgroundGreen">
-                {group}
-              </Text>
+                borderColor="$backgroundGreen"
+              />
             ))}
         </XStack>
       </YStack>
