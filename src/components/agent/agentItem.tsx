@@ -60,6 +60,20 @@ const AgentItem: FC<AgentItemProps> = ({ agent }) => {
     navigation.navigate('AgentDetailPage', { agentId: agent.id, mode: 'edit' })
   }
 
+  // get the newest update time from agent's topics
+  const updateTime = new Date(
+    agent.topics?.reduce((latest, topic) => {
+      const topicUpdateTime = new Date(topic.updatedAt).getTime()
+      return topicUpdateTime > latest ? topicUpdateTime : latest
+    }, 0) ?? Date.now()
+  ).toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+
   return (
     <ReanimatedSwipeable ref={swipeableRef} renderRightActions={renderRightActions} friction={2} rightThreshold={40}>
       <XStack
@@ -76,11 +90,11 @@ const AgentItem: FC<AgentItemProps> = ({ agent }) => {
             <Text width="90%" numberOfLines={1} ellipsizeMode="tail">
               {agent.name}
             </Text>
-            <Text fontSize={12}>{agent.type}</Text>
+            <Text fontSize={12}>{updateTime}</Text>
           </YStack>
         </XStack>
         <Button disabled circular backgroundColor="$gray8" size={20}>
-          <Text>{agent.topics.length}</Text>
+          <Text>{agent.topics?.length ?? 1}</Text>
         </Button>
       </XStack>
     </ReanimatedSwipeable>

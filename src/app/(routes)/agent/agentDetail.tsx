@@ -6,7 +6,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, ScrollView, styled, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { ModelTabContent } from '@/components/agent/modelTabContent'
-import { PresetTabContent } from '@/components/agent/presetTabContent'
 import { PromptTabContent } from '@/components/agent/promptTabContent'
 import { ToolTabContent } from '@/components/agent/toolTabContent'
 import { SettingContainer } from '@/components/settings'
@@ -70,9 +69,6 @@ export default function AgentDetailPage() {
               <StyledTab value="model">
                 <Text fontSize="12">{t('common.model')}</Text>
               </StyledTab>
-              <StyledTab value="preset">
-                <Text fontSize="12">{t('common.preset')}</Text>
-              </StyledTab>
               <StyledTab value="tool">
                 <Text fontSize="12">{t('common.tool')}</Text>
               </StyledTab>
@@ -84,10 +80,6 @@ export default function AgentDetailPage() {
 
               <Tabs.Content value="model" flex={1} gap={30}>
                 <ModelTabContent agent={agent} />
-              </Tabs.Content>
-
-              <Tabs.Content value="preset" flex={1} gap={30}>
-                <PresetTabContent agent={agent} />
               </Tabs.Content>
 
               <Tabs.Content value="tool" flex={1} gap={30}>

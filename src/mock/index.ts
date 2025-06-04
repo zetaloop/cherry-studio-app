@@ -1,4 +1,5 @@
 import { SYSTEM_MODELS } from '@/config/models/system-models'
+import agentsJsonData from '@/resources/data/agents.json'
 import { Agent, Provider } from '@/types/agent'
 
 export const MOCK_AIHUBMIX_MODELS = [
@@ -646,3 +647,18 @@ export const MOCK_AGENTS: Agent[] = [
     type: 'agent'
   }
 ]
+
+// 读取resources/data/agent.json文件中的数据
+export function getSystemAgents(): Agent[] {
+  try {
+    if (agentsJsonData) {
+      const agents = JSON.parse(JSON.stringify(agentsJsonData)) || []
+      return agents
+    } else {
+      return []
+    }
+  } catch (error) {
+    console.error('Error reading agents data:', error)
+    return []
+  }
+}

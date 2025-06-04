@@ -19,7 +19,18 @@
       "settings.reasoning.auto": "Auto",
       "settings.reasoning.low": "Low",
       "settings.reasoning.medium": "Medium",
-      "settings.reasoning.high": "High"
+      "settings.reasoning.high": "High",
+      "market": {
+        "title": "Agent Market",
+        "search_placeholder": "Search agents...",
+        "groups": {
+          "all": "All",
+          "career": "Career",
+          "business": "Business",
+          "tools": "Tools",
+          "language": "Language"
+        }
+      }
     },
     "assistants": {
       "edit": {
