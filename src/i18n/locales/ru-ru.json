@@ -19,7 +19,19 @@
       "settings.reasoning.auto": "Авто",
       "settings.reasoning.low": "Низкий",
       "settings.reasoning.medium": "Средний",
-      "settings.reasoning.high": "Высокий"
+      "settings.reasoning.high": "Высокий",
+      "market": {
+        "title": "Маркет агентов",
+        "search_placeholder": "Поиск агентов...",
+        "groups": {
+          "all": "Все",
+          "career": "Карьера",
+          "business": "Бизнес",
+          "tools": "Инструменты",
+          "language": "Язык"
+        },
+        "button.chat": "Чат сейчас"
+      }
     },
     "assistants": {
       "edit": {
