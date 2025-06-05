@@ -28,9 +28,11 @@ const AgentItemRow: FC<AgentItemRowProps> = ({ agent, setIsBottomSheetOpen, onAg
       borderRadius={8}
       onPress={handlePress}>
       <XStack gap={14} flex={1} marginRight={10} maxWidth="75%">
-        <Text fontSize={35}>{agent.emoji}</Text>
+        <Text fontSize={35}>{agent.emoji?.replace(/\r\n/g, '')}</Text>
         <YStack gap={4} flex={1} maxWidth="100%">
-          <Text>{agent.name}</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail">
+            {agent.name}
+          </Text>
           <Text fontSize={12} numberOfLines={1} ellipsizeMode="tail">
             {agent.description}
           </Text>
