@@ -28,7 +28,7 @@ export default function AgentItemSheet({ agent, bottomSheetRef, isOpen, onClose 
         {/* todo: fix scrollview 空间问题，有些agent描述会超出，但无法控制高度 */}
         <ScrollView flex={1} paddingHorizontal={20} showsVerticalScrollIndicator={false} maxHeight="100%">
           <YStack alignItems="center" gap={10} paddingVertical={10}>
-            <Text fontSize={84}>{agent.emoji}</Text>
+            <Text fontSize={84}>{agent.emoji?.replace(/\r\n/g, '')}</Text>
             <XStack gap={20}>
               {agent.group &&
                 agent.group.map((group, index) => (

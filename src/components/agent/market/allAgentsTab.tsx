@@ -50,8 +50,8 @@ const AllAgentsTab: React.FC<AllAgentsTabProps> = ({
       </XStack>
       <XStack flex={1}>
         <ScrollView flex={1} horizontal showsHorizontalScrollIndicator={false}>
-          <XStack gap={30}>
-            {item.agents.map(agent => (
+          <XStack gap={20}>
+            {item.agents.slice(0, 5).map(agent => (
               <AgentItemCard
                 key={agent.id}
                 agent={agent}

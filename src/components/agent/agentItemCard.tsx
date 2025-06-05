@@ -33,7 +33,7 @@ const AgentItemCard = ({ agent, setIsBottomSheetOpen, onAgentPress }: AgentItemC
         <BookmarkMinus size={20} color="white" />
       </Button>
       <YStack gap={7} alignItems="center" justifyContent="center" height="100%">
-        <Text fontSize={30}>{agent.emoji}</Text>
+        <Text fontSize={30}>{agent.emoji?.replace(/\r\n/g, '')}</Text>
         <Text textAlign="center" numberOfLines={2} ellipsizeMode="tail">
           {agent.name}
         </Text>
