@@ -19,7 +19,19 @@
       "settings.reasoning.auto": "自動",
       "settings.reasoning.low": "低",
       "settings.reasoning.medium": "中",
-      "settings.reasoning.high": "高"
+      "settings.reasoning.high": "高",
+      "market": {
+        "title": "智能體市集",
+        "search_placeholder": "搜尋智能體...",
+        "groups": {
+          "all": "全部",
+          "career": "職涯",
+          "business": "商業",
+          "tools": "工具",
+          "language": "語言"
+        },
+        "button.chat": "立即對話"
+      }
     },
     "assistants": {
       "edit": {

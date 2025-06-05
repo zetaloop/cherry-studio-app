@@ -1,3 +1,4 @@
+import React from 'react'
 import { Input, InputProps, View } from 'tamagui'
 
 const MInput: React.FC<

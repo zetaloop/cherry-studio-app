@@ -19,7 +19,19 @@
       "settings.reasoning.auto": "自動",
       "settings.reasoning.low": "低",
       "settings.reasoning.medium": "中",
-      "settings.reasoning.high": "高"
+      "settings.reasoning.high": "高",
+      "market": {
+        "title": "エージェントマーケット",
+        "search_placeholder": "エージェントを検索...",
+        "groups": {
+          "all": "すべて",
+          "career": "キャリア",
+          "business": "ビジネス",
+          "tools": "ツール",
+          "language": "言語"
+        },
+        "button.chat": "今すぐチャット"
+      }
     },
     "assistants": {
       "edit": {
