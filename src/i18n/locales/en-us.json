@@ -89,7 +89,8 @@
       "search_placeholder": "Search...",
       "prompt": "Prompt",
       "preset": "Preset",
-      "tool": "Tool"
+      "tool": "Tool",
+      "added": " Added"
     },
     "history": {
       "topics.empty": " No topics found",
@@ -225,7 +226,15 @@
         "blacklist.title": "Blacklist",
         "blacklist_placeholder": "Please use the following format (separated by newlines)\nPattern matching: *://*.example.com/*\nRegular expression: /example\\.(net|org)/",
         "blacklist_description": "Results from the following websites will not appear in search results",
-        "subscribe.title": "Blacklist Subscription"
+        "subscribe.title": "Blacklist Subscription",
+        "provider": {
+          "free": {
+            "title": "Free Service Providers"
+          },
+          "api": {
+            "title": "API Service Providers"
+          }
+        }
       },
       "modelAndService": "AI Models & Services",
       "dataAndSecurity": "Data & Security",

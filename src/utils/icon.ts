@@ -124,6 +124,16 @@ const PROVIDER_ICONS_LIGHT = {
   default: require('@/assets/images/llmIcons/light/openai.png')
 }
 
+const WEB_SEARCH_PROVIDER_ICONS = {
+  google: require('@/assets/images/websearchIcons/google.png'),
+  bing: require('@/assets/images/websearchIcons/bing.png'),
+  baidu: require('@/assets/images/websearchIcons/baidu.png'),
+  exa: require('@/assets/images/websearchIcons/exa.png'),
+  bocha: require('@/assets/images/websearchIcons/bocha.png'),
+  searxng: require('@/assets/images/websearchIcons/searxng.png'),
+  tavily: require('@/assets/images/websearchIcons/tavily.png')
+}
+
 // 添加缓存
 const modelIconCache = new Map<string, any>()
 const providerIconCache = new Map<string, any>()
@@ -179,4 +189,29 @@ export function getModelOrProviderIcon(modelId: string, providerId: string, isDa
 
   // 如果没有模型图标，则使用提供商图标
   return getProviderIcon(providerId, isDark)
+}
+
+export function getWebSearchProviderIcon(providerId: string, isDark: boolean): any {
+  const cacheKey = `${providerId}-${isDark}`
+
+  // 检查缓存
+  if (providerIconCache.has(cacheKey)) {
+    return providerIconCache.get(cacheKey)
+  }
+
+  const webSearchIcons = WEB_SEARCH_PROVIDER_ICONS
+  let result = null
+
+  for (const key in webSearchIcons) {
+    const regex = new RegExp(key, 'i')
+
+    if (regex.test(providerId)) {
+      result = webSearchIcons[key as keyof typeof webSearchIcons]
+      break
+    }
+  }
+
+  // 缓存结果
+  providerIconCache.set(cacheKey, result)
+  return result
 }
