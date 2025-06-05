@@ -9,35 +9,13 @@ import { SubscribeSource } from '@/types/websearch'
 
 import BlacklistSection from './blacklist'
 import GeneralSettings from './general-settings'
-import ProviderSection from './websearc-provider'
-
-const selectOptions = [
-  {
-    label: 'Free Service Provider',
-    options: [
-      { label: 'Google', value: 'google' },
-      { label: 'Bing', value: 'bing' },
-      { label: 'Baidu', value: 'baidu' }
-    ]
-  },
-  {
-    label: 'API Service Provider',
-    options: [
-      { label: 'Tavily', value: 'tavily' },
-      { label: 'Exa', value: 'exa' },
-      { label: 'Searxng', value: 'searxng' }
-    ]
-  }
-]
+import ProviderSection from './websearch-provider'
 
 const blacklistSubscription: SubscribeSource[] = [{ key: 1, url: 'https://git.io/ublacklist', name: 'git.io' }]
 
 export default function WebSearchSettingsPage() {
   const { t } = useTranslation()
   const theme = useTheme()
-
-  // Provider state
-  const [selectedProvider, setSelectedProvider] = useState<string | undefined>(undefined)
 
   // General settings state
   const [searchWithDates, setSearchWithDates] = useState<boolean>(true)
@@ -47,14 +25,6 @@ export default function WebSearchSettingsPage() {
 
   // Blacklist state
   const [blacklistText, setBlacklistText] = useState<string>('')
-
-  // Provider handlers
-  const handleProviderChange = useCallback((value: string | null) => {
-    if (value) {
-      setSelectedProvider(value)
-      console.log('Selected web search provider:', value)
-    }
-  }, [])
 
   // General settings handlers
   const handleSearchCountChange = useCallback((value: number[]) => {
@@ -80,11 +50,7 @@ export default function WebSearchSettingsPage() {
       <ScrollView flex={1}>
         <SettingContainer>
           <YStack gap={24} flex={1}>
-            <ProviderSection
-              selectedProvider={selectedProvider}
-              onProviderChange={handleProviderChange}
-              selectOptions={selectOptions}
-            />
+            <ProviderSection />
 
             <GeneralSettings
               searchWithDates={searchWithDates}
