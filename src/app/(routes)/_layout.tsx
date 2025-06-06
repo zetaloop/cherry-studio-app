@@ -23,6 +23,7 @@ import { RootStackParamList } from '@/types/naviagate'
 import AgentPage from './agent'
 import AgentDetailPage from './agent/agentDetail'
 import AgentMarketPage from './agent/market'
+import WebSearchProviderSettingsPage from './settings/websearch/websearchProviderSettings'
 import TopicPage from './topic'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -31,7 +32,7 @@ const AppStackLayout: FC = () => {
   const welcomeShown = useAppSelector(state => state.app.welcomeShown)
 
   return (
-    <Stack.Navigator initialRouteName="WebSearchSettings">
+    <Stack.Navigator>
       {!welcomeShown && <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomePage} />}
       <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
       <Stack.Screen options={{ headerShown: false }} name="Settings" component={SettingsPage} />
@@ -49,10 +50,11 @@ const AppStackLayout: FC = () => {
       <Stack.Screen options={{ headerShown: false }} name="TopicPage" component={TopicPage} />
       <Stack.Screen options={{ headerShown: false }} name="AgentPage" component={AgentPage} />
       <Stack.Screen options={{ headerShown: false }} name="AgentDetailPage" component={AgentDetailPage} />
+      <Stack.Screen options={{ headerShown: false }} name="AgentMarketPage" component={AgentMarketPage} />
       <Stack.Screen
-        options={{ headerShown: false, presentation: 'modal' }}
-        name="AgentMarketPage"
-        component={AgentMarketPage}
+        options={{ headerShown: false }}
+        name="WebsearchProviderSettingsPage"
+        component={WebSearchProviderSettingsPage}
       />
     </Stack.Navigator>
   )

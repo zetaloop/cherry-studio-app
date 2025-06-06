@@ -12,7 +12,7 @@ export default function ProviderSection() {
 
   return (
     <YStack gap={24}>
-      <YStack>
+      <YStack gap={8}>
         <SettingGroupTitle>{t('settings.websearch.provider.free.title')}</SettingGroupTitle>
         <SettingGroup>
           {freeProviders.map((provider, index) => (
@@ -24,7 +24,7 @@ export default function ProviderSection() {
           ))}
         </SettingGroup>
       </YStack>
-      <YStack>
+      <YStack gap={8}>
         <SettingGroupTitle>{t('settings.websearch.provider.api.title')}</SettingGroupTitle>
         <SettingGroup>
           {apiProviders.map((provider, index) => (

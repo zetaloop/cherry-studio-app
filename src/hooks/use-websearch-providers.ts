@@ -10,3 +10,15 @@ export function useWebsearchProviders() {
     apiProviders
   }
 }
+
+export function useWebsearchProvider(id: string) {
+  const provider = INITIAL_WEBSEARCH_PROVIDERS.find(provider => provider.id === id)
+
+  if (!provider) {
+    throw new Error(`Web search provider with id ${id} not found`)
+  }
+
+  return {
+    provider
+  }
+}
