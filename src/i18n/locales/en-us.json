@@ -90,7 +90,8 @@
       "prompt": "Prompt",
       "preset": "Preset",
       "tool": "Tool",
-      "added": " Added"
+      "added": " Added",
+      "visit": "Visit"
     },
     "history": {
       "topics.empty": " No topics found",
@@ -183,6 +184,7 @@
         "api.url.reset": "Reset",
         "api.url.tip": "Ending with / ignores v1, ending with # forces use of input address",
         "api_host": "API Host",
+        "api_host.placeholder": "Please enter API host",
         "api_key": "API Key",
         "api_key.placeholder": "Please enter API key",
         "api_key.get": "Get API Key",
@@ -214,6 +216,12 @@
       "assistant.show.icon": "Show model icon",
       "tray.title": "Enable System Tray Icon",
       "websearch": {
+        "api_service": "API Service",
+        "api_host": "API Host",
+        "api_host.placeholder": "Please enter API host",
+        "api_key": "API Key",
+        "api_key.placeholder": "Please enter API key",
+        "api_key.get": "Get API Key",
         "tavily": {
           "api_key.placeholder": "Enter Tavily API Key"
         },

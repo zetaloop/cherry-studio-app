@@ -153,6 +153,7 @@ export default function ApiServicePage() {
 
           <XStack justifyContent="space-between">
             <SettingHelpText>{t('settings.provider.api_key.tip')}</SettingHelpText>
+            {/* todo */}
             <ExternalLink href="" size={12}>
               {t('settings.provider.api_key.get')}
             </ExternalLink>
@@ -164,7 +165,11 @@ export default function ApiServicePage() {
           <XStack paddingHorizontal={10} height={20} alignItems="center">
             <SettingGroupTitle>{t('settings.provider.api_host')}</SettingGroupTitle>
           </XStack>
-          <Input placeholder={t('settings.provider.api_host')} value={apiHost} onChangeText={handleApiHostChange} />
+          <Input
+            placeholder={t('settings.provider.api_host.placeholder')}
+            value={apiHost}
+            onChangeText={handleApiHostChange}
+          />
         </YStack>
       </SettingContainer>
 
