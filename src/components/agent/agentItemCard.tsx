@@ -20,7 +20,7 @@ const AgentItemCard = ({ agent, setIsBottomSheetOpen, onAgentPress }: AgentItemC
   }
 
   return (
-    <CustomRadialGradientBackground>
+    <CustomRadialGradientBackground style={{ height: 216, width: 148 }}>
       <YStack
         paddingHorizontal={14}
         paddingTop={30}
