@@ -1,4 +1,4 @@
-import { Book, BookMarked, BookOpenCheck, ChevronRight, Globe, HardDrive, NotebookPen } from '@tamagui/lucide-icons'
+import { ChevronRight, CloudUpload, FolderSearch2 } from '@tamagui/lucide-icons'
 import { useNavigation } from 'expo-router'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -6,6 +6,7 @@ import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
+import { DataBackupIcon } from '@/components/ui/databackupIcon'
 import { NavigationProps } from '@/types/naviagate'
 
 interface SettingItemConfig {
@@ -30,7 +31,7 @@ export default function DataSettingsPage() {
         {
           title: 'Basic Data Settings',
           screen: 'BasicDataSettings',
-          icon: <HardDrive size={24} />
+          icon: <FolderSearch2 size={24} />
         }
       ]
     },
@@ -40,12 +41,12 @@ export default function DataSettingsPage() {
         {
           title: 'WebDAV',
           screen: 'webdav',
-          icon: <Globe size={24} />
+          icon: <CloudUpload size={24} />
         },
         {
           title: 'Nutstore Configuration',
           screen: 'nutstore',
-          icon: <BookOpenCheck size={24} />
+          icon: <DataBackupIcon provider="nutstore" />
         }
       ]
     },
@@ -55,17 +56,27 @@ export default function DataSettingsPage() {
         {
           title: 'Notion',
           screen: 'notion',
-          icon: <BookMarked size={24} />
+          icon: <DataBackupIcon provider="notion" />
         },
         {
           title: 'Yuque',
           screen: 'yuque',
-          icon: <Book size={24} />
+          icon: <DataBackupIcon provider="yuque" />
         },
         {
           title: 'Joplin',
           screen: 'joplin',
-          icon: <NotebookPen size={24} />
+          icon: <DataBackupIcon provider="joplin" />
+        },
+        {
+          title: 'Obsidian',
+          screen: 'obsidian',
+          icon: <DataBackupIcon provider="obsidian" />
+        },
+        {
+          title: 'SiYuan Note',
+          screen: 'siyuan',
+          icon: <DataBackupIcon provider="siyuan" />
         }
       ]
     }
