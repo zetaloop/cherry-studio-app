@@ -111,7 +111,13 @@
           "title": "清除缓存"
         },
         "data.title": "数据目录",
-        "title": "数据设置"
+        "title": "数据设置",
+        "basic_title": "基础数据设置",
+        "backup": "数据备份",
+        "recovery": "数据恢复",
+        "reset": "数据重置",
+        "cloud_backup": "云端备份设置",
+        "third_party": "第三方连接"
       },
       "models": {
         "default_model": "默认模型",
@@ -162,7 +168,7 @@
           "balance_recharge": "余额充值",
           "free_bills": "免费额度"
         },
-        "api_host.placeholder": "[to be translated]:Please enter API host"
+        "api_host.placeholder": "请输入 API 主机"
       },
       "proxy.title": "代理地址",
       "theme.window.style.opaque": "不透明窗口",
@@ -189,18 +195,18 @@
         "blacklist_placeholder": "请使用以下格式（按行分隔）\n模式匹配：*://*.example.com/*\n正则表达式：/example\\.(net|org)/",
         "blacklist_description": "来自以下网站的结果将不会出现在搜索结果中",
         "subscribe.title": "黑名单订阅",
-        "api_service": "[to be translated]:API Service",
-        "api_host": "[to be translated]:API Host",
-        "api_host.placeholder": "[to be translated]:Please enter API host",
-        "api_key": "[to be translated]:API Key",
-        "api_key.placeholder": "[to be translated]:Please enter API key",
-        "api_key.get": "[to be translated]:Get API Key",
+        "api_service": "API 服务",
+        "api_host": "API 主机",
+        "api_host.placeholder": "请输入 API 主机",
+        "api_key": "API 密钥",
+        "api_key.placeholder": "请输入 API 密钥",
+        "api_key.get": "获取 API 密钥",
         "provider": {
           "free": {
-            "title": "[to be translated]:Free Service Providers"
+            "title": "免费服务提供商"
           },
           "api": {
-            "title": "[to be translated]:API Service Providers"
+            "title": "API 服务提供商"
           }
         }
       },
@@ -240,6 +246,30 @@
         "privacy.title": "隐私设置",
         "privacy.anonymous": "匿名报告错误和统计",
         "language.title": "语言"
+      },
+      "webdav": {
+        "title": "WebDAV",
+        "config": {
+          "title": "WebDAV 配置",
+          "host": "WebDAV 主机",
+          "host_placeholder": "http://localhost:8080",
+          "user": "WebDAV 用户",
+          "user_placeholder": "WebDAV 用户",
+          "password": "WebDAV 密码",
+          "password_placeholder": "WebDAV 密码",
+          "password_hint": "至少需要 8 个字符",
+          "path": "WebDAV 路径",
+          "path_placeholder": "WebDAV 路径"
+        },
+        "backup": {
+          "title": "备份设置",
+          "to_webdav": "备份到 WebDAV",
+          "from_webdav": "从 WebDAV 恢复",
+          "auto_backup": "自动备份",
+          "slim_backup": "精简备份",
+          "max_backups": "最大备份数",
+          "unlimited": "无限制"
+        }
       }
     },
     "profile": {

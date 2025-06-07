@@ -1,6 +1,7 @@
 import { ChevronRight, FileText, Folder, FolderOpen, RotateCcw, Save, Trash2 } from '@tamagui/lucide-icons'
 import { useNavigation } from 'expo-router'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
@@ -25,23 +26,24 @@ interface SettingGroupConfig {
 export default function BasicDataSettingsPage() {
   const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
+  const { t } = useTranslation()
 
   const settingsItems: SettingGroupConfig[] = [
     {
-      title: 'Data Settings',
+      title: t('settings.data.title'),
       items: [
         {
-          title: 'Data Backup',
+          title: t('settings.data.backup'),
           screen: 'data-backup',
           icon: <Save size={24} />
         },
         {
-          title: 'Data Recovery',
+          title: t('settings.data.recovery'),
           screen: 'data-recovery',
           icon: <Folder size={24} />
         },
         {
-          title: 'Data Reset',
+          title: t('settings.data.reset'),
           icon: <RotateCcw size={24} color="red" />,
           danger: true,
           onPress: () => {
@@ -52,20 +54,20 @@ export default function BasicDataSettingsPage() {
       ]
     },
     {
-      title: 'Data Directory',
+      title: t('settings.data.data.title'),
       items: [
         {
-          title: 'App Data',
+          title: t('settings.data.app_data'),
           icon: <FolderOpen size={24} />,
           subtitle: 'My phone/Cherry'
         },
         {
-          title: 'App Logs',
+          title: t('settings.data.app_logs'),
           icon: <FileText size={24} />,
           subtitle: 'My phone/Cherry/Logs'
         },
         {
-          title: 'Clear Cache',
+          title: t('settings.data.clear_cache.button'),
           icon: <Trash2 size={24} color="red" />,
           danger: true,
           onPress: () => {
@@ -79,7 +81,7 @@ export default function BasicDataSettingsPage() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
-      <HeaderBar title="Basic Data Settings" onBackPress={() => navigation.goBack()} />
+      <HeaderBar title={t('settings.data.basic_title')} onBackPress={() => navigation.goBack()} />
 
       <ScrollView flex={1} backgroundColor="$background">
         <SettingContainer>

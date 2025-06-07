@@ -111,7 +111,13 @@
           "title": "Очистить кэш"
         },
         "data.title": "Каталог данных",
-        "title": "Настройки данных"
+        "title": "Настройки данных",
+        "basic_title": "Основные настройки данных",
+        "backup": "Резервное копирование данных",
+        "recovery": "Восстановление данных",
+        "reset": "Сброс данных",
+        "cloud_backup": "Настройки облачного резервного копирования",
+        "third_party": "Подключения к сторонним сервисам"
       },
       "models": {
         "default_model": "Модель по умолчанию",
@@ -162,7 +168,7 @@
           "balance_recharge": "Пополнение баланса",
           "free_bills": "Бесплатные счета"
         },
-        "api_host.placeholder": "[to be translated]:Please enter API host"
+        "api_host.placeholder": "Пожалуйста, введите API хост"
       },
       "proxy.title": "Адрес прокси",
       "theme.window.style.opaque": "Непрозрачное окно",
@@ -189,18 +195,18 @@
         "blacklist_placeholder": "Используйте следующий формат (разделение новой строкой)\nСопоставление шаблонов: *://*.example.com/*\nРегулярное выражение: /example\\.(net|org)/",
         "blacklist_description": "Результаты со следующих сайтов не будут отображаться в результатах поиска",
         "subscribe.title": "Подписка на чёрный список",
-        "api_service": "[to be translated]:API Service",
-        "api_host": "[to be translated]:API Host",
-        "api_host.placeholder": "[to be translated]:Please enter API host",
-        "api_key": "[to be translated]:API Key",
-        "api_key.placeholder": "[to be translated]:Please enter API key",
-        "api_key.get": "[to be translated]:Get API Key",
+        "api_service": "API Сервис",
+        "api_host": "API Хост",
+        "api_host.placeholder": "Пожалуйста, введите API хост",
+        "api_key": "API Ключ",
+        "api_key.placeholder": "Пожалуйста, введите API ключ",
+        "api_key.get": "Получить API ключ",
         "provider": {
           "free": {
-            "title": "[to be translated]:Free Service Providers"
+            "title": "Бесплатные поставщики услуг"
           },
           "api": {
-            "title": "[to be translated]:API Service Providers"
+            "title": "Поставщики API услуг"
           }
         }
       },
@@ -240,6 +246,30 @@
         "privacy.title": "Настройки конфиденциальности",
         "privacy.anonymous": "Анонимно сообщать об ошибках и статистике",
         "language.title": "Язык"
+      },
+      "webdav": {
+        "title": "WebDAV",
+        "config": {
+          "title": "Конфигурация WebDAV",
+          "host": "Хост WebDAV",
+          "host_placeholder": "http://localhost:8080",
+          "user": "Пользователь WebDAV",
+          "user_placeholder": "Пользователь WebDAV",
+          "password": "Пароль WebDAV",
+          "password_placeholder": "Пароль WebDAV",
+          "password_hint": "Должен быть не менее 8 символов",
+          "path": "Путь WebDAV",
+          "path_placeholder": "Путь WebDAV"
+        },
+        "backup": {
+          "title": "Настройки резервного копирования",
+          "to_webdav": "Резервное копирование в WebDAV",
+          "from_webdav": "Восстановление из WebDAV",
+          "auto_backup": "Автоматическое резервное копирование",
+          "slim_backup": "Компактное резервное копирование",
+          "max_backups": "Максимальное количество резервных копий",
+          "unlimited": "Без ограничений"
+        }
       }
     },
     "profile": {

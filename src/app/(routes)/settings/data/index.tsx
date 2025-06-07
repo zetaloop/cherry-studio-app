@@ -1,6 +1,7 @@
 import { ChevronRight, CloudUpload, FolderSearch2 } from '@tamagui/lucide-icons'
 import { useNavigation } from 'expo-router'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
@@ -23,24 +24,25 @@ interface SettingGroupConfig {
 export default function DataSettingsPage() {
   const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
+  const { t } = useTranslation()
 
   const settingsItems: SettingGroupConfig[] = [
     {
       title: ' ',
       items: [
         {
-          title: 'Basic Data Settings',
+          title: t('settings.data.basic_title'),
           screen: 'BasicDataSettings',
           icon: <FolderSearch2 size={24} />
         }
       ]
     },
     {
-      title: 'Cloud Backup Settings',
+      title: t('settings.data.cloud_backup'),
       items: [
         {
           title: 'WebDAV',
-          screen: 'webdav',
+          screen: 'WebDavPage',
           icon: <CloudUpload size={24} />
         },
         {
@@ -51,7 +53,7 @@ export default function DataSettingsPage() {
       ]
     },
     {
-      title: 'Third-party Connections',
+      title: t('settings.data.third_party'),
       items: [
         {
           title: 'Notion',
@@ -84,7 +86,7 @@ export default function DataSettingsPage() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
-      <HeaderBar title="Data Settings" onBackPress={() => navigation.goBack()} />
+      <HeaderBar title={t('settings.data.title')} onBackPress={() => navigation.goBack()} />
 
       <ScrollView flex={1} backgroundColor="$background">
         <SettingContainer>

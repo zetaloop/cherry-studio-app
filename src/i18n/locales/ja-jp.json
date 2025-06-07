@@ -111,7 +111,13 @@
           "title": "キャッシュをクリアする"
         },
         "data.title": "データディレクトリ",
-        "title": "データ設定"
+        "title": "データ設定",
+        "basic_title": "基本データ設定",
+        "backup": "データバックアップ",
+        "recovery": "データ復元",
+        "reset": "データリセット",
+        "cloud_backup": "クラウドバックアップ設定",
+        "third_party": "サードパーティ接続"
       },
       "models": {
         "default_model": "デフォルトモデル",
@@ -162,7 +168,7 @@
           "balance_recharge": "残高チャージ",
           "free_bills": "無料請求"
         },
-        "api_host.placeholder": "[to be translated]:Please enter API host"
+        "api_host.placeholder": "APIホストを入力してください"
       },
       "proxy.title": "プロキシ アドレス",
       "theme.window.style.opaque": "不透明ウィンドウ",
@@ -189,18 +195,18 @@
         "blacklist_placeholder": "以下の形式を使用してください（改行で区切る）\nパターンマッチング：*://*.example.com/*\n正規表現：/example\\.(net|org)/",
         "blacklist_description": "以下のウェブサイトからの結果は検索結果に表示されません",
         "subscribe.title": "ブラックリスト購読",
-        "api_service": "[to be translated]:API Service",
-        "api_host": "[to be translated]:API Host",
-        "api_host.placeholder": "[to be translated]:Please enter API host",
-        "api_key": "[to be translated]:API Key",
-        "api_key.placeholder": "[to be translated]:Please enter API key",
-        "api_key.get": "[to be translated]:Get API Key",
+        "api_service": "APIサービス",
+        "api_host": "APIホスト",
+        "api_host.placeholder": "APIホストを入力してください",
+        "api_key": "APIキー",
+        "api_key.placeholder": "APIキーを入力してください",
+        "api_key.get": "APIキーを取得",
         "provider": {
           "free": {
-            "title": "[to be translated]:Free Service Providers"
+            "title": "無料サービスプロバイダー"
           },
           "api": {
-            "title": "[to be translated]:API Service Providers"
+            "title": "APIサービスプロバイダー"
           }
         }
       },
@@ -240,6 +246,30 @@
         "privacy.title": "プライバシー設定",
         "privacy.anonymous": "エラーと統計を匿名で報告",
         "language.title": "言語"
+      },
+      "webdav": {
+        "title": "WebDAV",
+        "config": {
+          "title": "WebDAV 設定",
+          "host": "WebDAV ホスト",
+          "host_placeholder": "http://localhost:8080",
+          "user": "WebDAV ユーザー",
+          "user_placeholder": "WebDAV ユーザー",
+          "password": "WebDAV パスワード",
+          "password_placeholder": "WebDAV パスワード",
+          "password_hint": "8文字以上である必要があります",
+          "path": "WebDAV パス",
+          "path_placeholder": "WebDAV パス"
+        },
+        "backup": {
+          "title": "バックアップ設定",
+          "to_webdav": "WebDAV にバックアップ",
+          "from_webdav": "WebDAV から復元",
+          "auto_backup": "自動バックアップ",
+          "slim_backup": "スリムバックアップ",
+          "max_backups": "最大バックアップ数",
+          "unlimited": "無制限"
+        }
       }
     },
     "profile": {
