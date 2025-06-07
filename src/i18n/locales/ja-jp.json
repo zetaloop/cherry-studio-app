@@ -30,7 +30,8 @@
           "tools": "ツール",
           "language": "言語"
         },
-        "button.chat": "今すぐチャット"
+        "button.chat": "今すぐチャット",
+        "popular": "人気のエージェント"
       }
     },
     "assistants": {
@@ -89,7 +90,10 @@
       "search_placeholder": "検索...",
       "prompt": "プロンプト",
       "preset": "プリセット",
-      "tool": "ツール"
+      "tool": "ツール",
+      "added": "追加済み",
+      "visit": "訪問",
+      "see_all": "すべて表示"
     },
     "history": {
       "topics.empty": "トピックが見つかりません。",
@@ -157,7 +161,8 @@
           "login": "ログイン",
           "balance_recharge": "残高チャージ",
           "free_bills": "無料請求"
-        }
+        },
+        "api_host.placeholder": "[to be translated]:Please enter API host"
       },
       "proxy.title": "プロキシ アドレス",
       "theme.window.style.opaque": "不透明ウィンドウ",
@@ -183,7 +188,21 @@
         "blacklist.title": "ブラックリスト",
         "blacklist_placeholder": "以下の形式を使用してください（改行で区切る）\nパターンマッチング：*://*.example.com/*\n正規表現：/example\\.(net|org)/",
         "blacklist_description": "以下のウェブサイトからの結果は検索結果に表示されません",
-        "subscribe.title": "ブラックリスト購読"
+        "subscribe.title": "ブラックリスト購読",
+        "api_service": "[to be translated]:API Service",
+        "api_host": "[to be translated]:API Host",
+        "api_host.placeholder": "[to be translated]:Please enter API host",
+        "api_key": "[to be translated]:API Key",
+        "api_key.placeholder": "[to be translated]:Please enter API key",
+        "api_key.get": "[to be translated]:Get API Key",
+        "provider": {
+          "free": {
+            "title": "[to be translated]:Free Service Providers"
+          },
+          "api": {
+            "title": "[to be translated]:API Service Providers"
+          }
+        }
       },
       "modelAndService": "AIモデル＆サービス",
       "dataAndSecurity": "データ & セキュリティ",

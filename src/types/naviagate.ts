@@ -10,6 +10,8 @@ export type RootStackParamList = {
   ProvidersPage: undefined
   AboutSettings: undefined
   GeneralSettings: undefined
+  ThemeSettingsPage: undefined
+  LanguageChangePage: undefined
   WebSearchSettings: undefined
   ProviderListPage: undefined
   ProviderSettingsPage: { providerId: string }
