@@ -30,7 +30,8 @@
           "tools": "Tools",
           "language": "Language"
         },
-        "button.chat": "Chat Now"
+        "button.chat": "Chat Now",
+        "popular": "Popular Agents"
       }
     },
     "assistants": {
@@ -91,7 +92,8 @@
       "preset": "Preset",
       "tool": "Tool",
       "added": " Added",
-      "visit": "Visit"
+      "visit": "Visit",
+      "see_all": "See All"
     },
     "history": {
       "topics.empty": " No topics found",
