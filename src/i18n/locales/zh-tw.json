@@ -111,7 +111,13 @@
           "title": "清除快取"
         },
         "data.title": "資料目錄",
-        "title": "資料設定"
+        "title": "資料設定",
+        "basic_title": "基礎資料設定",
+        "backup": "資料備份",
+        "recovery": "資料恢復",
+        "reset": "資料重置",
+        "cloud_backup": "雲端備份設定",
+        "third_party": "第三方連接"
       },
       "models": {
         "default_model": "預設模型",
@@ -162,7 +168,7 @@
           "balance_recharge": "餘額充值",
           "free_bills": "免費帳單"
         },
-        "api_host.placeholder": "[to be translated]:Please enter API host"
+        "api_host.placeholder": "請輸入 API 主機"
       },
       "proxy.title": "代理地址",
       "theme.window.style.opaque": "不透明窗口",
@@ -189,18 +195,18 @@
         "blacklist_placeholder": "請使用以下格式（按行分隔）\n模式匹配：*://*.example.com/*\n正則表達式：/example\\.(net|org)/",
         "blacklist_description": "來自以下網站的結果將不會出現在搜尋結果中",
         "subscribe.title": "黑名單訂閱",
-        "api_service": "[to be translated]:API Service",
-        "api_host": "[to be translated]:API Host",
-        "api_host.placeholder": "[to be translated]:Please enter API host",
-        "api_key": "[to be translated]:API Key",
-        "api_key.placeholder": "[to be translated]:Please enter API key",
-        "api_key.get": "[to be translated]:Get API Key",
+        "api_service": "API 服務",
+        "api_host": "API 主機",
+        "api_host.placeholder": "請輸入 API 主機",
+        "api_key": "API 金鑰",
+        "api_key.placeholder": "請輸入 API 金鑰",
+        "api_key.get": "獲取 API 金鑰",
         "provider": {
           "free": {
-            "title": "[to be translated]:Free Service Providers"
+            "title": "免費服務提供商"
           },
           "api": {
-            "title": "[to be translated]:API Service Providers"
+            "title": "API 服務提供商"
           }
         }
       },
@@ -240,6 +246,30 @@
         "privacy.title": "隱私設定",
         "privacy.anonymous": "匿名回報錯誤和統計",
         "language.title": "語言"
+      },
+      "webdav": {
+        "title": "WebDAV",
+        "config": {
+          "title": "WebDAV 設定",
+          "host": "WebDAV 主機",
+          "host_placeholder": "http://localhost:8080",
+          "user": "WebDAV 使用者",
+          "user_placeholder": "WebDAV 使用者",
+          "password": "WebDAV 密碼",
+          "password_placeholder": "WebDAV 密碼",
+          "password_hint": "至少需要 8 個字符",
+          "path": "WebDAV 路徑",
+          "path_placeholder": "WebDAV 路徑"
+        },
+        "backup": {
+          "title": "備份設定",
+          "to_webdav": "備份到 WebDAV",
+          "from_webdav": "從 WebDAV 還原",
+          "auto_backup": "自動備份",
+          "slim_backup": "精簡備份",
+          "max_backups": "最大備份數",
+          "unlimited": "無限制"
+        }
       }
     },
     "profile": {

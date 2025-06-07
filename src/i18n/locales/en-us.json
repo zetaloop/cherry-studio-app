@@ -153,7 +153,13 @@
           "title": "Clear Cache"
         },
         "data.title": "Data Directory",
-        "title": "Data Settings"
+        "title": "Data Settings",
+        "basic_title": "Basic Data Settings",
+        "backup": "Data Backup",
+        "recovery": "Data Recovery",
+        "reset": "Data Reset",
+        "cloud_backup": "Cloud Backup Settings",
+        "third_party": "Third-party Connections"
       },
       "models": {
         "default_model": "Default Model",
@@ -258,6 +264,30 @@
         "privacy.title": "Privacy Settings",
         "privacy.anonymous": "Anonymous report errors and statistics",
         "language.title": "Language"
+      },
+      "webdav": {
+        "title": "WebDAV",
+        "config": {
+          "title": "WebDAV Config",
+          "host": "WebDAV Host",
+          "host_placeholder": "http://localhost:8080",
+          "user": "WebDAV User",
+          "user_placeholder": "WebDAV User",
+          "password": "WebDAV Password",
+          "password_placeholder": "WebDAV Password",
+          "password_hint": "Must be at least 8 characters",
+          "path": "WebDAV Path",
+          "path_placeholder": "WebDAV Path"
+        },
+        "backup": {
+          "title": "Backup Settings",
+          "to_webdav": "Backup to WebDAV",
+          "from_webdav": "Restore from WebDAV",
+          "auto_backup": "Auto Backup",
+          "slim_backup": "Slim Backup",
+          "max_backups": "Maximum Backups",
+          "unlimited": "Unlimited"
+        }
       }
     },
     "profile": {

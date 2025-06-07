@@ -6,6 +6,8 @@ export type RootStackParamList = {
   Settings: undefined
   DataSettings: undefined
   BasicDataSettings: undefined
+  WebDavPage: undefined
+  WebDavConfig: undefined
   ModelSettings: undefined
   ProvidersPage: undefined
   AboutSettings: undefined
