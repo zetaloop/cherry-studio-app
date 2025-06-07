@@ -134,6 +134,15 @@ const WEB_SEARCH_PROVIDER_ICONS = {
   tavily: require('@/assets/images/websearchIcons/tavily.png')
 }
 
+const DATA_BACKUP_ICONS = {
+  joplin: require('@/assets/images/dataIcons/joplin.png'),
+  notion: require('@/assets/images/dataIcons/notion.png'),
+  nutstore: require('@/assets/images/dataIcons/nutstore.png'),
+  obsidian: require('@/assets/images/dataIcons/obsidian.png'),
+  siyuan: require('@/assets/images/dataIcons/siyuan.png'),
+  yuque: require('@/assets/images/dataIcons/yuque.png')
+}
+
 // 添加缓存
 const modelIconCache = new Map<string, any>()
 const providerIconCache = new Map<string, any>()
@@ -207,6 +216,31 @@ export function getWebSearchProviderIcon(providerId: string, isDark: boolean): a
 
     if (regex.test(providerId)) {
       result = webSearchIcons[key as keyof typeof webSearchIcons]
+      break
+    }
+  }
+
+  // 缓存结果
+  providerIconCache.set(cacheKey, result)
+  return result
+}
+
+export function getDataBackupIcon(providerId: string, isDark: boolean): any {
+  const cacheKey = `${providerId}-${isDark}`
+
+  // 检查缓存
+  if (providerIconCache.has(cacheKey)) {
+    return providerIconCache.get(cacheKey)
+  }
+
+  const dataBackupIcons = DATA_BACKUP_ICONS
+  let result = null
+
+  for (const key in dataBackupIcons) {
+    const regex = new RegExp(key, 'i')
+
+    if (regex.test(providerId)) {
+      result = dataBackupIcons[key as keyof typeof dataBackupIcons]
       break
     }
   }
