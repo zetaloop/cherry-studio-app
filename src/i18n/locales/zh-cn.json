@@ -30,7 +30,8 @@
           "tools": "工具",
           "language": "语言"
         },
-        "button.chat": "立即对话"
+        "button.chat": "立即对话",
+        "popular": "热门智能体"
       }
     },
     "assistants": {
@@ -89,7 +90,10 @@
       "search_placeholder": "搜索...",
       "prompt": "提示词",
       "preset": "预设",
-      "tool": "工具"
+      "tool": "工具",
+      "added": "已添加",
+      "visit": "访问",
+      "see_all": "查看全部"
     },
     "history": {
       "topics.empty": "未找到主题",
@@ -157,7 +161,8 @@
           "login": "登录",
           "balance_recharge": "余额充值",
           "free_bills": "免费额度"
-        }
+        },
+        "api_host.placeholder": "[to be translated]:Please enter API host"
       },
       "proxy.title": "代理地址",
       "theme.window.style.opaque": "不透明窗口",
@@ -183,7 +188,21 @@
         "blacklist.title": "黑名单",
         "blacklist_placeholder": "请使用以下格式（按行分隔）\n模式匹配：*://*.example.com/*\n正则表达式：/example\\.(net|org)/",
         "blacklist_description": "来自以下网站的结果将不会出现在搜索结果中",
-        "subscribe.title": "黑名单订阅"
+        "subscribe.title": "黑名单订阅",
+        "api_service": "[to be translated]:API Service",
+        "api_host": "[to be translated]:API Host",
+        "api_host.placeholder": "[to be translated]:Please enter API host",
+        "api_key": "[to be translated]:API Key",
+        "api_key.placeholder": "[to be translated]:Please enter API key",
+        "api_key.get": "[to be translated]:Get API Key",
+        "provider": {
+          "free": {
+            "title": "[to be translated]:Free Service Providers"
+          },
+          "api": {
+            "title": "[to be translated]:API Service Providers"
+          }
+        }
       },
       "modelAndService": "AI模型与服务",
       "dataAndSecurity": "数据与安全",

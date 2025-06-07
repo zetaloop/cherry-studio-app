@@ -30,7 +30,8 @@
           "tools": "Инструменты",
           "language": "Язык"
         },
-        "button.chat": "Чат сейчас"
+        "button.chat": "Чат сейчас",
+        "popular": "Популярные агенты"
       }
     },
     "assistants": {
@@ -89,7 +90,10 @@
       "search_placeholder": "Поиск...",
       "prompt": "Промпт",
       "preset": "Пресет",
-      "tool": "Инструмент"
+      "tool": "Инструмент",
+      "added": "Добавлено",
+      "visit": "Посетить",
+      "see_all": "Показать все"
     },
     "history": {
       "topics.empty": "Темы не найдены",
@@ -157,7 +161,8 @@
           "login": "Войти",
           "balance_recharge": "Пополнение баланса",
           "free_bills": "Бесплатные счета"
-        }
+        },
+        "api_host.placeholder": "[to be translated]:Please enter API host"
       },
       "proxy.title": "Адрес прокси",
       "theme.window.style.opaque": "Непрозрачное окно",
@@ -183,7 +188,21 @@
         "blacklist.title": "Чёрный список",
         "blacklist_placeholder": "Используйте следующий формат (разделение новой строкой)\nСопоставление шаблонов: *://*.example.com/*\nРегулярное выражение: /example\\.(net|org)/",
         "blacklist_description": "Результаты со следующих сайтов не будут отображаться в результатах поиска",
-        "subscribe.title": "Подписка на чёрный список"
+        "subscribe.title": "Подписка на чёрный список",
+        "api_service": "[to be translated]:API Service",
+        "api_host": "[to be translated]:API Host",
+        "api_host.placeholder": "[to be translated]:Please enter API host",
+        "api_key": "[to be translated]:API Key",
+        "api_key.placeholder": "[to be translated]:Please enter API key",
+        "api_key.get": "[to be translated]:Get API Key",
+        "provider": {
+          "free": {
+            "title": "[to be translated]:Free Service Providers"
+          },
+          "api": {
+            "title": "[to be translated]:API Service Providers"
+          }
+        }
       },
       "modelAndService": "Модели и сервисы ИИ",
       "dataAndSecurity": "Данные и безопасность",
