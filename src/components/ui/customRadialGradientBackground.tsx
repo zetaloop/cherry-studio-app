@@ -4,21 +4,24 @@ import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg'
 
 interface CustomRadialGradientBackgroundProps {
   children?: React.ReactNode
+  style?: {
+    height?: number
+    width?: number
+    radius?: number
+  }
 }
 
-export default function CustomRadialGradientBackground({ children }: CustomRadialGradientBackgroundProps) {
-  const svgWidth = 148
-  const svgHeight = 217
-  const rectWidth = 148
-  const rectHeight = 216
+export default function CustomRadialGradientBackground({ children, style }: CustomRadialGradientBackgroundProps) {
   const rectY = 0.0717773
-  const rectRx = '20'
+  const rectRadius = style?.radius?.toString() || '20'
+
   return (
-    <View style={[{ width: svgWidth, height: svgHeight }]}>
+    <View style={[{ flex: 1 }, style]}>
       <Svg
-        height={svgHeight}
-        width={svgWidth}
-        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        height="100%"
+        width="100%"
+        viewBox="0 0 148 217"
+        preserveAspectRatio="none"
         style={StyleSheet.absoluteFillObject}>
         <Defs>
           {/* Gradient definitions based on the provided SVG */}
@@ -71,18 +74,50 @@ export default function CustomRadialGradientBackground({ children }: CustomRadia
           </RadialGradient>
         </Defs>
 
-        {/* Render all layers */}
+        {/* Render all layers with percentage */}
         {/* Base layer */}
-        <Rect y={rectY} width={rectWidth} height={rectHeight} rx={rectRx} fill="#898989" fillOpacity="0.05" />
+        <Rect y={rectY} width="100%" height="100%" rx={rectRadius} ry={rectRadius} fill="#898989" fillOpacity="0.05" />
         {/* Gradient layers */}
-        <Rect y={rectY} width={rectWidth} height={rectHeight} rx={rectRx} fill="url(#paint0)" fillOpacity="0.2" />
-        <Rect y={rectY} width={rectWidth} height={rectHeight} rx={rectRx} fill="url(#paint1)" fillOpacity="0.2" />
-        <Rect y={rectY} width={rectWidth} height={rectHeight} rx={rectRx} fill="url(#paint2)" fillOpacity="0.2" />
-        <Rect y={rectY} width={rectWidth} height={rectHeight} rx={rectRx} fill="url(#paint3)" fillOpacity="0.2" />
+        <Rect
+          y={rectY}
+          width="100%"
+          height="100%"
+          rx={rectRadius}
+          ry={rectRadius}
+          fill="url(#paint0)"
+          fillOpacity="0.2"
+        />
+        <Rect
+          y={rectY}
+          width="100%"
+          height="100%"
+          rx={rectRadius}
+          ry={rectRadius}
+          fill="url(#paint1)"
+          fillOpacity="0.2"
+        />
+        <Rect
+          y={rectY}
+          width="100%"
+          height="100%"
+          rx={rectRadius}
+          ry={rectRadius}
+          fill="url(#paint2)"
+          fillOpacity="0.2"
+        />
+        <Rect
+          y={rectY}
+          width="100%"
+          height="100%"
+          rx={rectRadius}
+          ry={rectRadius}
+          fill="url(#paint3)"
+          fillOpacity="0.2"
+        />
       </Svg>
 
       {/* 渲染传入的子组件 */}
-      <View style={[{ top: rectY, width: rectWidth, height: rectHeight }]}>{children}</View>
+      <View style={[StyleSheet.absoluteFillObject, { top: rectY }]}>{children}</View>
     </View>
   )
 }
