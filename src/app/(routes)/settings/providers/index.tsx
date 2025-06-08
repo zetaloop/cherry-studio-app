@@ -5,10 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, useTheme, YStack } from 'tamagui'
 
-import { SettingContainer, SettingGroupTitle } from '@/components/settings'
+import { SettingContainer, SettingGroup, SettingGroupTitle } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { EmptyModelView } from '@/components/settings/providers/emptyModelView'
 import { ProviderItem } from '@/components/settings/providers/providerItem'
+import CustomRadialGradientBackground from '@/components/ui/customRadialGradientBackground'
 import { SearchInput } from '@/components/ui/searchInput'
 import { useAllProviders } from '@/hooks/use-providers'
 import { NavigationProps } from '@/types/naviagate'
@@ -45,21 +46,19 @@ export default function ProvidersPage() {
         {providers.length === 0 ? (
           <EmptyModelView onAddModel={onAddProvider} />
         ) : (
-          <YStack gap={8} paddingVertical={8}>
+          <YStack flex={1} gap={8} paddingVertical={8}>
             <SettingGroupTitle>{t('settings.provider.title')}</SettingGroupTitle>
-            <ScrollView
-              backgroundColor="$gray2"
-              borderRadius={9}
-              contentContainerStyle={{
-                paddingTop: 2
-              }}>
-              {/* 此处providers应该显示key检测通过 但可能未开启 */}
-              {providers
-                .filter(p => p.checked)
-                .map(p => (
-                  <ProviderItem key={p.id} provider={p} mode="enabled" />
-                ))}
-            </ScrollView>
+            <CustomRadialGradientBackground style={{ radius: 2 }}>
+              <ScrollView backgroundColor="$colorTransparent">
+                <SettingGroup>
+                  {providers
+                    .filter(p => p.checked)
+                    .map(p => (
+                      <ProviderItem key={p.id} provider={p} mode="enabled" />
+                    ))}
+                </SettingGroup>
+              </ScrollView>
+            </CustomRadialGradientBackground>
           </YStack>
         )}
       </SettingContainer>

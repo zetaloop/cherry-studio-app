@@ -10,6 +10,7 @@ import { SettingContainer, SettingGroup } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { AddProviderSheet } from '@/components/settings/providers/addProviderSheet'
 import { ProviderItem } from '@/components/settings/providers/providerItem'
+import CustomRadialGradientBackground from '@/components/ui/customRadialGradientBackground'
 import { SearchInput } from '@/components/ui/searchInput'
 import { useAllProviders } from '@/hooks/use-providers'
 
@@ -19,7 +20,7 @@ export default function ProviderListPage() {
   const navigation = useNavigation()
 
   const bottomSheetRef = useRef<BottomSheet>(null)
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(true)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
   const { providers } = useAllProviders()
   const [searchQuery, setSearchQuery] = useState('')
@@ -72,13 +73,15 @@ export default function ProviderListPage() {
 
         <YStack flex={1} gap={8}>
           <Text>{t('settings.provider.title')}</Text>
-          <ScrollView>
-            <SettingGroup>
-              {providers.map(p => (
-                <ProviderItem key={p.id} provider={p} mode="checked" />
-              ))}
-            </SettingGroup>
-          </ScrollView>
+          <CustomRadialGradientBackground style={{ radius: 2 }}>
+            <ScrollView backgroundColor="$colorTransparent">
+              <SettingGroup>
+                {providers.map(p => (
+                  <ProviderItem key={p.id} provider={p} mode="checked" />
+                ))}
+              </SettingGroup>
+            </ScrollView>
+          </CustomRadialGradientBackground>
         </YStack>
       </SettingContainer>
 

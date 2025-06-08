@@ -49,7 +49,8 @@ export const SettingRow = styled(XStack, {
   alignItems: 'center',
   paddingVertical: 12,
   paddingLeft: 16,
-  paddingRight: 20
+  paddingRight: 20,
+  backgroundColor: '$colorTransparent'
 })
 
 export const SettingRowTitle = styled(Text, {
@@ -69,10 +70,11 @@ export const SettingHelpText = styled(Text, {
 })
 
 export const SettingGroup = styled(YStack, {
+  flex: 1,
   gap: 8,
   paddingVertical: 8,
   borderRadius: 9,
-  backgroundColor: '$gray2'
+  backgroundColor: '$colorTransparent'
 })
 
 export const SettingGroupTitle = styled(Text, {
