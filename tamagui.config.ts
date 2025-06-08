@@ -21,7 +21,13 @@ const extendedConfig = {
       backgroundPurple: 'rgba(114, 105, 255, 0.2)',
       foregroundPurple: 'rgba(114, 105, 255, 1)',
       backgroundOrange: 'rgba(242, 136, 57, 0.2)',
-      foregroundOrange: 'rgba(242, 136, 57, 1)'
+      foregroundOrange: 'rgba(242, 136, 57, 1)',
+      backgroundYellow: 'rgba(255, 202, 0, 0.2)',
+      foregroundYellow: 'rgba(255, 202, 0, 1)',
+      backgroundDarkPurple: 'rgba(56, 67, 255, 0.2)',
+      foregroundDarkPurple: 'rgba(56, 67, 255, 1)',
+      backgroundGray: 'rgba(135, 142, 168, 0.2)',
+      foregroundGray: 'rgba(135, 142, 168, 1)'
     }
   }
 }

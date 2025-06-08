@@ -1,4 +1,4 @@
-import { Eye, Globe, Lightbulb, Wrench } from '@tamagui/lucide-icons'
+import { CircleDollarSign, Eye, Globe, Languages, Lightbulb, Repeat2, Wrench } from '@tamagui/lucide-icons'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, XStack } from 'tamagui'
@@ -77,8 +77,8 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (isEmbeddingModel(model)) {
       result.push({
         key: 'embedding',
-        color: '$foregroundOrange',
-        icon: null,
+        color: '$foregroundDarkPurple',
+        icon: <Languages size={size} color="$foregroundDarkPurple" />,
         label: t('models.type.embedding')
       })
     }
@@ -86,8 +86,8 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (showFree && isFreeModel(model)) {
       result.push({
         key: 'free',
-        color: '$foregroundGreen',
-        icon: null,
+        color: '$foregroundYellow',
+        icon: <CircleDollarSign size={size} color="$foregroundYellow" />,
         label: t('models.type.free')
       })
     }
@@ -95,8 +95,8 @@ export const ModelTags: React.FC<ModelTagsProps> = ({
     if (isRerankModel(model)) {
       result.push({
         key: 'rerank',
-        color: '$foregroundBlue',
-        icon: null,
+        color: '$foregroundGray',
+        icon: <Repeat2 size={size} color="$foregroundGray" />,
         label: t('models.type.rerank')
       })
     }
