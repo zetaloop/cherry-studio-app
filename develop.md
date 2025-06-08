@@ -2,24 +2,37 @@
 
 ## 数据迁移相关
 
-1. 合并Assistant和Agent为Agent，Agent数据类型与原Assistant一致
+1. 合并Assistant和Agent为Assistant
 
 ## TODO
 
-- [x] provider logo light mode
-- [ ] logo performance problem
-- [ ] manage model page optimize performance
-- [ ] model select component optimize performance
-- [x] drawer disable swipeEnabled stack screen except home
-- [ ] model select component need change style
-- [ ] sheet keyboard cover input
-- [ ] change active tab style
-- [ ] fix KeyboardAvoidingView bug
-- [ ] fix scrollview bug(agent market) 有时候无法滚动
-- [ ] fix scrollview bug(agent item sheet) scrollview占据空间不固定
+### UI
 
-## database
+- [ ] 顶部助手栏
+- [ ] Chat/Message相关界面
+- [ ] 背景上色
 
-### Expo SQLite + Drizzle
+## Problems
 
-### Redux
+### 首页
+
+- [ ] 输入框和键盘动画不跟手
+
+### Model Provider
+
+- [ ] 搜索模型时键盘挡住显示区域
+- [ ] 添加模型时键盘挡住显示区域
+- [ ] 添加服务商时键盘挡住显示区域
+- [ ] 模型管理界面Tab无法改变样式
+
+### Default Model
+
+- [ ] 模型下拉框样式
+
+### Websearch
+
+- [ ] 黑名单键盘无法自动上移
+
+### Assistant Market
+
+- [ ] Bottom Sheet UI问题
