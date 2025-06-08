@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { KeyboardAvoidingView, Platform } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, useTheme, YStack } from 'tamagui'
 
@@ -46,34 +47,36 @@ export default function WebSearchSettingsPage() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
-      <HeaderBar title={t('settings.websearch.title')} />
-      <ScrollView flex={1}>
-        <SettingContainer>
-          <YStack gap={24} flex={1}>
-            <ProviderSection />
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+        <HeaderBar title={t('settings.websearch.title')} />
+        <ScrollView flex={1}>
+          <SettingContainer>
+            <YStack gap={24} flex={1}>
+              <ProviderSection />
 
-            <GeneralSettings
-              searchWithDates={searchWithDates}
-              onSearchWithDatesChange={setSearchWithDates}
-              overrideSearchService={overrideSearchService}
-              onOverrideSearchServiceChange={setOverrideSearchService}
-              searchCount={searchCount}
-              onSearchCountChange={handleSearchCountChange}
-              contentLimit={contentLimit}
-              onContentLimitChange={setContentLimit}
-            />
+              <GeneralSettings
+                searchWithDates={searchWithDates}
+                onSearchWithDatesChange={setSearchWithDates}
+                overrideSearchService={overrideSearchService}
+                onOverrideSearchServiceChange={setOverrideSearchService}
+                searchCount={searchCount}
+                onSearchCountChange={handleSearchCountChange}
+                contentLimit={contentLimit}
+                onContentLimitChange={setContentLimit}
+              />
 
-            <BlacklistSection
-              blacklistText={blacklistText}
-              onBlacklistTextChange={setBlacklistText}
-              subscriptions={blacklistSubscription}
-              onRefreshSubscription={handleRefreshSubscription}
-              onRefreshAllSubscriptions={handleRefreshAllSubscriptions}
-              onAddSubscription={handleAddSubscription}
-            />
-          </YStack>
-        </SettingContainer>
-      </ScrollView>
+              <BlacklistSection
+                blacklistText={blacklistText}
+                onBlacklistTextChange={setBlacklistText}
+                subscriptions={blacklistSubscription}
+                onRefreshSubscription={handleRefreshSubscription}
+                onRefreshAllSubscriptions={handleRefreshAllSubscriptions}
+                onAddSubscription={handleAddSubscription}
+              />
+            </YStack>
+          </SettingContainer>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }

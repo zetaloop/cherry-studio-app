@@ -57,6 +57,7 @@ export default function AboutPage() {
               </YStack>
             </SettingRow>
           </SettingGroup>
+
           <SettingGroup>
             <SettingRow onPress={async () => await openLink('https://github.com/CherryHQ/cherry-studio-app/releases/')}>
               <XStack alignItems="center" gap={10}>

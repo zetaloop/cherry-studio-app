@@ -70,7 +70,7 @@ export const SettingHelpText = styled(Text, {
 })
 
 export const SettingGroup = styled(YStack, {
-  flex: 1,
+  // flex: 1,
   gap: 8,
   paddingVertical: 8,
   borderRadius: 9,
