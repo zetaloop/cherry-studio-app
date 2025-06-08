@@ -1,4 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
 import { Minus, Plus } from '@tamagui/lucide-icons'
 import { debounce, groupBy, uniqBy } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -46,9 +47,9 @@ export default function ManageModelsPage() {
   const [actualFilterType, setActualFilterType] = useState<string>('all')
 
   const { providerId } = route.params
-  const { provider, models } = useProvider(providerId)
+  const { provider, models: providerModels } = useProvider(providerId)
 
-  const isModelInCurrentProvider = useMemo(() => getIsModelInProvider(models), [models])
+  const isModelInCurrentProvider = useMemo(() => getIsModelInProvider(providerModels), [providerModels])
   const isAllModelsInCurrentProvider = useMemo(
     () => getIsAllInProvider(isModelInCurrentProvider),
     [isModelInCurrentProvider]
@@ -187,6 +188,57 @@ export default function ManageModelsPage() {
     setListModels(AIHUBMIX_MODELS)
   }, [])
 
+  const renderModelGroupItem = useCallback(
+    ({ item: [groupName, currentModels], index }: ListRenderItemInfo<[string, Model[]]>) => (
+      <ModelGroup
+        groupName={groupName}
+        models={currentModels}
+        index={index}
+        showModelCount={true}
+        renderGroupButton={groupButtonModels => (
+          <Button
+            size={20}
+            chromeless
+            icon={
+              isAllModelsInCurrentProvider(groupButtonModels) ? (
+                <Minus size={14} borderRadius={99} backgroundColor="$backgroundRed" color="$foregroundRed" />
+              ) : (
+                <Plus size={14} borderRadius={99} backgroundColor="$backgroundGreen" color="$foregroundGreen" />
+              )
+            }
+            onPress={
+              isAllModelsInCurrentProvider(groupButtonModels)
+                ? () => onRemoveAllModels(groupButtonModels)
+                : () => onAddAllModels(groupButtonModels)
+            }
+          />
+        )}
+        renderModelButton={model => (
+          <Button
+            size={14}
+            chromeless
+            icon={
+              isModelInCurrentProvider(model.id) ? (
+                <Minus size={14} borderRadius={99} backgroundColor="$backgroundRed" color="$foregroundRed" />
+              ) : (
+                <Plus size={14} borderRadius={99} backgroundColor="$backgroundGreen" color="$foregroundGreen" />
+              )
+            }
+            onPress={isModelInCurrentProvider(model.id) ? () => onRemoveModel(model) : () => onAddModel(model)}
+          />
+        )}
+      />
+    ),
+    [
+      isAllModelsInCurrentProvider,
+      isModelInCurrentProvider,
+      onAddAllModels,
+      onAddModel,
+      onRemoveAllModels,
+      onRemoveModel
+    ]
+  )
+
   return (
     <SafeAreaView
       edges={['top', 'left', 'right']}
@@ -224,69 +276,12 @@ export default function ManageModelsPage() {
             <YStack flex={1}>
               {sortedModelGroups.length > 0 ? (
                 <Accordion overflow="hidden" type="multiple">
-                  {sortedModelGroups.map(([groupName, models], index) => (
-                    <ModelGroup
-                      key={groupName}
-                      groupName={groupName}
-                      models={models}
-                      index={index}
-                      showModelCount={true}
-                      renderGroupButton={models => (
-                        <Button
-                          size={20}
-                          chromeless
-                          icon={
-                            isAllModelsInCurrentProvider(models) ? (
-                              <Minus
-                                size={14}
-                                borderRadius={99}
-                                backgroundColor="$backgroundRed"
-                                color="$foregroundRed"
-                              />
-                            ) : (
-                              <Plus
-                                size={14}
-                                borderRadius={99}
-                                backgroundColor="$backgroundGreen"
-                                color="$foregroundGreen"
-                              />
-                            )
-                          }
-                          onPress={
-                            isAllModelsInCurrentProvider(models)
-                              ? () => onRemoveAllModels(models)
-                              : () => onAddAllModels(models)
-                          }
-                        />
-                      )}
-                      renderModelButton={model => (
-                        <Button
-                          size={14}
-                          chromeless
-                          icon={
-                            isModelInCurrentProvider(model.id) ? (
-                              <Minus
-                                size={14}
-                                borderRadius={99}
-                                backgroundColor="$backgroundRed"
-                                color="$foregroundRed"
-                              />
-                            ) : (
-                              <Plus
-                                size={14}
-                                borderRadius={99}
-                                backgroundColor="$backgroundGreen"
-                                color="$foregroundGreen"
-                              />
-                            )
-                          }
-                          onPress={
-                            isModelInCurrentProvider(model.id) ? () => onRemoveModel(model) : () => onAddModel(model)
-                          }
-                        />
-                      )}
-                    />
-                  ))}
+                  <FlashList
+                    data={sortedModelGroups}
+                    renderItem={renderModelGroupItem}
+                    keyExtractor={([groupName]) => groupName}
+                    estimatedItemSize={60} // 您可能需要根据 ModelGroup 折叠时的高度进行调整
+                  />
                 </Accordion>
               ) : (
                 <Text textAlign="center" color="$gray10" paddingVertical={24}>
