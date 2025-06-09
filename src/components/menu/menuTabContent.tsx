@@ -3,7 +3,6 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ScrollView, Text, XStack, YStack } from 'tamagui'
 
-import { SettingDivider } from '@/components/settings'
 import { SearchInput } from '@/components/ui/searchInput'
 
 interface MenuTabContentProps {
@@ -19,7 +18,6 @@ export function MenuTabContent({ searchPlaceholder, title, onSeeAllPress, childr
   return (
     <YStack flex={1} gap={10}>
       <SearchInput placeholder={searchPlaceholder} />
-      <SettingDivider />
       <ScrollView
         flex={1}
         contentContainerStyle={{
