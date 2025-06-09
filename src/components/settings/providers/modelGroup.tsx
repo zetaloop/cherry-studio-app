@@ -31,7 +31,6 @@ export function ModelGroup({
         alignItems="center"
         paddingVertical={12}
         paddingHorizontal={16}
-        backgroundColor="rgba(23, 23, 27, 1)"
         borderRadius={9}
         borderBottomLeftRadius={0}
         borderBottomRightRadius={0}>
@@ -61,11 +60,7 @@ export function ModelGroup({
       </Accordion.Trigger>
 
       <Accordion.HeightAnimator animation="quick">
-        <Accordion.Content
-          exitStyle={{ opacity: 0 }}
-          backgroundColor="rgba(23, 23, 27, 1)"
-          borderBottomLeftRadius={9}
-          borderBottomRightRadius={9}>
+        <Accordion.Content exitStyle={{ opacity: 0 }} borderBottomLeftRadius={9} borderBottomRightRadius={9}>
           <YStack flex={1} width="100%" gap={8}>
             {models.map(model => (
               <XStack
