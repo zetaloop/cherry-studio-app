@@ -2,8 +2,7 @@ import OpenAI from 'openai'
 
 import { Message } from './message'
 
-// Assistant -> Agent
-export type Agent = {
+export type Assistant = {
   id: string
   name: string
   prompt: string
@@ -14,10 +13,10 @@ export type Agent = {
   emoji?: string
   description?: string
   model?: Model
-  settings?: Partial<AgentSettings>
+  settings?: Partial<AssistantSettings>
 }
 
-export type AgentSettings = {
+export type AssistantSettings = {
   contextCount: number
   temperature: number
   topP: number
@@ -26,13 +25,13 @@ export type AgentSettings = {
   streamOutput: boolean
   hideMessages: boolean
   defaultModel?: Model
-  customParameters?: AgentSettingCustomParameters[]
+  customParameters?: AssistantSettingCustomParameters[]
   reasoning_effort?: ReasoningEffortOptions
   qwenThinkMode?: boolean
   toolUseMode?: 'function' | 'prompt'
 }
 
-export type AgentSettingCustomParameters = {
+export type AssistantSettingCustomParameters = {
   name: string
   value: string | number | boolean | object
   type: 'string' | 'number' | 'boolean' | 'json'
@@ -42,8 +41,7 @@ export type ReasoningEffortOptions = 'low' | 'medium' | 'high' | 'auto'
 
 export type Topic = {
   id: string
-  // assistantId -> agentId
-  agentId: string
+  assistantId: string
   name: string
   createdAt: string
   updatedAt: string

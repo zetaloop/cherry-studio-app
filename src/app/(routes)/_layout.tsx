@@ -24,9 +24,9 @@ import { persistor } from '@/store'
 import { useAppSelector } from '@/store'
 import { RootStackParamList } from '@/types/naviagate'
 
-import AgentPage from './agent'
-import AgentDetailPage from './agent/agentDetail'
-import AgentMarketPage from './agent/market'
+import AssistantPage from './assistant'
+import AssistantDetailPage from './assistant/assistantDetail'
+import AssistantMarketPage from './assistant/market'
 import WebSearchProviderSettingsPage from './settings/websearch/websearchProviderSettings'
 import TopicPage from './topic'
 
@@ -56,9 +56,9 @@ const AppStackLayout: FC = () => {
       <Stack.Screen options={{ headerShown: false }} name="ManageModelsPage" component={ManageModelsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ApiServicePage" component={ApiServicePage} />
       <Stack.Screen options={{ headerShown: false }} name="TopicPage" component={TopicPage} />
-      <Stack.Screen options={{ headerShown: false }} name="AgentPage" component={AgentPage} />
-      <Stack.Screen options={{ headerShown: false }} name="AgentDetailPage" component={AgentDetailPage} />
-      <Stack.Screen options={{ headerShown: false }} name="AgentMarketPage" component={AgentMarketPage} />
+      <Stack.Screen options={{ headerShown: false }} name="AssistantPage" component={AssistantPage} />
+      <Stack.Screen options={{ headerShown: false }} name="AssistantDetailPage" component={AssistantDetailPage} />
+      <Stack.Screen options={{ headerShown: false }} name="AssistantMarketPage" component={AssistantMarketPage} />
       <Stack.Screen
         options={{ headerShown: false }}
         name="WebsearchProviderSettingsPage"

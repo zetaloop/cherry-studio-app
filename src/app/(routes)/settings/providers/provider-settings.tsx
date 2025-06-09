@@ -15,7 +15,7 @@ import { ModelGroup } from '@/components/settings/providers/modelGroup'
 import { SearchInput } from '@/components/ui/searchInput'
 import { CustomSwitch } from '@/components/ui/switch'
 import { useProvider } from '@/hooks/use-providers'
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ProviderSettingsPage'>

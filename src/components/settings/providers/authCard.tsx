@@ -3,7 +3,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, XStack, YStack } from 'tamagui'
 
-import { Provider } from '@/types/agent'
+import { Provider } from '@/types/assistant'
 
 import { SettingGroup, SettingGroupTitle, SettingRow } from '..'
 

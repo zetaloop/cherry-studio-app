@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Image, useThemeName } from 'tamagui'
 
-import { Provider } from '@/types/agent'
+import { Provider } from '@/types/assistant'
 import { getProviderIcon } from '@/utils/icon'
 
 interface ProviderIconProps {

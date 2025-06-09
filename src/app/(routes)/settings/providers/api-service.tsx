@@ -13,7 +13,7 @@ import { HeaderBar } from '@/components/settings/headerBar'
 import { ApiCheckSheet } from '@/components/settings/providers/apiCheckSheet'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { useProvider } from '@/hooks/use-providers'
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { getModelUniqId } from '@/utils/model'
 

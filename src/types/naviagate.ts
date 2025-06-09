@@ -20,9 +20,9 @@ export type RootStackParamList = {
   ManageModelsPage: { providerId: string }
   ApiServicePage: { providerId: string }
   TopicPage: undefined
-  AgentPage: undefined
-  AgentDetailPage: { agentId?: string; mode: 'create' | 'edit' }
-  AgentMarketPage: undefined
+  AssistantPage: undefined
+  AssistantDetailPage: { assistantId?: string; mode: 'create' | 'edit' }
+  AssistantMarketPage: undefined
   WebsearchProviderSettingsPage: { providerId: string }
 }
 export type NavigationProps = StackNavigationProp<RootStackParamList>

@@ -1,4 +1,4 @@
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 
 import { isRerankModel } from './rerank'
 

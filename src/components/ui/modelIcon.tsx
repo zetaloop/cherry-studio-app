@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Image, useThemeName } from 'tamagui'
 
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 import { getModelOrProviderIcon } from '@/utils/icon'
 
 interface ModelIconProps {

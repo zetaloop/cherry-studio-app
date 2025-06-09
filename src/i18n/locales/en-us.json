@@ -1,39 +1,5 @@
 {
   "translation": {
-    "agents": {
-      "search.no_results": "No agents found",
-      "title": "Agents",
-      "title.recent": "Recent Agents",
-      "title.create": "Create Agent",
-      "title.edit": "Edit Agent",
-      "name": "Agent Name",
-      "create": "Create Agent",
-      "save": "Save Agent",
-      "settings.temperature": "Temperature",
-      "settings.top_p": "Top P",
-      "settings.context": "Context",
-      "settings.stream_output": "Stream Output",
-      "settings.max_tokens": "Enable Max Tokens Limit",
-      "settings.max_tokens_value": "Max Tokens Limits",
-      "settings.reasoning": "Reasoning Effort",
-      "settings.reasoning.auto": "Auto",
-      "settings.reasoning.low": "Low",
-      "settings.reasoning.medium": "Medium",
-      "settings.reasoning.high": "High",
-      "market": {
-        "title": "Agent Market",
-        "search_placeholder": "Search agents...",
-        "groups": {
-          "all": "All",
-          "career": "Career",
-          "business": "Business",
-          "tools": "Tools",
-          "language": "Language"
-        },
-        "button.chat": "Chat Now",
-        "popular": "Popular Agents"
-      }
-    },
     "assistants": {
       "edit": {
         "title": "Edit Assistant"
@@ -46,6 +12,37 @@
         "alphabetical": "Alphabetical",
         "recent_use": "Recently Used",
         "recent_add": "Recently Added"
+      },
+      "search.no_results": "No assistants found",
+      "title": "Assistants",
+      "title.recent": "Recent Assistants",
+      "title.create": "Create Assistant",
+      "title.edit": "Edit Assistant",
+      "name": "Assistant Name",
+      "save": "Save Assistant",
+      "settings.temperature": "Temperature",
+      "settings.top_p": "Top P",
+      "settings.context": "Context",
+      "settings.stream_output": "Stream Output",
+      "settings.max_tokens": "Enable Max Tokens Limit",
+      "settings.max_tokens_value": "Max Tokens Limits",
+      "settings.reasoning": "Reasoning Effort",
+      "settings.reasoning.auto": "Auto",
+      "settings.reasoning.low": "Low",
+      "settings.reasoning.medium": "Medium",
+      "settings.reasoning.high": "High",
+      "market": {
+        "title": "Assistant Market",
+        "search_placeholder": "Search assistants...",
+        "groups": {
+          "all": "All",
+          "career": "Career",
+          "business": "Business",
+          "tools": "Tools",
+          "language": "Language"
+        },
+        "button.chat": "Chat Now",
+        "popular": "Popular Assistants"
       }
     },
     "button": {
@@ -349,10 +346,6 @@
     },
     "home": {},
     "menu": {
-      "agent": {
-        "title": "Agent",
-        "recent": "Recent Agents"
-      },
       "topic": {
         "title": "Topic",
         "recent": "Recent Topics"

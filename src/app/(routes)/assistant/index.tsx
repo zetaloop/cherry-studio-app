@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, ScrollView, useTheme, XStack, YStack } from 'tamagui'
 
-import AgentItem from '@/components/agent/agentItem'
+import AssistantItem from '@/components/assistant/assistantItem'
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { SearchInput } from '@/components/ui/searchInput'
-import { MOCK_AGENTS } from '@/mock'
+import { MOCK_ASSISTANTS } from '@/mock'
 import { NavigationProps } from '@/types/naviagate'
 
-export default function AgentPage() {
+export default function AssistantPage() {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
@@ -22,8 +22,8 @@ export default function AgentPage() {
   const [showSaved, setShowSaved] = useState(false)
   const [showRecents, setShowRecents] = useState(false)
 
-  const onAddAgent = () => {
-    navigation.navigate('AgentDetailPage', { agentId: undefined, mode: 'create' })
+  const onAddAssistant = () => {
+    navigation.navigate('AssistantDetailPage', { assistantId: undefined, mode: 'create' })
   }
 
   const handleRecentFilter = () => {
@@ -47,11 +47,11 @@ export default function AgentPage() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar
-        title={t('agents.title.recent')}
+        title={t('assistants.title.recent')}
         onBackPress={() => navigation.goBack()}
         rightButton={{
           icon: <PenSquare size={24} />,
-          onPress: onAddAgent
+          onPress: onAddAssistant
         }}
       />
       <SettingContainer>
@@ -87,8 +87,8 @@ export default function AgentPage() {
         </XStack>
         <ScrollView flex={1} gap={20}>
           <YStack gap={24}>
-            {MOCK_AGENTS.map(agent => (
-              <AgentItem key={agent.id} agent={agent} />
+            {MOCK_ASSISTANTS.map(assistant => (
+              <AssistantItem key={assistant.id} assistant={assistant} />
             ))}
           </YStack>
         </ScrollView>

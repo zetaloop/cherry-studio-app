@@ -3,15 +3,15 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Adapt, Select, Sheet, Text } from 'tamagui' // Added Text, XStack
 
-import { Agent } from '@/types/agent'
+import { Assistant } from '@/types/assistant'
 
 interface ReasoningSelectProps {
-  agent?: Agent | null
+  assistant?: Assistant | null
 }
 
-export function ReasoningSelect<T = any>({ agent }: ReasoningSelectProps) {
+export function ReasoningSelect<T = any>({ assistant }: ReasoningSelectProps) {
   const { t } = useTranslation()
-  const [value, setValue] = useState<string | undefined>(agent?.settings?.reasoning_effort || 'auto')
+  const [value, setValue] = useState<string | undefined>(assistant?.settings?.reasoning_effort || 'auto')
 
   const selectOptions = [
     {
@@ -38,7 +38,7 @@ export function ReasoningSelect<T = any>({ agent }: ReasoningSelectProps) {
           color="$foregroundGreen"
           paddingHorizontal={5}
           borderRadius={5}>
-          {t(`agents.settings.reasoning.${value}`)}
+          {t(`assistants.settings.reasoning.${value}`)}
         </Text>
       </Select.Trigger>
 

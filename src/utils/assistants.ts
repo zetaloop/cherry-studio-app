@@ -1,7 +1,7 @@
-import { Agent } from '@/types/agent'
+import { Assistant } from '@/types/assistant'
 
-export function groupByCategories(data: Agent[]) {
-  const groupedMap = new Map<string, Agent[]>()
+export function groupByCategories(data: Assistant[]) {
+  const groupedMap = new Map<string, Assistant[]>()
   data.forEach(item => {
     item.group?.forEach(category => {
       if (!groupedMap.has(category)) {
@@ -11,7 +11,7 @@ export function groupByCategories(data: Agent[]) {
       groupedMap.get(category)?.push(item)
     })
   })
-  const result: Record<string, Agent[]> = {}
+  const result: Record<string, Assistant[]> = {}
   Array.from(groupedMap.entries()).forEach(([category, items]) => {
     result[category] = items
   })

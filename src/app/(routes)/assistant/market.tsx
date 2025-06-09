@@ -7,15 +7,15 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Tabs, Text, useTheme } from 'tamagui'
 
-import AgentItemSheet from '@/components/agent/market/agentItemSheet'
-import AllAgentsTab from '@/components/agent/market/allAgentsTab'
-import CategoryAgentsTab from '@/components/agent/market/categoryAgentsTab'
+import AllAssistantsTab from '@/components/assistant/market/allAssistantsTab'
+import AssistantItemSheet from '@/components/assistant/market/assistantItemSheet'
+import CategoryAssistantsTab from '@/components/assistant/market/categoryAssistantsTab'
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { SearchInput } from '@/components/ui/searchInput'
-import { getSystemAgents } from '@/mock'
-import { Agent } from '@/types/agent'
-import { groupByCategories } from '@/utils/agents'
+import { getSystemAssistants } from '@/mock'
+import { Assistant } from '@/types/assistant'
+import { groupByCategories } from '@/utils/assistants'
 interface TabConfig {
   value: string
   label: string
@@ -23,20 +23,20 @@ interface TabConfig {
 
 type FilterType = 'all' | string
 
-export default function AgentMarketPage() {
+export default function AssistantMarketPage() {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigation = useNavigation()
 
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
-  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
+  const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(null)
   const handleBottomSheetClose = useCallback(() => {
     setIsBottomSheetOpen(false)
-    setSelectedAgent(null)
+    setSelectedAssistant(null)
   }, [])
-  const handleAgentItemPress = useCallback((agent: Agent) => {
-    setSelectedAgent(agent)
+  const handleAssistantItemPress = useCallback((assistant: Assistant) => {
+    setSelectedAssistant(assistant)
     setIsBottomSheetOpen(true)
   }, [])
 
@@ -44,7 +44,7 @@ export default function AgentMarketPage() {
   const [searchText, setSearchText] = useState('')
   const [debouncedSearchText, setDebouncedSearchText] = useState('')
 
-  const systemAgents = useMemo(() => getSystemAgents(), [])
+  const systemAssistants = useMemo(() => getSystemAssistants(), [])
 
   const debouncedSetSearchText = useMemo(() => debounce(setDebouncedSearchText, 300), [])
 
@@ -56,53 +56,53 @@ export default function AgentMarketPage() {
     }
   }, [searchText, debouncedSetSearchText])
 
-  // Filter agents by search text first
-  const baseFilteredAgents = useMemo(() => {
+  // Filter assistants by search text first
+  const baseFilteredAssistants = useMemo(() => {
     if (!debouncedSearchText) {
-      return systemAgents
+      return systemAssistants
     }
 
     const lowerSearchText = debouncedSearchText.toLowerCase().trim()
 
     if (!lowerSearchText) {
-      return systemAgents
+      return systemAssistants
     }
 
-    return systemAgents.filter(
-      agent =>
-        (agent.name && agent.name.toLowerCase().includes(lowerSearchText)) ||
-        (agent.id && agent.id.toLowerCase().includes(lowerSearchText))
+    return systemAssistants.filter(
+      assistant =>
+        (assistant.name && assistant.name.toLowerCase().includes(lowerSearchText)) ||
+        (assistant.id && assistant.id.toLowerCase().includes(lowerSearchText))
     )
-  }, [systemAgents, debouncedSearchText])
+  }, [systemAssistants, debouncedSearchText])
 
-  const agentGroupsForDisplay = useMemo(() => groupByCategories(baseFilteredAgents), [baseFilteredAgents])
+  const assistantGroupsForDisplay = useMemo(() => groupByCategories(baseFilteredAssistants), [baseFilteredAssistants])
 
-  const agentGroupsForTabs = useMemo(() => groupByCategories(systemAgents), [systemAgents])
+  const assistantGroupsForTabs = useMemo(() => groupByCategories(systemAssistants), [systemAssistants])
 
-  // 过滤代理逻辑 for CategoryAgentsTab
-  const filterAgents = useMemo(() => {
+  // 过滤助手逻辑 for CategoryAssistantsTab
+  const filterAssistants = useMemo(() => {
     if (actualFilterType === 'all') {
-      return baseFilteredAgents
+      return baseFilteredAssistants
     }
 
-    return baseFilteredAgents.filter(agent => agent.group && agent.group.includes(actualFilterType))
-  }, [actualFilterType, baseFilteredAgents])
+    return baseFilteredAssistants.filter(assistant => assistant.group && assistant.group.includes(actualFilterType))
+  }, [actualFilterType, baseFilteredAssistants])
 
   const tabConfigs = useMemo(() => {
-    const groupKeys = Object.keys(agentGroupsForTabs).sort()
+    const groupKeys = Object.keys(assistantGroupsForTabs).sort()
 
     const allTab: TabConfig = {
       value: 'all',
-      label: t('agents.market.groups.all')
+      label: t('assistants.market.groups.all')
     }
 
     const dynamicTabs: TabConfig[] = groupKeys.map(groupKey => ({
       value: groupKey,
-      label: t(`agents.market.groups.${groupKey}`, groupKey.charAt(0).toUpperCase() + groupKey.slice(1))
+      label: t(`assistants.market.groups.${groupKey}`, groupKey.charAt(0).toUpperCase() + groupKey.slice(1))
     }))
 
     return [allTab, ...dynamicTabs]
-  }, [agentGroupsForTabs, t])
+  }, [assistantGroupsForTabs, t])
 
   const getTabStyle = useCallback(
     (tabValue: string) => ({
@@ -146,33 +146,33 @@ export default function AgentMarketPage() {
     () => (
       <>
         <Tabs.Content value={'all'} flex={1}>
-          <AllAgentsTab
-            agentGroups={agentGroupsForDisplay}
+          <AllAssistantsTab
+            assistantGroups={assistantGroupsForDisplay}
             onArrowClick={handleArrowClick}
             setIsBottomSheetOpen={setIsBottomSheetOpen}
-            onAgentPress={handleAgentItemPress}
+            onAssistantPress={handleAssistantItemPress}
           />
         </Tabs.Content>
         {tabConfigs
           .filter(({ value }) => value !== 'all')
           .map(({ value }) => (
             <Tabs.Content key={value} value={value} flex={1}>
-              <CategoryAgentsTab
-                agents={filterAgents}
+              <CategoryAssistantsTab
+                assistants={filterAssistants}
                 setIsBottomSheetOpen={setIsBottomSheetOpen}
-                onAgentPress={handleAgentItemPress}
+                onAssistantPress={handleAssistantItemPress}
               />
             </Tabs.Content>
           ))}
       </>
     ),
-    [tabConfigs, agentGroupsForDisplay, handleArrowClick, filterAgents]
+    [tabConfigs, assistantGroupsForDisplay, handleArrowClick, filterAssistants]
   )
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar
-        title={t('agents.market.title')}
+        title={t('assistants.market.title')}
         onBackPress={handleBackPress}
         rightButton={{
           icon: <BookmarkMinus size={24} />,
@@ -181,7 +181,7 @@ export default function AgentMarketPage() {
       />
       <SettingContainer>
         <SearchInput
-          placeholder={t('agents.market.search_placeholder')}
+          placeholder={t('assistants.market.search_placeholder')}
           value={searchText}
           onChangeText={setSearchText}
         />
@@ -199,12 +199,12 @@ export default function AgentMarketPage() {
           {renderTabContents}
         </Tabs>
       </SettingContainer>
-      {selectedAgent && (
-        <AgentItemSheet
+      {selectedAssistant && (
+        <AssistantItemSheet
           bottomSheetRef={bottomSheetRef}
           isOpen={isBottomSheetOpen}
           onClose={handleBottomSheetClose}
-          agent={selectedAgent}
+          assistant={selectedAssistant}
         />
       )}
     </SafeAreaView>

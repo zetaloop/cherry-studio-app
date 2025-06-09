@@ -3,19 +3,19 @@ import { FC } from 'react'
 import React from 'react'
 import { Text, XStack, YStack } from 'tamagui'
 
-import { Agent } from '@/types/agent'
+import { Assistant } from '@/types/assistant'
 
 import CustomRadialGradientBackground from '../ui/customRadialGradientBackground'
 
-interface AgentItemRowProps {
-  agent: Agent
+interface AssistantItemRowProps {
+  assistant: Assistant
   setIsBottomSheetOpen: (isOpen: boolean) => void
-  onAgentPress: (agent: Agent) => void
+  onAssistantPress: (assistant: Assistant) => void
 }
 
-const AgentItemRow: FC<AgentItemRowProps> = ({ agent, setIsBottomSheetOpen, onAgentPress }) => {
+const AssistantItemRow: FC<AssistantItemRowProps> = ({ assistant, setIsBottomSheetOpen, onAssistantPress }) => {
   const handlePress = () => {
-    onAgentPress(agent)
+    onAssistantPress(assistant)
     setIsBottomSheetOpen(true)
   }
 
@@ -31,13 +31,13 @@ const AgentItemRow: FC<AgentItemRowProps> = ({ agent, setIsBottomSheetOpen, onAg
         borderWidth={1}
         onPress={handlePress}>
         <XStack gap={14} flex={1} marginRight={10} maxWidth="75%">
-          <Text fontSize={35}>{agent.emoji?.replace(/\r\n/g, '')}</Text>
+          <Text fontSize={35}>{assistant.emoji?.replace(/\r\n/g, '')}</Text>
           <YStack gap={4} flex={1} maxWidth="100%">
             <Text numberOfLines={1} ellipsizeMode="tail">
-              {agent.name}
+              {assistant.name}
             </Text>
             <Text fontSize={12} numberOfLines={1} ellipsizeMode="tail">
-              {agent.description}
+              {assistant.description}
             </Text>
           </YStack>
         </XStack>
@@ -49,4 +49,4 @@ const AgentItemRow: FC<AgentItemRowProps> = ({ agent, setIsBottomSheetOpen, onAg
   )
 }
 
-export default AgentItemRow
+export default AssistantItemRow

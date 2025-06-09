@@ -1,5 +1,5 @@
 // 导出所有模型相关功能
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 
 export interface ModelGroup {
   [provider: string]: Model[]

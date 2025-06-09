@@ -5,38 +5,38 @@ import React, { useMemo } from 'react'
 import { ScrollView, Text, XStack, YStack } from 'tamagui'
 import { LinearGradient } from 'tamagui/linear-gradient'
 
-import AgentItemCard from '@/components/agent/agentItemCard'
-import { Agent } from '@/types/agent'
+import AssistantItemCard from '@/components/assistant/assistantItemCard'
+import { Assistant } from '@/types/assistant'
 
-interface AllAgentsTabProps {
-  agentGroups: Record<string, Agent[]>
+interface AllAssistantsTabProps {
+  assistantGroups: Record<string, Assistant[]>
   onArrowClick: (groupKey: string) => void
   setIsBottomSheetOpen: (isOpen: boolean) => void
-  onAgentPress: (agent: Agent) => void
+  onAssistantPress: (assistant: Assistant) => void
 }
 
 interface GroupItem {
   type: 'group'
   groupKey: string
-  agents: Agent[]
+  assistants: Assistant[]
 }
 
-const AllAgentsTab: React.FC<AllAgentsTabProps> = ({
-  agentGroups,
+const AllAssistantsTab: React.FC<AllAssistantsTabProps> = ({
+  assistantGroups,
   onArrowClick,
   setIsBottomSheetOpen,
-  onAgentPress
+  onAssistantPress
 }) => {
   // 将分组数据转换为扁平化的列表数据
   const flatData = useMemo(() => {
-    return Object.keys(agentGroups).map(
+    return Object.keys(assistantGroups).map(
       (groupKey): GroupItem => ({
         type: 'group',
         groupKey,
-        agents: agentGroups[groupKey]
+        assistants: assistantGroups[groupKey]
       })
     )
-  }, [agentGroups])
+  }, [assistantGroups])
 
   const renderGroupItem = ({ item }: { item: GroupItem }) => (
     <YStack gap={16}>
@@ -51,12 +51,12 @@ const AllAgentsTab: React.FC<AllAgentsTabProps> = ({
       <XStack flex={1}>
         <ScrollView flex={1} horizontal showsHorizontalScrollIndicator={false}>
           <XStack gap={20}>
-            {item.agents.slice(0, 5).map(agent => (
-              <AgentItemCard
-                key={agent.id}
-                agent={agent}
+            {item.assistants.slice(0, 5).map(assistant => (
+              <AssistantItemCard
+                key={assistant.id}
+                assistant={assistant}
                 setIsBottomSheetOpen={setIsBottomSheetOpen}
-                onAgentPress={onAgentPress}
+                onAssistantPress={onAssistantPress}
               />
             ))}
           </XStack>
@@ -79,4 +79,4 @@ const AllAgentsTab: React.FC<AllAgentsTabProps> = ({
   )
 }
 
-export default AllAgentsTab
+export default AllAssistantsTab

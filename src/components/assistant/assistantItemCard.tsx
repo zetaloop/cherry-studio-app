@@ -2,20 +2,20 @@ import { BookmarkMinus } from '@tamagui/lucide-icons'
 import React from 'react'
 import { Button, Text, XStack, YStack } from 'tamagui'
 
-import { Agent } from '@/types/agent'
+import { Assistant } from '@/types/assistant'
 
 import CustomRadialGradientBackground from '../ui/customRadialGradientBackground'
 import GroupTag from './market/groupTag'
 
-interface AgentItemCardProps {
-  agent: Agent
+interface AssistantItemCardProps {
+  assistant: Assistant
   setIsBottomSheetOpen: (isOpen: boolean) => void
-  onAgentPress: (agent: Agent) => void
+  onAssistantPress: (assistant: Assistant) => void
 }
 
-const AgentItemCard = ({ agent, setIsBottomSheetOpen, onAgentPress }: AgentItemCardProps) => {
+const AssistantItemCard = ({ assistant, setIsBottomSheetOpen, onAssistantPress }: AssistantItemCardProps) => {
   const handlePress = () => {
-    onAgentPress(agent)
+    onAssistantPress(assistant)
     setIsBottomSheetOpen(true)
   }
 
@@ -33,16 +33,16 @@ const AgentItemCard = ({ agent, setIsBottomSheetOpen, onAgentPress }: AgentItemC
           <BookmarkMinus size={20} color="white" />
         </Button>
         <YStack gap={7} alignItems="center" justifyContent="center" height="100%">
-          <Text fontSize={30}>{agent.emoji?.replace(/\r\n/g, '')}</Text>
+          <Text fontSize={30}>{assistant.emoji?.replace(/\r\n/g, '')}</Text>
           <Text textAlign="center" numberOfLines={2} ellipsizeMode="tail">
-            {agent.name}
+            {assistant.name}
           </Text>
           <Text color="$gray9" fontSize={10} numberOfLines={4} ellipsizeMode="tail">
-            {agent.description}
+            {assistant.description}
           </Text>
           <XStack gap={10}>
-            {agent.group &&
-              agent.group.map((group, index) => (
+            {assistant.group &&
+              assistant.group.map((group, index) => (
                 <GroupTag
                   key={index}
                   group={group}
@@ -59,4 +59,4 @@ const AgentItemCard = ({ agent, setIsBottomSheetOpen, onAgentPress }: AgentItemC
   )
 }
 
-export default AgentItemCard
+export default AssistantItemCard

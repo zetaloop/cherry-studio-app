@@ -1,4 +1,4 @@
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 
 export const SILICON_MODELS: Model[] = [
   {

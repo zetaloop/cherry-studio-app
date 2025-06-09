@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid'
 
 import i18n from '@/i18n'
 import { INITIAL_PROVIDERS } from '@/mock'
-import { Agent, Model, Provider, Topic } from '@/types/agent'
+import { Assistant, Model, Provider, Topic } from '@/types/assistant'
 
-export function getDefaultAgent(): Agent {
+export function getDefaultAssistant(): Assistant {
   return {
     id: 'default',
     name: i18n.t('chat.default.name'),

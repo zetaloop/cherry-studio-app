@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Text, XStack, YStack } from 'tamagui'
 
 import { ISheet } from '@/components/ui/sheet'
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 import { getModelUniqId } from '@/utils/model'
 
 import { ModelSelect } from './modelSelect'

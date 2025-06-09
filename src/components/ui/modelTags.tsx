@@ -10,7 +10,7 @@ import { isReasoningModel } from '@/config/models/reasoning'
 import { isRerankModel } from '@/config/models/rerank'
 import { isVisionModel } from '@/config/models/vision'
 import { isWebSearchModel } from '@/config/models/web-search'
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 
 import { CustomTag } from './customTag'
 

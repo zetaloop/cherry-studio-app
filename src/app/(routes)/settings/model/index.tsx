@@ -10,7 +10,7 @@ import { HeaderBar } from '@/components/settings/headerBar'
 import { ModelSelect } from '@/components/settings/providers/modelSelect'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { useProviders } from '@/hooks/use-providers'
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 import { getModelUniqId } from '@/utils/model'
 
 export default function ModelSettingsPage() {

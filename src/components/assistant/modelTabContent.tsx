@@ -7,7 +7,7 @@ import { SettingGroup, SettingRow } from '@/components/settings'
 import { ModelSelect } from '@/components/settings/providers/modelSelect'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { useAllProviders } from '@/hooks/use-providers'
-import { Agent, Model } from '@/types/agent'
+import { Assistant, Model } from '@/types/assistant'
 import { getModelUniqId } from '@/utils/model'
 
 import { CustomSlider } from '../ui/customSlider'
@@ -15,23 +15,23 @@ import { CustomSwitch } from '../ui/switch'
 import { ReasoningSelect } from './reasoingSelect'
 
 interface ModelTabContentProps {
-  agent?: Agent | null
-  onAgentChange?: (agent: Partial<Agent>) => void // 新增：传递更改回父组件
+  assistant?: Assistant | null
+  onAssistantChange?: (assistant: Partial<Assistant>) => void // 新增：传递更改回父组件
 }
 
-export function ModelTabContent({ agent, onAgentChange }: ModelTabContentProps) {
+export function ModelTabContent({ assistant, onAssistantChange }: ModelTabContentProps) {
   const { t } = useTranslation()
   const { providers } = useAllProviders()
 
   // 状态管理
-  const [selectedModel, setSelectedModel] = useState<Model | undefined>(agent?.model)
-  const [temperature, setTemperature] = useState(agent?.settings?.temperature || 0.7)
-  const [topP, setTopP] = useState(agent?.settings?.topP || 0.8)
-  const [context, setContext] = useState(agent?.settings?.contextCount || 15)
-  const [streamOutput, setStreamOutput] = useState(agent?.settings?.streamOutput || false)
-  const [enableMaxTokens, setEnableMaxTokens] = useState(agent?.settings?.enableMaxTokens || false)
-  const [maxTokens, setMaxTokens] = useState(agent?.settings?.maxTokens || 2048)
-  const [reasoning, setReasoning] = useState(agent?.settings?.reasoning_effort || '')
+  const [selectedModel, setSelectedModel] = useState<Model | undefined>(assistant?.model)
+  const [temperature, setTemperature] = useState(assistant?.settings?.temperature || 0.7)
+  const [topP, setTopP] = useState(assistant?.settings?.topP || 0.8)
+  const [context, setContext] = useState(assistant?.settings?.contextCount || 15)
+  const [streamOutput, setStreamOutput] = useState(assistant?.settings?.streamOutput || false)
+  const [enableMaxTokens, setEnableMaxTokens] = useState(assistant?.settings?.enableMaxTokens || false)
+  const [maxTokens, setMaxTokens] = useState(assistant?.settings?.maxTokens || 2048)
+  const [reasoning, setReasoning] = useState(assistant?.settings?.reasoning_effort || '')
 
   // 优化：使用 useMemo 缓存 selectOptions
   const selectOptions = useMemo(() => {
@@ -105,7 +105,7 @@ export function ModelTabContent({ agent, onAgentChange }: ModelTabContentProps) 
       <SettingGroup>
         <SettingRow>
           <CustomSlider
-            label={t('agents.settings.temperature')}
+            label={t('assistants.settings.temperature')}
             value={temperature}
             max={10}
             multiplier={10}
@@ -114,7 +114,7 @@ export function ModelTabContent({ agent, onAgentChange }: ModelTabContentProps) 
         </SettingRow>
         <SettingRow>
           <CustomSlider
-            label={t('agents.settings.top_p')}
+            label={t('assistants.settings.top_p')}
             value={topP}
             max={10}
             multiplier={10}
@@ -123,7 +123,7 @@ export function ModelTabContent({ agent, onAgentChange }: ModelTabContentProps) 
         </SettingRow>
         <SettingRow>
           <CustomSlider
-            label={t('agents.settings.context')}
+            label={t('assistants.settings.context')}
             value={context}
             max={30}
             onValueChange={handleContextChange}
@@ -133,16 +133,16 @@ export function ModelTabContent({ agent, onAgentChange }: ModelTabContentProps) 
 
       <SettingGroup>
         <SettingRow>
-          <Text>{t('agents.settings.stream_output')}</Text>
+          <Text>{t('assistants.settings.stream_output')}</Text>
           <CustomSwitch checked={streamOutput} onCheckedChange={setStreamOutput} />
         </SettingRow>
         <SettingRow>
-          <Text>{t('agents.settings.max_tokens')}</Text>
+          <Text>{t('assistants.settings.max_tokens')}</Text>
           <CustomSwitch checked={enableMaxTokens} onCheckedChange={setEnableMaxTokens} />
         </SettingRow>
         {enableMaxTokens && (
           <SettingRow>
-            <Text>{t('agents.settings.max_tokens_value')}</Text>
+            <Text>{t('assistants.settings.max_tokens_value')}</Text>
             <Input
               minWidth={80}
               height={25}
@@ -154,8 +154,8 @@ export function ModelTabContent({ agent, onAgentChange }: ModelTabContentProps) 
           </SettingRow>
         )}
         <SettingRow>
-          <Text>{t('agents.settings.reasoning')}</Text>
-          <ReasoningSelect agent={agent} />
+          <Text>{t('assistants.settings.reasoning')}</Text>
+          <ReasoningSelect assistant={assistant} />
         </SettingRow>
       </SettingGroup>
     </YStack>
