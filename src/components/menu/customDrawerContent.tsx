@@ -2,17 +2,12 @@ import { DrawerContentComponentProps, DrawerItemList } from '@react-navigation/d
 import { Settings } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Avatar, Button, Separator, SizableText, Tabs, Text, XStack, YStack } from 'tamagui'
+import { Avatar, Button, Text, XStack, YStack } from 'tamagui'
 
 import { MenuTabContent } from '@/components/menu/menuTabContent'
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { t } = useTranslation()
-
-  const handleAgentSeeAll = () => {
-    props.navigation.navigate('Main', { screen: 'AgentPage' })
-    console.log('Navigate to all agents')
-  }
 
   const handleTopicSeeAll = () => {
     props.navigation.navigate('Main', { screen: 'TopicPage' })
@@ -26,51 +21,14 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           <DrawerItemList {...props} />
         </YStack>
 
-        <Tabs defaultValue="agent" orientation="horizontal" flexDirection="column" flex={1}>
-          <Tabs.List aria-label="Assistant and Topics">
-            <Tabs.Tab
-              borderBottomWidth={4}
-              focusStyle={{
-                borderBottomColor: '$foregroundGreen',
-                backgroundColor: '$colorTransparent'
-              }}
-              flex={1}
-              value="agent">
-              <SizableText focusStyle={{ color: '$foregroundGreen' }}>{t('menu.agent.title')}</SizableText>
-            </Tabs.Tab>
-            <Tabs.Tab
-              backgroundColor="$colorTransparent"
-              borderBottomWidth={2}
-              focusStyle={{
-                backgroundColor: '$colorTransparent',
-                borderBottomColor: '$foregroundGreen'
-              }}
-              flex={1}
-              value="topics">
-              <SizableText focusStyle={{ color: '$foregroundGreen' }}>{t('menu.topic.title')}</SizableText>
-            </Tabs.Tab>
-          </Tabs.List>
-
-          <Separator />
-
-          <Tabs.Content backgroundColor="$background" value="agent" padding="$2" flex={1}>
-            <MenuTabContent
-              searchPlaceholder={t('common.search_placeholder')}
-              title={t('menu.agent.recent')}
-              onSeeAllPress={handleAgentSeeAll}>
-              {/* 这里可以添加agent特有的列表内容 */}
-            </MenuTabContent>
-          </Tabs.Content>
-
-          <Tabs.Content backgroundColor="$background" value="topics" padding="$2" flex={1}>
-            <MenuTabContent
-              searchPlaceholder={t('common.search_placeholder')}
-              title={t('menu.topic.recent')}
-              onSeeAllPress={handleTopicSeeAll}>
-              {/* 这里可以添加topic特有的列表内容 */}
-            </MenuTabContent>
-          </Tabs.Content>
-        </Tabs>
+        <YStack backgroundColor="$background" padding="$2" flex={1}>
+          <MenuTabContent
+            searchPlaceholder={t('common.search_placeholder')}
+            title={t('menu.topic.recent')}
+            onSeeAllPress={handleTopicSeeAll}>
+            {/* 这里可以添加topic特有的列表内容 */}
+          </MenuTabContent>
+        </YStack>
       </YStack>
 
       <XStack paddingHorizontal={20} paddingBottom={40} justifyContent="space-between" alignItems="center">
