@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ISelect } from '@/components/ui/select'
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 
 interface SelectOptionItem {
   label: string

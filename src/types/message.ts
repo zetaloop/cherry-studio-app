@@ -1,6 +1,6 @@
 import { CompletionUsage } from 'openai/resources/completions.mjs'
 
-import { Agent, Metrics, Model, Topic, Usage } from './agent'
+import { Assistant, Metrics, Model, Topic, Usage } from './assistant'
 import { FileType } from './file'
 import { GenerateImageResponse } from './image'
 import { WebSearchResponse, WebSearchSource } from './websearch'
@@ -191,7 +191,7 @@ export interface Response {
 export type ResponseError = Record<string, any>
 
 export interface MessageInputBaseParams {
-  agent: Agent
+  assistant: Assistant
   topic: Topic
   content?: string
   files?: FileType[]

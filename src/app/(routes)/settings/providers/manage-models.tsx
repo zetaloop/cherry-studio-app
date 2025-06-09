@@ -20,7 +20,7 @@ import { AIHUBMIX_MODELS } from '@/config/models/system-models'
 import { isVisionModel } from '@/config/models/vision'
 import { isWebSearchModel } from '@/config/models/web-search'
 import { useProvider } from '@/hooks/use-providers'
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 import { RootStackParamList } from '@/types/naviagate'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ManageModelsPage'>

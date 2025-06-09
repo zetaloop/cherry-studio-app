@@ -4,7 +4,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, XStack } from 'tamagui'
 
-import { Provider } from '@/types/agent'
+import { Provider } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 
 import { ProviderIcon } from '../../ui/providerIcon'

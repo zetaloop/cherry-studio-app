@@ -4,7 +4,7 @@ import { Accordion, Square, Text, XStack, YStack } from 'tamagui'
 
 import { ModelIcon } from '@/components/ui/modelIcon'
 import { ModelTags } from '@/components/ui/modelTags'
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 
 interface ModelGroupProps {
   groupName: string

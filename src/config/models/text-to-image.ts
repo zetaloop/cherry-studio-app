@@ -1,4 +1,4 @@
-import { Model } from '@/types/agent'
+import { Model } from '@/types/assistant'
 
 export const TEXT_TO_IMAGE_REGEX = /flux|diffusion|stabilityai|sd-|dall|cogview|janus/i
 

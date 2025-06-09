@@ -19,12 +19,12 @@ import {
   YStack
 } from 'tamagui'
 
-type TabType = 'agents' | 'knowledge' | 'files'
+type TabType = 'assistants' | 'knowledge' | 'files'
 
 export default function ProfilePage() {
   const { t } = useTranslation()
 
-  const tabs: TabType[] = ['agents', 'knowledge', 'files']
+  const tabs: TabType[] = ['assistants', 'knowledge', 'files']
 
   const [tabState, setTabState] = useState<{
     currentTab: TabType
@@ -33,7 +33,7 @@ export default function ProfilePage() {
     prevActiveAt: TabLayout | null
   }>({
     activeAt: null,
-    currentTab: 'agents',
+    currentTab: 'assistants',
     intentAt: null,
     prevActiveAt: null
   })
@@ -159,7 +159,7 @@ export default function ProfilePage() {
             <AnimatePresence exitBeforeEnter custom={{ direction }} initial={false}>
               <AnimatedYStack key={currentTab}>
                 <Tabs.Content value={currentTab} forceMount width="100%">
-                  {currentTab === 'agents' ? (
+                  {currentTab === 'assistants' ? (
                     <YStack alignItems="center" paddingVertical="$8" gap={12} width="100%">
                       <Text fontSize="$6" color="$yellow10">
                         😜

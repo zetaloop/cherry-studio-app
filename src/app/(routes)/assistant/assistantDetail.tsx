@@ -5,26 +5,26 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, ScrollView, styled, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
 
-import { ModelTabContent } from '@/components/agent/modelTabContent'
-import { PromptTabContent } from '@/components/agent/promptTabContent'
-import { ToolTabContent } from '@/components/agent/toolTabContent'
+import { ModelTabContent } from '@/components/assistant/modelTabContent'
+import { PromptTabContent } from '@/components/assistant/promptTabContent'
+import { ToolTabContent } from '@/components/assistant/toolTabContent'
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
 import { AvatarEditButton } from '@/components/ui/avatarEditButton'
 import { DefaultProviderIcon } from '@/components/ui/svgIcons'
-import { useAgent } from '@/hooks/use-agent'
+import { useAssistant } from '@/hooks/use-assistant'
 import { RootStackParamList } from '@/types/naviagate'
 
-type AgentDetailRouteProp = RouteProp<RootStackParamList, 'AgentDetailPage'>
+type AssistantDetailRouteProp = RouteProp<RootStackParamList, 'AssistantDetailPage'>
 
-export default function AgentDetailPage() {
+export default function AssistantDetailPage() {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigation = useNavigation()
-  const route = useRoute<AgentDetailRouteProp>()
+  const route = useRoute<AssistantDetailRouteProp>()
 
-  const { agentId, mode } = route.params
-  const { agent } = useAgent(agentId)
+  const { assistantId, mode } = route.params
+  const { assistant } = useAssistant(assistantId)
   const [activeTab, setActiveTab] = useState('model')
 
   const onAddTopic = () => {
@@ -35,7 +35,7 @@ export default function AgentDetailPage() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar
-        title={mode === 'create' ? t('agents.title.create') : t('agents.title.edit')}
+        title={mode === 'create' ? t('assistants.title.create') : t('assistants.title.edit')}
         onBackPress={() => navigation.goBack()}
       />
       {/* todo KeyboardAvoidingView bug */}
@@ -43,8 +43,8 @@ export default function AgentDetailPage() {
         <SettingContainer>
           <XStack justifyContent="center" alignItems="center">
             <AvatarEditButton
-              content={agent?.emoji || <DefaultProviderIcon />}
-              editIcon={agent?.emoji ? <ArrowLeftRight size={24} /> : <PenLine size={24} />}
+              content={assistant?.emoji || <DefaultProviderIcon />}
+              editIcon={assistant?.emoji ? <ArrowLeftRight size={24} /> : <PenLine size={24} />}
               onEditPress={() => {
                 // 处理编辑逻辑
                 console.log('Edit avatar')
@@ -75,21 +75,21 @@ export default function AgentDetailPage() {
             </Tabs.List>
             <YStack flex={1} paddingTop={30}>
               <Tabs.Content value="prompt" flex={1} gap={30}>
-                <PromptTabContent agent={agent} />
+                <PromptTabContent assistant={assistant} />
               </Tabs.Content>
 
               <Tabs.Content value="model" flex={1} gap={30}>
-                <ModelTabContent agent={agent} />
+                <ModelTabContent assistant={assistant} />
               </Tabs.Content>
 
               <Tabs.Content value="tool" flex={1} gap={30}>
-                <ToolTabContent agent={agent} />
+                <ToolTabContent assistant={assistant} />
               </Tabs.Content>
             </YStack>
           </Tabs>
           <XStack paddingHorizontal={25} width="100%" justifyContent="center" alignItems="center">
             <Button backgroundColor="$foregroundGreen" width="100%" borderRadius={48}>
-              {t(`agents.${mode === 'create' ? 'create' : 'save'}`)}
+              {t(`assistants.${mode === 'create' ? 'create' : 'save'}`)}
             </Button>
           </XStack>
         </SettingContainer>

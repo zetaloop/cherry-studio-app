@@ -71,7 +71,7 @@ export const AssistantsList: React.FC<AssistantsListProps> = ({ onClose }) => {
             ))
           ) : (
             <Text fontSize="$3" color="$gray10" textAlign="center" paddingVertical="$4">
-              {t('agents.search.no_results')}
+              {t('assistants.search.no_results')}
             </Text>
           )}
         </YStack>

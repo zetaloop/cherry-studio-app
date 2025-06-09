@@ -8,14 +8,14 @@ import ReanimatedSwipeable, { SwipeableMethods } from 'react-native-gesture-hand
 import { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { Button, Text, XStack, YStack } from 'tamagui'
 
-import { Agent } from '@/types/agent'
+import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 
-interface AgentItemProps {
-  agent: Agent
+interface AssistantItemProps {
+  assistant: Assistant
 }
 
-function RenderRightActions(progress: SharedValue<number>, swipeableMethods: SwipeableMethods, agent: Agent) {
+function RenderRightActions(progress: SharedValue<number>, swipeableMethods: SwipeableMethods, assistant: Assistant) {
   const animatedStyle = useAnimatedStyle(() => {
     const translateX = interpolate(progress.value, [0, 1], [80, 0])
 
@@ -25,7 +25,7 @@ function RenderRightActions(progress: SharedValue<number>, swipeableMethods: Swi
   })
 
   const handleDelete = () => {
-    console.log('Delete agent:', agent.name)
+    console.log('Delete assistant:', assistant.name)
     swipeableMethods.close()
   }
 
@@ -44,7 +44,7 @@ function RenderRightActions(progress: SharedValue<number>, swipeableMethods: Swi
   )
 }
 
-const AgentItem: FC<AgentItemProps> = ({ agent }) => {
+const AssistantItem: FC<AssistantItemProps> = ({ assistant }) => {
   const swipeableRef = useRef(null)
   const navigation = useNavigation<NavigationProps>()
 
@@ -53,16 +53,16 @@ const AgentItem: FC<AgentItemProps> = ({ agent }) => {
     _: SharedValue<number>,
     swipeableMethods: SwipeableMethods
   ) => {
-    return RenderRightActions(progress, swipeableMethods, agent)
+    return RenderRightActions(progress, swipeableMethods, assistant)
   }
 
-  const editAgent = () => {
-    navigation.navigate('AgentDetailPage', { agentId: agent.id, mode: 'edit' })
+  const editAssistant = () => {
+    navigation.navigate('AssistantDetailPage', { assistantId: assistant.id, mode: 'edit' })
   }
 
-  // get the newest update time from agent's topics
+  // get the newest update time from assistant's topics
   const updateTime = new Date(
-    agent.topics?.reduce((latest, topic) => {
+    assistant.topics?.reduce((latest, topic) => {
       const topicUpdateTime = new Date(topic.updatedAt).getTime()
       return topicUpdateTime > latest ? topicUpdateTime : latest
     }, 0) ?? Date.now()
@@ -83,22 +83,22 @@ const AgentItem: FC<AgentItemProps> = ({ agent }) => {
         alignItems="center"
         paddingVertical={3}
         paddingHorizontal={20}
-        onPress={editAgent}>
+        onPress={editAssistant}>
         <XStack gap={14} flex={1} width="60%">
-          <Text fontSize={22}>{agent.emoji}</Text>
+          <Text fontSize={22}>{assistant.emoji}</Text>
           <YStack gap={2} flex={1}>
             <Text width="90%" numberOfLines={1} ellipsizeMode="tail">
-              {agent.name}
+              {assistant.name}
             </Text>
             <Text fontSize={12}>{updateTime}</Text>
           </YStack>
         </XStack>
         <Button disabled circular backgroundColor="$gray8" size={20}>
-          <Text>{agent.topics?.length ?? 1}</Text>
+          <Text>{assistant.topics?.length ?? 1}</Text>
         </Button>
       </XStack>
     </ReanimatedSwipeable>
   )
 }
 
-export default AgentItem
+export default AssistantItem

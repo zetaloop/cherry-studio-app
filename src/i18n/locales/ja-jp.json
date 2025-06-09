@@ -1,39 +1,5 @@
 {
   "translation": {
-    "agents": {
-      "search.no_results": "エージェントが見つかりませんでした。",
-      "title": "エージェント",
-      "title.recent": "最近のエージェント",
-      "title.create": "エージェントを作成",
-      "title.edit": "エージェントを編集",
-      "name": "エージェント名",
-      "create": "エージェントを作成",
-      "save": "エージェントを保存",
-      "settings.temperature": "温度",
-      "settings.top_p": "トップP",
-      "settings.context": "コンテキスト",
-      "settings.stream_output": "ストリーム出力",
-      "settings.max_tokens": "最大トークン制限を有効にする",
-      "settings.max_tokens_value": "最大トークン制限",
-      "settings.reasoning": "推論の努力",
-      "settings.reasoning.auto": "自動",
-      "settings.reasoning.low": "低",
-      "settings.reasoning.medium": "中",
-      "settings.reasoning.high": "高",
-      "market": {
-        "title": "エージェントマーケット",
-        "search_placeholder": "エージェントを検索...",
-        "groups": {
-          "all": "すべて",
-          "career": "キャリア",
-          "business": "ビジネス",
-          "tools": "ツール",
-          "language": "言語"
-        },
-        "button.chat": "今すぐチャット",
-        "popular": "人気のエージェント"
-      }
-    },
     "assistants": {
       "edit": {
         "title": "エディットアシスタント"
@@ -46,6 +12,37 @@
         "alphabetical": "アルファベット順",
         "recent_use": "最近使用したもの",
         "recent_add": "最近追加された"
+      },
+      "search.no_results": "アシスタントが見つかりません",
+      "title": "アシスタント",
+      "title.recent": "最近のアシスタント",
+      "title.create": "アシスタントを作成",
+      "title.edit": "編集アシスタント",
+      "name": "アシスタント名",
+      "save": "セーブアシスタント",
+      "settings.temperature": "温度",
+      "settings.top_p": "トップP",
+      "settings.context": "文脈",
+      "settings.stream_output": "ストリーム出力",
+      "settings.max_tokens": "最大トークン制限を有効にする",
+      "settings.max_tokens_value": "最大トークン制限",
+      "settings.reasoning": "推論努力",
+      "settings.reasoning.auto": "オート",
+      "settings.reasoning.low": "ロウ",
+      "settings.reasoning.medium": "ミディアム",
+      "settings.reasoning.high": "ハイ",
+      "market": {
+        "title": "アシスタントマーケット",
+        "search_placeholder": "検索アシスタント...",
+        "groups": {
+          "all": "オール",
+          "career": "キャリア",
+          "business": "ビジネス",
+          "tools": "ツール",
+          "language": "言語"
+        },
+        "button.chat": "今すぐチャット",
+        "popular": "人気アシスタント"
       }
     },
     "button": {
@@ -351,10 +348,6 @@
     "menu": {
       "search_placeholder": "検索...",
       "see_all": "すべて表示",
-      "agent": {
-        "title": "エージェント",
-        "recent": "最近のエージェント"
-      },
       "topic": {
         "title": "トピック",
         "recent": "最近のトピック"

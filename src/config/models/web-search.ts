@@ -1,5 +1,5 @@
-import { getProviderByModel } from '@/services/agent-service'
-import { Model } from '@/types/agent'
+import { getProviderByModel } from '@/services/assistant-service'
+import { Model } from '@/types/assistant'
 
 import { isEmbeddingModel } from './embedding'
 import { isOpenAIReasoningModel } from './reasoning'

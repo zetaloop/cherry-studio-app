@@ -1,39 +1,5 @@
 {
   "translation": {
-    "agents": {
-      "search.no_results": "Агентов не найдено",
-      "title": "Агенты",
-      "title.recent": "Недавние агенты",
-      "title.create": "Создать агента",
-      "title.edit": "Редактировать агента",
-      "name": "Имя агента",
-      "create": "Создать агента",
-      "save": "Сохранить агента",
-      "settings.temperature": "Температура",
-      "settings.top_p": "Top P",
-      "settings.context": "Контекст",
-      "settings.stream_output": "Потоковый вывод",
-      "settings.max_tokens": "Включить ограничение токенов",
-      "settings.max_tokens_value": "Ограничение токенов",
-      "settings.reasoning": "Усилие рассуждения",
-      "settings.reasoning.auto": "Авто",
-      "settings.reasoning.low": "Низкий",
-      "settings.reasoning.medium": "Средний",
-      "settings.reasoning.high": "Высокий",
-      "market": {
-        "title": "Маркет агентов",
-        "search_placeholder": "Поиск агентов...",
-        "groups": {
-          "all": "Все",
-          "career": "Карьера",
-          "business": "Бизнес",
-          "tools": "Инструменты",
-          "language": "Язык"
-        },
-        "button.chat": "Чат сейчас",
-        "popular": "Популярные агенты"
-      }
-    },
     "assistants": {
       "edit": {
         "title": "Редактировать помощника"
@@ -46,6 +12,37 @@
         "alphabetical": "Алфавитный",
         "recent_use": "Недавно использованные",
         "recent_add": "Недавно добавлено"
+      },
+      "search.no_results": "Ассистенты не найдены",
+      "title": "Ассистенты",
+      "title.recent": "Последние ассистенты",
+      "title.create": "Создать ассистента",
+      "title.edit": "Редактор Помощник",
+      "name": "Имя помощника",
+      "save": "Сохранить помощника",
+      "settings.temperature": "Температура",
+      "settings.top_p": "Top P",
+      "settings.context": "Контекст",
+      "settings.stream_output": "Потоковый вывод",
+      "settings.max_tokens": "Включить ограничение максимального количества токенов",
+      "settings.max_tokens_value": "Максимальные ограничения токенов",
+      "settings.reasoning": "Усилия, направленные на рассуждение",
+      "settings.reasoning.auto": "Автомобиль",
+      "settings.reasoning.low": "Низкий",
+      "settings.reasoning.medium": "Средний (необходимо уточнить контекст для более точного перевода)  \n\nПримечание: \n1. Слово \"medium\" имеет несколько значений в зависимости от контекста (например, \"средний\" в размере, \"носитель\" в искусстве, \"способ\" передачи информации). Для точного перевода желательно уточнить сферу использования.",
+      "settings.reasoning.high": "Высокий",
+      "market": {
+        "title": "Ассистент Маркет",
+        "search_placeholder": "Поисковые помощники...",
+        "groups": {
+          "all": "Все",
+          "career": "Карьера",
+          "business": "бизнес",
+          "tools": "Инструменты",
+          "language": "Язык"
+        },
+        "button.chat": "Чат сейчас",
+        "popular": "Популярные помощники"
       }
     },
     "button": {
@@ -351,10 +348,6 @@
     "menu": {
       "search_placeholder": "Поиск...",
       "see_all": "Показать все",
-      "agent": {
-        "title": "Агент",
-        "recent": "Недавние агенты"
-      },
       "topic": {
         "title": "Тема",
         "recent": "Недавние темы"

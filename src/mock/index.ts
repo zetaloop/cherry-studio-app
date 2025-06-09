@@ -1,6 +1,6 @@
 import { SYSTEM_MODELS } from '@/config/models/system-models'
-import agentsJsonData from '@/resources/data/agents.json'
-import { Agent, Provider } from '@/types/agent'
+import assistantsJsonData from '@/resources/data/assistants.json'
+import { Assistant, Provider } from '@/types/assistant'
 import { WebSearchProvider } from '@/types/websearch'
 
 export const MOCK_AIHUBMIX_MODELS = [
@@ -512,7 +512,7 @@ export const INITIAL_PROVIDERS: Provider[] = [
   }
 ]
 
-export const MOCK_AGENTS: Agent[] = [
+export const MOCK_ASSISTANTS: Assistant[] = [
   {
     id: 'a6e22b2a-e7a2-4aab-9c31-98bca001b75b',
     name: '默认助手',
@@ -521,7 +521,7 @@ export const MOCK_AGENTS: Agent[] = [
     topics: [
       {
         id: 'caede922-8a37-47dd-8697-5257d09a713a',
-        agentId: 'a6e22b2a-e7a2-4aab-9c31-98bca001b75b',
+        assistantId: 'a6e22b2a-e7a2-4aab-9c31-98bca001b75b',
         createdAt: '2025-05-29T02:39:40.147Z',
         updatedAt: '2025-05-29T02:39:44.735Z',
         name: '你好需帮助',
@@ -530,7 +530,7 @@ export const MOCK_AGENTS: Agent[] = [
       },
       {
         id: 'f2ad726b-a3de-47f8-97c7-0cfbe4472f2d',
-        agentId: 'default',
+        assistantId: 'default',
         createdAt: '2025-05-28T05:44:26.093Z',
         updatedAt: '2025-05-28T05:52:39.671Z',
         name: 'GPT模型时间查询',
@@ -538,7 +538,7 @@ export const MOCK_AGENTS: Agent[] = [
         isNameManuallyEdited: false
       }
     ],
-    type: 'agent',
+    type: 'assistant',
     model: { group: 'deepseek-ai', id: 'deepseek-ai/DeepSeek-R1', name: 'deepseek-ai/DeepSeek-R1', provider: 'silicon' }
   },
   {
@@ -548,7 +548,7 @@ export const MOCK_AGENTS: Agent[] = [
     topics: [
       {
         id: 'fcbce314-396d-4242-86a9-e12992ef28f7',
-        agentId: '3d1339ac-34ed-4002-a8c4-46048e09d5b2',
+        assistantId: '3d1339ac-34ed-4002-a8c4-46048e09d5b2',
         createdAt: '2025-05-28T09:07:54.808Z',
         updatedAt: '2025-05-28T09:14:54.039Z',
         name: '默认话题',
@@ -556,7 +556,7 @@ export const MOCK_AGENTS: Agent[] = [
         isNameManuallyEdited: false
       }
     ],
-    type: 'agent',
+    type: 'assistant',
     emoji: '⭐️',
     model: { group: 'deepseek-ai', id: 'deepseek-ai/DeepSeek-R1', name: 'deepseek-ai/DeepSeek-R1', provider: 'silicon' }
   },
@@ -571,7 +571,7 @@ export const MOCK_AGENTS: Agent[] = [
     topics: [
       {
         id: '600b4259-e0cb-44b5-bec3-d47bd531f078',
-        agentId: 'a090c2c3-dff4-4844-8c7c-e7f5402bf8d4',
+        assistantId: 'a090c2c3-dff4-4844-8c7c-e7f5402bf8d4',
         createdAt: '2025-05-29T03:25:45.501Z',
         updatedAt: '2025-05-29T03:25:45.501Z',
         name: '默认话题',
@@ -579,7 +579,7 @@ export const MOCK_AGENTS: Agent[] = [
         isNameManuallyEdited: false
       }
     ],
-    type: 'agent'
+    type: 'assistant'
   },
   {
     id: '446e295d-d61d-4b7a-b0e8-bf55bcf69e4a',
@@ -593,7 +593,7 @@ export const MOCK_AGENTS: Agent[] = [
     topics: [
       {
         id: '210f8baa-a21a-4a85-a8b9-042c675e7483',
-        agentId: '446e295d-d61d-4b7a-b0e8-bf55bcf69e4a',
+        assistantId: '446e295d-d61d-4b7a-b0e8-bf55bcf69e4a',
         createdAt: '2025-05-29T03:25:46.789Z',
         updatedAt: '2025-05-29T03:25:46.789Z',
         name: '默认话题',
@@ -601,7 +601,7 @@ export const MOCK_AGENTS: Agent[] = [
         isNameManuallyEdited: false
       }
     ],
-    type: 'agent'
+    type: 'assistant'
   },
   {
     id: '80fba870-a27e-4aa0-9215-f4f45b1cc0c5',
@@ -615,7 +615,7 @@ export const MOCK_AGENTS: Agent[] = [
     topics: [
       {
         id: 'e3751141-f619-48cc-bdd4-9a8241e2a8f0',
-        agentId: '80fba870-a27e-4aa0-9215-f4f45b1cc0c5',
+        assistantId: '80fba870-a27e-4aa0-9215-f4f45b1cc0c5',
         createdAt: '2025-05-29T03:25:50.802Z',
         updatedAt: '2025-05-29T03:25:50.802Z',
         name: '默认话题',
@@ -623,7 +623,7 @@ export const MOCK_AGENTS: Agent[] = [
         isNameManuallyEdited: false
       }
     ],
-    type: 'agent'
+    type: 'assistant'
   },
   {
     id: '938d12f2-a924-494a-bf52-e594eac61365',
@@ -637,7 +637,7 @@ export const MOCK_AGENTS: Agent[] = [
     topics: [
       {
         id: '5b40d155-68db-4d95-93f3-7e3ce9d89e5f',
-        agentId: '938d12f2-a924-494a-bf52-e594eac61365',
+        assistantId: '938d12f2-a924-494a-bf52-e594eac61365',
         createdAt: '2025-05-29T03:25:54.471Z',
         updatedAt: '2025-05-29T03:25:54.471Z',
         name: '默认话题',
@@ -645,21 +645,21 @@ export const MOCK_AGENTS: Agent[] = [
         isNameManuallyEdited: false
       }
     ],
-    type: 'agent'
+    type: 'assistant'
   }
 ]
 
-// 读取resources/data/agent.json文件中的数据
-export function getSystemAgents(): Agent[] {
+// 读取resources/data/assistants.json文件中的数据
+export function getSystemAssistants(): Assistant[] {
   try {
-    if (agentsJsonData) {
-      const agents = JSON.parse(JSON.stringify(agentsJsonData)) || []
-      return agents
+    if (assistantsJsonData) {
+      const assistants = JSON.parse(JSON.stringify(assistantsJsonData)) || []
+      return assistants
     } else {
       return []
     }
   } catch (error) {
-    console.error('Error reading agents data:', error)
+    console.error('Error reading assistants data:', error)
     return []
   }
 }

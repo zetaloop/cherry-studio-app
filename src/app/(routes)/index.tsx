@@ -6,19 +6,19 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image, styled, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
-import AgentItemCard from '@/components/agent/agentItemCard'
+import AssistantItemCard from '@/components/assistant/assistantItemCard'
 import { MessageInput } from '@/components/message-input'
 import { TopEntry } from '@/components/top-entry'
-import { getSystemAgents } from '@/mock'
+import { getSystemAssistants } from '@/mock'
 import { NavigationProps } from '@/types/naviagate'
 
 const HomeScreen = () => {
   const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
-  const systemAgents = useMemo(() => getSystemAgents(), [])
+  const systemAssistants = useMemo(() => getSystemAssistants(), [])
 
   const handlePress = () => {
-    navigation.navigate('AgentMarketPage')
+    navigation.navigate('AssistantMarketPage')
   }
 
   return (
@@ -30,13 +30,18 @@ const HomeScreen = () => {
           {/* assistant market(Temporary) */}
           <YStack gap={17} paddingHorizontal={20} paddingTop={40}>
             <XStack justifyContent="space-between">
-              <Text>{t('agents.market.popular')}</Text>
+              <Text>{t('assistants.market.popular')}</Text>
               <Text onPress={handlePress}>{t('common.see_all')}</Text>
             </XStack>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <XStack gap={20}>
-                {systemAgents.slice(0, 3).map(agent => (
-                  <AgentItemCard key={agent.id} agent={agent} setIsBottomSheetOpen={() => {}} onAgentPress={() => {}} />
+                {systemAssistants.slice(0, 3).map(assistant => (
+                  <AssistantItemCard
+                    key={assistant.id}
+                    assistant={assistant}
+                    setIsBottomSheetOpen={() => {}}
+                    onAssistantPress={() => {}}
+                  />
                 ))}
               </XStack>
             </ScrollView>
