@@ -220,6 +220,18 @@
       "topic.show.time": "Show topic time",
       "assistant.show.icon": "Show model icon",
       "tray.title": "Enable System Tray Icon",
+      "nutstore": {
+        "nutstore": "Nutstore",
+        "config": "Nutstore Configuration",
+        "title": "Nutstore Sync",
+        "username": "Nutstore Username",
+        "to_nutstore": "Backup to Nutstore",
+        "from_nutstore": "Restore from Nutstore",
+        "backupStatus": "Backup Status",
+        "backupPath": "Backup Storage Path",
+        "logout": "Log Out",
+        "login": "Login with Nutstore Account"
+      },
       "websearch": {
         "api_service": "API Service",
         "api_host": "API Host",
@@ -265,6 +277,7 @@
       "webdav": {
         "title": "WebDAV",
         "config": {
+          "apply": "Apply",
           "title": "WebDAV Config",
           "host": "WebDAV Host",
           "host_placeholder": "http://localhost:8080",

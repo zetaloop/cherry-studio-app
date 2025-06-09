@@ -8,6 +8,7 @@ export type RootStackParamList = {
   BasicDataSettings: undefined
   WebDavPage: undefined
   WebDavConfig: undefined
+  NutstoreLogin: undefined
   ModelSettings: undefined
   ProvidersPage: undefined
   AboutSettings: undefined

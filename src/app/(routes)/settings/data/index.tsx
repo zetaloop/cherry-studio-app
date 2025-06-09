@@ -46,8 +46,8 @@ export default function DataSettingsPage() {
           icon: <CloudUpload size={24} />
         },
         {
-          title: 'Nutstore Configuration',
-          screen: 'nutstore',
+          title: t('settings.nutstore.config'),
+          screen: 'NutstoreLogin',
           icon: <DataBackupIcon provider="nutstore" />
         }
       ]

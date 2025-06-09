@@ -137,8 +137,7 @@ const WEB_SEARCH_PROVIDER_ICONS = {
 const DATA_BACKUP_ICONS = {
   joplin: require('@/assets/images/dataIcons/joplin.png'),
   notion: require('@/assets/images/dataIcons/notion.png'),
-  // build会出错
-  // nutstore: require('@/assets/images/dataIcons/nutstore.png'),
+  nutstore: require('@/assets/images/dataIcons/nutstore.png'),
   obsidian: require('@/assets/images/dataIcons/obsidian.png'),
   siyuan: require('@/assets/images/dataIcons/siyuan.png'),
   yuque: require('@/assets/images/dataIcons/yuque.png')

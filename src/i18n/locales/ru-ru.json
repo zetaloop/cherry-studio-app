@@ -256,7 +256,8 @@
           "password_placeholder": "Пароль WebDAV",
           "password_hint": "Должен быть не менее 8 символов",
           "path": "Путь WebDAV",
-          "path_placeholder": "Путь WebDAV"
+          "path_placeholder": "Путь WebDAV",
+          "apply": "Применить"
         },
         "backup": {
           "title": "Настройки резервного копирования",
@@ -267,6 +268,18 @@
           "max_backups": "Максимальное количество резервных копий",
           "unlimited": "Без ограничений"
         }
+      },
+      "nutstore": {
+        "nutstore": "Nutstore",
+        "config": "Настройка Nutstore",
+        "title": "Синхронизация Nutstore",
+        "username": "Имя пользователя Nutstore",
+        "to_nutstore": "Резервное копирование в Nutstore",
+        "from_nutstore": "Восстановление из Nutstore",
+        "backupStatus": "Статус резервного копирования",
+        "backupPath": "Путь хранения резервных копий",
+        "logout": "Выйти",
+        "login": "Войти с учетной записью Nutstore"
       }
     },
     "profile": {

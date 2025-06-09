@@ -7,6 +7,7 @@ import SettingsPage from '@/app/(routes)/settings'
 import AboutSettingsPage from '@/app/(routes)/settings/about-settings'
 import DataSettingsPage from '@/app/(routes)/settings/data'
 import BasicDataSettingsPage from '@/app/(routes)/settings/data/basic-data'
+import NutstoreLogin from '@/app/(routes)/settings/data/nutstore'
 import WebDavConfig from '@/app/(routes)/settings/data/webdav-config'
 import WebDavPage from '@/app/(routes)/settings/data/webdav-settings'
 import GeneralSettingsPage from '@/app/(routes)/settings/general-settings'
@@ -44,6 +45,7 @@ const AppStackLayout: FC = () => {
       <Stack.Screen options={{ headerShown: false }} name="BasicDataSettings" component={BasicDataSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="WebDavPage" component={WebDavPage} />
       <Stack.Screen options={{ headerShown: false }} name="WebDavConfig" component={WebDavConfig} />
+      <Stack.Screen options={{ headerShown: false }} name="NutstoreLogin" component={NutstoreLogin} />
       <Stack.Screen options={{ headerShown: false }} name="ModelSettings" component={ModelSettingsPage} />
       <Stack.Screen options={{ headerShown: false }} name="ProvidersPage" component={ProvidersPage} />
       <Stack.Screen options={{ headerShown: false }} name="AboutSettings" component={AboutSettingsPage} />

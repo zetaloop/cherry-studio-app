@@ -256,7 +256,8 @@
           "password_placeholder": "WebDAV パスワード",
           "password_hint": "8文字以上である必要があります",
           "path": "WebDAV パス",
-          "path_placeholder": "WebDAV パス"
+          "path_placeholder": "WebDAV パス",
+          "apply": "適用"
         },
         "backup": {
           "title": "バックアップ設定",
@@ -267,6 +268,18 @@
           "max_backups": "最大バックアップ数",
           "unlimited": "無制限"
         }
+      },
+      "nutstore": {
+        "nutstore": "Nutstore",
+        "config": "Nutstore設定",
+        "title": "Nutstore同期",
+        "username": "Nutstoreユーザー名",
+        "to_nutstore": "Nutstoreにバックアップ",
+        "from_nutstore": "Nutstoreから復元",
+        "backupStatus": "バックアップ状態",
+        "backupPath": "バックアップ保存パス",
+        "logout": "ログアウト",
+        "login": "Nutstoreアカウントでログイン"
       }
     },
     "profile": {

@@ -66,11 +66,11 @@ export default function WebDavPage() {
                 </XStack>
                 <CustomSwitch />
               </SettingRow>
-              <SettingRow onPress={() => {}}>
+              <SettingRow>
                 <XStack alignItems="center" gap={12}>
                   <Text fontSize="$5">{t('settings.webdav.backup.max_backups')}</Text>
                 </XStack>
-                <XStack alignItems="center" gap={8}>
+                <XStack alignItems="center" gap={12}>
                   <Text fontSize="$5">{t('settings.webdav.backup.unlimited')}</Text>
                   <ChevronRight size={24} color="$colorFocus" />
                 </XStack>
