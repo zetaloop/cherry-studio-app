@@ -1,3 +1,4 @@
+import { useNavigation } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform } from 'react-native'
@@ -6,6 +7,7 @@ import { ScrollView, useTheme, YStack } from 'tamagui'
 
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/headerBar'
+import { NavigationProps } from '@/types/naviagate'
 import { SubscribeSource } from '@/types/websearch'
 
 import BlacklistSection from './blacklist'
@@ -17,6 +19,7 @@ const blacklistSubscription: SubscribeSource[] = [{ key: 1, url: 'https://git.io
 export default function WebSearchSettingsPage() {
   const { t } = useTranslation()
   const theme = useTheme()
+  const navigation = useNavigation<NavigationProps>()
 
   // General settings state
   const [searchWithDates, setSearchWithDates] = useState<boolean>(true)
@@ -48,7 +51,7 @@ export default function WebSearchSettingsPage() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-        <HeaderBar title={t('settings.websearch.title')} />
+        <HeaderBar title={t('settings.websearch.title')} onBackPress={() => navigation.goBack()} />
         <ScrollView flex={1}>
           <SettingContainer>
             <YStack gap={24} flex={1}>

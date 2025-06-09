@@ -256,7 +256,8 @@
           "password_placeholder": "WebDAV 密码",
           "password_hint": "至少需要 8 个字符",
           "path": "WebDAV 路径",
-          "path_placeholder": "WebDAV 路径"
+          "path_placeholder": "WebDAV 路径",
+          "apply": "应用"
         },
         "backup": {
           "title": "备份设置",
@@ -267,6 +268,18 @@
           "max_backups": "最大备份数",
           "unlimited": "无限制"
         }
+      },
+      "nutstore": {
+        "nutstore": "坚果云",
+        "config": "坚果云配置",
+        "title": "坚果云同步",
+        "username": "坚果云用户名",
+        "to_nutstore": "备份到坚果云",
+        "from_nutstore": "从坚果云恢复",
+        "backupStatus": "备份状态",
+        "backupPath": "备份存储路径",
+        "logout": "退出登录",
+        "login": "使用坚果云账户登录"
       }
     },
     "profile": {
