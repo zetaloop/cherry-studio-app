@@ -1,7 +1,7 @@
 import React from 'react'
 import { Slider, XStack, YStack } from 'tamagui'
 
-import { SettingRowTitle } from '@/components/settings'
+import { SettingRowTitle } from '@/components/Settings'
 
 interface CustomSliderProps {
   label: string

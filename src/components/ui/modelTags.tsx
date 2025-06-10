@@ -12,7 +12,7 @@ import { isVisionModel } from '@/config/models/vision'
 import { isWebSearchModel } from '@/config/models/web-search'
 import { Model } from '@/types/assistant'
 
-import { CustomTag } from './customTag'
+import { CustomTag } from './CustomTag'
 
 interface ModelTagsProps {
   model: Model

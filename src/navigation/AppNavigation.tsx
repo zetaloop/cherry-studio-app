@@ -9,7 +9,7 @@ import { useTheme } from 'tamagui'
 
 import AppStackWithPersist from '@/app/(routes)/_layout'
 
-import CustomDrawerContent from '../components/menu/customDrawerContent'
+import CustomDrawerContent from '../components/Menu/CustomDrawerContent'
 
 const Drawer = createDrawerNavigator()
 

@@ -5,7 +5,7 @@ import React, { useMemo } from 'react'
 import { ScrollView, Text, XStack, YStack } from 'tamagui'
 import { LinearGradient } from 'tamagui/linear-gradient'
 
-import AssistantItemCard from '@/components/assistant/assistantItemCard'
+import AssistantItemCard from '@/components/Assistant/AssistantItemCard'
 import { Assistant } from '@/types/assistant'
 
 interface AllAssistantsTabProps {

@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
 
-import ExternalLink from '@/components/external-link'
-import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
-import { HeaderBar } from '@/components/settings/headerBar'
+import ExternalLink from '@/components/ExternalLink'
+import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/Settings'
+import { HeaderBar } from '@/components/Settings/HeaderBar'
 import { useWebsearchProvider } from '@/hooks/use-websearch-providers'
 import { RootStackParamList } from '@/types/naviagate'
 

@@ -3,16 +3,16 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, Text, YStack } from 'tamagui'
 
-import { SettingGroup, SettingRow } from '@/components/settings'
-import { ModelSelect } from '@/components/settings/providers/modelSelect'
+import { SettingGroup, SettingRow } from '@/components/Settings'
+import { ModelSelect } from '@/components/Settings/Providers/ModelSelect'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { useAllProviders } from '@/hooks/use-providers'
 import { Assistant, Model } from '@/types/assistant'
 import { getModelUniqId } from '@/utils/model'
 
-import { CustomSlider } from '../ui/customSlider'
-import { CustomSwitch } from '../ui/switch'
-import { ReasoningSelect } from './reasoingSelect'
+import { CustomSlider } from '../UI/CustomSlider'
+import { CustomSwitch } from '../UI/Switch'
+import { ReasoningSelect } from './ReasoingSelect'
 
 interface ModelTabContentProps {
   assistant?: Assistant | null

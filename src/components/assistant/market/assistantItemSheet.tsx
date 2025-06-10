@@ -5,10 +5,10 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ScrollView, Text, XStack, YStack } from 'tamagui'
 
-import { ISheet } from '@/components/ui/sheet'
+import { ISheet } from '@/components/UI/Sheet'
 import { Assistant } from '@/types/assistant'
 
-import GroupTag from './groupTag'
+import GroupTag from './GroupTag'
 
 interface AssistantItemSheetProps {
   assistant: Assistant

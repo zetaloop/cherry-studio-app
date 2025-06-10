@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ISelect } from '@/components/ui/select'
+import { ISelect } from '@/components/UI/Select'
 
 interface SelectOptionItem {
   label: string

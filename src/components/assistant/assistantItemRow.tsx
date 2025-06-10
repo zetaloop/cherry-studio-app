@@ -5,7 +5,7 @@ import { Text, XStack, YStack } from 'tamagui'
 
 import { Assistant } from '@/types/assistant'
 
-import CustomRadialGradientBackground from '../ui/customRadialGradientBackground'
+import CustomRadialGradientBackground from '../UI/CustomRadialGradientBackground'
 
 interface AssistantItemRowProps {
   assistant: Assistant

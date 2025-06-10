@@ -7,7 +7,7 @@ import { Text, XStack } from 'tamagui'
 import { Provider } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 
-import { ProviderIcon } from '../../ui/providerIcon'
+import { ProviderIcon } from '../../UI/ProviderIcon'
 import { SettingRow } from '..'
 
 interface ProviderItemProps {

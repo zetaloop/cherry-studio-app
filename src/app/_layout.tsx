@@ -4,7 +4,6 @@ import '@/i18n'
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { TamaguiProvider } from '@tamagui/core'
 import * as SplashScreen from 'expo-splash-screen'
-import { SQLiteProvider } from 'expo-sqlite'
 import { StatusBar } from 'expo-status-bar'
 import { Suspense } from 'react'
 import { useEffect } from 'react'
@@ -49,18 +48,18 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Suspense fallback={<ActivityIndicator size="large" />}>
-        <SQLiteProvider databaseName={DATABASE_NAME} options={{ enableChangeListener: true }} useSuspense>
-          <Provider store={store}>
-            <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme ?? 'light'}>
-              <PortalProvider>
-                <ThemeProvider value={DefaultTheme}>
-                  <AppNavigator />
-                  <StatusBar style="auto" />
-                </ThemeProvider>
-              </PortalProvider>
-            </TamaguiProvider>
-          </Provider>
-        </SQLiteProvider>
+        {/* <SQLiteProvider databaseName={DATABASE_NAME} options={{ enableChangeListener: true }} useSuspense> */}
+        <Provider store={store}>
+          <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme ?? 'light'}>
+            <PortalProvider>
+              <ThemeProvider value={DefaultTheme}>
+                <AppNavigator />
+                <StatusBar style="auto" />
+              </ThemeProvider>
+            </PortalProvider>
+          </TamaguiProvider>
+        </Provider>
+        {/* </SQLiteProvider> */}
       </Suspense>
     </GestureHandlerRootView>
   )

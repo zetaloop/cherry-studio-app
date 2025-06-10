@@ -4,11 +4,11 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input, Text, XStack, YStack } from 'tamagui'
 
-import { AvatarEditButton } from '@/components/ui/avatarEditButton'
-import { ISheet } from '@/components/ui/sheet'
-import { DefaultProviderIcon } from '@/components/ui/svgIcons'
+import { AvatarEditButton } from '@/components/UI/AvatarEditButton'
+import { ISheet } from '@/components/UI/Sheet'
+import { DefaultProviderIcon } from '@/components/UI/SvgIcons'
 
-import { ProviderSelect } from './providerSelect'
+import { ProviderSelect } from './ProviderSelect'
 
 interface AddProviderSheetProps {
   bottomSheetRef: React.RefObject<BottomSheet | null>

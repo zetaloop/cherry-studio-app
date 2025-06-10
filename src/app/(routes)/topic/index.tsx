@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTheme } from 'tamagui'
 
-import { SettingContainer } from '@/components/settings'
-import { HeaderBar } from '@/components/settings/headerBar'
-import { SearchInput } from '@/components/ui/searchInput'
+import { SettingContainer } from '@/components/Settings'
+import { HeaderBar } from '@/components/Settings/HeaderBar'
+import { SearchInput } from '@/components/UI/SearchInput'
 
 export default function TopicPage() {
   const { t } = useTranslation()
