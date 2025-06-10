@@ -6,7 +6,7 @@ import { SettingGroup, SettingGroupTitle } from '@/components/Settings'
 import { WebsearchProviderRow } from '@/components/Settings/Websearch/WebsearchProviderRow'
 import { useWebsearchProviders } from '@/hooks/use-websearch-providers'
 
-export default function ProviderSection() {
+export default function ProviderSettings() {
   const { t } = useTranslation()
   const { freeProviders, apiProviders } = useWebsearchProviders()
 

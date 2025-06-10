@@ -6,7 +6,7 @@ import { Accordion, Button, Square, Text, TextArea, XStack, YStack } from 'tamag
 import { SettingGroup, SettingGroupTitle, SettingRow } from '@/components/Settings'
 import { SubscribeSource } from '@/types/websearch'
 
-interface BlacklistSectionProps {
+interface BlacklistSettingsProps {
   blacklistText: string
   onBlacklistTextChange: (text: string) => void
   subscriptions: SubscribeSource[]
@@ -15,14 +15,14 @@ interface BlacklistSectionProps {
   onAddSubscription: () => void
 }
 
-export default function BlacklistSection({
+export default function BlacklistSettings({
   blacklistText,
   onBlacklistTextChange,
   subscriptions,
   onRefreshSubscription,
   onRefreshAllSubscriptions,
   onAddSubscription
-}: BlacklistSectionProps) {
+}: BlacklistSettingsProps) {
   const { t } = useTranslation()
 
   const renderAccordionTriggerContent = ({ open }: { open: boolean }) => (
