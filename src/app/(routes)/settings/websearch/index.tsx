@@ -10,9 +10,9 @@ import { HeaderBar } from '@/components/Settings/HeaderBar'
 import { NavigationProps } from '@/types/naviagate'
 import { SubscribeSource } from '@/types/websearch'
 
-import BlacklistSection from './blacklist'
-import GeneralSettings from './general-settings'
-import ProviderSection from './websearch-provider'
+import BlacklistSettings from './BlacklistSettings'
+import GeneralSettings from './GeneralSettings'
+import ProviderSettings from './ProviderSettings'
 
 const blacklistSubscription: SubscribeSource[] = [{ key: 1, url: 'https://git.io/ublacklist', name: 'git.io' }]
 
@@ -55,7 +55,7 @@ export default function WebSearchSettingsPage() {
         <ScrollView flex={1}>
           <SettingContainer>
             <YStack gap={24} flex={1}>
-              <ProviderSection />
+              <ProviderSettings />
 
               <GeneralSettings
                 searchWithDates={searchWithDates}
@@ -68,7 +68,7 @@ export default function WebSearchSettingsPage() {
                 onContentLimitChange={setContentLimit}
               />
 
-              <BlacklistSection
+              <BlacklistSettings
                 blacklistText={blacklistText}
                 onBlacklistTextChange={setBlacklistText}
                 subscriptions={blacklistSubscription}
