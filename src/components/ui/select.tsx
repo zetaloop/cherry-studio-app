@@ -1,6 +1,7 @@
-import { Check, ChevronRight } from '@tamagui/lucide-icons'
+import { ChevronRight } from '@tamagui/lucide-icons'
 import React from 'react'
-import { Adapt, Select, Sheet, Text, XStack } from 'tamagui' // Added Text, XStack
+import { Text, XStack } from 'tamagui' // Removed Select, Sheet, Adapt, Check
+import * as DropdownMenu from 'zeego/dropdown-menu' // Added zeego
 
 interface SelectOptionItem<T = any> {
   label: string
@@ -20,7 +21,6 @@ interface ISelectProps<T = any> {
   selectOptions: SelectOptionGroup<T>[]
   placeholder: string
   width?: string | number
-  native?: boolean
 }
 
 export function ISelect<T = any>({
@@ -28,8 +28,7 @@ export function ISelect<T = any>({
   onValueChange,
   selectOptions,
   placeholder,
-  width = '100%',
-  native = true
+  width = '100%'
 }: ISelectProps<T>) {
   const findSelectedItem = (selectedValue: string): SelectOptionItem<T> | undefined => {
     for (const group of selectOptions) {
@@ -66,52 +65,47 @@ export function ISelect<T = any>({
   }, [value, selectOptions])
 
   return (
-    <Select value={value} onValueChange={handleValueChange} native={native}>
-      <Select.Trigger borderWidth={0} width={width} iconAfter={ChevronRight}>
-        {selectedDisplayInfo ? (
-          <XStack paddingVertical={8} flex={1} justifyContent="space-between" alignItems="center" gap="$2">
-            <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
-              {selectedDisplayInfo.groupLabel}
-            </Text>
-            <Text flexShrink={0} numberOfLines={1} maxWidth="60%" ellipsizeMode="tail">
-              {selectedDisplayInfo.itemLabel}
-            </Text>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <XStack
+          width={width}
+          borderWidth={0}
+          paddingVertical={8}
+          alignItems="center"
+          justifyContent="space-between"
+          gap={10}>
+          <XStack flex={1} alignItems="center" overflow="hidden" justifyContent="space-between">
+            {selectedDisplayInfo ? (
+              <>
+                <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
+                  {selectedDisplayInfo.groupLabel}
+                </Text>
+                <Text flexShrink={0} numberOfLines={1} maxWidth="60%" ellipsizeMode="tail">
+                  {selectedDisplayInfo.itemLabel}
+                </Text>
+              </>
+            ) : (
+              <Text flex={1} numberOfLines={1} ellipsizeMode="tail">
+                {placeholder}
+              </Text>
+            )}
           </XStack>
-        ) : (
-          <Select.Value paddingVertical={8} placeholder={placeholder} />
-        )}
-      </Select.Trigger>
+          <ChevronRight size={16} />
+        </XStack>
+      </DropdownMenu.Trigger>
 
-      <Adapt platform="touch">
-        <Sheet native modal dismissOnSnapToBottom>
-          <Sheet.Frame>
-            <Sheet.ScrollView>
-              <Adapt.Contents />
-            </Sheet.ScrollView>
-          </Sheet.Frame>
-          <Sheet.Overlay />
-        </Sheet>
-      </Adapt>
-
-      <Select.Content zIndex={200000}>
-        <Select.Viewport>
-          {selectOptions.map((group, groupIndex) => (
-            <Select.Group key={group.title || group.label || groupIndex}>
-              <Select.Label>{group.label}</Select.Label>
-              {group.options.map((item, itemIndex) => {
-                return (
-                  <Select.Item index={itemIndex} key={item.value} value={item.value}>
-                    <Select.ItemText>{item.label}</Select.ItemText>
-                    <Select.ItemIndicator marginLeft="auto">
-                      <Check size={16} />
-                    </Select.ItemIndicator>
-                  </Select.Item>
-                )
-              })}
-            </Select.Group>
-          ))}
-        </Select.Viewport>
-      </Select.Content>
-    </Select>
+      <DropdownMenu.Content>
+        {selectOptions.map((group, groupIndex) => (
+          <DropdownMenu.Group key={group.title || group.label || groupIndex}>
+            {group.label && group.label.trim() !== '' && <DropdownMenu.Label>{group.label}</DropdownMenu.Label>}
+            {group.options.map(item => (
+              <DropdownMenu.Item key={item.value} onSelect={() => handleValueChange(item.value)}>
+                <DropdownMenu.ItemTitle>{item.label}</DropdownMenu.ItemTitle>
+              </DropdownMenu.Item>
+            ))}
+          </DropdownMenu.Group>
+        ))}
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   )
 }
