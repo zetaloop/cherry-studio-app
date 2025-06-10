@@ -1,118 +1,73 @@
-import { ArrowDownUp, ChevronDown, Edit3, Plus } from '@tamagui/lucide-icons'
+import { BookmarkMinus, ChevronDown, Settings2 } from '@tamagui/lucide-icons'
+import { BlurView } from 'expo-blur' // 导入 BlurView
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Button, Popover, Text, XStack, YStack } from 'tamagui'
+import { Button, Popover, Text, useWindowDimensions, View, XStack, YStack } from 'tamagui'
 
-import { useMiddleSectionController } from '../hooks/useMiddleSectionController'
-import { AssistantEditor } from './assistant-editor'
-import { AssistantsList } from './assistants-list'
-import { SortOptions } from './sort-options'
+import { MOCK_ASSISTANTS } from '@/mock'
+
+const assistant = MOCK_ASSISTANTS[0]
 
 export const MiddleSection: React.FC = () => {
-  const { t } = useTranslation()
-  const {
-    currentAssistant,
-    isAssistantsListOpen,
-    toggleAssistantsList,
-    closeAssistantsList,
-    startEditAssistant,
-    startCreateAssistant,
-    setSortType
-  } = useMiddleSectionController()
-
-  const [showSortOptions, setShowSortOptions] = useState(false)
-  const [showEditor, setShowEditor] = useState(false)
-
-  // 处理排序选项
-  const handleOpenSortOptions = () => {
-    setShowSortOptions(true)
-  }
-
-  const handleCloseSortOptions = () => {
-    setShowSortOptions(false)
-  }
-
-  // 处理编辑
-  const handleOpenEditor = () => {
-    if (currentAssistant) {
-      startEditAssistant(currentAssistant)
-      setShowEditor(true)
-    }
-  }
-
-  const handleCreateNew = () => {
-    startCreateAssistant()
-    setShowEditor(true)
-  }
-
-  const handleCloseEditor = () => {
-    setShowEditor(false)
-  }
+  const [open, setOpen] = useState(false)
+  const { width } = useWindowDimensions()
 
   return (
-    <XStack alignItems="center" justifyContent="center" gap="$2">
-      <Popover open={isAssistantsListOpen} onOpenChange={toggleAssistantsList} placement="bottom" size="$5">
-        <Popover.Trigger asChild>
-          <XStack alignItems="center" justifyContent="center" gap="$1.5" pressStyle={{ opacity: 0.7 }} cursor="pointer">
-            {currentAssistant && (
-              <>
-                {/* <Avatar circular size="$3">
-                  <AvatarFallback backgroundColor="$blue5" />
-                  <AvatarImage src={currentAssistant.avatar} />
-                </Avatar> */}
-                <Text fontSize="$5" fontWeight="500" color="$gray12">
-                  {currentAssistant.name}
-                </Text>
-                <ChevronDown size={16} color="$gray10" />
-              </>
-            )}
-          </XStack>
-        </Popover.Trigger>
+    <Popover open={open} onOpenChange={setOpen}>
+      <Popover.Trigger asChild>
+        <Button chromeless iconAfter={<ChevronDown size={16} rotation={open ? 180 : 0} animation="quick" />}>
+          {assistant.name}
+        </Button>
+      </Popover.Trigger>
 
-        <Popover.Content borderWidth={1} borderColor="$borderColor" padding="$3" minWidth={280} width="auto" elevate>
-          <YStack gap="$2" width="100%">
-            <XStack gap="$2" justifyContent="flex-end">
-              <Button
-                size="$2"
-                backgroundColor="transparent"
-                icon={<ArrowDownUp size={16} />}
-                onPress={handleOpenSortOptions}
-                pressStyle={{ opacity: 0.7 }}
-              />
-              <Button
-                size="$2"
-                backgroundColor="transparent"
-                icon={<Edit3 size={16} />}
-                onPress={handleOpenEditor}
-                pressStyle={{ opacity: 0.7 }}
-              />
-              <Button
-                size="$2"
-                backgroundColor="transparent"
-                icon={<Plus size={16} />}
-                onPress={handleCreateNew}
-                pressStyle={{ opacity: 0.7 }}
-              />
-            </XStack>
-
-            <AssistantsList onClose={closeAssistantsList} />
+      <Popover.Content
+        enterStyle={{ y: -10, opacity: 0 }}
+        exitStyle={{ y: -10, opacity: 0 }}
+        animation="quick"
+        style={{ width: width }}
+        padding={0}
+        backgroundColor="transparent"
+        elevation={0}>
+        <BlurView
+          intensity={20} // 改变模糊程度
+          tint="default"
+          style={{
+            width: '100%',
+            height: '100%',
+            borderRadius: 10
+          }}>
+          <YStack width="100%">
+            <View>
+              <YStack gap={20} padding={20} borderWidth={0}>
+                <XStack justifyContent="space-between" alignItems="center">
+                  <XStack gap={10} alignItems="center">
+                    <Text fontSize={35}>{assistant.emoji}</Text>
+                    <YStack>
+                      <Text fontSize={18}>{assistant.name}</Text>
+                      <Text>@{assistant.model?.name}</Text>
+                    </YStack>
+                  </XStack>
+                  <XStack
+                    gap={15}
+                    borderRadius={26}
+                    paddingVertical={5}
+                    paddingHorizontal={15}
+                    backgroundColor="rgba(255, 255, 255, 0.1)"
+                    borderColor="rgba(240, 244, 250, 0.2)"
+                    borderWidth={0.5}>
+                    <BookmarkMinus size={15} />
+                    <Settings2 size={15} />
+                  </XStack>
+                </XStack>
+                <XStack>
+                  <Text fontSize={16} numberOfLines={3} ellipsizeMode="tail">
+                    {assistant.prompt}
+                  </Text>
+                </XStack>
+              </YStack>
+            </View>
           </YStack>
-        </Popover.Content>
-      </Popover>
-
-      {/* 排序选项弹窗 */}
-      <Popover open={showSortOptions} onOpenChange={setShowSortOptions} placement="right" size="$5">
-        <Popover.Content borderWidth={1} borderColor="$borderColor" padding="$3" width={280} elevate>
-          <SortOptions onClose={handleCloseSortOptions} />
-        </Popover.Content>
-      </Popover>
-
-      {/* 编辑助手弹窗 */}
-      <Popover open={showEditor} onOpenChange={setShowEditor} placement="right" size="$5">
-        <Popover.Content borderWidth={1} borderColor="$borderColor" padding="$3" width={320} elevate>
-          <AssistantEditor onClose={handleCloseEditor} />
-        </Popover.Content>
-      </Popover>
-    </XStack>
+        </BlurView>
+      </Popover.Content>
+    </Popover>
   )
 }
