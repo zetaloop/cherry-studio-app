@@ -4,9 +4,9 @@ import { DrawerActions, ParamListBase, useNavigation } from '@react-navigation/n
 import React from 'react'
 import { XStack } from 'tamagui'
 
-import { LeftSection } from './left-section'
-import { MiddleSection } from './middle-section'
-import { RightSection } from './right-section'
+import { LeftSection } from './LeftSection'
+import { MiddleSection } from './MiddleSection'
+import { RightSection } from './RightSection'
 
 export const TopEntry = () => {
   const navigation = useNavigation<DrawerNavigationProp<ParamListBase>>()

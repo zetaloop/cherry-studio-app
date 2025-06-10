@@ -6,12 +6,12 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, YStack } from 'tamagui'
 
-import { SettingContainer, SettingGroup } from '@/components/settings'
-import { HeaderBar } from '@/components/settings/headerBar'
-import { AddProviderSheet } from '@/components/settings/providers/addProviderSheet'
-import { ProviderItem } from '@/components/settings/providers/providerItem'
-import CustomRadialGradientBackground from '@/components/ui/customRadialGradientBackground'
-import { SearchInput } from '@/components/ui/searchInput'
+import { SettingContainer, SettingGroup } from '@/components/Settings'
+import { HeaderBar } from '@/components/Settings/HeaderBar'
+import { AddProviderSheet } from '@/components/Settings/Providers/AddProviderSheet'
+import { ProviderItem } from '@/components/Settings/Providers/ProviderItem'
+import CustomRadialGradientBackground from '@/components/UI/CustomRadialGradientBackground'
+import { SearchInput } from '@/components/UI/SearchInput'
 import { useAllProviders } from '@/hooks/use-providers'
 
 export default function ProviderListPage() {

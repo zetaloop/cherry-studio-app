@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
-import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
-import { HeaderBar } from '@/components/settings/headerBar'
+import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/Settings'
+import { HeaderBar } from '@/components/Settings/HeaderBar'
 
 export default function NutstoreLogin() {
   const [isLoggedIn, setIsLoggedIn] = useState(false) // State to track login status

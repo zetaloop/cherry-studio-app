@@ -5,8 +5,8 @@ import { KeyboardAvoidingView, Platform } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, useTheme, YStack } from 'tamagui'
 
-import { SettingContainer } from '@/components/settings'
-import { HeaderBar } from '@/components/settings/headerBar'
+import { SettingContainer } from '@/components/Settings'
+import { HeaderBar } from '@/components/Settings/HeaderBar'
 import { NavigationProps } from '@/types/naviagate'
 import { SubscribeSource } from '@/types/websearch'
 

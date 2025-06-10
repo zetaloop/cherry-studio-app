@@ -4,7 +4,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Avatar, Button, Text, XStack, YStack } from 'tamagui'
 
-import { MenuTabContent } from '@/components/menu/menuTabContent'
+import { MenuTabContent } from '@/components/Menu/MenuTabContent'
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { t } = useTranslation()

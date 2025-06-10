@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/store'
 import { Assistant, setAssistants, setCurrentAssistant, setCurrentTopic, setTopics, Topic } from '@/store/top-entry'
 
-import { DEFAULT_ASSISTANTS, DEFAULT_TOPICS, getCurrentAssistant, getCurrentTopic } from '../config'
+import { DEFAULT_ASSISTANTS, DEFAULT_TOPICS, getCurrentAssistant, getCurrentTopic } from '../Config'
 
 export const useTopEntryState = () => {
   const dispatch = useAppDispatch()

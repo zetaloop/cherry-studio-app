@@ -4,11 +4,11 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Text, XStack, YStack } from 'tamagui'
 
-import { ISheet } from '@/components/ui/sheet'
+import { ISheet } from '@/components/UI/Sheet'
 import { Model } from '@/types/assistant'
 import { getModelUniqId } from '@/utils/model'
 
-import { ModelSelect } from './modelSelect'
+import { ModelSelect } from './ModelSelect'
 
 interface ApiCheckSheetProps {
   bottomSheetRef: React.RefObject<BottomSheet | null>

@@ -3,7 +3,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ScrollView, Text, XStack, YStack } from 'tamagui'
 
-import { SearchInput } from '@/components/ui/searchInput'
+import { SearchInput } from '@/components/UI/SearchInput'
 
 interface MenuTabContentProps {
   searchPlaceholder: string

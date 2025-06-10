@@ -12,7 +12,7 @@ import {
   updateTopic
 } from '@/store/top-entry'
 
-import { createNewTopic, sortTopics } from '../config'
+import { createNewTopic, sortTopics } from '../Config'
 
 export const useLeftSectionController = () => {
   const dispatch = useAppDispatch()

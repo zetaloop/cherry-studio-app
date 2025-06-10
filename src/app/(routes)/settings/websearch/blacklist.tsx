@@ -3,7 +3,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Accordion, Button, Square, Text, TextArea, XStack, YStack } from 'tamagui'
 
-import { SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
+import { SettingGroup, SettingGroupTitle, SettingRow } from '@/components/Settings'
 import { SubscribeSource } from '@/types/websearch'
 
 interface BlacklistSectionProps {

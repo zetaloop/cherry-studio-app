@@ -2,11 +2,11 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, XStack, YStack } from 'tamagui'
 
-import { AddFileButton } from './addFileButton'
-import { MentionButton } from './mentionButton'
-import { ThinkButton } from './thinkButton'
-import { VoiceButton } from './voiceButton'
-import { WebsearchButton } from './websearchButton'
+import { AddFileButton } from './AddFileButton'
+import { MentionButton } from './MentionButton'
+import { ThinkButton } from './ThinkButton'
+import { VoiceButton } from './VoiceButton'
+import { WebsearchButton } from './WebsearchButton'
 
 export const MessageInput: React.FC = () => {
   const { t } = useTranslation()
