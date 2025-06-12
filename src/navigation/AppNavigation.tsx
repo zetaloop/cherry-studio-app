@@ -8,8 +8,7 @@ import { Dimensions } from 'react-native'
 import { useTheme } from 'tamagui'
 
 import AppStackWithPersist from '@/app/(routes)/_layout'
-
-import CustomDrawerContent from '../components/Menu/CustomDrawerContent'
+import CustomDrawerContent from '@/components/Menu/CustomDrawerContent'
 
 const Drawer = createDrawerNavigator()
 
