@@ -2,8 +2,8 @@ import { ChevronDown } from '@tamagui/lucide-icons'
 import React from 'react'
 import { Accordion, Square, Text, XStack, YStack } from 'tamagui'
 
-import { ModelIcon } from '@/components/UI/ModelIcon'
-import { ModelTags } from '@/components/UI/ModelTags'
+import { ModelIcon } from '@/components/ui/ModelIcon'
+import { ModelTags } from '@/components/ui/ModelTags'
 import { Model } from '@/types/assistant'
 
 interface ModelGroupProps {

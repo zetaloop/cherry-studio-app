@@ -2,8 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { YStack } from 'tamagui'
 
-import { SettingGroup, SettingGroupTitle } from '@/components/Settings'
-import { WebsearchProviderRow } from '@/components/Settings/Websearch/WebsearchProviderRow'
+import { SettingGroup, SettingGroupTitle } from '@/components/settings'
+import { WebsearchProviderRow } from '@/components/settings/websearch/WebsearchProviderRow'
 import { useWebsearchProviders } from '@/hooks/use-websearch-providers'
 
 export default function ProviderSettings() {

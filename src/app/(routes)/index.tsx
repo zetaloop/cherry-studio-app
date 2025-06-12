@@ -6,9 +6,9 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image, styled, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
-import AssistantItemCard from '@/components/Assistant/AssistantItemCard'
-import { MessageInput } from '@/components/MessageInput/MessageInput'
-import { TopEntry } from '@/components/TopEntry'
+import AssistantItemCard from '@/components/assistant/AssistantItemCard'
+import { MessageInput } from '@/components/message-input/MessageInput'
+import { TopEntry } from '@/components/top-entry'
 import { getSystemAssistants } from '@/mock'
 import { NavigationProps } from '@/types/naviagate'
 

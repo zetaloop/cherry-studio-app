@@ -4,9 +4,9 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input, Text, XStack, YStack } from 'tamagui'
 
-import { AvatarEditButton } from '@/components/UI/AvatarEditButton'
-import { ISheet } from '@/components/UI/Sheet'
-import { DefaultProviderIcon } from '@/components/UI/SvgIcons'
+import { AvatarEditButton } from '@/components/ui/AvatarEditButton'
+import { ISheet } from '@/components/ui/Sheet'
+import { DefaultProviderIcon } from '@/components/ui/SvgIcons'
 
 import { ProviderSelect } from './ProviderSelect'
 

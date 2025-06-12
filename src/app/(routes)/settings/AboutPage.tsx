@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image, Text, useTheme, XStack, YStack } from 'tamagui'
 
-import { SettingContainer, SettingGroup, SettingRow } from '@/components/Settings'
-import { HeaderBar } from '@/components/Settings/HeaderBar'
+import { SettingContainer, SettingGroup, SettingRow } from '@/components/settings'
+import { HeaderBar } from '@/components/settings/HeaderBar'
 
 export default function AboutPage() {
   const { t } = useTranslation()

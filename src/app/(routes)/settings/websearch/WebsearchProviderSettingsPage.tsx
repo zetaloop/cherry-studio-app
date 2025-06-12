@@ -6,8 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
-import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/Settings'
-import { HeaderBar } from '@/components/Settings/HeaderBar'
+import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
+import { HeaderBar } from '@/components/settings/HeaderBar'
 import { useWebsearchProvider } from '@/hooks/use-websearch-providers'
 import { RootStackParamList } from '@/types/naviagate'
 

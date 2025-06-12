@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ISelect } from '@/components/UI/Select'
+import { ISelect } from '@/components/ui/Select'
 import { WebSearchProvider } from '@/types/websearch'
 
 interface SelectOptionItem {

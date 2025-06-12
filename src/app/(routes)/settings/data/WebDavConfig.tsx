@@ -6,7 +6,7 @@ import { TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, ScrollView, Text, useTheme, YStack } from 'tamagui'
 
-import { HeaderBar } from '@/components/Settings/HeaderBar'
+import { HeaderBar } from '@/components/settings/HeaderBar'
 
 export default function WebDavConfig() {
   const theme = useTheme()

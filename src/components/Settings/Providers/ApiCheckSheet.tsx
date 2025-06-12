@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Text, XStack, YStack } from 'tamagui'
 
-import { ISheet } from '@/components/UI/Sheet'
+import { ISheet } from '@/components/ui/Sheet'
 import { Model } from '@/types/assistant'
 import { getModelUniqId } from '@/utils/model'
 

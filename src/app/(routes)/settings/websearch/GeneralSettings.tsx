@@ -2,8 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, Slider, XStack, YStack } from 'tamagui'
 
-import { SettingGroup, SettingGroupTitle, SettingRow, SettingRowTitle } from '@/components/Settings'
-import { CustomSwitch } from '@/components/UI/Switch'
+import { SettingGroup, SettingGroupTitle, SettingRow, SettingRowTitle } from '@/components/settings'
+import { CustomSwitch } from '@/components/ui/Switch'
 
 interface GeneralSettingsProps {
   searchWithDates: boolean

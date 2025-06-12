@@ -5,7 +5,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ScrollView, Text, XStack, YStack } from 'tamagui'
 
-import { ISheet } from '@/components/UI/Sheet'
+import { ISheet } from '@/components/ui/Sheet'
 import { Assistant } from '@/types/assistant'
 
 import GroupTag from './GroupTag'

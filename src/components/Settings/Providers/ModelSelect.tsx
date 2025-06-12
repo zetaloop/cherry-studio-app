@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ISelect } from '@/components/UI/Select'
+import { ISelect } from '@/components/ui/Select'
 import { Model } from '@/types/assistant'
 
 interface SelectOptionItem {
