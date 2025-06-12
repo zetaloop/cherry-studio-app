@@ -1,11 +1,12 @@
 import React from 'react'
 
-import { ISelect } from '@/components/UI/Select'
-import { WebSearchProvider } from '@/types/websearch'
+import { ISelect } from '@/components/ui/Select'
+import { Model } from '@/types/assistant'
 
 interface SelectOptionItem {
   label: string
   value: string
+  data?: Model
 }
 
 interface SelectOptionGroup {
@@ -14,21 +15,21 @@ interface SelectOptionGroup {
   options: SelectOptionItem[]
 }
 
-interface WebSearchSelectProps {
+interface ModelSelectProps {
   value: string | undefined
   onValueChange: (value: string) => void
   selectOptions: SelectOptionGroup[]
   placeholder: string
 }
 
-export function WebSearchSelect({ value, onValueChange, selectOptions, placeholder }: WebSearchSelectProps) {
+export function ModelSelect({ value, onValueChange, selectOptions, placeholder }: ModelSelectProps) {
   const handleValueChange = (newValue: string, item?: SelectOptionItem) => {
     onValueChange(newValue)
     // 如果需要访问完整的模型信息，可以使用 item?.model
   }
 
   return (
-    <ISelect<WebSearchProvider>
+    <ISelect<Model>
       value={value}
       onValueChange={handleValueChange}
       selectOptions={selectOptions}

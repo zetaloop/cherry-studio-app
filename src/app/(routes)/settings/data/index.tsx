@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
-import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/Settings'
-import { HeaderBar } from '@/components/Settings/HeaderBar'
-import { DataBackupIcon } from '@/components/UI/DatabackupIcon'
+import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
+import { HeaderBar } from '@/components/settings/HeaderBar'
+import { DataBackupIcon } from '@/components/ui/DatabackupIcon'
 import { NavigationProps } from '@/types/naviagate'
 
 interface SettingItemConfig {

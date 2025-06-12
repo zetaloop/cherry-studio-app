@@ -1,7 +1,7 @@
 import { useAppDispatch } from '@/store'
 import { addTopic, setCurrentTopic } from '@/store/top-entry'
 
-import { createNewTopic } from '../Config'
+import { createNewTopic } from '../config'
 
 export const useRightSectionController = () => {
   const dispatch = useAppDispatch()

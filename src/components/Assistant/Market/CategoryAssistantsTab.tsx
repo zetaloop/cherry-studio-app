@@ -2,7 +2,7 @@ import { FlashList } from '@shopify/flash-list'
 import React from 'react'
 import { YStack } from 'tamagui'
 
-import AssistantItemRow from '@/components/Assistant/AssistantItemRow'
+import AssistantItemRow from '@/components/assistant/AssistantItemRow'
 import { Assistant } from '@/types/assistant'
 
 interface CategoryAssistantsTabProps {

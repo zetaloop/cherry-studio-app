@@ -4,8 +4,8 @@ import { Button, Text, XStack, YStack } from 'tamagui'
 
 import { Assistant } from '@/types/assistant'
 
-import CustomRadialGradientBackground from '../UI/CustomRadialGradientBackground'
-import GroupTag from './Market/GroupTag'
+import CustomRadialGradientBackground from '../ui/CustomRadialGradientBackground'
+import GroupTag from './market/GroupTag'
 
 interface AssistantItemCardProps {
   assistant: Assistant

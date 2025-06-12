@@ -4,7 +4,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, XStack } from 'tamagui'
 
-import { WebsearchProviderIcon } from '@/components/UI/WebsearchIcon'
+import { WebsearchProviderIcon } from '@/components/ui/WebsearchIcon'
 import { NavigationProps } from '@/types/naviagate'
 import { WebSearchProvider } from '@/types/websearch'
 

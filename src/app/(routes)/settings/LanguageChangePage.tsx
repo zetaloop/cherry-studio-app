@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Text, useTheme, XStack, YStack } from 'tamagui'
 
-import { SettingContainer } from '@/components/Settings'
-import { HeaderBar } from '@/components/Settings/HeaderBar'
+import { SettingContainer } from '@/components/settings'
+import { HeaderBar } from '@/components/settings/HeaderBar'
 import { languagesOptions } from '@/config/languages'
 import { NavigationProps } from '@/types/naviagate'
 

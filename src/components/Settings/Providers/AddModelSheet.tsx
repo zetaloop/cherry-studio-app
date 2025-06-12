@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input, Text, XStack, YStack } from 'tamagui'
 
-import { ISheet } from '@/components/UI/Sheet'
+import { ISheet } from '@/components/ui/Sheet'
 
 interface AddModelSheetProps {
   bottomSheetRef: React.RefObject<BottomSheet | null>

@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
-import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/Settings'
-import { HeaderBar } from '@/components/Settings/HeaderBar'
-import { CustomSwitch } from '@/components/UI/Switch'
+import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
+import { HeaderBar } from '@/components/settings/HeaderBar'
+import { CustomSwitch } from '@/components/ui/Switch'
 import { NavigationProps } from '@/types/naviagate'
 
 export default function WebDavPage() {

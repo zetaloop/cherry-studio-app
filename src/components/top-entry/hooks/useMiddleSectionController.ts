@@ -12,7 +12,7 @@ import {
   updateAssistant
 } from '@/store/top-entry'
 
-import { createNewAssistant, searchAssistants, sortAssistants } from '../Config'
+import { createNewAssistant, searchAssistants, sortAssistants } from '../config'
 
 export const useMiddleSectionController = () => {
   const dispatch = useAppDispatch()

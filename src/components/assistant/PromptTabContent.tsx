@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, TextArea, YStack } from 'tamagui'
 
-import { SettingRowTitle } from '@/components/Settings'
+import { SettingRowTitle } from '@/components/settings'
 import { Assistant } from '@/types/assistant'
 
 interface PromptTabContentProps {
