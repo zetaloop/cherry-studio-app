@@ -12,7 +12,7 @@ import { getModelUniqId } from '@/utils/model'
 
 import { CustomSlider } from '../UI/CustomSlider'
 import { CustomSwitch } from '../UI/Switch'
-import { ReasoningSelect } from './ReasoingSelect'
+import { ReasoningSelect } from './ReasoningSelect'
 
 interface ModelTabContentProps {
   assistant?: Assistant | null
