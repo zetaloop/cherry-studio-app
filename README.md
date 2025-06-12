@@ -38,13 +38,14 @@ English | [中文](./README-zh.md)
 3. **Install Dependencies**
 
    ```bash
-     bun install
+     yarn install
    ```
 
 4. **Start the app**
 
    ```bash
-     bun run start
+     yarn ios
+     yarn android
    ```
 
 In the output, you'll find options to open the app in a
