@@ -2,11 +2,11 @@ import { useNavigation } from '@react-navigation/native'
 import { ChevronRight, CloudUpload, HardDriveDownload, HardDriveUpload } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { CustomSwitch } from '@/components/ui/Switch'
 import { NavigationProps } from '@/types/naviagate'
 
@@ -16,7 +16,7 @@ export default function WebDavScreen() {
   const { t } = useTranslation()
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar title={t('settings.webdav.title')} onBackPress={() => navigation.goBack()} />
       <ScrollView flex={1} backgroundColor="$background">
         <SettingContainer>
@@ -77,6 +77,6 @@ export default function WebDavScreen() {
           </YStack>
         </SettingContainer>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

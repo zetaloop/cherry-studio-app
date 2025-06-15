@@ -3,11 +3,11 @@ import { Settings2 } from '@tamagui/lucide-icons'
 import { sortBy } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { ModelSelect } from '@/components/settings/providers/ModelSelect'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { useProviders } from '@/hooks/use-providers'
 import { Model } from '@/types/assistant'
@@ -57,7 +57,7 @@ export default function ModelSettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar title={t('settings.models.default_model')} onBackPress={() => navigation.goBack()} />
       <YStack padding="$4" backgroundColor="$background" flex={1} gap={24}>
         <YStack gap={8}>
@@ -105,6 +105,6 @@ export default function ModelSettingsScreen() {
           </XStack>
         </YStack>
       </YStack>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

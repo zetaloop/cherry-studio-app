@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, useTheme, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle } from '@/components/settings'
@@ -10,6 +9,7 @@ import { HeaderBar } from '@/components/settings/HeaderBar'
 import { EmptyModelView } from '@/components/settings/providers/EmptyModelView'
 import { ProviderItem } from '@/components/settings/providers/ProviderItem'
 import CustomRadialGradientBackground from '@/components/ui/CustomRadialGradientBackground'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { useAllProviders } from '@/hooks/use-providers'
 import { NavigationProps } from '@/types/naviagate'
@@ -27,7 +27,7 @@ export default function ProvidersScreen() {
   }
 
   return (
-    <SafeAreaView
+    <SafeAreaContainer
       style={{
         flex: 1,
         backgroundColor: theme.background.val
@@ -62,6 +62,6 @@ export default function ProvidersScreen() {
           </YStack>
         )}
       </SettingContainer>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

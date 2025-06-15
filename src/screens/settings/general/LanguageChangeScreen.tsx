@@ -2,11 +2,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { languagesOptions } from '@/config/languages'
 import { NavigationProps } from '@/types/naviagate'
 
@@ -36,7 +36,7 @@ export default function LanguageChangeScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar title={t('settings.general.language.title')} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
         <YStack flex={1} space={12} paddingHorizontal={16}>
@@ -72,6 +72,6 @@ export default function LanguageChangeScreen() {
           ))}
         </YStack>
       </SettingContainer>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

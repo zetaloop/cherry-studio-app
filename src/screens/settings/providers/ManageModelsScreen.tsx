@@ -4,12 +4,12 @@ import { Minus, Plus } from '@tamagui/lucide-icons'
 import { debounce, groupBy, uniqBy } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Accordion, Button, ScrollView, Tabs, Text, useTheme, YStack } from 'tamagui'
 
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { ModelGroup } from '@/components/settings/providers/ModelGroup'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { groupQwenModels, isFreeModel } from '@/config/models'
 import { isEmbeddingModel } from '@/config/models/embedding'
@@ -240,7 +240,7 @@ export default function ManageModelsScreen() {
   )
 
   return (
-    <SafeAreaView
+    <SafeAreaContainer
       edges={['top', 'left', 'right']}
       style={{
         flex: 1,
@@ -292,6 +292,6 @@ export default function ManageModelsScreen() {
           </YStack>
         </ScrollView>
       </SettingContainer>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

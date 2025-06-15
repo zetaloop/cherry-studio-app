@@ -3,17 +3,16 @@ import { t } from 'i18next'
 import React, { useMemo } from 'react'
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Image, styled, Text, useTheme, View, XStack, YStack } from 'tamagui'
+import { Image, styled, Text, View, XStack, YStack } from 'tamagui'
 
 import AssistantItemCard from '@/components/assistant/AssistantItemCard'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import { TopEntry } from '@/components/top-entry'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { getSystemAssistants } from '@/mock'
 import { NavigationProps } from '@/types/naviagate'
 
 const HomeScreen = () => {
-  const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
   const systemAssistants = useMemo(() => getSystemAssistants(), [])
 
@@ -22,7 +21,7 @@ const HomeScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
         <YStack backgroundColor="$background" flex={1} onPress={Keyboard.dismiss}>
           <TopEntry />
@@ -73,7 +72,7 @@ const HomeScreen = () => {
           </InputContainer>
         </YStack>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }
 

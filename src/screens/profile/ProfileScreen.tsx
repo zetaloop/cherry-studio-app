@@ -2,7 +2,6 @@ import { Link } from '@react-navigation/native'
 import { Settings } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import type { StackProps, TabLayout, TabsTabProps } from 'tamagui'
 import {
   AnimatePresence,
@@ -18,6 +17,8 @@ import {
   XStack,
   YStack
 } from 'tamagui'
+
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 
 type TabType = 'assistants' | 'knowledge' | 'files'
 
@@ -67,7 +68,7 @@ export default function ProfileScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: 'white' }}>
       <XStack justifyContent="flex-end" padding="$2">
         <Link screen="Settings" params={{ id: 'Settings' }}>
           <Button size="$3" circular icon={<Settings size={20} />} chromeless color="$gray9" />
@@ -180,7 +181,7 @@ export default function ProfileScreen() {
           </Tabs>
         </YStack>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }
 

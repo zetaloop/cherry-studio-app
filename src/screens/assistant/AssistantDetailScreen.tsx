@@ -2,7 +2,6 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, ScrollView, styled, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { ModelTabContent } from '@/components/assistant/ModelTabContent'
@@ -11,6 +10,7 @@ import { ToolTabContent } from '@/components/assistant/ToolTabContent'
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { AvatarEditButton } from '@/components/ui/AvatarEditButton'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { DefaultProviderIcon } from '@/components/ui/SvgIcons'
 import { useAssistant } from '@/hooks/use-assistant'
 import { RootStackParamList } from '@/types/naviagate'
@@ -33,7 +33,7 @@ export default function AssistantDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer>
       <HeaderBar
         title={mode === 'create' ? t('assistants.title.create') : t('assistants.title.edit')}
         onBackPress={() => navigation.goBack()}
@@ -94,7 +94,7 @@ export default function AssistantDetailScreen() {
           </XStack>
         </SettingContainer>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }
 
