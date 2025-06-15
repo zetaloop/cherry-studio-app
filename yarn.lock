@@ -7076,6 +7076,7 @@ __metadata:
     redux-devtools-expo-dev-plugin: "npm:^2.0.0"
     redux-persist: "npm:^6.0.0"
     tamagui: "npm:^1.123.17"
+    tokenx: "npm:^1.0.1"
     typescript: "npm:^5.3.3"
     uuid: "npm:^11.1.0"
     zeego: "npm:^3.0.6"
@@ -15281,6 +15282,13 @@ __metadata:
   version: 1.0.1
   resolution: "toidentifier@npm:1.0.1"
   checksum: 10c0/93937279934bd66cc3270016dd8d0afec14fb7c94a05c72dc57321f8bd1fa97e5bea6d1f7c89e728d077ca31ea125b78320a616a6c6cd0e6b9cb94cb864381c1
+  languageName: node
+  linkType: hard
+
+"tokenx@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "tokenx@npm:1.0.1"
+  checksum: 10c0/b3f4f18b33cf5fd7a0baa8d13da6f06850b5f2fdea9ef64c26aa91121fbec6d437ca5f31ea4a485dfb8944f434b9d1b68da87a723469e60d87c65737e1e9bf3f
   languageName: node
   linkType: hard
 

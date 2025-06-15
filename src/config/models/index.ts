@@ -1,4 +1,6 @@
 // 导出所有模型相关功能
+import OpenAI from 'openai'
+
 import { Model } from '@/types/assistant'
 
 export interface ModelGroup {
@@ -41,4 +43,64 @@ export function groupQwenModels(models: Model[]): Record<string, Model[]> {
     },
     {} as Record<string, Model[]>
   )
+}
+
+export const GEMINI_FLASH_MODEL_REGEX = new RegExp('gemini-.*-flash.*$')
+
+export const THINKING_TOKEN_MAP: Record<string, { min: number; max: number }> = {
+  // Gemini models
+  'gemini-.*-flash.*$': { min: 0, max: 24576 },
+  'gemini-.*-pro.*$': { min: 128, max: 32768 },
+
+  // Qwen models
+  'qwen-plus-.*$': { min: 0, max: 38912 },
+  'qwen-turbo-.*$': { min: 0, max: 38912 },
+  'qwen3-0\\.6b$': { min: 0, max: 30720 },
+  'qwen3-1\\.7b$': { min: 0, max: 30720 },
+  'qwen3-.*$': { min: 1024, max: 38912 },
+
+  // Claude models
+  'claude-3[.-]7.*sonnet.*$': { min: 1024, max: 64000 },
+  'claude-(:?sonnet|opus)-4.*$': { min: 1024, max: 32000 }
+}
+
+export const findTokenLimit = (modelId: string): { min: number; max: number } | undefined => {
+  for (const [pattern, limits] of Object.entries(THINKING_TOKEN_MAP)) {
+    if (new RegExp(pattern, 'i').test(modelId)) {
+      return limits
+    }
+  }
+
+  return undefined
+}
+
+export const NOT_SUPPORTED_REGEX = /(?:^tts|whisper|speech)/i
+
+export function isSupportedModel(model: OpenAI.Models.Model): boolean {
+  if (!model) {
+    return false
+  }
+
+  return !NOT_SUPPORTED_REGEX.test(model.id)
+}
+
+export function isOpenAIChatCompletionOnlyModel(model: Model): boolean {
+  if (!model) {
+    return false
+  }
+
+  return (
+    model.id.includes('gpt-4o-search-preview') ||
+    model.id.includes('gpt-4o-mini-search-preview') ||
+    model.id.includes('o1-mini') ||
+    model.id.includes('o1-preview')
+  )
+}
+
+export function isGemmaModel(model?: Model): boolean {
+  if (!model) {
+    return false
+  }
+
+  return model.id.includes('gemma-') || model.group === 'Gemma'
 }

@@ -1,9 +1,9 @@
-import { getProviderByModel } from '@/services/assistant-service'
+import { getProviderByModel } from '@/services/AssistantService'
 import { Model } from '@/types/assistant'
 
 import { isEmbeddingModel } from './embedding'
+import { GENERATE_IMAGE_MODELS, isTextToImageModel } from './image'
 import { isOpenAIReasoningModel } from './reasoning'
-import { GENERATE_IMAGE_MODELS, isTextToImageModel } from './text-to-image'
 
 export const CLAUDE_SUPPORTED_WEBSEARCH_REGEX = new RegExp(
   `\\b(?:claude-3(-|\\.)(7|5)-sonnet(?:-[\\w-]+)|claude-3(-|\\.)5-haiku(?:-[\\w-]+))\\b`,
