@@ -41,7 +41,7 @@ export default function SettingsScreen() {
         },
         {
           title: t('settings.websearch.title'),
-          screen: 'WebsearchSettingsScreen',
+          screen: 'WebSearchSettingsScreen',
           icon: <Globe size={24} />
         }
       ]

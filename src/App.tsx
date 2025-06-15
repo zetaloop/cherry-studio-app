@@ -18,7 +18,7 @@ import { PortalProvider } from 'tamagui'
 import store, { persistor } from '@/store'
 
 import tamaguiConfig from '../tamagui.config'
-import AppNavigator from './navigation/AppNavigator'
+import AppNavigator from './navigators/AppNavigator'
 
 // import migrations from '../../drizzle/migrations'
 
