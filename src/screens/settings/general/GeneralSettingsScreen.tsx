@@ -4,11 +4,11 @@ import { ChevronRight } from '@tamagui/lucide-icons'
 import { useState } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { CustomSwitch } from '@/components/ui/Switch'
 import { languagesOptions } from '@/config/languages'
 import { themeOptions } from '@/config/theme'
@@ -56,7 +56,7 @@ export default function GeneralSettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar title={t('settings.general.title')} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
         <YStack gap={24} flex={1}>
@@ -106,6 +106,6 @@ export default function GeneralSettingsScreen() {
           </YStack>
         </YStack>
       </SettingContainer>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

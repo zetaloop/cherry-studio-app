@@ -4,8 +4,7 @@ import { BookmarkMinus } from '@tamagui/lucide-icons'
 import { debounce } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { ScrollView, Tabs, Text, useTheme } from 'tamagui'
+import { ScrollView, Tabs, Text } from 'tamagui'
 
 import AllAssistantsTab from '@/components/assistant/market/AllAssistantsTab'
 import AssistantItemSheet from '@/components/assistant/market/AssistantItemSheet'
@@ -16,6 +15,8 @@ import { SearchInput } from '@/components/ui/SearchInput'
 import { getSystemAssistants } from '@/mock'
 import { Assistant } from '@/types/assistant'
 import { groupByCategories } from '@/utils/assistants'
+
+import SafeAreaContainer from '../../components/ui/SafeAreaContainer'
 interface TabConfig {
   value: string
   label: string
@@ -25,7 +26,6 @@ type FilterType = 'all' | string
 
 export default function AssistantMarketScreen() {
   const { t } = useTranslation()
-  const theme = useTheme()
   const navigation = useNavigation()
 
   const bottomSheetRef = useRef<BottomSheet>(null)
@@ -168,9 +168,8 @@ export default function AssistantMarketScreen() {
     ),
     [tabConfigs, assistantGroupsForDisplay, handleArrowClick, filterAssistants]
   )
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer>
       <HeaderBar
         title={t('assistants.market.title')}
         onBackPress={handleBackPress}
@@ -207,6 +206,6 @@ export default function AssistantMarketScreen() {
           assistant={selectedAssistant}
         />
       )}
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

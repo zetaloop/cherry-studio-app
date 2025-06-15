@@ -2,11 +2,11 @@ import { useNavigation } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, useTheme, YStack } from 'tamagui'
 
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { NavigationProps } from '@/types/naviagate'
 import { SubscribeSource } from '@/types/websearch'
 
@@ -49,7 +49,7 @@ export default function WebSearchSettingsScreen() {
   }, [])
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
         <HeaderBar title={t('settings.websearch.title')} onBackPress={() => navigation.goBack()} />
         <ScrollView flex={1}>
@@ -80,6 +80,6 @@ export default function WebSearchSettingsScreen() {
           </SettingContainer>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

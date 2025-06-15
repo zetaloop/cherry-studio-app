@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { Animated, Dimensions, Image, TouchableOpacity } from 'react-native'
 import PagerView from 'react-native-pager-view'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
+import { SafeAreaContainer } from '@/components/ui/SafeAreaContainer'
 import { useAppDispatch } from '@/store'
 import { setWelcomeShown } from '@/store/app'
 
@@ -94,7 +94,7 @@ export default function WelcomeScreen() {
   }, [activeIndex])
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer>
       <YStack flex={1} alignItems="center" justifyContent="space-between" paddingVertical={20}>
         <YStack alignItems="center" marginTop={20}>
           <Image source={require('@/assets/images/favicon.png')} style={{ width: 60, height: 60, borderRadius: 15 }} />
@@ -160,6 +160,6 @@ export default function WelcomeScreen() {
           <Text color="#9333EA">隐私政策</Text>
         </Text>
       </YStack>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

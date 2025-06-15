@@ -3,11 +3,11 @@ import { ArrowUpRight, Copyright, Github, Globe, Mail, Rss } from '@tamagui/luci
 import * as ExpoLinking from 'expo-linking'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 
 export default function AboutScreen() {
   const { t } = useTranslation()
@@ -23,7 +23,7 @@ export default function AboutScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar
         title={t('settings.about.header')}
         onBackPress={() => navigation.goBack()}
@@ -98,6 +98,6 @@ export default function AboutScreen() {
           </SettingGroup>
         </YStack>
       </SettingContainer>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

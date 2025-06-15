@@ -4,7 +4,6 @@ import { ChevronRight, HeartPulse, Plus, Settings, Settings2 } from '@tamagui/lu
 import { debounce, groupBy } from 'lodash'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Accordion, Button, ScrollView, Separator, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
@@ -12,6 +11,7 @@ import { HeaderBar } from '@/components/settings/HeaderBar'
 import { AddModelSheet } from '@/components/settings/providers/AddModelSheet'
 import AuthCard from '@/components/settings/providers/AuthCard'
 import { ModelGroup } from '@/components/settings/providers/ModelGroup'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { CustomSwitch } from '@/components/ui/Switch'
 import { useProvider } from '@/hooks/use-providers'
@@ -89,7 +89,7 @@ export default function ProviderSettingsScreen() {
   }, [])
 
   return (
-    <SafeAreaView
+    <SafeAreaContainer
       edges={['top', 'left', 'right']}
       style={{
         flex: 1,
@@ -194,6 +194,6 @@ export default function ProviderSettingsScreen() {
         </ScrollView>
       </SettingContainer>
       <AddModelSheet bottomSheetRef={bottomSheetRef} isOpen={isBottomSheetOpen} onClose={handleBottomSheetClose} />
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

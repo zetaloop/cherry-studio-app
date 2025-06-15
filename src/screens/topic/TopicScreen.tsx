@@ -2,11 +2,11 @@ import { useNavigation } from '@react-navigation/native'
 import { PenSquare } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTheme } from 'tamagui'
 
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 
 export default function TopicScreen() {
@@ -20,7 +20,7 @@ export default function TopicScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar
         title={t('topics.title.recent')}
         onBackPress={() => navigation.goBack()}
@@ -32,6 +32,6 @@ export default function TopicScreen() {
       <SettingContainer>
         <SearchInput placeholder={t('common.search_placeholder')} />
       </SettingContainer>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

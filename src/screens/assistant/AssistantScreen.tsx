@@ -2,12 +2,12 @@ import { useNavigation } from '@react-navigation/native'
 import { PenSquare } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, ScrollView, useTheme, XStack, YStack } from 'tamagui'
 
 import AssistantItem from '@/components/assistant/AssistantItem'
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { MOCK_ASSISTANTS } from '@/mock'
 import { NavigationProps } from '@/types/naviagate'
@@ -45,7 +45,7 @@ export default function AssistantScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer>
       <HeaderBar
         title={t('assistants.title.recent')}
         onBackPress={() => navigation.goBack()}
@@ -93,6 +93,6 @@ export default function AssistantScreen() {
           </YStack>
         </ScrollView>
       </SettingContainer>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

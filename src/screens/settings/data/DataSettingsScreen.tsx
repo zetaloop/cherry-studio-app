@@ -2,12 +2,12 @@ import { ChevronRight, CloudUpload, FolderSearch2 } from '@tamagui/lucide-icons'
 import { useNavigation } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { DataBackupIcon } from '@/components/ui/DatabackupIcon'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { NavigationProps } from '@/types/naviagate'
 
 interface SettingItemConfig {
@@ -85,7 +85,7 @@ export default function DataSettingsScreen() {
   ]
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar title={t('settings.data.title')} onBackPress={() => navigation.goBack()} />
 
       <ScrollView flex={1} backgroundColor="$background">
@@ -101,7 +101,7 @@ export default function DataSettingsScreen() {
           </YStack>
         </SettingContainer>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }
 

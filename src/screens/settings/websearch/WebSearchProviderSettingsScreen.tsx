@@ -2,12 +2,12 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
 import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { useWebsearchProvider } from '@/hooks/use-websearch-providers'
 import { RootStackParamList } from '@/types/naviagate'
 
@@ -41,7 +41,7 @@ export default function WebSearchProviderSettingsScreen() {
   }, [])
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar title={provider.name} onBackPress={handleBackPress} />
 
       <SettingContainer>
@@ -103,6 +103,6 @@ export default function WebSearchProviderSettingsScreen() {
           />
         </YStack>
       </SettingContainer>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

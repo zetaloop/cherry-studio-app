@@ -3,11 +3,11 @@ import { ChevronRight, HardDriveDownload, HardDriveUpload, LogOut, RefreshCcw, U
 import { useState } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 
 export default function NutstoreLoginScreen() {
   const [isLoggedIn, setIsLoggedIn] = useState(false) // State to track login status
@@ -16,7 +16,7 @@ export default function NutstoreLoginScreen() {
   const { t } = useTranslation()
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar title={t('settings.nutstore.nutstore')} onBackPress={() => navigation.goBack()} />
       <ScrollView flex={1} backgroundColor="$background">
         <SettingContainer>
@@ -100,6 +100,6 @@ export default function NutstoreLoginScreen() {
           )}
         </SettingContainer>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

@@ -4,13 +4,13 @@ import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import { sortBy } from 'lodash'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
 import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { ApiCheckSheet } from '@/components/settings/providers/ApiCheckSheet'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { useProvider } from '@/hooks/use-providers'
 import { Model } from '@/types/assistant'
@@ -106,7 +106,7 @@ export default function ApiServiceScreen() {
   }, [selectedModel, apiKey, apiHost])
 
   return (
-    <SafeAreaView
+    <SafeAreaContainer
       style={{
         flex: 1,
         backgroundColor: theme.background.val
@@ -183,6 +183,6 @@ export default function ApiServiceScreen() {
         apiKey={apiKey}
         onStartModelCheck={handleStartModelCheck}
       />
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }

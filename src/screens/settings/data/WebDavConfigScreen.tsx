@@ -3,10 +3,10 @@ import { ScanQrCode } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextInput, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, ScrollView, Text, useTheme, YStack } from 'tamagui'
 
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 
 export default function WebDavConfigScreen() {
   const theme = useTheme()
@@ -33,7 +33,7 @@ export default function WebDavConfigScreen() {
   } as const
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+    <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar
         title={t('settings.webdav.config.title')}
         onBackPress={() => navigation.goBack()}
@@ -102,6 +102,6 @@ export default function WebDavConfigScreen() {
           </View>
         </YStack>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaContainer>
   )
 }
