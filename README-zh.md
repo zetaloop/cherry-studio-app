@@ -16,7 +16,7 @@
 ## 🛠️ 技术栈
 
 - **框架**: Expo React Native
-- **包管理器**: Bun
+- **包管理器**: Yarn
 - **UI**: Tamagui
 - **路由**: React Navigation
 - **状态管理**: Redux Toolkit
@@ -38,13 +38,14 @@
 3. **安装依赖**
 
    ```bash
-     bun install
+     yarn install
    ```
 
 4. **运行**
 
    ```bash
-     bun run start
+     yarn ios
+     yarn android
    ```
 
 在输出中，您将找到以

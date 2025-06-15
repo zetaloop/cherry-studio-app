@@ -16,7 +16,7 @@ English | [中文](./README-zh.md)
 ## 🛠️ Tech Stack
 
 - **Framework**: Expo React Native
-- **Package Manager**: Bun
+- **Package Manager**: Yarn
 - **UI**: Tamagui
 - **Routing**: React Navigation
 - **State Management**: Redux Toolkit

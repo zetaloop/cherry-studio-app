@@ -1,5 +1,21 @@
 # 开发文档
 
+## 代码规范
+
+### Components
+
+- 组件命名使用PascalCase
+- 组件文件名使用kebab-case
+
+### Screens
+
+- 屏幕命名使用PascalCase
+- 屏幕文件名使用kebab-case
+
+### Navigators
+
+- 新增Screen需要在MainStackNavigator中注册，根据文件夹目录放置对应的位置
+
 ## 数据迁移相关
 
 1. 合并Assistant和Agent为Assistant
