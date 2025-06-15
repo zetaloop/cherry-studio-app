@@ -24,7 +24,7 @@ export const ProviderItem: React.FC<ProviderItemProps> = ({ provider, mode = 'en
   const statusText = mode === 'enabled' ? t('settings.provider.enabled') : t('settings.provider.checked') // 假设你有这个翻译键
 
   return (
-    <SettingRow onPress={() => navigation.navigate('ProviderSettingsPage', { providerId: provider.id })}>
+    <SettingRow onPress={() => navigation.navigate('ProviderSettings', { providerId: provider.id })}>
       <XStack gap={5} alignItems="center">
         <ProviderIcon provider={provider} />
         <Text>{provider.name}</Text>

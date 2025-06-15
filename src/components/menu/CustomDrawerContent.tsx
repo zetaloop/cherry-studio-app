@@ -10,7 +10,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
   const { t } = useTranslation()
 
   const handleTopicSeeAll = () => {
-    props.navigation.navigate('Main', { screen: 'TopicPage' })
+    props.navigation.navigate('Main', { screen: 'TopicScreen' })
     console.log('Navigate to all topics')
   }
 
@@ -43,7 +43,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           icon={<Settings size={24} />}
           chromeless
           onPress={() => {
-            props.navigation.navigate('Main', { screen: 'Settings' })
+            props.navigation.navigate('Main', { screen: 'SettingsScreen' })
             props.navigation.closeDrawer()
           }}
         />

@@ -1,29 +1,29 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 
 export type RootStackParamList = {
-  Welcome: undefined
-  Home: undefined
-  Settings: undefined
-  DataSettings: undefined
-  BasicDataSettings: undefined
-  WebDavPage: undefined
-  WebDavConfig: undefined
-  NutstoreLogin: undefined
-  ModelSettings: undefined
-  ProvidersPage: undefined
-  AboutSettings: undefined
-  GeneralSettings: undefined
-  ThemeSettingsPage: undefined
-  LanguageChangePage: undefined
-  WebSearchSettings: undefined
-  ProviderListPage: undefined
-  ProviderSettingsPage: { providerId: string }
-  ManageModelsPage: { providerId: string }
-  ApiServicePage: { providerId: string }
-  TopicPage: undefined
-  AssistantPage: undefined
-  AssistantDetailPage: { assistantId?: string; mode: 'create' | 'edit' }
-  AssistantMarketPage: undefined
-  WebsearchProviderSettingsPage: { providerId: string }
+  WelcomeScreen: undefined
+  HomeScreen: undefined
+  SettingsScreen: undefined
+  DataSettingsScreen: undefined
+  BasicDataSettingsScreen: undefined
+  WebDavScreen: undefined
+  WebDavConfigScreen: undefined
+  NutstoreLoginScreen: undefined
+  ModelSettingsScreen: undefined
+  ProvidersScreen: undefined
+  AboutScreen: undefined
+  GeneralSettingsScreen: undefined
+  ThemeSettingsScreen: undefined
+  LanguageChangeScreen: undefined
+  WebSearchSettingsScreen: undefined
+  ProviderListScreen: undefined
+  ProviderSettingsScreen: { providerId: string }
+  ManageModelsScreen: { providerId: string }
+  ApiServiceScreen: { providerId: string }
+  TopicScreen: undefined
+  AssistantScreen: undefined
+  AssistantDetailScreen: { assistantId?: string; mode: 'create' | 'edit' }
+  AssistantMarketScreen: undefined
+  WebSearchProviderSettingsScreen: { providerId: string }
 }
 export type NavigationProps = StackNavigationProp<RootStackParamList>

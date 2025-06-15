@@ -8,6 +8,7 @@ export default {
     scheme: 'cherry-studio',
     userInterfaceStyle: 'automatic',
     newArchEnabled: true,
+    entryPoint: './src/app.js',
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.anonymous.cherrystudio'
