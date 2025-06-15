@@ -3,6 +3,8 @@ import { CompletionUsage } from 'openai/resources/completions.mjs'
 import { Assistant, Metrics, Model, Topic, Usage } from './assistant'
 import { FileType } from './file'
 import { GenerateImageResponse } from './image'
+import { KnowledgeReference } from './knowledge'
+import { MCPServer, MCPToolResponse } from './mcp'
 import { WebSearchResponse, WebSearchSource } from './websearch'
 
 // MessageBlock 类型枚举 - 根据实际API返回特性优化
@@ -50,7 +52,7 @@ export interface PlaceholderMessageBlock extends BaseMessageBlock {
 export interface MainTextMessageBlock extends BaseMessageBlock {
   type: MessageBlockType.MAIN_TEXT
   content: string
-  // knowledgeBaseIds?: string[]
+  knowledgeBaseIds?: string[]
   // Citation references
   citationReferences?: {
     citationBlockId?: string
@@ -93,22 +95,22 @@ export interface ImageMessageBlock extends BaseMessageBlock {
 }
 
 // Added unified ToolBlock
-// export interface ToolMessageBlock extends BaseMessageBlock {
-//   type: MessageBlockType.TOOL
-//   toolId: string
-//   toolName?: string
-//   arguments?: Record<string, any>
-//   content?: string | object
-//   metadata?: BaseMessageBlock['metadata'] & {
-//     rawMcpToolResponse?: MCPToolResponse
-//   }
-// }
+export interface ToolMessageBlock extends BaseMessageBlock {
+  type: MessageBlockType.TOOL
+  toolId: string
+  toolName?: string
+  arguments?: Record<string, any>
+  content?: string | object
+  metadata?: BaseMessageBlock['metadata'] & {
+    rawMcpToolResponse?: MCPToolResponse
+  }
+}
 
 // Consolidated and Enhanced Citation Block
 export interface CitationMessageBlock extends BaseMessageBlock {
   type: MessageBlockType.CITATION
   response?: WebSearchResponse
-  // knowledge?: KnowledgeReference[]
+  knowledge?: KnowledgeReference[]
 }
 
 // 文件块
@@ -129,7 +131,7 @@ export type MessageBlock =
   | TranslationMessageBlock
   | CodeMessageBlock
   | ImageMessageBlock
-  // | ToolMessageBlock
+  | ToolMessageBlock
   | FileMessageBlock
   | ErrorMessageBlock
   | CitationMessageBlock
@@ -160,11 +162,10 @@ export type Message = {
   modelId?: string
   model?: Model
   type?: 'clear'
-  isPreset?: boolean
   useful?: boolean
   askId?: string // 关联的问题消息ID
   mentions?: Model[]
-  // enabledMCPs?: MCPServer[]
+  enabledMCPs?: MCPServer[]
 
   usage?: Usage
   metrics?: Metrics
@@ -183,7 +184,7 @@ export interface Response {
   usage?: Usage
   metrics?: Metrics
   webSearch?: WebSearchResponse
-  // mcpToolResponse?: MCPToolResponse[]
+  mcpToolResponse?: MCPToolResponse[]
   generateImage?: GenerateImageResponse
   error?: ResponseError
 }
@@ -195,8 +196,8 @@ export interface MessageInputBaseParams {
   topic: Topic
   content?: string
   files?: FileType[]
-  // knowledgeBaseIds?: string[]
+  knowledgeBaseIds?: string[]
   mentions?: Model[]
-  // enabledMCPs?: MCPServer[]
+  enabledMCPs?: MCPServer[]
   usage?: CompletionUsage
 }

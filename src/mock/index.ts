@@ -1,4 +1,4 @@
-import { SYSTEM_MODELS } from '@/config/models/system-models'
+import { SYSTEM_MODELS } from '@/config/models/systemModels'
 import assistantsJsonData from '@/resources/data/assistants.json'
 import { Assistant, Provider } from '@/types/assistant'
 import { WebSearchProvider } from '@/types/websearch'

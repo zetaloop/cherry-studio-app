@@ -13,6 +13,7 @@ export type Assistant = {
   emoji?: string
   description?: string
   model?: Model
+  defaultModel?: Model
   settings?: Partial<AssistantSettings>
 }
 
@@ -23,14 +24,12 @@ export type AssistantSettings = {
   maxTokens: number | undefined
   enableMaxTokens: boolean
   streamOutput: boolean
-  hideMessages: boolean
   defaultModel?: Model
   customParameters?: AssistantSettingCustomParameters[]
   reasoning_effort?: ReasoningEffortOptions
   qwenThinkMode?: boolean
   toolUseMode?: 'function' | 'prompt'
 }
-
 export type AssistantSettingCustomParameters = {
   name: string
   value: string | number | boolean | object
