@@ -21,7 +21,7 @@ export const WebsearchProviderRow = ({ provider, need_config }: WebsearchProvide
 
   const onPress = () => {
     if (!need_config) return
-    navigation.navigate('WebsearchProviderSettings', { providerId: provider.id })
+    navigation.navigate('WebSearchProviderSettingsScreen', { providerId: provider.id })
   }
 
   return (
