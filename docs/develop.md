@@ -22,28 +22,42 @@
 
 ## TODO
 
+> 第一期目标: 实现基本的聊天功能，支持上传图片和文档
+
 ### UI
 
-- [ ] 顶部助手栏
+- [x] 顶部助手栏
 - [ ] Chat/Message相关界面
 - [ ] 背景上色
+
+### 数据
+
+- [ ] 支持Cherry Studio客户端数据迁移
+  > 使用expo-sqlite + zustand(或者仍旧使用redux)
+
+### 逻辑
+
+- [ ] 使用和客户端相同的中间件架构，通过aiCore调用底层sdk
+  > 由于移动端不支持ReadableStream，中间件部分需要一些修改
+- [ ] [迁移ApiService](https://github.com/CherryHQ/cherry-studio/blob/main/src/renderer/src/services/ApiService.ts)
+- [ ] [迁移messageThunk](https://github.com/CherryHQ/cherry-studio/blob/main/src/renderer/src/store/thunk/messageThunk.ts)
 
 ## Problems
 
 ### 首页
 
-- [ ] 输入框和键盘动画不跟手
+- [ ] 输入框和键盘动画不跟手(/video/problem1.mov)
 
 ### Model Provider
 
-- [ ] 搜索模型时键盘挡住显示区域
-- [ ] 添加模型时键盘挡住显示区域
-- [ ] 添加服务商时键盘挡住显示区域
+- [ ] 搜索模型时键盘挡住显示区域(/video/problem2.mov)
+- [ ] 添加模型时键盘挡住显示区域(/video/problem2.mov)
+- [ ] 添加服务商时键盘挡住显示区域(/video/problem3.mov)
 - [ ] 模型管理界面Tab无法改变样式
 
 ### Default Model
 
-- [ ] 模型下拉框样式
+- [x] 模型下拉框样式
 
 ### Websearch
 
@@ -51,4 +65,4 @@
 
 ### Assistant Market
 
-- [ ] Bottom Sheet UI问题
+- [ ] Bottom Sheet UI问题(/video/problem4.mov)
