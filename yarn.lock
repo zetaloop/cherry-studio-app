@@ -2621,6 +2621,62 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oxlint/darwin-arm64@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@oxlint/darwin-arm64@npm:1.1.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxlint/darwin-x64@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@oxlint/darwin-x64@npm:1.1.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oxlint/linux-arm64-gnu@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@oxlint/linux-arm64-gnu@npm:1.1.0"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxlint/linux-arm64-musl@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@oxlint/linux-arm64-musl@npm:1.1.0"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@oxlint/linux-x64-gnu@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@oxlint/linux-x64-gnu@npm:1.1.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxlint/linux-x64-musl@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@oxlint/linux-x64-musl@npm:1.1.0"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@oxlint/win32-arm64@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@oxlint/win32-arm64@npm:1.1.0"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxlint/win32-x64@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@oxlint/win32-x64@npm:1.1.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -7053,6 +7109,7 @@ __metadata:
     jest-expo: "npm:~52.0.2"
     lodash: "npm:^4.17.21"
     openai: "npm:^4.102.0"
+    oxlint: "npm:^1.1.0"
     prettier: "npm:^3.4.2"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
@@ -12819,6 +12876,42 @@ __metadata:
     "@oxc-transform/binding-win32-x64-msvc":
       optional: true
   checksum: 10c0/b33ce8c54d9deb8827c35eefd022eac2522ddd486e8f3b9e07ef8f448b063094246f329207f4b631622734e3025c3bd128a208d1e6b38ba08e98282ec7312855
+  languageName: node
+  linkType: hard
+
+"oxlint@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "oxlint@npm:1.1.0"
+  dependencies:
+    "@oxlint/darwin-arm64": "npm:1.1.0"
+    "@oxlint/darwin-x64": "npm:1.1.0"
+    "@oxlint/linux-arm64-gnu": "npm:1.1.0"
+    "@oxlint/linux-arm64-musl": "npm:1.1.0"
+    "@oxlint/linux-x64-gnu": "npm:1.1.0"
+    "@oxlint/linux-x64-musl": "npm:1.1.0"
+    "@oxlint/win32-arm64": "npm:1.1.0"
+    "@oxlint/win32-x64": "npm:1.1.0"
+  dependenciesMeta:
+    "@oxlint/darwin-arm64":
+      optional: true
+    "@oxlint/darwin-x64":
+      optional: true
+    "@oxlint/linux-arm64-gnu":
+      optional: true
+    "@oxlint/linux-arm64-musl":
+      optional: true
+    "@oxlint/linux-x64-gnu":
+      optional: true
+    "@oxlint/linux-x64-musl":
+      optional: true
+    "@oxlint/win32-arm64":
+      optional: true
+    "@oxlint/win32-x64":
+      optional: true
+  bin:
+    oxc_language_server: bin/oxc_language_server
+    oxlint: bin/oxlint
+  checksum: 10c0/4b5455b3e9da1ac6f796d48f31e487bbcbdd5d29864614a82219654408ca3d7fe1d9fdf898c79432702a8f6e243f471728b6ad5839589cf980212b872bf3c44f
   languageName: node
   linkType: hard
 
