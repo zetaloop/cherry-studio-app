@@ -20,13 +20,7 @@ export default {
       },
       package: 'com.anonymous.cherrystudio'
     },
-    web: {
-      bundler: 'metro',
-      output: 'static',
-      favicon: './src/assets/images/favicon.png'
-    },
     plugins: [
-      'expo-router',
       [
         'expo-splash-screen',
         {
