@@ -1,5 +1,5 @@
+import { useNavigation } from '@react-navigation/native'
 import { ChevronRight, FileText, Folder, FolderOpen, RotateCcw, Save, Trash2 } from '@tamagui/lucide-icons'
-import { useNavigation } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, useTheme, XStack, YStack } from 'tamagui'

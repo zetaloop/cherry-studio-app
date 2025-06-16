@@ -1,4 +1,4 @@
-import { useNavigation } from 'expo-router'
+import { useNavigation } from '@react-navigation/native'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform } from 'react-native'
