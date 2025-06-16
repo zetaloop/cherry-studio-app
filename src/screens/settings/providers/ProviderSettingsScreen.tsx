@@ -23,7 +23,6 @@ type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ProviderSettings
 
 export default function ProviderSettingsScreen() {
   const { t } = useTranslation()
-  const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
   const route = useRoute<ProviderSettingsRouteProp>()
   const [searchText, setSearchText] = useState('')
@@ -90,12 +89,7 @@ export default function ProviderSettingsScreen() {
   }, [])
 
   return (
-    <SafeAreaContainer
-      edges={['top', 'left', 'right']}
-      style={{
-        flex: 1,
-        backgroundColor: theme.background.val
-      }}>
+    <SafeAreaContainer>
       <HeaderBar
         title={provider.name}
         onBackPress={() => navigation.goBack()}
