@@ -110,6 +110,7 @@ export default function ProviderSettingsScreen() {
           showsVerticalScrollIndicator={false}
           style={{ flex: 1 }}
           extraScrollHeight={300}
+          enableOnAndroid={true}
           contentContainerStyle={{ flexGrow: 1 }}>
           <YStack flex={1} gap={24}>
             {/* Auth Card */}
