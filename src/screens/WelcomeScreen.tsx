@@ -6,7 +6,7 @@ import { Animated, Dimensions, Image, TouchableOpacity } from 'react-native'
 import PagerView from 'react-native-pager-view'
 import { Button, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
-import { SafeAreaContainer } from '@/components/ui/SafeAreaContainer'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { useAppDispatch } from '@/store'
 import { setWelcomeShown } from '@/store/app'
 
