@@ -3,6 +3,7 @@ import { BookmarkMinus } from '@tamagui/lucide-icons'
 import { useMemo } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import Markdown from 'react-native-markdown-display'
 import { Button, ScrollView, Text, XStack, YStack } from 'tamagui'
 
 import { ISheet } from '@/components/ui/Sheet'
@@ -36,7 +37,9 @@ export default function AssistantItemSheet({ assistant, bottomSheetRef, isOpen, 
                 ))}
             </XStack>
             <Text>{assistant.description}</Text>
-            <Text>{assistant.prompt}</Text>
+            <Text>
+              <Markdown>{assistant.prompt}</Markdown>
+            </Text>
           </YStack>
         </ScrollView>
 
