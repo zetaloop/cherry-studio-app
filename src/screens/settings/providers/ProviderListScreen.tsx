@@ -16,7 +16,6 @@ import { useAllProviders } from '@/hooks/use-providers'
 
 export default function ProviderListScreen() {
   const { t } = useTranslation()
-  const theme = useTheme()
   const navigation = useNavigation()
 
   const bottomSheetRef = useRef<BottomSheet>(null)
@@ -54,12 +53,7 @@ export default function ProviderListScreen() {
   }
 
   return (
-    <SafeAreaContainer
-      edges={['top', 'left', 'right']}
-      style={{
-        flex: 1,
-        backgroundColor: theme.background.val
-      }}>
+    <SafeAreaContainer>
       <HeaderBar
         title={t('settings.provider.list.title')}
         onBackPress={() => navigation.goBack()}

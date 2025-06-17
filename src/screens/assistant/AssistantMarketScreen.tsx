@@ -166,7 +166,7 @@ export default function AssistantMarketScreen() {
           ))}
       </>
     ),
-    [tabConfigs, assistantGroupsForDisplay, handleArrowClick, filterAssistants]
+    [assistantGroupsForDisplay, handleArrowClick, handleAssistantItemPress, tabConfigs, filterAssistants]
   )
   return (
     <SafeAreaContainer>

@@ -1,8 +1,8 @@
-import BottomSheet from '@gorhom/bottom-sheet' // Keep this if bottomSheetRef type is needed, or import type directly
+import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet' // Keep this if bottomSheetRef type is needed, or import type directly
 import { PenLine } from '@tamagui/lucide-icons'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Text, XStack, YStack } from 'tamagui'
+import { Button, Text, XStack, YStack } from 'tamagui'
 
 import { AvatarEditButton } from '@/components/ui/AvatarEditButton'
 import { ISheet } from '@/components/ui/Sheet'
@@ -53,7 +53,7 @@ export function AddProviderSheet({
               <Text color="red">*</Text>
               <Text>{t('settings.provider.add.name')}</Text>
             </XStack>
-            <Input
+            <BottomSheetTextInput
               placeholder={t('settings.provider.add.name.placeholder')}
               value={providerName}
               onChangeText={onProviderNameChange}

@@ -1,7 +1,7 @@
-import BottomSheet from '@gorhom/bottom-sheet' // For type if needed
+import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet' // For type if needed
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Text, XStack, YStack } from 'tamagui'
+import { Button, Text, XStack, YStack } from 'tamagui'
 
 import { ISheet } from '@/components/ui/Sheet'
 
@@ -56,7 +56,7 @@ export function AddModelSheet({
               <Text color="red">*</Text>
               <Text>{t('settings.models.add.model.id')}</Text>
             </XStack>
-            <Input
+            <BottomSheetTextInput
               placeholder={t('settings.models.add.model.id.placeholder')}
               value={modelId}
               onChangeText={setModelId}
@@ -65,7 +65,7 @@ export function AddModelSheet({
 
           <YStack width="100%" gap={8}>
             <Text>{t('settings.models.add.model.name')}</Text>
-            <Input
+            <BottomSheetTextInput
               placeholder={t('settings.models.add.model.name.placeholder')}
               value={modelName}
               onChangeText={setModelName}
@@ -74,7 +74,7 @@ export function AddModelSheet({
 
           <YStack width="100%" gap={8}>
             <Text>{t('settings.models.add.model.group')}</Text>
-            <Input
+            <BottomSheetTextInput
               placeholder={t('settings.models.add.model.group.placeholder')}
               value={modelGroup}
               onChangeText={setModelGroup}
