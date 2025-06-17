@@ -57,9 +57,9 @@ const HomeScreen = () => {
         messages: 'hi',
         assistant: MOCK_ASSISTANTS[0],
         streamOutput: false
+        // streamOutput: true
       }
 
-      // Try streaming check first
       const result = await ai.completions(params)
       console.log(result.getText())
     } catch (error) {
