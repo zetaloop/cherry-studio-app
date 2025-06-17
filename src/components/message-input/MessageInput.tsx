@@ -4,11 +4,15 @@ import { TextArea, XStack, YStack } from 'tamagui'
 
 import { AddFileButton } from './AddFileButton'
 import { MentionButton } from './MentionButton'
+import { SendButton } from './SendButton'
 import { ThinkButton } from './ThinkButton'
 import { VoiceButton } from './VoiceButton'
 import { WebsearchButton } from './WebsearchButton'
+interface MessageInputProps {
+  onSend: () => void
+}
 
-export const MessageInput: React.FC = () => {
+export const MessageInput: React.FC<MessageInputProps> = ({ onSend }) => {
   const { t } = useTranslation()
 
   return (
@@ -27,6 +31,7 @@ export const MessageInput: React.FC = () => {
         <XStack gap={5} alignItems="center">
           <MentionButton />
           <VoiceButton />
+          <SendButton onSend={onSend} />
         </XStack>
       </XStack>
     </YStack>
