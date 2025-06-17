@@ -6,7 +6,7 @@ import { Animated, Dimensions, Image, TouchableOpacity } from 'react-native'
 import PagerView from 'react-native-pager-view'
 import { Button, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
-import { SafeAreaContainer } from '@/components/ui/SafeAreaContainer'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { useAppDispatch } from '@/store'
 import { setWelcomeShown } from '@/store/app'
 
@@ -56,7 +56,7 @@ export default function WelcomeScreen() {
   const indicatorWidths = useRef(carouselItems.map((_, index) => new Animated.Value(index === 0 ? 24 : 8))).current
 
   const handleStart = () => {
-    navigation.dispatch(StackActions.replace('Home'))
+    navigation.dispatch(StackActions.replace('HomeScreen'))
     AsyncStorage.setItem('accessToken', 'true')
     dispatch(setWelcomeShown(true))
   }

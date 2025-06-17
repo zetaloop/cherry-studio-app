@@ -514,32 +514,32 @@ export const INITIAL_PROVIDERS: Provider[] = [
 
 export const MOCK_ASSISTANTS: Assistant[] = [
   {
-    id: 'a6e22b2a-e7a2-4aab-9c31-98bca001b75b',
+    id: '37b0e75f-f940-4f50-925a-bc4a38132844',
     name: '默认助手',
     emoji: '⭐️',
-    prompt: '你是{{model_name}}，现在时间是{{datetime}}，使用{{language}}语言回答',
+    prompt: '',
     topics: [
       {
-        id: 'caede922-8a37-47dd-8697-5257d09a713a',
-        assistantId: 'a6e22b2a-e7a2-4aab-9c31-98bca001b75b',
-        createdAt: '2025-05-29T02:39:40.147Z',
-        updatedAt: '2025-05-29T02:39:44.735Z',
-        name: '你好需帮助',
-        messages: [],
-        isNameManuallyEdited: false
-      },
-      {
-        id: 'f2ad726b-a3de-47f8-97c7-0cfbe4472f2d',
-        assistantId: 'default',
-        createdAt: '2025-05-28T05:44:26.093Z',
-        updatedAt: '2025-05-28T05:52:39.671Z',
-        name: 'GPT模型时间查询',
+        id: '972bd6aa-89e3-41b7-85a5-16e1bab85a9e',
+        assistantId: '37b0e75f-f940-4f50-925a-bc4a38132844',
+        createdAt: '2025-06-15T02:10:02.075Z',
+        updatedAt: '2025-06-17T02:34:44.330Z',
+        name: 'Hi',
         messages: [],
         isNameManuallyEdited: false
       }
     ],
     type: 'assistant',
-    model: { group: 'deepseek-ai', id: 'deepseek-ai/DeepSeek-R1', name: 'deepseek-ai/DeepSeek-R1', provider: 'silicon' }
+    model: {
+      id: 'deepseek-ai/DeepSeek-V3',
+      name: 'deepseek-ai/DeepSeek-V3',
+      provider: 'silicon',
+      group: 'deepseek-ai'
+    },
+    settings: {
+      temperature: 1,
+      streamOutput: true
+    }
   },
   {
     id: '3d1339ac-34ed-4002-a8c4-46048e09d5b2',

@@ -1,15 +1,19 @@
 import { useNavigation } from '@react-navigation/native'
 import { t } from 'i18next'
+import OpenAI from 'openai'
 import React, { useMemo } from 'react'
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Image, styled, Text, View, XStack, YStack } from 'tamagui'
 
+import AiProvider from '@/aiCore'
+import { CompletionsParams } from '@/aiCore/middleware/schemas'
 import AssistantItemCard from '@/components/assistant/AssistantItemCard'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import { TopEntry } from '@/components/top-entry'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { getSystemAssistants } from '@/mock'
+import { getSystemAssistants, INITIAL_PROVIDERS, MOCK_ASSISTANTS } from '@/mock'
+import { checkApiProvider } from '@/services/ApiService'
 import { NavigationProps } from '@/types/naviagate'
 
 const HomeScreen = () => {
@@ -18,6 +22,49 @@ const HomeScreen = () => {
 
   const handlePress = () => {
     navigation.navigate('AssistantMarketScreen')
+  }
+
+  const handleOpenAISend = async () => {
+    const client = new OpenAI({
+      baseURL: INITIAL_PROVIDERS[0].apiHost,
+      apiKey: INITIAL_PROVIDERS[0].apiKey
+    })
+    const stream = await client.chat.completions.create({
+      model: 'deepseek-ai/DeepSeek-V3',
+      messages: [
+        {
+          role: 'user',
+          content: 'hi'
+        }
+      ],
+      // stream: true,
+      stream: false
+    })
+
+    // for await (const chunk of stream) {
+    //   console.log(chunk.choices[0]?.delta?.content || '')
+    // }
+    console.log(stream.choices[0]?.message?.content || '')
+  }
+
+  const handleAiCoreSend = async () => {
+    try {
+      checkApiProvider(INITIAL_PROVIDERS[0])
+
+      const ai = new AiProvider(INITIAL_PROVIDERS[0])
+      const params: CompletionsParams = {
+        callType: 'check',
+        messages: 'hi',
+        assistant: MOCK_ASSISTANTS[0],
+        streamOutput: false
+      }
+
+      // Try streaming check first
+      const result = await ai.completions(params)
+      console.log(result.getText())
+    } catch (error) {
+      console.error('Error sending message:', error)
+    }
   }
 
   return (
@@ -68,7 +115,7 @@ const HomeScreen = () => {
           </ContentContainer>
 
           <InputContainer>
-            <MessageInput />
+            <MessageInput onSend={handleAiCoreSend} />
           </InputContainer>
         </YStack>
       </KeyboardAvoidingView>

@@ -8,6 +8,7 @@ import { INITIAL_PROVIDERS } from '@/mock'
 import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/assistant'
 
 export function getDefaultAssistant(): Assistant {
+  // todo
   return {
     id: 'default',
     name: i18n.t('chat.default.name'),
@@ -18,7 +19,16 @@ export function getDefaultAssistant(): Assistant {
   }
 }
 
+export function getAssistantProvider(assistant: Assistant): Provider {
+  // todo
+  // const providers = store.getState().llm.providers
+  const providers = INITIAL_PROVIDERS
+  const provider = providers.find(p => p.id === assistant.model?.provider)
+  return provider || getDefaultProvider()
+}
+
 export function getDefaultTopic(assistantId: string): Topic {
+  // todo
   return {
     id: uuidv4(),
     assistantId,
@@ -35,10 +45,12 @@ export function getDefaultProvider() {
 }
 
 export function getDefaultModel() {
+  // todo
   return INITIAL_PROVIDERS[0].models[0]
 }
 
 export function getProviderByModel(model?: Model): Provider {
+  // todo
   const providers = INITIAL_PROVIDERS
   const providerId = model ? model.provider : getDefaultProvider().id
   return providers.find(p => p.id === providerId) as Provider
