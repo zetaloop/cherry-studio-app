@@ -4,7 +4,8 @@ import { ChevronRight, HeartPulse, Plus, Settings, Settings2 } from '@tamagui/lu
 import { debounce, groupBy } from 'lodash'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Accordion, Button, ScrollView, Separator, Text, useTheme, XStack, YStack } from 'tamagui'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Accordion, Button, Separator, Text, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
@@ -22,7 +23,6 @@ type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ProviderSettings
 
 export default function ProviderSettingsScreen() {
   const { t } = useTranslation()
-  const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
   const route = useRoute<ProviderSettingsRouteProp>()
   const [searchText, setSearchText] = useState('')
@@ -89,12 +89,7 @@ export default function ProviderSettingsScreen() {
   }, [])
 
   return (
-    <SafeAreaContainer
-      edges={['top', 'left', 'right']}
-      style={{
-        flex: 1,
-        backgroundColor: theme.background.val
-      }}>
+    <SafeAreaContainer>
       <HeaderBar
         title={provider.name}
         onBackPress={() => navigation.goBack()}
@@ -109,8 +104,14 @@ export default function ProviderSettingsScreen() {
           }
         ]}
       />
+
       <SettingContainer>
-        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+        <KeyboardAwareScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}
+          extraScrollHeight={300}
+          enableOnAndroid={true}
+          contentContainerStyle={{ flexGrow: 1 }}>
           <YStack flex={1} gap={24}>
             {/* Auth Card */}
             <AuthCard provider={provider} />
@@ -191,7 +192,7 @@ export default function ProviderSettingsScreen() {
               )}
             </YStack>
           </YStack>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SettingContainer>
       <AddModelSheet bottomSheetRef={bottomSheetRef} isOpen={isBottomSheetOpen} onClose={handleBottomSheetClose} />
     </SafeAreaContainer>
