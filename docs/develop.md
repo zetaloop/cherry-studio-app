@@ -50,9 +50,9 @@
 
 ### Model Provider
 
-- [ ] 搜索模型时键盘挡住显示区域(/video/problem2.mov)
-- [ ] 添加模型时键盘挡住显示区域(/video/problem2.mov)
-- [ ] 添加服务商时键盘挡住显示区域(/video/problem3.mov)
+- [x] 搜索模型时键盘挡住显示区域(/video/problem2.mov)
+- [x] 添加模型时键盘挡住显示区域(/video/problem2.mov)
+- [x] 添加服务商时键盘挡住显示区域(/video/problem3.mov)
 - [ ] 模型管理界面Tab无法改变样式
 
 ### Default Model
