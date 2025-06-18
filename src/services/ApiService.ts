@@ -5,7 +5,15 @@ import { Message } from '@/types/message'
 
 const BASE_URL = 'http://localhost:8081'
 
-export async function fetchChatCompletion({ messages, assistant }: { messages: Message[]; assistant: Assistant }) {
+export async function fetchChatCompletion({
+  messages,
+  assistant,
+  onUpdate
+}: {
+  messages: Message[]
+  assistant: Assistant
+  onUpdate: (message: string) => void
+}) {
   console.log('fetchChatCompletion called with:', { messages, assistant })
 
   try {
@@ -41,6 +49,7 @@ export async function fetchChatCompletion({ messages, assistant }: { messages: M
       const textChunk = parsedData.text
       fullMessage += textChunk
       console.log('Frontend Received chunk:', textChunk)
+      onUpdate(textChunk)
     })
 
     es.addEventListener('error', error => {
