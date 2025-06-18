@@ -1,4 +1,5 @@
 import { ChevronDown } from '@tamagui/lucide-icons'
+import { MotiView, useAnimationState } from 'moti'
 import React from 'react'
 import { Accordion, Square, Text, XStack, YStack } from 'tamagui'
 
@@ -23,6 +24,10 @@ export function ModelGroup({
   renderModelButton,
   showModelCount = false
 }: ModelGroupProps) {
+  const springIn = useAnimationState({
+    from: { opacity: 0, translateY: 30 },
+    to: { opacity: 1, translateY: 0 }
+  })
   return (
     <Accordion.Item key={groupName} value={`item-${index}`} marginBottom={8}>
       <Accordion.Trigger
@@ -32,30 +37,34 @@ export function ModelGroup({
         paddingVertical={12}
         paddingHorizontal={16}
         borderRadius={9}
-        borderBottomLeftRadius={0}
-        borderBottomRightRadius={0}>
+        borderWidth={0}>
         {({ open }: { open: boolean }) => (
-          <>
-            <XStack gap={10} alignItems="center">
-              <Square animation="quick" rotate={open ? '0deg' : '-90deg'}>
-                <ChevronDown size={14} />
-              </Square>
-              <Text fontSize={14} fontWeight="bold">
-                {groupName}
-              </Text>
-              {showModelCount && (
-                <Text
-                  paddingHorizontal={8}
-                  borderRadius={8}
-                  backgroundColor="$backgroundGreen"
-                  color="$foregroundGreen">
-                  {models.length}
+          <MotiView
+            state={springIn}
+            transition={{ type: 'timing', duration: 800, delay: index * 40 }}
+            style={{ flex: 1 }}>
+            <XStack gap={10} alignItems="center" justifyContent="space-between">
+              <XStack gap={10} alignItems="center" flex={1}>
+                <Square animation="quick" rotate={open ? '0deg' : '-90deg'}>
+                  <ChevronDown size={14} />
+                </Square>
+                <Text fontSize={14} fontWeight="bold">
+                  {groupName}
                 </Text>
-              )}
-            </XStack>
+                {showModelCount && (
+                  <Text
+                    paddingHorizontal={8}
+                    borderRadius={8}
+                    backgroundColor="$backgroundGreen"
+                    color="$foregroundGreen">
+                    {models.length}
+                  </Text>
+                )}
+              </XStack>
 
-            {renderGroupButton?.(models)}
-          </>
+              {renderGroupButton?.(models)}
+            </XStack>
+          </MotiView>
         )}
       </Accordion.Trigger>
 
