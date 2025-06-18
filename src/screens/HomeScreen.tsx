@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import { t } from 'i18next'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Image, styled, Text, View, XStack, YStack } from 'tamagui'
@@ -16,14 +16,41 @@ import { NavigationProps } from '@/types/naviagate'
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProps>()
   const systemAssistants = useMemo(() => getSystemAssistants(), [])
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>([])
 
   const handlePress = () => {
     navigation.navigate('AssistantMarketScreen')
   }
 
-  const handleAiCoreSend = async () => {
+  const handleAiCoreSend = async (message: string) => {
+    const userMessage = { role: 'user', content: message }
+    const newMessages = [...messages, userMessage]
+    setMessages(newMessages)
+    let isFirstChunk = true
+
     // todo: change mock data
-    await fetchChatCompletion({ messages: [], assistant: MOCK_ASSISTANTS[0] })
+    await fetchChatCompletion({
+      messages: [],
+      assistant: MOCK_ASSISTANTS[0],
+      onUpdate: (chunk: string) => {
+        setMessages(prev => {
+          const updatedMessages = [...prev]
+
+          if (isFirstChunk) {
+            updatedMessages.push({ role: 'assistant', content: chunk })
+            isFirstChunk = false
+          } else {
+            const lastMessage = updatedMessages[updatedMessages.length - 1]
+
+            if (lastMessage && lastMessage.role === 'assistant') {
+              lastMessage.content += chunk
+            }
+          }
+
+          return updatedMessages
+        })
+      }
+    })
   }
 
   return (
@@ -32,46 +59,58 @@ const HomeScreen = () => {
         <YStack backgroundColor="$background" flex={1} onPress={Keyboard.dismiss}>
           <TopEntry />
 
-          {/* assistant market(Temporary) */}
-          <YStack gap={17} paddingHorizontal={20} paddingTop={40}>
-            <XStack justifyContent="space-between">
-              <Text>{t('assistants.market.popular')}</Text>
-              <Text onPress={handlePress}>{t('common.see_all')}</Text>
-            </XStack>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <XStack gap={20}>
-                {systemAssistants.slice(0, 3).map(assistant => (
-                  <AssistantItemCard
-                    key={assistant.id}
-                    assistant={assistant}
-                    setIsBottomSheetOpen={() => {}}
-                    onAssistantPress={() => {}}
-                  />
-                ))}
-              </XStack>
-            </ScrollView>
-          </YStack>
-
-          {/* 主要内容区域 */}
-          <ContentContainer>
-            <Image
-              source={require('@/assets/images/adaptive-icon.png')}
-              width={100}
-              height={100}
-              resizeMode="contain"
-              borderRadius={50}
-              overflow="hidden"
-            />
-
-            <YStack alignItems="center" space="$2">
-              <Text fontSize="$6" fontWeight="bold" color="$color12">
-                {t('chat.title')}
-              </Text>
-              <Text fontSize="$3" color="$color11" textAlign="center" maxWidth={300}>
-                {t('chat.welcome')}
-              </Text>
+          {messages.length > 0 ? (
+            <YStack paddingHorizontal={20} paddingTop={40} flex={1}>
+              {messages.map((message, index) => (
+                <Text key={index} fontSize={18}>
+                  {message.role}: {message.content}
+                </Text>
+              ))}
             </YStack>
-          </ContentContainer>
+          ) : (
+            <>
+              {/* assistant market(Temporary) */}
+              <YStack gap={17} paddingHorizontal={20} paddingTop={40}>
+                <XStack justifyContent="space-between">
+                  <Text>{t('assistants.market.popular')}</Text>
+                  <Text onPress={handlePress}>{t('common.see_all')}</Text>
+                </XStack>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <XStack gap={20}>
+                    {systemAssistants.slice(0, 3).map(assistant => (
+                      <AssistantItemCard
+                        key={assistant.id}
+                        assistant={assistant}
+                        setIsBottomSheetOpen={() => {}}
+                        onAssistantPress={() => {}}
+                      />
+                    ))}
+                  </XStack>
+                </ScrollView>
+              </YStack>
+
+              {/* 主要内容区域 */}
+              <ContentContainer>
+                <Image
+                  source={require('@/assets/images/adaptive-icon.png')}
+                  width={100}
+                  height={100}
+                  resizeMode="contain"
+                  borderRadius={50}
+                  overflow="hidden"
+                />
+
+                <YStack alignItems="center" space="$2">
+                  <Text fontSize="$6" fontWeight="bold" color="$color12">
+                    {t('chat.title')}
+                  </Text>
+                  <Text fontSize="$3" color="$color11" textAlign="center" maxWidth={300}>
+                    {t('chat.welcome')}
+                  </Text>
+                </YStack>
+              </ContentContainer>
+            </>
+          )}
 
           <InputContainer>
             <MessageInput onSend={handleAiCoreSend} />
