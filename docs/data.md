@@ -1,6 +1,6 @@
 # Database
 
-使用drizzle + expo-sqlite / zustand
+使用drizzle + expo-sqlite / redux
 
 ## 客户端数据统计
 
@@ -34,7 +34,7 @@
 
 #### 1. 运行时数据
 
-- **存储方式**: Zustand Store (内存)
+- **存储方式**: Redux Store (内存)
 - **生命周期**: 应用运行期间
 - **持久化**: ❌ 无需持久化
 - **特点**: 临时状态、缓存数据
@@ -44,7 +44,7 @@
 
 #### 2. 偏好设置 (Preferences)
 
-- **存储方式**: Zustand + AsyncStorage
+- **存储方式**: Redux
 - **生命周期**: 跨应用重启
 - **持久化**: ✅ 自动持久化
 - **特点**:
@@ -88,7 +88,7 @@
   └── paintings (画图相关配置)
   ```
 
-### Zustand 数据设计
+### Redux 数据设计
 
 #### websearch
 
@@ -105,6 +105,24 @@
 - defaultAssistant
 - ~~assistants~~ -> 移动到数据库中
 - tagsOrder
+
+#### Example
+
+以llm.ts为例
+
+```tsx
+export interface LlmState {
+  providers: Provider[]
+  defaultModel: Model
+  topicNamingModel: Model
+  translateModel: Model
+  quickAssistantModel: Model
+  settings: LlmSettings
+}
+```
+
+将providers属性存放入sqlite中，其余属性存在redux中。
+在hooks中获取数据时，先从sqlite中获取providers
 
 ### User Data数据表设计
 
@@ -169,7 +187,7 @@
 | 0     | tavily     | Tavily       | abc123         | https://api.tavily.com |
 
 > provider相关的配置存在这里
-> 其他的websearch配置可以存在zustand中，searchWithTime、maxResults等
+> 其他的websearch配置可以存在redux中，searchWithTime、maxResults等
 
 #### 9. assistants 表
 

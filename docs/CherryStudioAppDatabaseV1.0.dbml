@@ -24,7 +24,6 @@ Table messages {
 	useful boolean
 	ask_id text
 	mentions blob
-	enabled_mcps blob
 	usage blob
 	metrics blob
 	multi_model_message_style text
