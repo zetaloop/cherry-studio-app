@@ -3,13 +3,13 @@ import EventSource from 'react-native-sse'
 import { Assistant, Model, Provider } from '@/types/assistant'
 import { Message } from '@/types/message'
 
-const BASE_PROVIDER_URL = 'http://localhost:8081/api/provider'
+const BASE_URL = 'http://localhost:8081'
 
 export async function fetchChatCompletion({ messages, assistant }: { messages: Message[]; assistant: Assistant }) {
   console.log('fetchChatCompletion called with:', { messages, assistant })
 
   try {
-    const url = `${BASE_PROVIDER_URL}/completion`
+    const url = `${BASE_URL}/api/provider/completion`
     const options = {
       method: 'POST',
       headers: {
@@ -55,7 +55,7 @@ export async function fetchChatCompletion({ messages, assistant }: { messages: M
 
 export async function checkApi(provider: Provider, model: Model) {
   try {
-    const url = `${BASE_PROVIDER_URL}/check`
+    const url = `${BASE_URL}/api/provider/check`
     const options = {
       method: 'POST',
       headers: {
@@ -78,6 +78,24 @@ export async function checkApi(provider: Provider, model: Model) {
     return data
   } catch (error) {
     console.error('Error in checkApi:', error)
+    throw error
+  }
+}
+
+export async function fetchModels(provider: Provider): Promise<Model[]> {
+  try {
+    const url = `${BASE_URL}/api/models`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ provider })
+    })
+    const { models } = await response.json()
+    return models
+  } catch (error) {
+    console.error('Error in fetchModels:', error)
     throw error
   }
 }

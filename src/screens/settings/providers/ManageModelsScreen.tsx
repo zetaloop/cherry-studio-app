@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
 import { Minus, Plus } from '@tamagui/lucide-icons'
-import { debounce, groupBy, uniqBy } from 'lodash'
+import { debounce, groupBy, isEmpty, uniqBy } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Accordion, Button, ScrollView, Tabs, Text, useTheme, YStack } from 'tamagui'
@@ -16,12 +16,14 @@ import { isEmbeddingModel } from '@/config/models/embedding'
 import { isFunctionCallingModel } from '@/config/models/functionCalling'
 import { isReasoningModel } from '@/config/models/reasoning'
 import { isRerankModel } from '@/config/models/rerank'
-import { AIHUBMIX_MODELS } from '@/config/models/systemModels'
 import { isVisionModel } from '@/config/models/vision'
 import { isWebSearchModel } from '@/config/models/webSearch'
 import { useProvider } from '@/hooks/use-providers'
+import { fetchModels } from '@/services/ApiService'
 import { Model } from '@/types/assistant'
 import { RootStackParamList } from '@/types/naviagate'
+import { runAsyncFunction } from '@/utils'
+import { getDefaultGroupName } from '@/utils/naming'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ManageModelsScreen'>
 
@@ -184,8 +186,26 @@ export default function ManageModelsScreen() {
   )
 
   useEffect(() => {
-    // mock data
-    setListModels(AIHUBMIX_MODELS)
+    runAsyncFunction(async () => {
+      try {
+        const models = await fetchModels(provider)
+        setListModels(
+          models
+            .map(model => ({
+              id: model?.id || model?.name,
+              // @ts-ignore name
+              name: model?.display_name || model?.displayName || model?.name || model?.id,
+              provider: provider.id,
+              group: getDefaultGroupName(model?.id || model?.name, provider.id),
+              description: model?.description || '',
+              owned_by: model?.owned_by || ''
+            }))
+            .filter(model => !isEmpty(model.name))
+        )
+      } catch (error) {
+        console.error('Failed to fetch models', error)
+      }
+    })
   }, [])
 
   const renderModelGroupItem = useCallback(
@@ -241,7 +261,6 @@ export default function ManageModelsScreen() {
 
   return (
     <SafeAreaContainer
-      edges={['top', 'left', 'right']}
       style={{
         flex: 1,
         backgroundColor: theme.background.val
