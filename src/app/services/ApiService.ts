@@ -25,6 +25,7 @@ import {
 import { Assistant, Model, Provider } from '@/types/assistant'
 import { Chunk, ChunkType } from '@/types/chunk'
 import { Message } from '@/types/message'
+import { SdkModel } from '@/types/sdk'
 
 export async function fetchChatCompletion({
   messages,
@@ -169,5 +170,15 @@ export async function checkApi(provider: Provider, model: Model): Promise<void> 
     } else {
       throw error
     }
+  }
+}
+
+export async function fetchModels(provider: Provider): Promise<SdkModel[]> {
+  const AI = new AiProvider(provider)
+
+  try {
+    return await AI.models()
+  } catch (error) {
+    return []
   }
 }
