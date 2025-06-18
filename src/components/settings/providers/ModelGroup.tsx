@@ -70,33 +70,38 @@ export function ModelGroup({
 
       <Accordion.HeightAnimator animation="quick">
         <Accordion.Content exitStyle={{ opacity: 0 }} borderBottomLeftRadius={9} borderBottomRightRadius={9}>
-          <YStack flex={1} width="100%" gap={8}>
-            {models.map(model => (
-              <XStack
-                key={model.id}
-                alignItems="center"
-                justifyContent="space-between"
-                paddingHorizontal={8}
-                width="100%">
-                <XStack gap={8} flex={1} maxWidth="80%">
-                  {/* icon */}
-                  <XStack justifyContent="center" alignItems="center" flexShrink={0}>
-                    <ModelIcon model={model} />
+          <MotiView
+            state={springIn}
+            transition={{ type: 'timing', duration: 800, delay: index * 40 }}
+            style={{ flex: 1 }}>
+            <YStack flex={1} width="100%" gap={8}>
+              {models.map(model => (
+                <XStack
+                  key={model.id}
+                  alignItems="center"
+                  justifyContent="space-between"
+                  paddingHorizontal={8}
+                  width="100%">
+                  <XStack gap={8} flex={1} maxWidth="80%">
+                    {/* icon */}
+                    <XStack justifyContent="center" alignItems="center" flexShrink={0}>
+                      <ModelIcon model={model} />
+                    </XStack>
+                    {/* name and tool */}
+                    <YStack gap={5} flex={1} minWidth={0}>
+                      <Text numberOfLines={1} ellipsizeMode="tail">
+                        {model.name}
+                      </Text>
+                      <ModelTags model={model} size={11} style={{ flexShrink: 0 }} />
+                    </YStack>
                   </XStack>
-                  {/* name and tool */}
-                  <YStack gap={5} flex={1} minWidth={0}>
-                    <Text numberOfLines={1} ellipsizeMode="tail">
-                      {model.name}
-                    </Text>
-                    <ModelTags model={model} size={11} style={{ flexShrink: 0 }} />
-                  </YStack>
+                  <XStack flexShrink={0} marginLeft={8}>
+                    {renderModelButton?.(model)}
+                  </XStack>
                 </XStack>
-                <XStack flexShrink={0} marginLeft={8}>
-                  {renderModelButton?.(model)}
-                </XStack>
-              </XStack>
-            ))}
-          </YStack>
+              ))}
+            </YStack>
+          </MotiView>
         </Accordion.Content>
       </Accordion.HeightAnimator>
     </Accordion.Item>
