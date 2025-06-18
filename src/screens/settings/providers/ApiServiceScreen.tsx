@@ -13,6 +13,7 @@ import { ApiCheckSheet } from '@/components/settings/providers/ApiCheckSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { useProvider } from '@/hooks/use-providers'
+import { checkApi } from '@/services/ApiService'
 import { Model } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { getModelUniqId } from '@/utils/model'
@@ -25,16 +26,16 @@ export default function ApiServiceScreen() {
   const navigation = useNavigation<NavigationProps>()
   const route = useRoute<ProviderSettingsRouteProp>()
 
+  const { providerId } = route.params
+  const { provider } = useProvider(providerId)
+
   const [showApiKey, setShowApiKey] = useState(false)
   const [selectedModel, setSelectedModel] = useState<Model | undefined>()
-  const [apiKey, setApiKey] = useState('')
-  const [apiHost, setApiHost] = useState('')
+  const [apiKey, setApiKey] = useState(provider?.apiKey || '')
+  const [apiHost, setApiHost] = useState(provider?.apiHost || '')
 
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
-
-  const { providerId } = route.params
-  const { provider } = useProvider(providerId)
 
   const selectOptions = useMemo(() => {
     if (!provider?.models?.length) return []
@@ -98,8 +99,7 @@ export default function ApiServiceScreen() {
     if (!selectedModel) return
 
     try {
-      // TODO: 实现模型检测逻辑
-      console.log('Starting model check for:', selectedModel, 'with API Key:', apiKey, 'and API Host:', apiHost)
+      await checkApi(provider, selectedModel)
     } catch (error) {
       console.error('Model check failed:', error)
     }
