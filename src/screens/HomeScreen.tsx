@@ -11,6 +11,7 @@ import { TopEntry } from '@/components/top-entry'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { getSystemAssistants, MOCK_ASSISTANTS } from '@/mock'
 import { fetchChatCompletion } from '@/services/ApiService'
+import { createStreamProcessor } from '@/services/StreamProcessingService'
 import { NavigationProps } from '@/types/naviagate'
 
 const HomeScreen = () => {
@@ -22,34 +23,31 @@ const HomeScreen = () => {
     navigation.navigate('AssistantMarketScreen')
   }
 
-  const handleAiCoreSend = async (message: string) => {
-    const userMessage = { role: 'user', content: message }
-    const newMessages = [...messages, userMessage]
-    setMessages(newMessages)
-    let isFirstChunk = true
+  const handleAiCoreSend = async (userInput: string) => {
+    setMessages(prev => [...prev, { role: 'user', content: userInput }])
 
-    // todo: change mock data
+    let aiReply = ''
+
+    const callbacks = {
+      onTextChunk: (text: string) => {
+        aiReply += text
+        setMessages(prev => {
+          const lastMessage = prev[prev.length - 1]
+
+          if (lastMessage && lastMessage.role === 'assistant') {
+            return [...prev.slice(0, -1), { ...lastMessage, content: aiReply }]
+          }
+
+          return [...prev, { role: 'assistant', content: aiReply }]
+        })
+      }
+    }
+
+    const streamProcessorCallbacks = createStreamProcessor(callbacks)
     await fetchChatCompletion({
       messages: [],
       assistant: MOCK_ASSISTANTS[0],
-      onUpdate: (chunk: string) => {
-        setMessages(prev => {
-          const updatedMessages = [...prev]
-
-          if (isFirstChunk) {
-            updatedMessages.push({ role: 'assistant', content: chunk })
-            isFirstChunk = false
-          } else {
-            const lastMessage = updatedMessages[updatedMessages.length - 1]
-
-            if (lastMessage && lastMessage.role === 'assistant') {
-              lastMessage.content += chunk
-            }
-          }
-
-          return updatedMessages
-        })
-      }
+      onChunkReceived: streamProcessorCallbacks
     })
   }
 
