@@ -58,6 +58,10 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
     options?: OpenAI.RequestOptions
   ): Promise<OpenAISdkRawOutput> {
     const sdk = await this.getSdkInstance()
+    payload = {
+      ...payload,
+      messages: [{ role: 'user', content: 'Hi!' }]
+    }
     // @ts-ignore - SDK参数可能有额外的字段
     return await sdk.chat.completions.create(payload, options)
   }
