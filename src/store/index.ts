@@ -6,9 +6,8 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, R
 
 import app from './app'
 import runtime from './runtime'
-import topEntry from './top-entry'
 
-const rootReducer = combineReducers({ app, runtime, topEntry })
+const rootReducer = combineReducers({ app, runtime })
 
 const persistedReducer = persistReducer(
   {

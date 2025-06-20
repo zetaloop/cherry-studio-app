@@ -1,7 +1,5 @@
 import OpenAI from 'openai'
 
-import { Message } from './message'
-
 export type Assistant = {
   id: string
   name: string
@@ -44,7 +42,7 @@ export type Topic = {
   name: string
   createdAt: string
   updatedAt: string
-  messages: Message[]
+  // messages: Message[]
   pinned?: boolean
   prompt?: string
   isNameManuallyEdited?: boolean

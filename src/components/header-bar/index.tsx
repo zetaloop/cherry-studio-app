@@ -4,11 +4,18 @@ import { DrawerActions, ParamListBase, useNavigation } from '@react-navigation/n
 import React from 'react'
 import { XStack } from 'tamagui'
 
-import { LeftSection } from './LeftSection'
-import { MiddleSection } from './MiddleSection'
-import { RightSection } from './RightSection'
+import { Assistant } from '@/types/assistant'
 
-export const TopEntry = () => {
+import { AssistantSelection } from './AssistantSelection'
+import { MenuButton } from './MenuButton'
+import { NewTopicButton } from './NewTopicButton'
+
+interface HeaderBarProps {
+  assistant: Assistant
+  setAssistant: (assistant: Assistant) => void
+}
+
+export const HeaderBar = ({ assistant, setAssistant }: HeaderBarProps) => {
   const navigation = useNavigation<DrawerNavigationProp<ParamListBase>>()
 
   const handleMenuPress = () => {
@@ -19,13 +26,13 @@ export const TopEntry = () => {
     <>
       <XStack paddingHorizontal="$4" alignItems="center" height={44} justifyContent="space-between">
         <XStack alignItems="center" minWidth={40}>
-          <LeftSection onMenuPress={handleMenuPress} />
+          <MenuButton onMenuPress={handleMenuPress} />
         </XStack>
         <XStack flex={1} justifyContent="center" alignItems="center">
-          <MiddleSection />
+          <AssistantSelection assistant={assistant} setAssistant={setAssistant} />
         </XStack>
         <XStack alignItems="center" minWidth={40} justifyContent="flex-end">
-          <RightSection />
+          <NewTopicButton />
         </XStack>
       </XStack>
     </>

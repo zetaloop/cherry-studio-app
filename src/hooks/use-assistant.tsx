@@ -1,4 +1,4 @@
-import { MOCK_ASSISTANTS } from '@/mock'
+import { getSystemAssistants } from '@/mock'
 
 export function useAssistant(id?: string) {
   if (!id) {
@@ -7,10 +7,22 @@ export function useAssistant(id?: string) {
     }
   }
 
-  const assistant = MOCK_ASSISTANTS.find(assistant => assistant.id === id)
+  const assistant = getSystemAssistants().find(assistant => assistant.id === id)
 
   if (!assistant) {
     throw new Error(`Assistant with id ${id} not found`)
+  }
+
+  return {
+    assistant
+  }
+}
+
+export function useDefaultAssistant() {
+  const assistant = getSystemAssistants()[0]
+
+  if (!assistant) {
+    throw new Error('Default assistant not found')
   }
 
   return {

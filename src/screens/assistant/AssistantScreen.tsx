@@ -9,7 +9,7 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { MOCK_ASSISTANTS } from '@/mock'
+import { getSystemAssistants } from '@/mock'
 import { NavigationProps } from '@/types/naviagate'
 
 export default function AssistantScreen() {
@@ -23,7 +23,7 @@ export default function AssistantScreen() {
   const [showRecents, setShowRecents] = useState(false)
 
   const onAddAssistant = () => {
-    navigation.navigate('AssistantDetail', { assistantId: undefined, mode: 'create' })
+    navigation.navigate('AssistantDetailScreen', { assistantId: undefined, mode: 'create' })
   }
 
   const handleRecentFilter = () => {
@@ -87,7 +87,7 @@ export default function AssistantScreen() {
         </XStack>
         <ScrollView flex={1} gap={20}>
           <YStack gap={24}>
-            {MOCK_ASSISTANTS.map(assistant => (
+            {getSystemAssistants().map(assistant => (
               <AssistantItem key={assistant.id} assistant={assistant} />
             ))}
           </YStack>

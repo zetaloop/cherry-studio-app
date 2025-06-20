@@ -22,7 +22,7 @@ export default {
     },
     web: {
       bundler: 'metro',
-      output: 'server',
+      // output: 'static',
       favicon: './src/assets/images/favicon.png'
     },
     plugins: [
