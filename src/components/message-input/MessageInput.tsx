@@ -1,6 +1,13 @@
-import React, { useState } from 'react'
+import { isEmpty } from 'lodash'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, XStack, YStack } from 'tamagui'
+
+import { getUserMessage } from '@/services/MessagesService'
+import { useAppDispatch } from '@/store'
+import { sendMessage as _sendMessage } from '@/store/thunk/messageThunk'
+import { Assistant, Topic } from '@/types/assistant'
+import { MessageInputBaseParams } from '@/types/message'
 
 import { AddFileButton } from './AddFileButton'
 import { MentionButton } from './MentionButton'
@@ -9,21 +16,30 @@ import { ThinkButton } from './ThinkButton'
 import { VoiceButton } from './VoiceButton'
 import { WebsearchButton } from './WebsearchButton'
 interface MessageInputProps {
-  onSend: (message: string) => void
+  assistant: Assistant
+  topic: Topic
 }
 
-export const MessageInput: React.FC<MessageInputProps> = ({ onSend }) => {
+export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic }) => {
   const { t } = useTranslation()
-  const [value, setValue] = useState('')
+  const [text, setText] = useState('')
+  const dispatch = useAppDispatch()
 
-  const handleSend = () => {
-    const trimmedValue = value.trim()
-
-    if (trimmedValue) {
-      onSend(trimmedValue)
-      setValue('')
+  const sendMessage = useCallback(async () => {
+    if (isEmpty(text.trim())) {
+      return
     }
-  }
+
+    try {
+      const baseUserMessage: MessageInputBaseParams = { assistant, topic, content: text }
+
+      const { message, blocks } = getUserMessage(baseUserMessage)
+
+      dispatch(_sendMessage(message, blocks, assistant, topic.id))
+    } catch (error) {
+      console.error('Error sending message:', error)
+    }
+  }, [assistant, topic, text])
 
   return (
     <YStack gap={10}>
@@ -34,21 +50,21 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSend }) => {
           borderWidth={0}
           backgroundColor="$colorTransparent"
           flex={1}
-          value={value}
-          onChangeText={setValue}
+          value={text}
+          onChangeText={setText}
         />
       </XStack>
       {/* button */}
       <XStack justifyContent="space-between" alignItems="center">
         <XStack gap={5} alignItems="center">
+          <MentionButton />
           <AddFileButton />
           <WebsearchButton />
           <ThinkButton />
         </XStack>
         <XStack gap={5} alignItems="center">
-          <MentionButton />
           <VoiceButton />
-          <SendButton onSend={handleSend} />
+          <SendButton onSend={sendMessage} />
         </XStack>
       </XStack>
     </YStack>

@@ -4,19 +4,12 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@/constants'
 import i18n from '@/i18n'
-import { INITIAL_PROVIDERS } from '@/mock'
+import { getSystemAssistants, INITIAL_PROVIDERS } from '@/mock'
 import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/assistant'
 
 export function getDefaultAssistant(): Assistant {
-  // todo
-  return {
-    id: 'default',
-    name: i18n.t('chat.default.name'),
-    emoji: '🍒',
-    prompt: '',
-    topics: [getDefaultTopic('default')],
-    type: 'assistant'
-  }
+  // todo get from store
+  return getSystemAssistants()[0]
 }
 
 export function getAssistantProvider(assistant: Assistant): Provider {

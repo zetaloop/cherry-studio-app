@@ -3,7 +3,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, XStack } from 'tamagui'
 
-export const RightSection: React.FC = () => {
+export const NewTopicButton: React.FC = () => {
   const { t } = useTranslation()
 
   return (

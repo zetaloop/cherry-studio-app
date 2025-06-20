@@ -3,11 +3,11 @@ import { Menu } from '@tamagui/lucide-icons'
 import React from 'react'
 import { Button } from 'tamagui'
 
-interface LeftSectionProps {
+interface MenuButtonProps {
   onMenuPress: () => void
 }
 
-export const LeftSection = ({ onMenuPress }: LeftSectionProps) => {
+export const MenuButton = ({ onMenuPress }: MenuButtonProps) => {
   return (
     <Button
       size={24}

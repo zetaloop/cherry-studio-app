@@ -3,11 +3,14 @@ import { BlurView } from 'expo-blur' // 导入 BlurView
 import React, { useState } from 'react'
 import { Button, Popover, Text, useWindowDimensions, View, XStack, YStack } from 'tamagui'
 
-import { MOCK_ASSISTANTS } from '@/mock'
+import { Assistant } from '@/types/assistant'
 
-const assistant = MOCK_ASSISTANTS[0]
+interface AssistantSelectionProps {
+  assistant: Assistant
+  setAssistant: (assistant: Assistant) => void
+}
 
-export const MiddleSection: React.FC = () => {
+export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistant }) => {
   const [open, setOpen] = useState(false)
   const { width } = useWindowDimensions()
 
@@ -43,7 +46,7 @@ export const MiddleSection: React.FC = () => {
                     <Text fontSize={35}>{assistant.emoji}</Text>
                     <YStack>
                       <Text fontSize={18}>{assistant.name}</Text>
-                      <Text>@{assistant.model?.name}</Text>
+                      {assistant.model && <Text>@{assistant.model?.name}</Text>}
                     </YStack>
                   </XStack>
                   <XStack
