@@ -3,10 +3,9 @@ import '@/i18n'
 
 import { DefaultTheme, NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { TamaguiProvider } from '@tamagui/core'
-import { drizzle } from 'drizzle-orm/expo-sqlite'
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator'
 import * as SplashScreen from 'expo-splash-screen'
-import { openDatabaseSync } from 'expo-sqlite'
+import { SQLiteProvider } from 'expo-sqlite'
 import { StatusBar } from 'expo-status-bar'
 import { Suspense } from 'react'
 import { useEffect } from 'react'
@@ -20,27 +19,32 @@ import { PortalProvider } from 'tamagui'
 
 import store, { persistor } from '@/store'
 
+import { DATABASE_NAME, db, expoDb } from '../db'
+import { removeAllBlocks } from '../db/queries/messageBlocks.queries'
+import { removeAllMessages } from '../db/queries/messages.queries'
 import migrations from '../drizzle/migrations'
 import tamaguiConfig from '../tamagui.config'
 import AppNavigator from './navigators/AppNavigator'
 
-export const DATABASE_NAME = 'message_blocks_test.db'
-export const expoDb = openDatabaseSync(DATABASE_NAME)
-export const db = drizzle(expoDb)
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
 export default function App() {
   const colorScheme = useColorScheme()
-
   const { success, error } = useMigrations(db, migrations)
 
   useEffect(() => {
-    if (success) {
-      console.log('Migrations completed successfully')
-    } else if (error) {
-      console.error('Migrations failed', error)
+    const handleMigrations = async () => {
+      if (success) {
+        console.log('Migrations completed successfully', expoDb.databasePath)
+        await removeAllMessages()
+        await removeAllBlocks()
+      } else if (error) {
+        console.error('Migrations failed', error)
+      }
     }
+
+    handleMigrations()
   }, [success, error])
 
   useEffect(() => {
@@ -50,20 +54,22 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Suspense fallback={<ActivityIndicator size="large" />}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme ?? 'light'}>
-              <PortalProvider>
-                <NavigationContainer theme={DefaultTheme}>
-                  <ThemeProvider value={DefaultTheme}>
-                    <AppNavigator />
-                    <StatusBar style="auto" />
-                  </ThemeProvider>
-                </NavigationContainer>
-              </PortalProvider>
-            </TamaguiProvider>
-          </PersistGate>
-        </Provider>
+        <SQLiteProvider databaseName={DATABASE_NAME} options={{ enableChangeListener: true }} useSuspense>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme ?? 'light'}>
+                <PortalProvider>
+                  <NavigationContainer theme={DefaultTheme}>
+                    <ThemeProvider value={DefaultTheme}>
+                      <AppNavigator />
+                      <StatusBar style="auto" />
+                    </ThemeProvider>
+                  </NavigationContainer>
+                </PortalProvider>
+              </TamaguiProvider>
+            </PersistGate>
+          </Provider>
+        </SQLiteProvider>
       </Suspense>
     </GestureHandlerRootView>
   )

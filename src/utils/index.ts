@@ -1,3 +1,5 @@
+import * as Crypto from 'expo-crypto'
+
 /**
  * 异步执行一个函数。
  * @param {() => void} fn 要执行的函数
@@ -6,3 +8,5 @@
 export const runAsyncFunction = async (fn: () => void): Promise<void> => {
   await fn()
 }
+
+export const uuid = () => Crypto.randomUUID()

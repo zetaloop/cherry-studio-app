@@ -2,24 +2,18 @@ import { useNavigation } from '@react-navigation/native'
 import { t } from 'i18next'
 import React, { useMemo, useState } from 'react'
 import { Keyboard, KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
-import { Image, styled, Text, View, XStack, YStack } from 'tamagui'
+import { Button, Image, styled, Text, View, XStack, YStack } from 'tamagui'
 
 import AssistantItemCard from '@/components/assistant/AssistantItemCard'
 import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { getSystemAssistants } from '@/mock'
+import { getSystemAssistants, MOCK_TOPIC } from '@/mock'
 import { getDefaultAssistant } from '@/services/AssistantService'
-import { Assistant, Topic } from '@/types/assistant'
+import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 
-const MOCK_TOPIC: Topic = {
-  id: '1',
-  assistantId: '1',
-  name: 'test topic',
-  createdAt: '',
-  updatedAt: ''
-}
+import { testMessageBlocks } from '../../db/test/messageBlocks.test'
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProps>()
@@ -30,6 +24,13 @@ const HomeScreen = () => {
 
   const handlePress = () => {
     navigation.navigate('AssistantMarketScreen')
+  }
+
+  const handleTestDatabase = async () => {
+    // await upsertOneTopic(MOCK_TOPIC)
+    await testMessageBlocks()
+    // const assistants = getSystemAssistants()
+    // await upsertAssistants(assistants)
   }
 
   return (
@@ -76,6 +77,9 @@ const HomeScreen = () => {
               <Text fontSize="$3" color="$color11" textAlign="center" maxWidth={300}>
                 {t('chat.welcome')}
               </Text>
+              <Button width={80} onPress={handleTestDatabase}>
+                test
+              </Button>
             </YStack>
           </ContentContainer>
 

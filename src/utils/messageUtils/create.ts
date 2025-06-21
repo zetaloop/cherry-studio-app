@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
-
 import { Assistant, Topic } from '@/types/assistant'
 import { FileType, FileTypes } from '@/types/file'
 import {
@@ -20,6 +18,8 @@ import {
   UserMessageStatus
 } from '@/types/message'
 
+import { uuid } from '..'
+
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 /**
@@ -36,7 +36,7 @@ export function createBaseMessageBlock<T extends MessageBlockType>(
 ): BaseMessageBlock & { type: T } {
   const now = new Date().toISOString()
   return {
-    id: uuidv4(),
+    id: uuid(),
     messageId,
     type,
     createdAt: now,
@@ -289,7 +289,7 @@ export function createMessage(
   overrides: PartialBy<Omit<Message, 'role' | 'topicId' | 'assistantId' | 'createdAt' | 'status'>, 'blocks' | 'id'> = {}
 ): Message {
   const now = new Date().toISOString()
-  const messageId = overrides.id || uuidv4()
+  const messageId = overrides.id || uuid()
 
   const { blocks: initialBlocks, id, ...restOverrides } = overrides
 
@@ -327,7 +327,7 @@ export function createAssistantMessage(
   overrides: Partial<Omit<Message, 'id' | 'role' | 'assistantId' | 'topicId' | 'createdAt' | 'type' | 'status'>> = {}
 ): Message {
   const now = new Date().toISOString()
-  const messageId = uuidv4()
+  const messageId = uuid()
 
   return {
     id: messageId,

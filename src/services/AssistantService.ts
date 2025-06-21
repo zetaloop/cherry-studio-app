@@ -1,11 +1,8 @@
-import 'react-native-get-random-values'
-
-import { v4 as uuidv4 } from 'uuid'
-
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@/constants'
 import i18n from '@/i18n'
 import { getSystemAssistants, INITIAL_PROVIDERS } from '@/mock'
 import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/assistant'
+import { uuid } from '@/utils'
 
 export function getDefaultAssistant(): Assistant {
   // todo get from store
@@ -23,12 +20,12 @@ export function getAssistantProvider(assistant: Assistant): Provider {
 export function getDefaultTopic(assistantId: string): Topic {
   // todo
   return {
-    id: uuidv4(),
+    id: uuid(),
     assistantId,
+    messages: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     name: i18n.t('chat.default.topic.name'),
-    messages: [],
     isNameManuallyEdited: false
   }
 }
