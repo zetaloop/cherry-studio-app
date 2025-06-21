@@ -1,18 +1,24 @@
 import OpenAI from 'openai'
 
+import { Message } from './message'
+
 export type Assistant = {
   id: string
   name: string
   prompt: string
-  topics?: Topic[]
-  type?: string
-  group?: string[]
-  // tranform to image?
+  topics: Topic[]
+  type: string
   emoji?: string
   description?: string
   model?: Model
   defaultModel?: Model
   settings?: Partial<AssistantSettings>
+  /** enableWebSearch 代表使用模型内置网络搜索功能 */
+  enableWebSearch?: boolean
+  enableGenerateImage?: boolean
+  knowledgeRecognition?: 'off' | 'on'
+  tags?: string[] // 助手标签
+  group?: string[] // 助手分组
 }
 
 export type AssistantSettings = {
@@ -42,7 +48,7 @@ export type Topic = {
   name: string
   createdAt: string
   updatedAt: string
-  // messages: Message[]
+  messages: Message[]
   pinned?: boolean
   prompt?: string
   isNameManuallyEdited?: boolean

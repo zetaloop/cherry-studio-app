@@ -8,6 +8,41 @@
       "when": 1750421734905,
       "tag": "0000_organic_revanche",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1750470773663,
+      "tag": "0001_sloppy_gargoyle",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1750473814663,
+      "tag": "0002_strange_dracula",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1750475074066,
+      "tag": "0003_curious_magik",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1750476171492,
+      "tag": "0004_high_warstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1750476661438,
+      "tag": "0005_fancy_gauntlet",
+      "breakpoints": true
     }
   ]
 }

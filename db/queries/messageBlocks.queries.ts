@@ -1,8 +1,8 @@
-import { eq, inArray, sql } from 'drizzle-orm'
+import { eq, inArray } from 'drizzle-orm'
 
-import { db } from '@/App'
 import { MessageBlock, MessageBlockStatus, MessageBlockType } from '@/types/message'
 
+import { db } from '..'
 // import { db } from '..'
 import { messageBlocks } from '../schema'
 
@@ -202,11 +202,16 @@ function transformMessageBlockToDb(messageBlock: MessageBlock): any {
  * @param block - 要更新或插入的 MessageBlock 对象。
  */
 export async function upsertOneBlock(block: MessageBlock) {
-  const dbRecord = transformMessageBlockToDb(block)
-  await db.insert(messageBlocks).values(dbRecord).onConflictDoUpdate({
-    target: messageBlocks.id,
-    set: dbRecord // 更新除主键外的所有字段
-  })
+  try {
+    const dbRecord = transformMessageBlockToDb(block)
+    await db.insert(messageBlocks).values(dbRecord).onConflictDoUpdate({
+      target: messageBlocks.id,
+      set: dbRecord // 更新除主键外的所有字段
+    })
+  } catch (error) {
+    console.error('Error upserting one block:', error)
+    throw error
+  }
 }
 
 /**
@@ -216,38 +221,20 @@ export async function upsertOneBlock(block: MessageBlock) {
 export async function upsertManyBlocks(blocks: MessageBlock[]) {
   if (blocks.length === 0) return
 
-  const dbRecords = blocks.map(transformMessageBlockToDb)
-  // 使用 onConflictDoUpdate 和 `excluded` 进行高效的批量 upsert
-  await db
-    .insert(messageBlocks)
-    .values(dbRecords)
-    .onConflictDoUpdate({
-      target: messageBlocks.id,
-      set: {
-        messageId: sql.raw(`excluded.message_id`),
-        type: sql.raw(`excluded.type`),
-        updatedAt: sql.raw(`excluded.updated_at`),
-        status: sql.raw(`excluded.status`),
-        model: sql.raw(`excluded.model`),
-        metadata: sql.raw(`excluded.metadata`),
-        error: sql.raw(`excluded.error`),
-        content: sql.raw(`excluded.content`),
-        language: sql.raw(`excluded.language`),
-        url: sql.raw(`excluded.url`),
-        file: sql.raw(`excluded.file`),
-        toolId: sql.raw(`excluded.tool_id`),
-        toolName: sql.raw(`excluded.tool_name`),
-        arguments: sql.raw(`excluded.arguments`),
-        sourceBlockId: sql.raw(`excluded.source_block_id`),
-        sourceLanguage: sql.raw(`excluded.source_language`),
-        targetLanguage: sql.raw(`excluded.target_language`),
-        response: sql.raw(`excluded.response`),
-        knowledge: sql.raw(`excluded.knowledge`),
-        thinkingMillsec: sql.raw(`excluded.thinking_millsec`),
-        knowledgeBaseIds: sql.raw(`excluded.knowledge_base_ids`),
-        citationReferences: sql.raw(`excluded.citation_references`)
-      }
-    })
+  try {
+    const dbRecords = blocks.map(transformMessageBlockToDb)
+
+    const upsertPromises = dbRecords.map(record =>
+      db.insert(messageBlocks).values(record).onConflictDoUpdate({
+        target: messageBlocks.id,
+        set: record
+      })
+    )
+    await Promise.all(upsertPromises)
+  } catch (error) {
+    console.error('Error upserting many blocks:', error)
+    throw error
+  }
 }
 
 /**
@@ -255,43 +242,48 @@ export async function upsertManyBlocks(blocks: MessageBlock[]) {
  * @param update - 包含块 ID 和要应用的更改的对象。
  */
 export async function updateOneBlock(update: { id: string; changes: Partial<MessageBlock> }) {
-  const { id, changes } = update
-  const dbChanges: { [key: string]: any } = {}
+  try {
+    const { id, changes } = update
+    const dbChanges: { [key: string]: any } = {}
 
-  // 使用 KeysOfUnion 辅助类型来正确地类型化键数组。
-  // 这会创建一个包含任何块类型中所有可能键的联合类型。
-  const jsonFields: KeysOfUnion<MessageBlock>[] = [
-    'model',
-    'metadata',
-    'error',
-    'file',
-    'arguments',
-    'response',
-    'knowledge',
-    'knowledgeBaseIds',
-    'citationReferences'
-  ]
+    // 使用 KeysOfUnion 辅助类型来正确地类型化键数组。
+    // 这会创建一个包含任何块类型中所有可能键的联合类型。
+    const jsonFields: KeysOfUnion<MessageBlock>[] = [
+      'model',
+      'metadata',
+      'error',
+      'file',
+      'arguments',
+      'response',
+      'knowledge',
+      'knowledgeBaseIds',
+      'citationReferences'
+    ]
 
-  for (const key in changes) {
-    // 我们必须将 `changes` 转换为 `any` 来动态访问其属性，
-    // 因为 TypeScript 无法保证给定的 `key` 存在于 `MessageBlock` 联合类型中的每一种类型上。
-    const value = (changes as any)[key]
-    if (value === undefined) continue
+    for (const key in changes) {
+      // 我们必须将 `changes` 转换为 `any` 来动态访问其属性，
+      // 因为 TypeScript 无法保证给定的 `key` 存在于 `MessageBlock` 联合类型中的每一种类型上。
+      const value = (changes as any)[key]
+      if (value === undefined) continue
 
-    // 为了类型兼容性，对 `includes` 方法使用字符串数组断言。
-    if ((jsonFields as string[]).includes(key)) {
-      dbChanges[key] = JSON.stringify(value)
-    } else if (key === 'thinking_millsec') {
-      dbChanges.thinkingMillsec = value // 映射到数据库列名
-    } else if (key === 'content' && typeof value === 'object') {
-      dbChanges.content = JSON.stringify(value)
-    } else {
-      dbChanges[key] = value
+      // 为了类型兼容性，对 `includes` 方法使用字符串数组断言。
+      if ((jsonFields as string[]).includes(key)) {
+        dbChanges[key] = JSON.stringify(value)
+      } else if (key === 'thinking_millsec') {
+        dbChanges.thinkingMillsec = value
+      } else if (key === 'content' && typeof value === 'object') {
+        dbChanges.content = JSON.stringify(value)
+      } else {
+        dbChanges[key] = value
+      }
     }
-  }
 
-  if (Object.keys(dbChanges).length > 0) {
-    await db.update(messageBlocks).set(dbChanges).where(eq(messageBlocks.id, id))
+    if (Object.keys(dbChanges).length > 0) {
+      await db.update(messageBlocks).set(dbChanges).where(eq(messageBlocks.id, id))
+    }
+  } catch (error) {
+    console.error(`Error updating block with ID ${update.id}:`, error)
+    throw error
   }
 }
 
@@ -300,7 +292,12 @@ export async function updateOneBlock(update: { id: string; changes: Partial<Mess
  * @param blockId - 要移除的块的 ID。
  */
 export async function removeOneBlock(blockId: string) {
-  await db.delete(messageBlocks).where(eq(messageBlocks.id, blockId))
+  try {
+    await db.delete(messageBlocks).where(eq(messageBlocks.id, blockId))
+  } catch (error) {
+    console.error(`Error removing block with ID ${blockId}:`, error)
+    throw error
+  }
 }
 
 /**
@@ -309,14 +306,25 @@ export async function removeOneBlock(blockId: string) {
  */
 export async function removeManyBlocks(blockIds: string[]) {
   if (blockIds.length === 0) return
-  await db.delete(messageBlocks).where(inArray(messageBlocks.id, blockIds))
+
+  try {
+    await db.delete(messageBlocks).where(inArray(messageBlocks.id, blockIds))
+  } catch (error) {
+    console.error('Error removing multiple blocks:', error)
+    throw error
+  }
 }
 
 /**
  * 移除所有块。
  */
 export async function removeAllBlocks() {
-  await db.delete(messageBlocks)
+  try {
+    await db.delete(messageBlocks)
+  } catch (error) {
+    console.error('Error removing all blocks:', error)
+    throw error
+  }
 }
 
 // --- 查询函数 ---
@@ -327,6 +335,30 @@ export async function removeAllBlocks() {
  * @returns MessageBlock 对象数组。
  */
 export async function getBlocksByMessageId(messageId: string): Promise<MessageBlock[]> {
-  const dbRecords = await db.select().from(messageBlocks).where(eq(messageBlocks.messageId, messageId))
-  return dbRecords.map(transformDbToMessageBlock)
+  try {
+    const dbRecords = await db.select().from(messageBlocks).where(eq(messageBlocks.messageId, messageId))
+    return dbRecords.map(transformDbToMessageBlock)
+  } catch (error) {
+    console.error(`Error getting blocks for message ID ${messageId}:`, error)
+    throw error
+  }
+}
+
+/**
+ * 根据消息 ID 获取所有块的 ID。
+ * @param messageId - 消息的 ID。
+ * @returns 块 ID 数组。
+ */
+export async function getBlocksIdByMessageId(messageId: string): Promise<string[]> {
+  try {
+    const dbRecords = await db
+      .select({ id: messageBlocks.id })
+      .from(messageBlocks)
+      .where(eq(messageBlocks.messageId, messageId))
+
+    return dbRecords.map(record => record.id)
+  } catch (error) {
+    console.error(`Error getting block IDs for message ID ${messageId}:`, error)
+    throw error
+  }
 }

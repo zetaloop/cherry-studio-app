@@ -1,5 +1,6 @@
 import { drizzle } from 'drizzle-orm/expo-sqlite'
 import * as SQLite from 'expo-sqlite'
 
-const expo = SQLite.openDatabaseSync('cherry-studio.db')
-export const db = drizzle(expo)
+export const DATABASE_NAME = 'cherry_studio_test.db'
+export const expoDb = SQLite.openDatabaseSync(DATABASE_NAME)
+export const db = drizzle(expoDb)

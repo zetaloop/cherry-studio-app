@@ -1,6 +1,6 @@
 import { SYSTEM_MODELS } from '@/config/models/systemModels'
 import assistantsEnJsonData from '@/resources/data/assistants-en.json'
-import { Assistant, Provider } from '@/types/assistant'
+import { Assistant, Provider, Topic } from '@/types/assistant'
 import { WebSearchProvider } from '@/types/websearch'
 
 export const MOCK_AIHUBMIX_MODELS = [
@@ -576,3 +576,12 @@ export const INITIAL_WEBSEARCH_PROVIDERS: WebSearchProvider[] = [
     url: 'https://www.baidu.com/s?wd=%s'
   }
 ]
+
+export const MOCK_TOPIC: Topic = {
+  id: '123',
+  assistantId: '1',
+  name: 'test topic',
+  messages: [],
+  createdAt: new Date().toISOString(),
+  updatedAt: ''
+}

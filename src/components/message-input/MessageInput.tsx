@@ -3,9 +3,8 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, XStack, YStack } from 'tamagui'
 
+import { sendMessage as _sendMessage } from '@/services/MessagesService'
 import { getUserMessage } from '@/services/MessagesService'
-import { useAppDispatch } from '@/store'
-import { sendMessage as _sendMessage } from '@/store/thunk/messageThunk'
 import { Assistant, Topic } from '@/types/assistant'
 import { MessageInputBaseParams } from '@/types/message'
 
@@ -23,7 +22,6 @@ interface MessageInputProps {
 export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic }) => {
   const { t } = useTranslation()
   const [text, setText] = useState('')
-  const dispatch = useAppDispatch()
 
   const sendMessage = useCallback(async () => {
     if (isEmpty(text.trim())) {
@@ -35,7 +33,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic }) 
 
       const { message, blocks } = getUserMessage(baseUserMessage)
 
-      dispatch(_sendMessage(message, blocks, assistant, topic.id))
+      await _sendMessage(message, blocks, assistant, topic.id)
+
+      setText('')
     } catch (error) {
       console.error('Error sending message:', error)
     }
