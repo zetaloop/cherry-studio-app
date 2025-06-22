@@ -10,6 +10,10 @@ export type RootStackParamList = {
   WebDavConfigScreen: undefined
   NutstoreLoginScreen: undefined
   ModelSettingsScreen: undefined
+  DefaultAssistantSettingsScreen: { assistantId?: string }
+  NamingModelSettingsScreen: undefined
+  TranslateModelSettingsScreen: undefined
+  TranslateLanguageChooseScreen: undefined
   ProvidersScreen: undefined
   AboutScreen: undefined
   GeneralSettingsScreen: undefined
