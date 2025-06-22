@@ -120,14 +120,38 @@
         "default_model": "デフォルトモデル",
         "default_assistant_model": "デフォルトアシスタントモデル",
         "default_assistant_model_description": "新しいアシスタントを作成する際に使用するモデル。アシスタントが設定されていない場合、このモデルが使用されます。",
+        "default_assistant_settings": {
+          "hint.name": "名前",
+          "hint.placeholder": "デフォルトアシスタント",
+          "hint.prompt": "プロンプト",
+          "hint.params": "モデルパラメータ"
+        },
         "empty": "まだモデルがありません...",
         "empty.tooltip": "お探しのページは見つかりませんでした。ご不便をおかけして申し訳ありません。",
         "empty.add_model": "最初のモデルを追加しましょう。",
-        "translate_model": "モデルを翻訳する",
-        "translate_model_description": "翻訳サービスのために使用されるモデル",
+        "translate_model": "翻訳モデル",
+        "translate_model_description": "翻訳サービスに使用されるモデル",
+        "translate_model_setting": {
+          "hint": {
+            "assistant": "翻訳アシスタント",
+            "specify_language": "言語を指定",
+            "target_language": "ターゲット言語",
+            "local_language": "ローカル言語",
+            "prompt": "プロンプト"
+          },
+          "language_choose": {
+            "title": "言語選択"
+          }
+        },
         "search": "モデルを検索...",
         "title": "モデル",
         "topic_naming_model": "トピック命名",
+        "topic_naming_settings": {
+          "hint.autonaming": "セッションの自動命名",
+          "hint.prompt": "プロンプト"
+        },
+        "quick_assistant": "クイックアシスタント",
+        "quick_assistant_description": "クイックアシスタントが使用するモデル",
         "add.model": "モデルを追加",
         "add.model.id": "モデルID",
         "add.model.id.placeholder": "必須 例: gpt-4o",
