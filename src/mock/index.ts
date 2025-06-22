@@ -585,3 +585,75 @@ export const MOCK_TOPIC: Topic = {
   createdAt: new Date().toISOString(),
   updatedAt: ''
 }
+
+export const MOCK_TOPICS: Topic[] = [
+  MOCK_TOPIC,
+  {
+    id: '456',
+    assistantId: '1',
+    name: 'test topic 2',
+    messages: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: ''
+  }
+]
+
+export const MOCK_ASSISTANTS: Assistant[] = [
+  {
+    id: 'assistant-test-1',
+    name: 'Test Assistant 1',
+    prompt: 'You are test assistant 1.',
+    topics: [],
+    type: 'assistant',
+    emoji: '🧪',
+    description: 'This is the first test assistant.',
+    model: MOCK_AIHUBMIX_MODELS[0],
+    defaultModel: MOCK_AIHUBMIX_MODELS[0],
+    settings: {
+      contextCount: 10,
+      temperature: 0.7,
+      topP: 1,
+      maxTokens: 100,
+      enableMaxTokens: true,
+      streamOutput: true,
+      customParameters: [{ name: 'param1', value: 'value1', type: 'string' }]
+    },
+    enableWebSearch: true,
+    enableGenerateImage: false,
+    knowledgeRecognition: 'on',
+    tags: ['test', 'assistant1'],
+    group: ['test-group']
+  },
+  {
+    id: 'assistant-test-2',
+    name: 'Test Assistant 2',
+    prompt: 'You are test assistant 2, focus on code.',
+    topics: [],
+    type: 'coding-assistant',
+    emoji: '💻',
+    description: 'This is the second test assistant.',
+    model: MOCK_AIHUBMIX_MODELS[1],
+    defaultModel: MOCK_AIHUBMIX_MODELS[1],
+    settings: {
+      contextCount: 5,
+      temperature: 0.9,
+      topP: 0.9,
+      maxTokens: undefined,
+      enableMaxTokens: false,
+      streamOutput: false,
+      customParameters: []
+    },
+    enableWebSearch: false,
+    enableGenerateImage: true,
+    knowledgeRecognition: 'off',
+    tags: ['test', 'coding'],
+    group: ['developer-group']
+  },
+  {
+    id: 'assistant-test-3',
+    name: 'Test Assistant 3 (Initial)',
+    prompt: 'Initial prompt for test assistant 3.',
+    topics: [],
+    type: 'general'
+  }
+]
