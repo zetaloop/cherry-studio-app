@@ -1,4 +1,4 @@
-import { blob, index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 import { assistants } from './assistants'
 import { topics } from './topics'
@@ -22,9 +22,9 @@ export const messages = sqliteTable(
     type: text('type'),
     useful: integer('useful', { mode: 'boolean' }),
     askId: text('ask_id'),
-    mentions: blob('mentions'),
-    usage: blob('usage'),
-    metrics: blob('metrics'),
+    mentions: text('mentions'),
+    usage: text('usage'),
+    metrics: text('metrics'),
     multiModelMessageStyle: text('multi_model_message_style'),
     foldSelected: integer('fold_selected', { mode: 'boolean' })
   },

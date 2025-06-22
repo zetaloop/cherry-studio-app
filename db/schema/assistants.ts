@@ -1,4 +1,4 @@
-import { blob, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export const assistants = sqliteTable('assistants', {
   id: text('id').notNull().unique().primaryKey(),
@@ -10,9 +10,9 @@ export const assistants = sqliteTable('assistants', {
   type: text('type').notNull().default('assistant'),
   emoji: text('emoji'),
   description: text('description'),
-  model: blob('model'),
-  defaultModel: blob('default_model'),
-  settings: blob('settings'),
+  model: text('model'),
+  defaultModel: text('default_model'),
+  settings: text('settings'),
   enableWebSearch: integer('enable_web_search', { mode: 'boolean' }),
   // websearchProviderId: text('websearch_provider_id'),
   // todo add foreign key

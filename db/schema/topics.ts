@@ -1,4 +1,4 @@
-import { blob, index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 import { assistants } from './assistants'
 
@@ -12,7 +12,7 @@ export const topics = sqliteTable(
     name: text('name').notNull(),
     createdAt: text('created_at').notNull(),
     updatedAt: text('updated_at').notNull(),
-    messages: blob('messages').notNull().default('[]'),
+    messages: text('messages').notNull().default('[]'),
     pinned: integer({ mode: 'boolean' }),
     prompt: text('prompt'),
     isNameManuallyEdited: integer({ mode: 'boolean' })
