@@ -1,10 +1,8 @@
 import { useNavigation } from '@react-navigation/native'
-import { t } from 'i18next'
-import React, { useMemo, useState } from 'react'
-import { Keyboard, KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
-import { Button, Image, styled, Text, View, XStack, YStack } from 'tamagui'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
+import { ScrollView, styled, View, YStack } from 'tamagui'
 
-import AssistantItemCard from '@/components/assistant/AssistantItemCard'
 import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
@@ -13,14 +11,21 @@ import { getDefaultAssistant } from '@/services/AssistantService'
 import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 
-import { testMessageBlocks } from '../../db/test/messageBlocks.test'
+import Messages from './messages/Messages'
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProps>()
-
-  const [assistant, setAssistant] = useState<Assistant>(getDefaultAssistant())
-
+  const [assistant, setAssistant] = useState<Assistant | null>(null)
   const systemAssistants = useMemo(() => getSystemAssistants(), [])
+
+  useEffect(() => {
+    const fetchAssistant = async () => {
+      const data = await getDefaultAssistant()
+      setAssistant(data)
+    }
+
+    fetchAssistant()
+  }, [])
 
   const handlePress = () => {
     navigation.navigate('AssistantMarketScreen')
@@ -28,19 +33,19 @@ const HomeScreen = () => {
 
   const handleTestDatabase = async () => {
     // await upsertOneTopic(MOCK_TOPIC)
-    await testMessageBlocks()
-    // const assistants = getSystemAssistants()
-    // await upsertAssistants(assistants)
+    // await testMessageBlocks()
+    //   const assistants = getSystemAssistants()
+    //   await upsertAssistants(assistants)
   }
 
   return (
     <SafeAreaContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
         <YStack paddingHorizontal={12} backgroundColor="$background" flex={1} onPress={Keyboard.dismiss}>
-          <HeaderBar assistant={assistant} setAssistant={setAssistant} />
+          {assistant && <HeaderBar assistant={assistant} />}
 
           {/* assistant market(Temporary) */}
-          <YStack gap={17} paddingHorizontal={20} paddingTop={40}>
+          {/* <YStack gap={17} paddingHorizontal={20} paddingTop={40}>
             <XStack justifyContent="space-between">
               <Text>{t('assistants.market.popular')}</Text>
               <Text onPress={handlePress}>{t('common.see_all')}</Text>
@@ -57,10 +62,10 @@ const HomeScreen = () => {
                 ))}
               </XStack>
             </ScrollView>
-          </YStack>
+          </YStack> */}
 
           {/* 主要内容区域 */}
-          <ContentContainer>
+          {/* <ContentContainer>
             <Image
               source={require('@/assets/images/adaptive-icon.png')}
               width={100}
@@ -71,9 +76,6 @@ const HomeScreen = () => {
             />
 
             <YStack alignItems="center" space="$2">
-              <Text fontSize="$6" fontWeight="bold" color="$color12">
-                {t('chat.title')}
-              </Text>
               <Text fontSize="$3" color="$color11" textAlign="center" maxWidth={300}>
                 {t('chat.welcome')}
               </Text>
@@ -81,11 +83,11 @@ const HomeScreen = () => {
                 test
               </Button>
             </YStack>
-          </ContentContainer>
-
-          <InputContainer>
-            <MessageInput assistant={assistant} topic={MOCK_TOPIC} />
-          </InputContainer>
+          </ContentContainer> */}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {assistant && <Messages assistant={assistant} topic={MOCK_TOPIC} />}
+          </ScrollView>
+          <InputContainer>{assistant && <MessageInput assistant={assistant} topic={MOCK_TOPIC} />}</InputContainer>
         </YStack>
       </KeyboardAvoidingView>
     </SafeAreaContainer>

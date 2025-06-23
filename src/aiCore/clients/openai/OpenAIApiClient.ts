@@ -58,10 +58,6 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
     options?: OpenAI.RequestOptions
   ): Promise<OpenAISdkRawOutput> {
     const sdk = await this.getSdkInstance()
-    payload = {
-      ...payload,
-      messages: [{ role: 'user', content: 'Hi!' }]
-    }
     // @ts-ignore - SDK参数可能有额外的字段
     return await sdk.chat.completions.create(payload, options)
   }
@@ -221,8 +217,8 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
   public async convertMessageToSdkParam(message: Message, model: Model): Promise<OpenAISdkMessageParam> {
     const isVision = isVisionModel(model)
     const content = await this.getMessageContent(message)
-    const fileBlocks = findFileBlocks(message)
-    const imageBlocks = findImageBlocks(message)
+    const fileBlocks = await findFileBlocks(message)
+    const imageBlocks = await findImageBlocks(message)
 
     if (fileBlocks.length === 0 && imageBlocks.length === 0) {
       return {
@@ -438,7 +434,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
         if (typeof messages === 'string') {
           userMessages.push({ role: 'user', content: messages })
         } else {
-          const processedMessages = addImageFileToContents(messages)
+          const processedMessages = await addImageFileToContents(messages)
 
           for (const message of processedMessages) {
             userMessages.push(await this.convertMessageToSdkParam(message, model))

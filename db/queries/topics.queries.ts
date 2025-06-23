@@ -13,13 +13,26 @@ import { getMessagesByTopicId } from './messages.queries'
  * @returns 一个 Topic 对象。
  */
 function transformDbToTopic(dbRecord: any): Topic {
+  const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
+    if (typeof jsonString !== 'string' || jsonString.trim() === '') {
+      return defaultValue
+    }
+
+    try {
+      return JSON.parse(jsonString)
+    } catch (e) {
+      console.error('JSON parse error for string:', jsonString)
+      return defaultValue
+    }
+  }
+
   return {
     id: dbRecord.id,
     assistantId: dbRecord.assistantId,
     name: dbRecord.name,
     createdAt: dbRecord.createdAt,
     updatedAt: dbRecord.updatedAt,
-    messages: dbRecord.messages ? JSON.parse(dbRecord.messages) : [],
+    messages: safeJsonParse(dbRecord.messages, []),
     // 将数字（0 或 1）转换为布尔值
     pinned: !!dbRecord.pinned,
     prompt: dbRecord.prompt,

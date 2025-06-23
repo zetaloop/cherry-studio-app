@@ -28,14 +28,14 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic }) 
       return
     }
 
+    setText('')
+
     try {
       const baseUserMessage: MessageInputBaseParams = { assistant, topic, content: text }
 
       const { message, blocks } = getUserMessage(baseUserMessage)
 
       await _sendMessage(message, blocks, assistant, topic.id)
-
-      setText('')
     } catch (error) {
       console.error('Error sending message:', error)
     }

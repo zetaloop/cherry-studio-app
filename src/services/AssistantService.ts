@@ -1,12 +1,21 @@
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@/constants'
 import i18n from '@/i18n'
-import { getSystemAssistants, INITIAL_PROVIDERS } from '@/mock'
+import { INITIAL_PROVIDERS } from '@/mock'
 import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/assistant'
 import { uuid } from '@/utils'
 
-export function getDefaultAssistant(): Assistant {
+import { getAssistantById } from '../../db/queries/assistants.queries'
+
+export async function getDefaultAssistant(): Promise<Assistant> {
   // todo get from store
-  return getSystemAssistants()[0]
+  const assistant = await getAssistantById('1')
+
+  if (!assistant) {
+    console.error('Default assistant not found')
+    throw new Error('Default assistant not found')
+  }
+
+  return assistant
 }
 
 export function getAssistantProvider(assistant: Assistant): Provider {
