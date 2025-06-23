@@ -75,6 +75,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic }) => {
     runAsyncFunction(async () => {
       try {
         const assistantData = await getAssistantById(topic.assistantId)
+        console.log('Fetched assistant:', assistantData)
         setAssistant(assistantData)
       } catch (error) {
         console.error('Failed to fetch assistant:', error)
@@ -92,7 +93,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic }) => {
         paddingVertical={3}
         paddingHorizontal={20}
         onPress={openTopic}>
-        <XStack flex={1} gap={14} maxWidth="70%">
+        <XStack gap={14} maxWidth="70%">
           <Text fontSize={35}>{assistant?.emoji}</Text>
           <YStack gap={2} flex={1}>
             <Text fontSize={16} numberOfLines={1} ellipsizeMode="tail" fontWeight="500">

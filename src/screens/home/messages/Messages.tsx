@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list'
 import { eq } from 'drizzle-orm'
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import React from 'react'
 import { View } from 'tamagui'
 
@@ -23,9 +23,12 @@ interface MessagesProps {
 }
 
 const Messages: FC<MessagesProps> = ({ assistant, topic, setActiveTopic, onComponentUpdate, onFirstUpdate }) => {
-  const { data: rawMessages } = useLiveQuery(
-    db.select().from(messagesSchema).where(eq(messagesSchema.topicId, topic.id)).orderBy(messagesSchema.createdAt)
+  const query = useMemo(
+    () =>
+      db.select().from(messagesSchema).where(eq(messagesSchema.topicId, topic.id)).orderBy(messagesSchema.createdAt),
+    [topic.id]
   )
+  const { data: rawMessages } = useLiveQuery(query)
 
   const [processedMessages, setProcessedMessages] = useState<Message[]>([])
 
