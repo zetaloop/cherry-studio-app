@@ -26,7 +26,8 @@ const ReactNativeMarkdown: FC<Props> = ({ block }) => {
 
   const style = {
     text: {
-      color: textColor
+      color: textColor,
+      fontSize: 12
     },
     body: {
       backgroundColor: 'transparent'
