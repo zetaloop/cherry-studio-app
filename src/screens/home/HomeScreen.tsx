@@ -2,8 +2,9 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
-import { ScrollView, styled, View, YStack } from 'tamagui'
+import { Image, ScrollView, styled, Text, View, XStack, YStack } from 'tamagui'
 
+import AssistantItemCard from '@/components/assistant/AssistantItemCard'
 import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
@@ -23,6 +24,7 @@ const HomeScreen = () => {
   const [assistant, setAssistant] = useState<Assistant | null>(null)
   const [topic, setTopic] = useState<Topic | null>(null)
   const systemAssistants = useMemo(() => getSystemAssistants(), [])
+  const [hasMessages, setHasMessages] = useState(false)
   const route = useRoute<HomeScreenRouteProp>()
 
   const { topicId } = route.params || {}
@@ -35,7 +37,7 @@ const HomeScreen = () => {
       if (!topicId) {
         const newTopic = await createNewTopic(assistantData)
         setTopic(newTopic)
-        console.log('Created new topic:', newTopic)
+        setHasMessages(false)
         return
       }
 
@@ -43,6 +45,7 @@ const HomeScreen = () => {
 
       if (topicData) {
         setTopic(topicData)
+        setHasMessages(topicData.messages.length > 0)
       } else {
         console.warn(`Topic with ID ${topicId} not found.`)
       }
@@ -67,51 +70,56 @@ const HomeScreen = () => {
           {assistant && <HeaderBar assistant={assistant} />}
 
           {/* assistant market(Temporary) */}
-          {/* <YStack gap={17} paddingHorizontal={20} paddingTop={40}>
-            <XStack justifyContent="space-between">
-              <Text>{t('assistants.market.popular')}</Text>
-              <Text onPress={handlePress}>{t('common.see_all')}</Text>
-            </XStack>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <XStack gap={20}>
-                {systemAssistants.slice(0, 3).map(assistant => (
-                  <AssistantItemCard
-                    key={assistant.id}
-                    assistant={assistant}
-                    setIsBottomSheetOpen={() => {}}
-                    onAssistantPress={() => {}}
-                  />
-                ))}
+          {!hasMessages && (
+            <YStack gap={17} paddingHorizontal={20} paddingTop={40}>
+              <XStack justifyContent="space-between">
+                <Text>{t('assistants.market.popular')}</Text>
+                <Text onPress={handlePress}>{t('common.see_all')}</Text>
               </XStack>
-            </ScrollView>
-          </YStack> */}
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <XStack gap={20}>
+                  {systemAssistants.slice(0, 3).map(assistant => (
+                    <AssistantItemCard
+                      key={assistant.id}
+                      assistant={assistant}
+                      setIsBottomSheetOpen={() => {}}
+                      onAssistantPress={() => {}}
+                    />
+                  ))}
+                </XStack>
+              </ScrollView>
+            </YStack>
+          )}
 
           {/* 主要内容区域 */}
-          {/* <ContentContainer>
-            <Image
-              source={require('@/assets/images/adaptive-icon.png')}
-              width={100}
-              height={100}
-              resizeMode="contain"
-              borderRadius={50}
-              overflow="hidden"
-            />
+          {!hasMessages && (
+            <ContentContainer>
+              <Image
+                source={require('@/assets/images/adaptive-icon.png')}
+                width={100}
+                height={100}
+                resizeMode="contain"
+                borderRadius={50}
+                overflow="hidden"
+              />
 
-            <YStack alignItems="center" space="$2">
-              <Text fontSize="$3" color="$color11" textAlign="center" maxWidth={300}>
-                {t('chat.welcome')}
-              </Text>
-              <Button width={80} onPress={handleTestDatabase}>
-                test
-              </Button>
-            </YStack>
-          </ContentContainer> */}
+              <YStack alignItems="center" space="$2">
+                <Text fontSize="$3" color="$color11" textAlign="center" maxWidth={300}>
+                  {t('chat.welcome')}
+                </Text>
+              </YStack>
+            </ContentContainer>
+          )}
 
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {assistant && topic && <Messages key={topic.id} assistant={assistant} topic={topic} />}
-          </ScrollView>
+          {assistant && topic && (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Messages key={topic.id} assistant={assistant} topic={topic} />
+            </ScrollView>
+          )}
 
-          <InputContainer>{assistant && topic && <MessageInput assistant={assistant} topic={topic} />}</InputContainer>
+          <InputContainer>
+            {assistant && topic && <MessageInput assistant={assistant} topic={topic} setHasMessages={setHasMessages} />}
+          </InputContainer>
         </YStack>
       </KeyboardAvoidingView>
     </SafeAreaContainer>

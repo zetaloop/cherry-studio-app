@@ -17,9 +17,10 @@ import { WebsearchButton } from './WebsearchButton'
 interface MessageInputProps {
   assistant: Assistant
   topic: Topic
+  setHasMessages: (hasMessages: boolean) => void
 }
 
-export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic }) => {
+export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, setHasMessages }) => {
   const { t } = useTranslation()
   const [text, setText] = useState('')
 
@@ -29,6 +30,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic }) 
     }
 
     setText('')
+    setHasMessages(true)
 
     try {
       const baseUserMessage: MessageInputBaseParams = { assistant, topic, content: text }
