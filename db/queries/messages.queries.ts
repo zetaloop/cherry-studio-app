@@ -11,7 +11,7 @@ import { getBlocksIdByMessageId } from './messageBlocks.queries'
  * @param dbRecord - 从数据库检索的记录。
  * @returns 一个 Message 对象。
  */
-function transformDbToMessage(dbRecord: any): Message {
+export function transformDbToMessage(dbRecord: any): Message {
   return {
     id: dbRecord.id,
     role: dbRecord.role,
@@ -142,18 +142,21 @@ export async function getMessagesByTopicId(topicId: string): Promise<Message[]> 
  * @param topicId - 主题的 ID。
  * @param message - 要插入或更新的消息对象。
  */
-export async function upsertOneMessage(message: Message) {
+export async function upsertOneMessage(message: Message): Promise<Message> {
   try {
     const existingMessage = await getMessageById(message.id)
 
     if (existingMessage) {
       // 更新现有消息
       const dbRecord = transformMessageToDb(message)
-      await db.update(messages).set(dbRecord).where(eq(messages.id, message.id))
+      return transformDbToMessage(
+        await db.update(messages).set(dbRecord).where(eq(messages.id, message.id)).returning()
+      )
     } else {
       // 插入新消息
       const dbRecord = transformMessageToDb(message)
-      await db.insert(messages).values(dbRecord)
+
+      return transformDbToMessage(await db.insert(messages).values(dbRecord).returning())
     }
   } catch (error) {
     console.error(`Error upserting message with ID ${message.id}:`, error)
