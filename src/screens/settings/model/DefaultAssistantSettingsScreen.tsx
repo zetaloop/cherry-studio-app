@@ -2,8 +2,9 @@ import { useNavigation } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useSelector } from 'react-redux'
-import { Input, ScrollView, Text, XStack, YStack } from 'tamagui'
+import { Input, Text, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
@@ -117,7 +118,7 @@ export default function DefaultAssistantSettingsScreen() {
       <HeaderBar title={t('settings.models.default_assistant_model')} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
         <YStack flex={1} paddingTop={24} paddingHorizontal={10}>
-          <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+          <KeyboardAwareScrollView flex={1} showsVerticalScrollIndicator={false}>
             <XStack justifyContent="center" alignItems="center">
               <AvatarEditButton
                 content={defaultAssistant.emoji || <DefaultProviderIcon />}
@@ -211,7 +212,7 @@ export default function DefaultAssistantSettingsScreen() {
                 )}
               </SettingGroup>
             </YStack>
-          </ScrollView>
+          </KeyboardAwareScrollView>
         </YStack>
       </SettingContainer>
     </SafeAreaContainer>
