@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import { SquarePen } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -5,6 +6,7 @@ import { Button, XStack } from 'tamagui'
 
 import { createNewTopic } from '@/services/AssistantService'
 import { Assistant } from '@/types/assistant'
+import { NavigationProps } from '@/types/naviagate'
 
 interface NewTopicButtonProps {
   assistant: Assistant
@@ -12,10 +14,11 @@ interface NewTopicButtonProps {
 
 export const NewTopicButton: React.FC<NewTopicButtonProps> = ({ assistant }) => {
   const { t } = useTranslation()
+  const navigation = useNavigation<NavigationProps>()
 
   const handleAddNewTopic = async () => {
-    await createNewTopic(assistant)
-    // todo navigate to home screen with new topic
+    const newTopic = await createNewTopic(assistant)
+    navigation.navigate('HomeScreen', { topicId: newTopic.id })
   }
 
   return (
