@@ -1,31 +1,53 @@
-import { useNavigation } from '@react-navigation/native'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
 import { ScrollView, styled, View, YStack } from 'tamagui'
 
 import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { getSystemAssistants, MOCK_TOPIC } from '@/mock'
-import { getDefaultAssistant } from '@/services/AssistantService'
-import { Assistant } from '@/types/assistant'
-import { NavigationProps } from '@/types/naviagate'
+import { getSystemAssistants } from '@/mock'
+import { createNewTopic, getDefaultAssistant } from '@/services/AssistantService'
+import { Assistant, Topic } from '@/types/assistant'
+import { NavigationProps, RootStackParamList } from '@/types/naviagate'
+import { runAsyncFunction } from '@/utils'
 
+import { getTopicById } from '../../../db/queries/topics.queries'
 import Messages from './messages/Messages'
+type HomeScreenRouteProp = RouteProp<RootStackParamList, 'HomeScreen'>
 
 const HomeScreen = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation<NavigationProps>()
   const [assistant, setAssistant] = useState<Assistant | null>(null)
+  const [topic, setTopic] = useState<Topic | null>(null)
   const systemAssistants = useMemo(() => getSystemAssistants(), [])
+  const route = useRoute<HomeScreenRouteProp>()
+
+  const { topicId } = route.params || {}
 
   useEffect(() => {
-    const fetchAssistant = async () => {
-      const data = await getDefaultAssistant()
-      setAssistant(data)
-    }
+    runAsyncFunction(async () => {
+      const assistantData = await getDefaultAssistant()
+      setAssistant(assistantData)
 
-    fetchAssistant()
-  }, [])
+      if (!topicId) {
+        const newTopic = await createNewTopic(assistantData)
+        setTopic(newTopic)
+        console.log('Created new topic:', newTopic)
+        return
+      }
+
+      const topicData = await getTopicById(topicId)
+
+      if (topicData) {
+        setTopic(topicData)
+      } else {
+        console.warn(`Topic with ID ${topicId} not found.`)
+      }
+    })
+  }, [topicId])
 
   const handlePress = () => {
     navigation.navigate('AssistantMarketScreen')
@@ -84,10 +106,12 @@ const HomeScreen = () => {
               </Button>
             </YStack>
           </ContentContainer> */}
+
           <ScrollView showsVerticalScrollIndicator={false}>
-            {assistant && <Messages assistant={assistant} topic={MOCK_TOPIC} />}
+            {assistant && topic && <Messages assistant={assistant} topic={topic} />}
           </ScrollView>
-          <InputContainer>{assistant && <MessageInput assistant={assistant} topic={MOCK_TOPIC} />}</InputContainer>
+
+          <InputContainer>{assistant && topic && <MessageInput assistant={assistant} topic={topic} />}</InputContainer>
         </YStack>
       </KeyboardAvoidingView>
     </SafeAreaContainer>

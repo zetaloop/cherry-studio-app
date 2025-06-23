@@ -24,8 +24,6 @@ function transformDbToAssistant(dbRecord: any): Assistant {
     }
   }
 
-  console.log('transformDbToAssistant', dbRecord.model, safeJsonParse(dbRecord.model))
-
   return {
     id: dbRecord.id,
     name: dbRecord.name,
