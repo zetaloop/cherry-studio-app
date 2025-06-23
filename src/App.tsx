@@ -20,8 +20,6 @@ import { PortalProvider } from 'tamagui'
 import store, { persistor } from '@/store'
 
 import { DATABASE_NAME, db, expoDb } from '../db'
-import { removeAllBlocks } from '../db/queries/messageBlocks.queries'
-import { removeAllMessages } from '../db/queries/messages.queries'
 import migrations from '../drizzle/migrations'
 import tamaguiConfig from '../tamagui.config'
 import AppNavigator from './navigators/AppNavigator'
@@ -37,8 +35,6 @@ export default function App() {
     const handleMigrations = async () => {
       if (success) {
         console.log('Migrations completed successfully', expoDb.databasePath)
-        await removeAllMessages()
-        await removeAllBlocks()
       } else if (error) {
         console.error('Migrations failed', error)
       }

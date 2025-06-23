@@ -1,4 +1,4 @@
-import { DrawerContentComponentProps, DrawerItemList } from '@react-navigation/drawer'
+import { DrawerContentComponentProps, DrawerItemList, useDrawerStatus } from '@react-navigation/drawer'
 import { FlashList } from '@shopify/flash-list'
 import { Settings } from '@tamagui/lucide-icons'
 import React, { useEffect, useState } from 'react'
@@ -15,6 +15,7 @@ import TopicItem from '../topic/TopicItem'
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { t } = useTranslation()
   const [topics, setTopics] = useState<Topic[]>([])
+  const isDrawerOpen = useDrawerStatus() === 'open'
 
   const handleTopicSeeAll = () => {
     props.navigation.navigate('Main', { screen: 'TopicScreen' })
@@ -24,15 +25,17 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
   const renderItem = ({ item }: { item: Topic }) => <TopicItem topic={item} />
 
   useEffect(() => {
-    runAsyncFunction(async () => {
-      try {
-        const topicsData = await getTopics()
-        setTopics(topicsData)
-      } catch (error) {
-        console.error('Failed to fetch topics:', error)
-      }
-    })
-  }, [])
+    if (isDrawerOpen) {
+      runAsyncFunction(async () => {
+        try {
+          const topicsData = await getTopics()
+          setTopics(topicsData)
+        } catch (error) {
+          console.error('Failed to fetch topics:', error)
+        }
+      })
+    }
+  }, [isDrawerOpen])
 
   return (
     <YStack flex={1} backgroundColor="transparent">

@@ -12,6 +12,19 @@ import { getBlocksIdByMessageId } from './messageBlocks.queries'
  * @returns 一个 Message 对象。
  */
 export function transformDbToMessage(dbRecord: any): Message {
+  const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
+    if (typeof jsonString !== 'string') {
+      return defaultValue
+    }
+
+    try {
+      return JSON.parse(jsonString)
+    } catch (e) {
+      console.error('JSON parse error for string:', jsonString)
+      return defaultValue
+    }
+  }
+
   return {
     id: dbRecord.id,
     role: dbRecord.role,
@@ -21,13 +34,13 @@ export function transformDbToMessage(dbRecord: any): Message {
     updatedAt: dbRecord.updatedAt,
     status: dbRecord.status,
     modelId: dbRecord.modelId,
-    model: dbRecord.model ? JSON.parse(dbRecord.model) : undefined,
+    model: dbRecord.model ? safeJsonParse(dbRecord.model) : undefined,
     type: dbRecord.type,
     useful: !!dbRecord.useful,
     askId: dbRecord.askId,
-    mentions: dbRecord.mentions ? JSON.parse(dbRecord.mentions) : undefined,
-    usage: dbRecord.usage ? JSON.parse(dbRecord.usage) : undefined,
-    metrics: dbRecord.metrics ? JSON.parse(dbRecord.metrics) : undefined,
+    mentions: dbRecord.mentions ? safeJsonParse(dbRecord.mentions) : undefined,
+    usage: dbRecord.usage ? safeJsonParse(dbRecord.usage) : undefined,
+    metrics: dbRecord.metrics ? safeJsonParse(dbRecord.metrics) : undefined,
     multiModelMessageStyle: dbRecord.multiModelMessageStyle,
     foldSelected: !!dbRecord.foldSelected,
     // 注意：'blocks' 字段需要通过查询 message_blocks 表来单独填充。

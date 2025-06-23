@@ -15,6 +15,7 @@ export const NewTopicButton: React.FC<NewTopicButtonProps> = ({ assistant }) => 
 
   const handleAddNewTopic = async () => {
     await createNewTopic(assistant)
+    // todo navigate to home screen with new topic
   }
 
   return (

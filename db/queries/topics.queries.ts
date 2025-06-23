@@ -5,7 +5,6 @@ import { Message } from '@/types/message'
 
 import { db } from '..'
 import { topics } from '../schema'
-import { getMessagesByTopicId } from './messages.queries'
 
 /**
  * 将数据库记录转换为 Topic 类型。
@@ -13,13 +12,26 @@ import { getMessagesByTopicId } from './messages.queries'
  * @returns 一个 Topic 对象。
  */
 function transformDbToTopic(dbRecord: any): Topic {
+  const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
+    if (typeof jsonString !== 'string') {
+      return defaultValue
+    }
+
+    try {
+      return JSON.parse(jsonString)
+    } catch (e) {
+      console.error('JSON parse error for string:', jsonString)
+      return defaultValue
+    }
+  }
+
   return {
     id: dbRecord.id,
     assistantId: dbRecord.assistantId,
     name: dbRecord.name,
     createdAt: dbRecord.createdAt,
     updatedAt: dbRecord.updatedAt,
-    messages: dbRecord.messages ? JSON.parse(dbRecord.messages) : [],
+    messages: dbRecord.messages ? safeJsonParse(dbRecord.messages) : [],
     // 将数字（0 或 1）转换为布尔值
     pinned: !!dbRecord.pinned,
     prompt: dbRecord.prompt,
@@ -60,10 +72,7 @@ export async function getTopicById(topicId: string): Promise<Topic | undefined> 
       return undefined
     }
 
-    // query messages by topicId
-    const messages = await getMessagesByTopicId(topicId)
     const topic = transformDbToTopic(result[0])
-    topic.messages = messages
     return topic
   } catch (error) {
     console.error(`Error getting topic by ID ${topicId}:`, error)
@@ -133,7 +142,7 @@ export async function getTopics(): Promise<Topic[]> {
     const topicsWithMessages = await Promise.all(
       results.map(async dbRecord => {
         const topic = transformDbToTopic(dbRecord)
-        topic.messages = await getMessagesByTopicId(topic.id)
+        // topic.messages = await getMessagesByTopicId(topic.id)
         return topic
       })
     )

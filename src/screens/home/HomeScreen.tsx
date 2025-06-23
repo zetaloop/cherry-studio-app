@@ -108,7 +108,7 @@ const HomeScreen = () => {
           </ContentContainer> */}
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            {assistant && topic && <Messages assistant={assistant} topic={topic} />}
+            {assistant && topic && <Messages key={topic.id} assistant={assistant} topic={topic} />}
           </ScrollView>
 
           <InputContainer>{assistant && topic && <MessageInput assistant={assistant} topic={topic} />}</InputContainer>
