@@ -31,7 +31,7 @@ export const HeaderBar = ({ assistant }: HeaderBarProps) => {
           <AssistantSelection assistant={assistant} />
         </XStack>
         <XStack alignItems="center" minWidth={40} justifyContent="flex-end">
-          <NewTopicButton />
+          <NewTopicButton assistant={assistant} />
         </XStack>
       </XStack>
     </>

@@ -1,3 +1,5 @@
+import { t } from 'i18next'
+
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@/constants'
 import i18n from '@/i18n'
 import { INITIAL_PROVIDERS } from '@/mock'
@@ -5,6 +7,7 @@ import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/as
 import { uuid } from '@/utils'
 
 import { getAssistantById } from '../../db/queries/assistants.queries'
+import { upsertOneTopic } from '../../db/queries/topics.queries'
 
 export async function getDefaultAssistant(): Promise<Assistant> {
   // todo get from store
@@ -83,4 +86,17 @@ export const getAssistantSettings = (assistant: Assistant): AssistantSettings =>
     defaultModel: assistant?.defaultModel ?? undefined,
     customParameters: assistant?.settings?.customParameters ?? []
   }
+}
+
+export async function createNewTopic(assistant: Assistant): Promise<Topic> {
+  const newTopic: Topic = {
+    id: uuid(),
+    assistantId: assistant.id,
+    name: t('new_topic'),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    messages: []
+  }
+  await upsertOneTopic(newTopic)
+  return newTopic
 }
