@@ -39,7 +39,13 @@ export default {
       'expo-asset',
       'expo-font',
       'expo-web-browser',
-      'expo-sqlite'
+      'expo-sqlite',
+      [
+        'expo-document-picker',
+        {
+          iCloudContainerEnvironment: 'Production'
+        }
+      ]
     ],
     experiments: {
       typedRoutes: true

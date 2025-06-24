@@ -6,9 +6,11 @@ import { TextArea, XStack, YStack } from 'tamagui'
 import { sendMessage as _sendMessage } from '@/services/MessagesService'
 import { getUserMessage } from '@/services/MessagesService'
 import { Assistant, Topic } from '@/types/assistant'
+import { FileType } from '@/types/file'
 import { MessageInputBaseParams } from '@/types/message'
 
 import { AddFileButton } from './AddFileButton'
+import FilePreview from './FilePreview'
 import { MentionButton } from './MentionButton'
 import { SendButton } from './SendButton'
 import { ThinkButton } from './ThinkButton'
@@ -23,6 +25,7 @@ interface MessageInputProps {
 export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, setHasMessages }) => {
   const { t } = useTranslation()
   const [text, setText] = useState('')
+  const [files, setFiles] = useState<FileType[]>([])
 
   const sendMessage = useCallback(async () => {
     if (isEmpty(text.trim())) {
@@ -45,6 +48,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, se
 
   return (
     <YStack gap={10}>
+      {files.length > 0 && <FilePreview files={files} setFiles={setFiles} />}
       {/* message */}
       <XStack>
         <TextArea
@@ -60,7 +64,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, se
       <XStack justifyContent="space-between" alignItems="center">
         <XStack gap={5} alignItems="center">
           <MentionButton />
-          <AddFileButton />
+          <AddFileButton files={files} setFiles={setFiles} />
           <WebsearchButton />
           <ThinkButton />
         </XStack>
