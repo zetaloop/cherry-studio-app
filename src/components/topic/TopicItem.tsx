@@ -8,6 +8,7 @@ import ReanimatedSwipeable, { SwipeableMethods } from 'react-native-gesture-hand
 import { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { Text, XStack, YStack } from 'tamagui'
 
+import { deleteTopicById } from '@/services/TopicService'
 import { Assistant, Topic } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 import { runAsyncFunction } from '@/utils'
@@ -16,9 +17,15 @@ import { getAssistantById } from '../../../db/queries/assistants.queries'
 
 interface TopicItemProps {
   topic: Topic
+  onTopicDeleted: () => void
 }
 
-function RenderRightActions(progress: SharedValue<number>, swipeableMethods: SwipeableMethods, topic: Topic) {
+function RenderRightActions(
+  progress: SharedValue<number>,
+  swipeableMethods: SwipeableMethods,
+  topic: Topic,
+  onTopicDeleted: () => void
+) {
   const animatedStyle = useAnimatedStyle(() => {
     const translateX = interpolate(progress.value, [0, 1], [80, 0])
 
@@ -27,8 +34,14 @@ function RenderRightActions(progress: SharedValue<number>, swipeableMethods: Swi
     }
   })
 
-  const handleDelete = () => {
-    console.log('Delete topic:', topic.name)
+  const handleDelete = async () => {
+    try {
+      await deleteTopicById(topic.id)
+      onTopicDeleted()
+    } catch (error) {
+      console.error('Failed to delete topic:', error)
+    }
+
     swipeableMethods.close()
   }
 
@@ -47,7 +60,7 @@ function RenderRightActions(progress: SharedValue<number>, swipeableMethods: Swi
   )
 }
 
-const TopicItem: FC<TopicItemProps> = ({ topic }) => {
+const TopicItem: FC<TopicItemProps> = ({ topic, onTopicDeleted }) => {
   const swipeableRef = useRef(null)
   const navigation = useNavigation<NavigationProps>()
   const [assistant, setAssistant] = useState<Assistant | null>(null)
@@ -57,7 +70,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic }) => {
     _: SharedValue<number>,
     swipeableMethods: SwipeableMethods
   ) => {
-    return RenderRightActions(progress, swipeableMethods, topic)
+    return RenderRightActions(progress, swipeableMethods, topic, onTopicDeleted)
   }
 
   const openTopic = () => {

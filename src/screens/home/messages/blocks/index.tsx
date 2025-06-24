@@ -16,6 +16,7 @@ import FileBlock from './FileBlock'
 import ImageBlock from './ImageBlock'
 import MainTextBlock from './MainTextBlock'
 import PlaceholderBlock from './PlaceholderBlock'
+import ThinkingBlock from './ThinkingBlock'
 
 interface MessageBlockRendererProps {
   message: Message
@@ -90,6 +91,9 @@ const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ message }) => {
             break
           case MessageBlockType.FILE:
             blockComponent = <FileBlock key={block.id} block={block} />
+            break
+          case MessageBlockType.THINKING:
+            blockComponent = <ThinkingBlock key={block.id} block={block} />
             break
           default:
             console.warn('Unsupported block type in MessageBlockRenderer:', (block as any).type, block)

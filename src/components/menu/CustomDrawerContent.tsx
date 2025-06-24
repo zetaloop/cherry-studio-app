@@ -17,12 +17,23 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
   const [topics, setTopics] = useState<Topic[]>([])
   const isDrawerOpen = useDrawerStatus() === 'open'
 
+  const refreshTopics = () => {
+    runAsyncFunction(async () => {
+      try {
+        const topicsData = await getTopics()
+        setTopics(topicsData)
+      } catch (error) {
+        console.error('Failed to fetch topics:', error)
+      }
+    })
+  }
+
   const handleTopicSeeAll = () => {
     props.navigation.navigate('Main', { screen: 'TopicScreen' })
     console.log('Navigate to all topics')
   }
 
-  const renderItem = ({ item }: { item: Topic }) => <TopicItem topic={item} />
+  const renderItem = ({ item }: { item: Topic }) => <TopicItem topic={item} onTopicDeleted={refreshTopics} />
 
   useEffect(() => {
     if (isDrawerOpen) {
