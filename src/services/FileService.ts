@@ -4,7 +4,9 @@ import { FileType } from '@/types/file'
 const fileStorageDir = new Directory(Paths.cache, 'Files')
 
 export async function uploadFiles(files: FileType[]): Promise<FileType[]> {
-  fileStorageDir.create({ intermediates: true })
+  if (!fileStorageDir.exists) {
+    fileStorageDir.create({ intermediates: true, overwrite: true })
+  }
 
   const filePromises = files.map(async file => {
     try {

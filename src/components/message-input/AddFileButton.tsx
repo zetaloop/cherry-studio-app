@@ -40,7 +40,6 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
           count: 1
         }
       })
-      console.log('Selected images:', _files)
       setFiles([...files, ..._files])
     } catch (error) {
       console.error('Error selecting image:', error)
@@ -70,7 +69,6 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
           count: 1
         }
       })
-      console.log('Selected files:', _files)
       setFiles([...files, ..._files])
     } catch (error) {
       console.error('Error selecting file:', error)
@@ -79,8 +77,8 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
 
   const handleAddPress = async () => {
     // 暂时先调用添加图片功能
-    // await handleAddImage()
-    await handleAddFile()
+    await handleAddImage()
+    // await handleAddFile()
   }
 
   return <Button chromeless size={24} icon={<CirclePlus size={24} />} onPress={handleAddPress} />

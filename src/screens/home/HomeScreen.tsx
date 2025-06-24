@@ -9,7 +9,7 @@ import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { getSystemAssistants } from '@/mock'
-import { getDefaultAssistant } from '@/services/AssistantService'
+import { getAssistantById } from '@/services/AssistantService'
 import { createNewTopic, getNewestTopic } from '@/services/TopicService'
 import { Assistant, Topic } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
@@ -32,7 +32,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     runAsyncFunction(async () => {
-      const assistantData = await getDefaultAssistant()
+      const assistantData = await getAssistantById('1')
       setAssistant(assistantData)
 
       if (!topicId) {
@@ -43,7 +43,7 @@ const HomeScreen = () => {
         }
 
         setTopic(newTopic)
-        setHasMessages(true)
+        setHasMessages(false)
         return
       }
 
