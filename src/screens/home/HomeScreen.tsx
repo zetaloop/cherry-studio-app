@@ -62,13 +62,6 @@ const HomeScreen = () => {
     navigation.navigate('AssistantMarketScreen')
   }
 
-  const handleTestDatabase = async () => {
-    // await upsertOneTopic(MOCK_TOPIC)
-    // await testMessageBlocks()
-    //   const assistants = getSystemAssistants()
-    //   await upsertAssistants(assistants)
-  }
-
   return (
     <SafeAreaContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
