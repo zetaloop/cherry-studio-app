@@ -117,7 +117,7 @@ const HomeScreen = () => {
             </ContentContainer>
           )}
 
-          {assistant && topic && (
+          {hasMessages && assistant && topic && (
             <ScrollView showsVerticalScrollIndicator={false}>
               <Messages key={topic.id} assistant={assistant} topic={topic} />
             </ScrollView>

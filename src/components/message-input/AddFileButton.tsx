@@ -14,16 +14,14 @@ interface AddFileButtonProps {
 }
 
 export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles }) => {
-  const handleAddPress = async () => {
+  const handleAddImage = async () => {
     try {
-      // handleAddFile
-      // const result = await DocumentPicker.getDocumentAsync({})
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images']
       })
 
       if (result.canceled) {
-        console.log('File selection was canceled')
+        console.log('Image selection was canceled')
         return
       }
 
@@ -42,10 +40,10 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
           count: 1
         }
       })
-      console.log('Selected files:', _files)
+      console.log('Selected images:', _files)
       setFiles([...files, ..._files])
     } catch (error) {
-      console.error('Error selecting file:', error)
+      console.error('Error selecting image:', error)
     }
   }
 
@@ -77,6 +75,12 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
     } catch (error) {
       console.error('Error selecting file:', error)
     }
+  }
+
+  const handleAddPress = async () => {
+    // 暂时先调用添加图片功能
+    // await handleAddImage()
+    await handleAddFile()
   }
 
   return <Button chromeless size={24} icon={<CirclePlus size={24} />} onPress={handleAddPress} />
