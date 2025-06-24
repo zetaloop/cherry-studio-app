@@ -1,9 +1,9 @@
 import * as FileSystem from 'expo-file-system'
 
 import { FileType } from '@/types/file'
-const fileStorageDir = FileSystem.documentDirectory + 'Files/'
+const fileStorageDir = FileSystem.cacheDirectory + 'Files/'
 
-export async function uploadFile(files: FileType[]): Promise<FileType[]> {
+export async function uploadFiles(files: FileType[]): Promise<FileType[]> {
   // use FileSystem.copyAsync(options)
   const filePromises = files.map(async file => {
     const fileUri = file.path

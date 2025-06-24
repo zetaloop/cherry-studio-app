@@ -3,7 +3,7 @@ import { FlashList } from '@shopify/flash-list'
 import { Settings } from '@tamagui/lucide-icons'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Avatar, Button, Text, XStack, YStack } from 'tamagui'
+import { Avatar, Button, Text, View, XStack, YStack } from 'tamagui'
 
 import { MenuTabContent } from '@/components/menu/MenuTabContent'
 import { Topic } from '@/types/assistant'
@@ -49,12 +49,14 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
             searchPlaceholder={t('common.search_placeholder')}
             title={t('menu.topic.recent')}
             onSeeAllPress={handleTopicSeeAll}>
-            <FlashList
-              ItemSeparatorComponent={() => <YStack height={20} />}
-              data={topics}
-              renderItem={renderItem}
-              estimatedItemSize={50}
-            />
+            <View style={{ flex: 1, minHeight: 200 }}>
+              <FlashList
+                ItemSeparatorComponent={() => <YStack height={20} />}
+                data={topics}
+                renderItem={renderItem}
+                estimatedItemSize={50}
+              />
+            </View>
           </MenuTabContent>
         </YStack>
       </YStack>

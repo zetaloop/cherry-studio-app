@@ -9,7 +9,7 @@ export const KB = 1024
 export const MB = 1024 * KB
 export const GB = 1024 * MB
 
-export const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
+export const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.heic']
 export const videoExts = ['.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv']
 export const audioExts = ['.mp3', '.wav', '.ogg', '.flac', '.aac']
 export const documentExts = ['.pdf', '.doc', '.docx', '.pptx', '.xlsx', '.odt', '.odp', '.ods']

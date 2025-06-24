@@ -25,8 +25,13 @@ const Messages: FC<MessagesProps> = ({ assistant, topic, setActiveTopic, onCompo
   }
 
   return (
-    <View flex={1}>
-      <FlashList data={processedMessages} renderItem={renderMessage} keyExtractor={item => item.id} />
+    <View style={{ flex: 1, minHeight: 200 }}>
+      <FlashList
+        data={processedMessages}
+        renderItem={renderMessage}
+        keyExtractor={item => item.id}
+        estimatedItemSize={60}
+      />
     </View>
   )
 }
