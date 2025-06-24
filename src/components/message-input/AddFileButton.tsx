@@ -5,6 +5,7 @@ import { Button } from 'tamagui'
 
 import { FileType } from '@/types/file'
 import { uuid } from '@/utils'
+import { getFileType } from '@/utils/file'
 
 interface AddFileButtonProps {
   files: FileType[]
@@ -29,6 +30,7 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
           path: asset.uri,
           size: asset.size || 0,
           ext: asset.name.split('.').pop() || '',
+          type: getFileType(asset.name.split('.').pop() || ''),
           mimeType: asset.mimeType || '',
           created_at: new Date().toISOString(),
           count: 1

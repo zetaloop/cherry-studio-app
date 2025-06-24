@@ -12,6 +12,7 @@ import {
   MessageBlockType
 } from '@/types/message'
 
+import FileBlock from './FileBlock'
 import ImageBlock from './ImageBlock'
 import MainTextBlock from './MainTextBlock'
 import PlaceholderBlock from './PlaceholderBlock'
@@ -86,6 +87,9 @@ const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ message }) => {
 
           case MessageBlockType.IMAGE:
             blockComponent = <ImageBlock key={block.id} block={block} />
+            break
+          case MessageBlockType.FILE:
+            blockComponent = <FileBlock key={block.id} block={block} />
             break
           default:
             console.warn('Unsupported block type in MessageBlockRenderer:', (block as any).type, block)
