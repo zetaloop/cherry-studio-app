@@ -12,7 +12,7 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { AvatarEditButton } from '@/components/ui/AvatarEditButton'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { useAssistant } from '@/hooks/use-assistant'
+import { useAssistant } from '@/hooks/useAssistant'
 import { RootStackParamList } from '@/types/naviagate'
 
 type AssistantDetailRouteProp = RouteProp<RootStackParamList, 'AssistantDetailScreen'>
