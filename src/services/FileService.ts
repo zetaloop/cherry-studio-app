@@ -1,20 +1,19 @@
-import * as FileSystem from 'expo-file-system'
+import { Directory, File, Paths } from 'expo-file-system/next'
 
 import { FileType } from '@/types/file'
-const fileStorageDir = FileSystem.cacheDirectory + 'Files/'
+const fileStorageDir = new Directory(Paths.cache, 'Files')
 
 export async function uploadFiles(files: FileType[]): Promise<FileType[]> {
-  // use FileSystem.copyAsync(options)
-  const filePromises = files.map(async file => {
-    const fileUri = file.path
-    const destinationUri = fileStorageDir + file.id + '.' + file.ext
+  fileStorageDir.create({ intermediates: true })
 
+  const filePromises = files.map(async file => {
     try {
-      await FileSystem.makeDirectoryAsync(fileStorageDir, { intermediates: true })
-      await FileSystem.copyAsync({ from: fileUri, to: destinationUri })
+      const sourceFile = new File(file.path)
+      const destinationFile = new File(fileStorageDir, `${file.id}.${file.ext}`)
+      sourceFile.copy(destinationFile)
       return {
         ...file,
-        path: destinationUri
+        path: destinationFile.uri
       }
     } catch (error) {
       console.error('Error uploading file:', error)
