@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, XStack, YStack } from 'tamagui'
 
+import { uploadFile } from '@/services/FileService'
 import { sendMessage as _sendMessage } from '@/services/MessagesService'
 import { getUserMessage } from '@/services/MessagesService'
 import { Assistant, Topic } from '@/types/assistant'
@@ -37,6 +38,11 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, se
 
     try {
       const baseUserMessage: MessageInputBaseParams = { assistant, topic, content: text }
+
+      if (files.length > 0) {
+        const uploadedFiles = await uploadFile(files)
+        baseUserMessage.files = uploadedFiles
+      }
 
       const { message, blocks } = getUserMessage(baseUserMessage)
 

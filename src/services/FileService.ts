@@ -1,45 +1,27 @@
-// import db from '@/db'
+import * as FileSystem from 'expo-file-system'
+
 import { FileType } from '@/types/file'
+const fileStorageDir = FileSystem.documentDirectory + 'Files/'
 
-export default class FileManager {
-  static async getFile(id: string): Promise<FileType | undefined> {
-    // const file = await db.files.get(id)
+export async function uploadFile(files: FileType[]): Promise<FileType[]> {
+  // use FileSystem.copyAsync(options)
+  const filePromises = files.map(async file => {
+    const fileUri = file.path
+    const destinationUri = fileStorageDir + file.id + '.' + file.ext
 
-    // if (file) {
-    //   // todo
-    //   // const filesPath = store.getState().runtime.filesPath
-    //   const filesPath = ''
-    //   console.warn('[FileManager] TODO')
-    //   file.path = filesPath + '/' + file.id + file.ext
-    // }
+    try {
+      await FileSystem.makeDirectoryAsync(fileStorageDir, { intermediates: true })
+      await FileSystem.copyAsync({ from: fileUri, to: destinationUri })
+      return {
+        ...file,
+        path: destinationUri
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error)
+      throw new Error(`Failed to upload file: ${file.name}`)
+    }
+  })
+  const uploadedFiles = await Promise.all(filePromises)
 
-    // return file
-    return undefined
-  }
-  static async deleteFile(id: string, force: boolean = false): Promise<void> {
-    // const file = await this.getFile(id)
-
-    // if (!file) {
-    //   return
-    // }
-
-    // if (!force) {
-    //   if (file.count > 1) {
-    //     await db.files.update(id, { ...file, count: file.count - 1 })
-    //     return
-    //   }
-    // }
-
-    // await db.files.delete(id)
-
-    // try {
-    //   await FileSystem.deleteAsync(id + file.ext)
-    // } catch (error) {
-    //   console.error('[FileManager] Failed to delete file:', error)
-    // }
-    return
-  }
-  static async deleteFiles(files: FileType[]): Promise<void> {
-    await Promise.all(files.map(file => this.deleteFile(file.id)))
-  }
+  return uploadedFiles
 }
