@@ -1,4 +1,5 @@
 import * as FileSystem from 'expo-file-system'
+import { File } from 'expo-file-system/next'
 import OpenAI, { AzureOpenAI } from 'openai'
 import { ChatCompletionContentPart, ChatCompletionContentPartRefusal, ChatCompletionTool } from 'openai/resources'
 
@@ -249,9 +250,7 @@ export class OpenAIAPIClient extends OpenAIBaseClient<
     for (const imageBlock of imageBlocks) {
       if (isVision) {
         if (imageBlock.file) {
-          const base64 = await FileSystem.readAsStringAsync(imageBlock.file.path, {
-            encoding: FileSystem.EncodingType.Base64
-          })
+          const base64 = new File(imageBlock.file.path).base64()
           parts.push({ type: 'image_url', image_url: { url: `data:image/jpg;base64,${base64}` } })
         } else if (imageBlock.url && imageBlock.url.startsWith('data:')) {
           parts.push({ type: 'image_url', image_url: { url: imageBlock.url } })

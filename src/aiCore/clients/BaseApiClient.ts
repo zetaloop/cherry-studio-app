@@ -1,4 +1,4 @@
-import * as FileSystem from 'expo-file-system'
+import { File } from 'expo-file-system/next'
 import { isEmpty } from 'lodash'
 
 import { GenerateImageParams } from '@/config/models/image'
@@ -249,9 +249,7 @@ export abstract class BaseApiClient<
 
         for (const fileBlock of textFileBlocks) {
           const file = fileBlock.file
-          const fileContent = (
-            await FileSystem.readAsStringAsync(file.path, { encoding: FileSystem.EncodingType.UTF8 })
-          ).trim()
+          const fileContent = new File(file.path).text().trim()
           const fileNameRow = 'file: ' + file.origin_name + '\n\n'
           text = text + fileNameRow + fileContent + divider
         }
