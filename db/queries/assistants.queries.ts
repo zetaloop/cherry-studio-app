@@ -19,7 +19,7 @@ function transformDbToAssistant(dbRecord: any): Assistant {
     try {
       return JSON.parse(jsonString)
     } catch (e) {
-      console.error('JSON parse error for string:', jsonString)
+      console.error('JSON parse error for string:', e, jsonString)
       return defaultValue
     }
   }

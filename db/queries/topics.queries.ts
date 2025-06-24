@@ -154,3 +154,12 @@ export async function getTopics(): Promise<Topic[]> {
     throw error
   }
 }
+
+export async function deleteTopicById(topicId: string): Promise<void> {
+  try {
+    await db.delete(topics).where(eq(topics.id, topicId))
+  } catch (error) {
+    console.error(`Error deleting topic with ID ${topicId}:`, error)
+    throw error
+  }
+}

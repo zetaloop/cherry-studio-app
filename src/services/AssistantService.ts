@@ -8,7 +8,7 @@ import { getAssistantById } from '../../db/queries/assistants.queries'
 
 export async function getDefaultAssistant(): Promise<Assistant> {
   // todo get from store
-  const assistant = await getAssistantById('3')
+  const assistant = await getAssistantById('1')
 
   if (!assistant) {
     console.error('Default assistant not found')

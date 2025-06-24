@@ -43,7 +43,7 @@ const HomeScreen = () => {
         }
 
         setTopic(newTopic)
-        setHasMessages(false)
+        setHasMessages(true)
         return
       }
 
