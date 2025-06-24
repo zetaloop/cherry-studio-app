@@ -4,7 +4,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, XStack } from 'tamagui'
 
-import { createNewTopic } from '@/services/AssistantService'
+import { createNewTopic } from '@/services/TopicService'
 import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 

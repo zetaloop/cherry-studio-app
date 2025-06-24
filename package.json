@@ -10,7 +10,8 @@
     "ios": "expo run:ios",
     "test": "jest --watchAll",
     "lint": "oxlint --fix",
-    "check:i18n": "node scripts/check-i18n.js"
+    "check:i18n": "node scripts/check-i18n.js",
+    "check": "yarn check:i18n && oxlint"
   },
   "jest": {
     "preset": "jest-expo"
