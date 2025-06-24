@@ -1,5 +1,6 @@
 import { CirclePlus } from '@tamagui/lucide-icons'
 import * as DocumentPicker from 'expo-document-picker'
+import * as ImagePicker from 'expo-image-picker'
 import React from 'react'
 import { Button } from 'tamagui'
 
@@ -13,6 +14,41 @@ interface AddFileButtonProps {
 }
 
 export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles }) => {
+  const handleAddPress = async () => {
+    try {
+      // handleAddFile
+      // const result = await DocumentPicker.getDocumentAsync({})
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images']
+      })
+
+      if (result.canceled) {
+        console.log('File selection was canceled')
+        return
+      }
+
+      const _files: FileType[] = result.assets.map(asset => {
+        const id = uuid()
+        return {
+          id: id,
+          name: asset.fileName || id,
+          origin_name: asset.fileName || id,
+          path: asset.uri,
+          size: asset.fileSize || 0,
+          ext: asset.fileName?.split('.').pop() || 'png',
+          type: getFileType(asset.fileName?.split('.').pop() || 'png'),
+          mimeType: asset.mimeType || '',
+          created_at: new Date().toISOString(),
+          count: 1
+        }
+      })
+      console.log('Selected files:', _files)
+      setFiles([...files, ..._files])
+    } catch (error) {
+      console.error('Error selecting file:', error)
+    }
+  }
+
   const handleAddFile = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({})
@@ -36,11 +72,12 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
           count: 1
         }
       })
+      console.log('Selected files:', _files)
       setFiles([...files, ..._files])
     } catch (error) {
       console.error('Error selecting file:', error)
     }
   }
 
-  return <Button chromeless size={24} icon={<CirclePlus size={24} />} onPress={handleAddFile} />
+  return <Button chromeless size={24} icon={<CirclePlus size={24} />} onPress={handleAddPress} />
 }

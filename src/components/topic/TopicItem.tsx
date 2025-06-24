@@ -75,7 +75,6 @@ const TopicItem: FC<TopicItemProps> = ({ topic }) => {
     runAsyncFunction(async () => {
       try {
         const assistantData = await getAssistantById(topic.assistantId)
-        console.log('Fetched assistant:', assistantData)
         setAssistant(assistantData)
       } catch (error) {
         console.error('Failed to fetch assistant:', error)

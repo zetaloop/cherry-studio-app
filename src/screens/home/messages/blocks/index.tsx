@@ -45,7 +45,7 @@ const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ message }) => {
   const groupedBlocks = useMemo(() => filterImageBlockGroups(processedBlocks), [processedBlocks])
 
   return (
-    <View>
+    <View flex={1}>
       {groupedBlocks.map(block => {
         if (Array.isArray(block)) {
           const groupKey = block.map(imageBlock => imageBlock.id).join('-')

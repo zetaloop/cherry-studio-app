@@ -15,8 +15,8 @@ interface MessageItemProps {
 
 const MessageItem: FC<MessageItemProps> = ({ assistant, message }) => {
   return (
-    <View>
-      <YStack>
+    <View flex={1}>
+      <YStack flex={1}>
         {message.role === 'assistant' && <MessageHeader assistant={assistant} message={message} />}
         <MessageContent message={message} />
       </YStack>
