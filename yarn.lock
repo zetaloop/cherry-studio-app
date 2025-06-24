@@ -6924,6 +6924,7 @@ __metadata:
     expo-constants: "npm:~17.1.6"
     expo-crypto: "npm:~14.1.5"
     expo-dev-client: "npm:~5.2.1"
+    expo-document-picker: "npm:~13.1.6"
     expo-drizzle-studio-plugin: "npm:^0.1.2"
     expo-file-system: "npm:~18.1.10"
     expo-font: "npm:~13.3.1"
@@ -6970,7 +6971,6 @@ __metadata:
     redux-persist: "npm:^6.0.0"
     tamagui: "npm:^1.123.17"
     tokenx: "npm:^1.0.1"
-    typecheck: "npm:^0.1.2"
     typescript: "npm:^5.3.3"
     zeego: "npm:^3.0.6"
   languageName: unknown
@@ -8864,6 +8864,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10c0/606a14d72aa349f41a99591fc323705a2959f7476f676f0630e958e698fe6110b680b1a56975f0d57f39d27ea6ed87491b7ba229fcc1a3f71c42cca2b5185286
+  languageName: node
+  linkType: hard
+
+"expo-document-picker@npm:~13.1.6":
+  version: 13.1.6
+  resolution: "expo-document-picker@npm:13.1.6"
+  peerDependencies:
+    expo: "*"
+  checksum: 10c0/0800000360e0f0f123f3097b43eb13bf7f0a5a8a18db7a2ae6ce05ee983138d2242d9391b69a25f45af08347e7c1f773ca158e4b74eb71da23cb6b429d8cfee6
   languageName: node
   linkType: hard
 
@@ -15328,13 +15337,6 @@ __metadata:
   version: 4.41.0
   resolution: "type-fest@npm:4.41.0"
   checksum: 10c0/f5ca697797ed5e88d33ac8f1fec21921839871f808dc59345c9cf67345bfb958ce41bd821165dbf3ae591cedec2bf6fe8882098dfdd8dc54320b859711a2c1e4
-  languageName: node
-  linkType: hard
-
-"typecheck@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "typecheck@npm:0.1.2"
-  checksum: 10c0/307b4ba7b5b1259208cf92f20c193c3109a88099e016a0d50e5df44ed975ee750026a7db5f2c94e8895ad88a7722f8ede2b3cc076182cbcc2d453023349022da
   languageName: node
   linkType: hard
 

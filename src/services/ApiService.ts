@@ -172,7 +172,7 @@ export async function mockCheckApi(provider: Provider, model: Model): Promise<vo
 
   const ai = new AiProvider(provider)
 
-  const assistant = getDefaultAssistant()
+  const assistant = await getDefaultAssistant()
   assistant.model = model
 
   try {
