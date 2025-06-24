@@ -9,7 +9,8 @@ import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { getSystemAssistants } from '@/mock'
-import { createNewTopic, getDefaultAssistant } from '@/services/AssistantService'
+import { getDefaultAssistant } from '@/services/AssistantService'
+import { createNewTopic, getNewestTopic } from '@/services/TopicService'
 import { Assistant, Topic } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { runAsyncFunction } from '@/utils'
@@ -35,7 +36,12 @@ const HomeScreen = () => {
       setAssistant(assistantData)
 
       if (!topicId) {
-        const newTopic = await createNewTopic(assistantData)
+        let newTopic = await getNewestTopic()
+
+        if (!newTopic) {
+          newTopic = await createNewTopic(assistantData)
+        }
+
         setTopic(newTopic)
         setHasMessages(false)
         return
