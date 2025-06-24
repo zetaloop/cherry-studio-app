@@ -1,9 +1,8 @@
-import { eq } from 'drizzle-orm'
-import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
-import { FC, memo, useEffect, useMemo, useState } from 'react'
+import { FC, memo, useMemo } from 'react'
 import React from 'react'
 import { View, XStack } from 'tamagui'
 
+import { useMessageBlocks } from '@/hooks/useMessageBlocks'
 import {
   ImageMessageBlock,
   MainTextMessageBlock,
@@ -13,9 +12,6 @@ import {
   MessageBlockType
 } from '@/types/message'
 
-import { db } from '../../../../../db'
-import { transformDbToMessageBlock } from '../../../../../db/queries/messageBlocks.queries'
-import { messageBlocks as messageBlocksSchema } from '../../../../../db/schema'
 import ImageBlock from './ImageBlock'
 import MainTextBlock from './MainTextBlock'
 import PlaceholderBlock from './PlaceholderBlock'
@@ -43,39 +39,9 @@ const filterImageBlockGroups = (blocks: MessageBlock[]): (MessageBlock[] | Messa
 }
 
 const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ message }) => {
-  const { data: rawBlocks } = useLiveQuery(
-    db.select().from(messageBlocksSchema).where(eq(messageBlocksSchema.messageId, message.id))
-  )
+  const { processedBlocks } = useMessageBlocks(message.id)
 
-  const [renderedBlocks, setRenderedBlocks] = useState<MessageBlock[]>([])
-
-  useEffect(() => {
-    if (rawBlocks === undefined) {
-      return
-    }
-
-    let isMounted = true
-
-    const processMessages = async () => {
-      const blocks = await Promise.all(
-        rawBlocks.map(async rawblock => {
-          const block = transformDbToMessageBlock(rawblock)
-          return block
-        })
-      )
-
-      if (isMounted) {
-        setRenderedBlocks(blocks)
-      }
-    }
-
-    processMessages()
-
-    return () => {
-      isMounted = false
-    }
-  }, [rawBlocks])
-  const groupedBlocks = useMemo(() => filterImageBlockGroups(renderedBlocks), [renderedBlocks])
+  const groupedBlocks = useMemo(() => filterImageBlockGroups(processedBlocks), [processedBlocks])
 
   return (
     <View>
