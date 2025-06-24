@@ -1,17 +1,18 @@
 import { useNavigation } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
 import { useCallback, useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useSelector } from 'react-redux'
 import { Input, Text, XStack, YStack } from 'tamagui'
 
+import { DefaultProviderIcon } from '@/components/icons/DefaultProviderIcon'
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { AvatarEditButton } from '@/components/ui/AvatarEditButton'
 import { CustomSlider } from '@/components/ui/CustomSlider'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { DefaultProviderIcon } from '@/components/ui/SvgIcons'
 import { CustomSwitch } from '@/components/ui/Switch'
 import { RootState, useAppDispatch } from '@/store'
 import { updateDefaultAssistant } from '@/store/assistant'
@@ -118,7 +119,7 @@ export default function DefaultAssistantSettingsScreen() {
       <HeaderBar title={t('settings.models.default_assistant_model')} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
         <YStack flex={1} paddingTop={24} paddingHorizontal={10}>
-          <KeyboardAwareScrollView flex={1} showsVerticalScrollIndicator={false}>
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
             <XStack justifyContent="center" alignItems="center">
               <AvatarEditButton
                 content={defaultAssistant.emoji || <DefaultProviderIcon />}

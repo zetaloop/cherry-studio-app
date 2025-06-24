@@ -4,15 +4,36 @@ import { INITIAL_PROVIDERS } from '@/mock'
 import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/assistant'
 import { uuid } from '@/utils'
 
-import { getAssistantById } from '../../db/queries/assistants.queries'
+import { getAssistantById as _getAssistantById } from '../../db/queries/assistants.queries'
 
-export async function getDefaultAssistant(): Promise<Assistant> {
+export function getDefaultAssistant(): Assistant {
+  return {
+    id: 'default',
+    name: i18n.t('chat.default.name'),
+    emoji: '😀',
+    prompt: '',
+    topics: [getDefaultTopic('default')],
+    type: 'assistant',
+    settings: {
+      temperature: DEFAULT_TEMPERATURE,
+      contextCount: DEFAULT_CONTEXTCOUNT,
+      enableMaxTokens: false,
+      maxTokens: 0,
+      streamOutput: true,
+      topP: 1,
+      toolUseMode: 'prompt',
+      customParameters: []
+    }
+  }
+}
+
+export async function getAssistantById(assistantId: string): Promise<Assistant> {
   // todo get from store
-  const assistant = await getAssistantById('1')
+  const assistant = await _getAssistantById(assistantId)
 
   if (!assistant) {
-    console.error('Default assistant not found')
-    throw new Error('Default assistant not found')
+    console.error(`Assistant with ID ${assistantId} not found`)
+    throw new Error(`Assistant with ID ${assistantId} not found`)
   }
 
   return assistant
