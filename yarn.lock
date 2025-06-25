@@ -6952,7 +6952,9 @@ __metadata:
     react-i18next: "npm:^15.4.1"
     react-native: "npm:0.79.4"
     react-native-device-info: "npm:^14.0.4"
+    react-native-file-viewer: "npm:^2.1.5"
     react-native-gesture-handler: "npm:~2.24.0"
+    react-native-image-viewing: "npm:^0.2.2"
     react-native-ios-context-menu: "npm:3.1.0"
     react-native-ios-utilities: "npm:5.1.2"
     react-native-keyboard-aware-scroll-view: "npm:^0.9.5"
@@ -13411,6 +13413,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-file-viewer@npm:^2.1.5":
+  version: 2.1.5
+  resolution: "react-native-file-viewer@npm:2.1.5"
+  peerDependencies:
+    react-native: ">=0.47"
+  checksum: 10c0/92bb7245c4c6dd82253d4eb2cbcca5cb4a1a0bcbd5a29d2d7171b2b0290dc6690b9df759b590fd7b5f1f2e64b5bbf35db6165aa4d5aaab8e8ff2f75b4a35b448
+  languageName: node
+  linkType: hard
+
 "react-native-fit-image@npm:^1.5.5":
   version: 1.5.5
   resolution: "react-native-fit-image@npm:1.5.5"
@@ -13431,6 +13442,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/eb2c5cb53690ae5de1482370a156cbd775f6b3054540cd47310ec4712df83a280fe7b6259f372eec4c14a6d7f70ab18f1919a9fe63beaca9ceae126edbe32298
+  languageName: node
+  linkType: hard
+
+"react-native-image-viewing@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "react-native-image-viewing@npm:0.2.2"
+  peerDependencies:
+    react: ">=16.11.0"
+    react-native: ">=0.61.3"
+  checksum: 10c0/b2a089b17e99008fa7f14a3a3a6776c343437742f1e48bc7a2639c429112e85448f288f81bb926c0d68c0ac1789faad89c2338be89f2dbb0b39d8192fb790eb2
   languageName: node
   linkType: hard
 
