@@ -27,15 +27,15 @@ function transformDbToTopic(dbRecord: any): Topic {
 
   return {
     id: dbRecord.id,
-    assistantId: dbRecord.assistantId,
+    assistantId: dbRecord.assistant_id,
     name: dbRecord.name,
-    createdAt: dbRecord.createdAt,
-    updatedAt: dbRecord.updatedAt,
+    createdAt: dbRecord.created_at,
+    updatedAt: dbRecord.updated_at,
     messages: dbRecord.messages ? safeJsonParse(dbRecord.messages) : [],
     // 将数字（0 或 1）转换为布尔值
     pinned: !!dbRecord.pinned,
     prompt: dbRecord.prompt,
-    isNameManuallyEdited: !!dbRecord.isNameManuallyEdited
+    isNameManuallyEdited: !!dbRecord.is_name_manually_edited
   }
 }
 
@@ -47,15 +47,15 @@ function transformDbToTopic(dbRecord: any): Topic {
 function transformTopicToDb(topic: Topic): any {
   return {
     id: topic.id,
-    assistantId: topic.assistantId,
+    assistant_id: topic.assistantId,
     name: topic.name,
-    createdAt: topic.createdAt,
-    updatedAt: topic.updatedAt,
+    created_at: topic.createdAt,
+    updated_at: topic.updatedAt,
     messages: JSON.stringify(topic.messages),
     // 将布尔值转换为数字（1 表示 true，0 表示 false）
     pinned: topic.pinned ? 1 : 0,
     prompt: topic.prompt,
-    isNameManuallyEdited: topic.isNameManuallyEdited ? 1 : 0
+    is_name_manually_edited: topic.isNameManuallyEdited ? 1 : 0
   }
 }
 

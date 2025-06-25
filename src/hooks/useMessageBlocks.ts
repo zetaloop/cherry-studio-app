@@ -8,7 +8,7 @@ import { messageBlocks as messageBlocksSchema } from '../../db/schema'
 
 export const useMessageBlocks = (messageId: string) => {
   const query = useMemo(
-    () => db.select().from(messageBlocksSchema).where(eq(messageBlocksSchema.messageId, messageId)),
+    () => db.select().from(messageBlocksSchema).where(eq(messageBlocksSchema.message_id, messageId)),
     [messageId]
   )
   const { data: rawBlocks } = useLiveQuery(query)

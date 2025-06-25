@@ -1,6 +1,6 @@
+import { getSystemProviders } from '@/config/providers'
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@/constants'
 import i18n from '@/i18n'
-import { INITIAL_PROVIDERS } from '@/mock'
 import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/assistant'
 import { uuid } from '@/utils'
 
@@ -42,7 +42,7 @@ export async function getAssistantById(assistantId: string): Promise<Assistant> 
 export function getAssistantProvider(assistant: Assistant): Provider {
   // todo
   // const providers = store.getState().llm.providers
-  const providers = INITIAL_PROVIDERS
+  const providers = getSystemProviders()
   const provider = providers.find(p => p.id === assistant.model?.provider)
   return provider || getDefaultProvider()
 }
@@ -66,12 +66,12 @@ export function getDefaultProvider() {
 
 export function getDefaultModel() {
   // todo
-  return INITIAL_PROVIDERS[0].models[0]
+  return getSystemProviders()[0].models[0]
 }
 
 export function getProviderByModel(model?: Model): Provider {
   // todo
-  const providers = INITIAL_PROVIDERS
+  const providers = getSystemProviders()
   const providerId = model ? model.provider : getDefaultProvider().id
   return providers.find(p => p.id === providerId) as Provider
 }
