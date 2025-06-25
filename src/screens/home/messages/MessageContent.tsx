@@ -2,7 +2,8 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { View } from 'tamagui'
 
-import { Message } from '@/types/message'
+import { useMessageBlocks } from '@/hooks/useMessageBlocks'
+import { Message, MessageBlockType } from '@/types/message'
 
 import MessageBlockRenderer from './blocks'
 
@@ -12,30 +13,54 @@ interface Props {
 
 const MessageContent: React.FC<Props> = ({ message }) => {
   const isUser = message.role === 'user'
+  const { processedBlocks } = useMessageBlocks(message.id)
+
+  const mediaBlocks = processedBlocks.filter(
+    block => block.type === MessageBlockType.IMAGE || block.type === MessageBlockType.FILE
+  )
+  const contentBlocks = processedBlocks.filter(
+    block => block.type !== MessageBlockType.IMAGE && block.type !== MessageBlockType.FILE
+  )
 
   return (
-    <View style={[styles.container, isUser ? styles.userMessage : styles.assistantMessage]}>
-      <MessageBlockRenderer message={message} />
+    <View style={isUser ? styles.userContainer : styles.assistantContainer}>
+      {mediaBlocks.length > 0 && <MessageBlockRenderer blocks={mediaBlocks} />}
+      {contentBlocks.length > 0 && (
+        <View
+          style={[
+            styles.contentWrapper,
+            isUser ? styles.userMessageContent : styles.assistantMessageContent,
+            mediaBlocks.length > 0 && { marginTop: 8 }
+          ]}>
+          <MessageBlockRenderer blocks={contentBlocks} />
+        </View>
+      )}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  userContainer: {
+    alignSelf: 'flex-end',
+    width: '50%',
+    alignItems: 'flex-end'
+  },
+  assistantContainer: {
+    alignSelf: 'flex-start',
+    alignItems: 'flex-start'
+  },
+  contentWrapper: {
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderTopLeftRadius: 28,
     borderBottomLeftRadius: 28,
     borderBottomRightRadius: 28
   },
-  userMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: 'green',
-    width: '50%'
+  userMessageContent: {
+    flex: 1,
+    backgroundColor: 'green'
   },
-  assistantMessage: {
-    alignItems: 'flex-start',
-    alignSelf: 'flex-start',
+  assistantMessageContent: {
     backgroundColor: 'transparent'
   }
 })

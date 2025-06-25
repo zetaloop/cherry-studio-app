@@ -2,11 +2,9 @@ import { FC, memo, useMemo } from 'react'
 import React from 'react'
 import { View, XStack } from 'tamagui'
 
-import { useMessageBlocks } from '@/hooks/useMessageBlocks'
 import {
   ImageMessageBlock,
   MainTextMessageBlock,
-  Message,
   MessageBlock,
   MessageBlockStatus,
   MessageBlockType
@@ -19,7 +17,7 @@ import PlaceholderBlock from './PlaceholderBlock'
 import ThinkingBlock from './ThinkingBlock'
 
 interface MessageBlockRendererProps {
-  message: Message
+  blocks: MessageBlock[]
 }
 
 const filterImageBlockGroups = (blocks: MessageBlock[]): (MessageBlock[] | MessageBlock)[] => {
@@ -40,10 +38,8 @@ const filterImageBlockGroups = (blocks: MessageBlock[]): (MessageBlock[] | Messa
   }, [])
 }
 
-const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ message }) => {
-  const { processedBlocks } = useMessageBlocks(message.id)
-
-  const groupedBlocks = useMemo(() => filterImageBlockGroups(processedBlocks), [processedBlocks])
+const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ blocks }) => {
+  const groupedBlocks = useMemo(() => filterImageBlockGroups(blocks), [blocks])
 
   return (
     <View flex={1}>
