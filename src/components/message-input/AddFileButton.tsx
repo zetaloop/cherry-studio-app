@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker'
 import React from 'react'
 import { Button } from 'tamagui'
 
+import { uploadFiles } from '@/services/FileService'
 import { FileType } from '@/types/file'
 import { uuid } from '@/utils'
 import { getFileType } from '@/utils/file'
@@ -17,7 +18,8 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
   const handleAddImage = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images']
+        mediaTypes: ['images'],
+        allowsMultipleSelection: true
       })
 
       if (result.canceled) {
@@ -40,7 +42,8 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
           count: 1
         }
       })
-      setFiles([...files, ..._files])
+      const uploadedFiles = await uploadFiles(_files)
+      setFiles([...files, ...uploadedFiles])
     } catch (error) {
       console.error('Error selecting image:', error)
     }
@@ -48,7 +51,7 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
 
   const handleAddFile = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({})
+      const result = await DocumentPicker.getDocumentAsync({ multiple: true })
 
       if (result.canceled) {
         console.log('File selection was canceled')
@@ -69,7 +72,8 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
           count: 1
         }
       })
-      setFiles([...files, ..._files])
+      const uploadedFiles = await uploadFiles(_files)
+      setFiles([...files, ...uploadedFiles])
     } catch (error) {
       console.error('Error selecting file:', error)
     }

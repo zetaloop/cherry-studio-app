@@ -70,16 +70,6 @@ export function getUserMessage({
   const blocks: MessageBlock[] = []
   const blockIds: string[] = []
 
-  // 内容为空也应该创建空文本块
-  if (content !== undefined) {
-    // Pass messageId when creating blocks
-    const textBlock = createMainTextBlock(messageId, content, {
-      status: MessageBlockStatus.SUCCESS
-    })
-    blocks.push(textBlock)
-    blockIds.push(textBlock.id)
-  }
-
   if (files?.length) {
     files.forEach(file => {
       if (file.type === FileTypes.IMAGE) {
@@ -92,6 +82,16 @@ export function getUserMessage({
         blockIds.push(fileBlock.id)
       }
     })
+  }
+
+  // 内容为空也应该创建空文本块
+  if (content !== undefined) {
+    // Pass messageId when creating blocks
+    const textBlock = createMainTextBlock(messageId, content, {
+      status: MessageBlockStatus.SUCCESS
+    })
+    blocks.push(textBlock)
+    blockIds.push(textBlock.id)
   }
 
   // 直接在createMessage中传入id
