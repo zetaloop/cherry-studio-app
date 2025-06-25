@@ -6,9 +6,9 @@ import {
   MessageBlock,
   MessageBlockStatus,
   MessageBlockType,
-  PlaceholderMessageBlock
+  PlaceholderMessageBlock,
+  Response
 } from '@/types/message'
-import { Response } from '@/types/message'
 import { uuid } from '@/utils'
 import { formatErrorMessage, isAbortError } from '@/utils/error'
 import {
@@ -30,14 +30,6 @@ import { fetchChatCompletion } from './ApiService'
 import { getDefaultModel } from './AssistantService'
 import { createStreamProcessor, StreamProcessorCallbacks } from './StreamProcessingService'
 import { estimateMessagesUsage } from './TokenService'
-export {
-  filterContextMessages,
-  filterEmptyMessages,
-  filterMessages,
-  filterUsefulMessages,
-  filterUserRoleStartMessages,
-  getGroupedMessages
-} from '@/utils/messageUtils/filters'
 
 /**
  * Creates a user message object and associated blocks based on input.
@@ -502,8 +494,7 @@ export async function fetchAndProcessAssistantResponseImpl(
               response?.usage?.prompt_tokens === 0 ||
               response?.usage?.completion_tokens === 0)
           ) {
-            const usage = await estimateMessagesUsage({ assistant, messages: finalContextWithAssistant })
-            response.usage = usage
+            response.usage = await estimateMessagesUsage({ assistant, messages: finalContextWithAssistant })
           }
 
           // todo set topic loading
