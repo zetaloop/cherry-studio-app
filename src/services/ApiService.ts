@@ -12,14 +12,14 @@ import i18n from '@/i18n'
 import { Assistant, Model, Provider } from '@/types/assistant'
 import { Chunk, ChunkType } from '@/types/chunk'
 import { Message } from '@/types/message'
-
-import { getAssistantById, getAssistantProvider, getAssistantSettings, getDefaultModel } from './AssistantService'
 import {
   filterContextMessages,
   filterEmptyMessages,
   filterUsefulMessages,
   filterUserRoleStartMessages
-} from './MessagesService'
+} from '@/utils/messageUtils/filters'
+
+import { getAssistantById, getAssistantProvider, getAssistantSettings, getDefaultModel } from './AssistantService'
 
 const BASE_URL = 'http://localhost:8081'
 
