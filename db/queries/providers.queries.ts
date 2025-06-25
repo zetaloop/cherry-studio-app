@@ -1,3 +1,5 @@
+import { eq } from 'drizzle-orm'
+
 import { Provider } from '@/types/assistant'
 
 import { db } from '..'
@@ -79,6 +81,21 @@ export async function upsertProviders(providersToUpsert: Provider[]) {
     await Promise.all(upsertPromises)
   } catch (error) {
     console.error('Error in upsertProviders:', error)
+    throw error
+  }
+}
+
+export async function getProviderById(providerId: string): Promise<Provider | undefined> {
+  try {
+    const result = await db.select().from(providers).where(eq(providers.id, providerId)).limit(1)
+
+    if (result.length === 0) {
+      return undefined
+    }
+
+    return transformDbToProvider(result[0])
+  } catch (error) {
+    console.error('Error in getProviderById:', error)
     throw error
   }
 }

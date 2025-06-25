@@ -36,7 +36,7 @@ export async function fetchChatCompletion({
 }) {
   console.log('fetchChatCompletion', messages, assistant)
 
-  const provider = getAssistantProvider(assistant)
+  const provider = await getAssistantProvider(assistant)
   const AI = new AiProvider(provider)
 
   // Make sure that 'Clear Context' works for all scenarios including external tool and normal chat.

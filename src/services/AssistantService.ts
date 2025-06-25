@@ -5,6 +5,7 @@ import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/as
 import { uuid } from '@/utils'
 
 import { getAssistantById as _getAssistantById } from '../../db/queries/assistants.queries'
+import { getProviderById } from '../../db/queries/providers.queries'
 
 export function getDefaultAssistant(): Assistant {
   return {
@@ -39,11 +40,8 @@ export async function getAssistantById(assistantId: string): Promise<Assistant> 
   return assistant
 }
 
-export function getAssistantProvider(assistant: Assistant): Provider {
-  // todo
-  // const providers = store.getState().llm.providers
-  const providers = getSystemProviders()
-  const provider = providers.find(p => p.id === assistant.model?.provider)
+export async function getAssistantProvider(assistant: Assistant): Promise<Provider> {
+  const provider = await getProviderById(assistant.model?.provider || '')
   return provider || getDefaultProvider()
 }
 
