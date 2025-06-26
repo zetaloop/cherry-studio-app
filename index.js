@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler'
+import './polyfills'
 
 import { Buffer } from 'buffer'
 import { registerRootComponent } from 'expo'

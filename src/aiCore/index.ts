@@ -1,136 +1,255 @@
+/**
+ * Cherry Studio AI Core - 新版本入口
+ * 集成 @cherrystudio/ai-core 库的渐进式重构方案
+ *
+ * 融合方案：简化实现，专注于核心功能
+ * 1. 优先使用新AI SDK
+ * 2. 失败时fallback到原有实现
+ * 3. 暂时保持接口兼容性
+ */
+import {
+  createExecutor,
+  ProviderConfigFactory,
+  type ProviderId,
+  type ProviderSettingsMap,
+  StreamTextParams
+} from '@cherrystudio/ai-core'
+import { fetch as expoFetch } from 'expo/fetch'
+import { cloneDeep } from 'lodash'
+
 import { GenerateImageParams, isDedicatedImageGenerationModel } from '@/config/models/image'
 import { Model, Provider } from '@/types/assistant'
-import { RequestOptions, SdkModel } from '@/types/sdk'
+import { formatApiHost } from '@/utils/api'
 
-import { ApiClientFactory, BaseApiClient, OpenAIAPIClient } from './clients'
-import { AihubmixAPIClient } from './clients/AihubmixAPIClient'
-import { AnthropicAPIClient } from './clients/anthropic/AnthropicAPIClient'
-import { OpenAIResponseAPIClient } from './clients/openai/OpenAIResponseAPIClient'
-import { CompletionsMiddlewareBuilder } from './middleware/builder'
-import { MIDDLEWARE_NAME as AbortHandlerMiddlewareName } from './middleware/common/AbortHandlerMiddleware'
-import { MIDDLEWARE_NAME as FinalChunkConsumerMiddlewareName } from './middleware/common/FinalChunkConsumerMiddleware'
-import { applyCompletionsMiddlewares } from './middleware/composer'
-// import { MIDDLEWARE_NAME as McpToolChunkMiddlewareName } from './middleware/core/McpToolChunkMiddleware'
-import { MIDDLEWARE_NAME as RawStreamListenerMiddlewareName } from './middleware/core/RawStreamListenerMiddleware'
-import { MIDDLEWARE_NAME as ThinkChunkMiddlewareName } from './middleware/core/ThinkChunkMiddleware'
-// import { MIDDLEWARE_NAME as WebSearchMiddlewareName } from './middleware/core/WebSearchMiddleware'
-// import { MIDDLEWARE_NAME as ImageGenerationMiddlewareName } from './middleware/feat/ImageGenerationMiddleware'
-// import { MIDDLEWARE_NAME as ThinkingTagExtractionMiddlewareName } from './middleware/feat/ThinkingTagExtractionMiddleware'
-// import { MIDDLEWARE_NAME as ToolUseExtractionMiddlewareName } from './middleware/feat/ToolUseExtractionMiddleware'
-import { MiddlewareRegistry } from './middleware/register'
-import { CompletionsParams, CompletionsResult } from './middleware/schemas'
+import AiSdkToChunkAdapter from './AiSdkToChunkAdapter'
+import { AiSdkMiddlewareConfig, buildAiSdkMiddlewares } from './middleware/aisdk/AiSdkMiddlewareBuilder'
+import { CompletionsResult } from './middleware/schemas'
+import reasonPlugin from './plugins/reasonPlugin'
+import textPlugin from './plugins/textPlugin'
+import { getAiSdkProviderId } from './provider/factory'
 
-export default class AiProvider {
-  private apiClient: BaseApiClient
+/**
+ * 将 Provider 配置转换为新 AI SDK 格式
+ */
+function providerToAiSdkConfig(provider: Provider): {
+  providerId: ProviderId | 'openai-compatible'
+  options: ProviderSettingsMap[keyof ProviderSettingsMap]
+} {
+  // 如果是 vertexai 类型且没有 googleCredentials，转换为 VertexProvider
+  const actualProvider = cloneDeep(provider)
+
+  // if (provider.type === 'vertexai' && !isVertexProvider(provider)) {
+  //   if (!isVertexAIConfigured()) {
+  //     throw new Error('VertexAI is not configured. Please configure project, location and service account credentials.')
+  //   }
+
+  //   actualProvider = createVertexProvider(provider)
+  // }
+
+  if (actualProvider.type === 'openai' || actualProvider.type === 'anthropic') {
+    actualProvider.apiHost = formatApiHost(actualProvider.apiHost)
+  }
+
+  const aiSdkProviderId = getAiSdkProviderId(actualProvider)
+
+  if (aiSdkProviderId !== 'openai-compatible') {
+    const options = ProviderConfigFactory.fromProvider(aiSdkProviderId, {
+      ...actualProvider
+      // 使用ai-sdk内置的baseURL
+      // baseURL: actualProvider.apiHost
+    })
+
+    return {
+      providerId: aiSdkProviderId as ProviderId,
+      options
+    }
+  } else {
+    console.log(`Using openai-compatible fallback for provider: ${actualProvider.type}`)
+    const options = ProviderConfigFactory.createOpenAICompatible(actualProvider.apiHost, actualProvider.apiKey)
+
+    return {
+      providerId: 'openai-compatible',
+      options: {
+        ...options,
+        name: actualProvider.id
+      }
+    }
+  }
+}
+
+/**
+ * 检查是否支持使用新的AI SDK
+ */
+function isModernSdkSupported(provider: Provider, model?: Model): boolean {
+  // 目前支持主要的providers
+  const supportedProviders = ['openai', 'anthropic', 'gemini', 'azure-openai', 'vertexai']
+
+  // 检查provider类型
+  if (!supportedProviders.includes(provider.type)) {
+    return false
+  }
+
+  // 对于 vertexai，检查配置是否完整
+  // if (provider.type === 'vertexai' && !isVertexAIConfigured()) {
+  //   return false
+  // }
+
+  // 检查是否为图像生成模型（暂时不支持）
+  if (model && isDedicatedImageGenerationModel(model)) {
+    return false
+  }
+
+  return true
+}
+
+export default class ModernAiProvider {
+  private modernExecutor?: ReturnType<typeof createExecutor>
+  private provider: Provider
 
   constructor(provider: Provider) {
-    // Use the new ApiClientFactory to get a BaseApiClient instance
-    this.apiClient = ApiClientFactory.create(provider)
+    this.provider = provider
+
+    const customFetch = async (url, options) => {
+      const response = await expoFetch(url, {
+        ...options,
+        headers: {
+          ...options.headers
+        }
+      })
+      return response
+    }
+
+    // TODO:如果后续在调用completions时需要切换provider的话,
+    // 初始化时不构建中间件，等到需要时再构建
+    const config = providerToAiSdkConfig(provider)
+    config.options.fetch = customFetch
+    this.modernExecutor = createExecutor(config.providerId, config.options, [
+      reasonPlugin({
+        delayInMs: 80,
+        chunkingRegex: /([\u4E00-\u9FFF]{3})|\S+\s+/
+      }),
+      textPlugin
+    ])
   }
 
-  public async completions(params: CompletionsParams, options?: RequestOptions): Promise<CompletionsResult> {
-    // 1. 根据模型识别正确的客户端
-    const model = params.assistant.model
+  public async completions(
+    modelId: string,
+    params: StreamTextParams,
+    middlewareConfig: AiSdkMiddlewareConfig
+  ): Promise<CompletionsResult> {
+    // const model = params.assistant.model
 
-    if (!model) {
-      return Promise.reject(new Error('Model is required'))
-    }
+    // 检查是否应该使用现代化客户端
+    // if (this.modernClient && model && isModernSdkSupported(this.provider, model)) {
+    // try {
+    console.log('completions', modelId, params, middlewareConfig)
+    return await this.modernCompletions(modelId, params, middlewareConfig)
+    // } catch (error) {
+    // console.warn('Modern client failed, falling back to legacy:', error)
+    // fallback到原有实现
+    // }
+    // }
 
-    // 根据client类型选择合适的处理方式
-    let client: BaseApiClient
-
-    if (this.apiClient instanceof AihubmixAPIClient) {
-      // AihubmixAPIClient: 根据模型选择合适的子client
-      client = this.apiClient.getClientForModel(model)
-
-      if (client instanceof OpenAIResponseAPIClient) {
-        client = client.getClient(model) as BaseApiClient
-      }
-    } else if (this.apiClient instanceof OpenAIResponseAPIClient) {
-      // OpenAIResponseAPIClient: 根据模型特征选择API类型
-      client = this.apiClient.getClient(model) as BaseApiClient
-    } else {
-      // 其他client直接使用
-      client = this.apiClient
-    }
-
-    // 2. 构建中间件链
-    const builder = CompletionsMiddlewareBuilder.withDefaults()
-
-    // images api
-    if (isDedicatedImageGenerationModel(model)) {
-      builder.clear()
-      builder
-        .add(MiddlewareRegistry[FinalChunkConsumerMiddlewareName])
-        .add(MiddlewareRegistry[AbortHandlerMiddlewareName])
-      // .add(MiddlewareRegistry[ImageGenerationMiddlewareName])
-    } else {
-      // Existing logic for other models
-      if (!params.enableReasoning) {
-        // builder.remove(ThinkingTagExtractionMiddlewareName)
-        builder.remove(ThinkChunkMiddlewareName)
-      }
-
-      // 注意：用client判断会导致typescript类型收窄
-      if (!(this.apiClient instanceof OpenAIAPIClient)) {
-        // builder.remove(ThinkingTagExtractionMiddlewareName)
-      }
-
-      if (!(this.apiClient instanceof AnthropicAPIClient)) {
-        builder.remove(RawStreamListenerMiddlewareName)
-      }
-
-      if (!params.enableWebSearch) {
-        // builder.remove(WebSearchMiddlewareName)
-      }
-
-      if (!params.mcpTools?.length) {
-        // builder.remove(ToolUseExtractionMiddlewareName)
-        // builder.remove(McpToolChunkMiddlewareName)
-      }
-
-      // if (isEnabledToolUse(params.assistant) && isFunctionCallingModel(model)) {
-      //   builder.remove(ToolUseExtractionMiddlewareName)
-      // }
-
-      if (params.callType !== 'chat') {
-        builder.remove(AbortHandlerMiddlewareName)
-      }
-    }
-
-    const middlewares = builder.build()
-
-    // 3. Create the wrapped SDK method with middlewares
-    const wrappedCompletionMethod = applyCompletionsMiddlewares(client, client.createCompletions, middlewares)
-
-    // 4. Execute the wrapped method with the original params
-    return wrappedCompletionMethod(params, options)
+    // 使用原有实现
+    // return this.legacyProvider.completions(params, options)
   }
 
-  public async models(): Promise<SdkModel[]> {
-    return this.apiClient.listModels()
+  /**
+   * 使用现代化AI SDK的completions实现
+   * 使用建造者模式动态构建中间件
+   */
+  private async modernCompletions(
+    modelId: string,
+    params: StreamTextParams,
+    middlewareConfig: AiSdkMiddlewareConfig
+  ): Promise<CompletionsResult> {
+    if (!this.modernExecutor) {
+      throw new Error('Modern AI SDK client not initialized')
+    }
+
+    try {
+      // 合并传入的配置和实例配置
+      const finalConfig: AiSdkMiddlewareConfig = {
+        ...middlewareConfig,
+        provider: this.provider,
+        // 工具相关信息从 params 中获取
+        enableTool: !!Object.keys(params.tools || {}).length
+      }
+
+      // 动态构建中间件数组
+      const middlewares = buildAiSdkMiddlewares(finalConfig)
+      console.log('构建的中间件:', middlewares)
+
+      // 创建带有中间件的执行器
+      if (middlewareConfig.onChunk) {
+        // 流式处理 - 使用适配器
+        const adapter = new AiSdkToChunkAdapter(middlewareConfig.onChunk)
+        // this.modernExecutor.pluginEngine.use(
+        //   createMCPPromptPlugin({
+        //     mcpTools: middlewareConfig.mcpTools || [],
+        //     assistant: params.assistant,
+        //     onChunk: middlewareConfig.onChunk,
+        //     recursiveCall: this.modernExecutor.streamText,
+        //     recursionDepth: 0,
+        //     maxRecursionDepth: 20
+        //   })
+        // )
+        const streamResult = await this.modernExecutor.streamText(
+          modelId,
+          params,
+          middlewares.length > 0 ? { middlewares } : undefined
+        )
+
+        const finalText = await adapter.processStream(streamResult)
+
+        return {
+          getText: () => finalText
+        }
+      } else {
+        // 流式处理但没有 onChunk 回调
+        const streamResult = await this.modernExecutor.streamText(
+          modelId,
+          params,
+          middlewares.length > 0 ? { middlewares } : undefined
+        )
+        const finalText = await streamResult.text
+
+        return {
+          getText: () => finalText
+        }
+      }
+    } catch (error) {
+      console.error('Modern AI SDK error:', error)
+      throw error
+    }
+  }
+
+  // 代理其他方法到原有实现
+  public async models() {
+    //todo: 使用现代化SDK获取模型列表
+    return
   }
 
   public async getEmbeddingDimensions(model: Model): Promise<number> {
-    try {
-      // Use the SDK instance to test embedding capabilities
-      const dimensions = await this.apiClient.getEmbeddingDimensions(model)
-      return dimensions
-    } catch (error) {
-      console.error('Error getting embedding dimensions:', error)
-      return 0
-    }
+    // todo: 使用现代化SDK获取嵌入维度
+    return -1
   }
 
   public async generateImage(params: GenerateImageParams): Promise<string[]> {
-    return this.apiClient.generateImage(params)
+    // todo: 使用现代化SDK生成图像
+    return []
   }
 
   public getBaseURL(): string {
-    return this.apiClient.getBaseURL()
+    // todo: 使用现代化SDK获取基础URL
+    return ''
   }
 
   public getApiKey(): string {
-    return this.apiClient.getApiKey()
+    // todo: 使用现代化SDK获取API密钥
+    return ''
   }
 }
+
+// 为了方便调试，导出一些工具函数
+export { isModernSdkSupported, providerToAiSdkConfig }

@@ -26,8 +26,8 @@ import { getMainTextContent } from '@/utils/messageUtils/find'
 import { updateOneBlock, upsertManyBlocks, upsertOneBlock } from '../../db/queries/messageBlocks.queries'
 import { getMessageById, getMessagesByTopicId, upsertOneMessage } from '../../db/queries/messages.queries'
 import { getTopicById, updateTopicMessages } from '../../db/queries/topics.queries'
-import { fetchChatCompletion } from './ApiService'
 import { getDefaultModel } from './AssistantService'
+import { OrchestrationService } from './OrchestrationService'
 import { createStreamProcessor, StreamProcessorCallbacks } from './StreamProcessingService'
 import { estimateMessagesUsage } from './TokenService'
 
@@ -521,11 +521,17 @@ export async function fetchAndProcessAssistantResponseImpl(
     const streamProcessorCallbacks = createStreamProcessor(callbacks)
 
     const startTime = Date.now()
-    await fetchChatCompletion({
-      messages: messagesForContext,
-      assistant: assistant,
-      onChunkReceived: streamProcessorCallbacks
-    })
+    const orchestrationService = new OrchestrationService()
+    await orchestrationService.handleUserMessage(
+      {
+        messages: messagesForContext,
+        assistant,
+        options: {
+          timeout: 30000
+        }
+      },
+      streamProcessorCallbacks
+    )
   } catch (error) {
     console.error('Error in fetchAndProcessAssistantResponseImpl:', error)
   }

@@ -1,107 +1,53 @@
-import { findLast, isEmpty, takeRight } from 'lodash'
+import { StreamTextParams } from '@cherrystudio/ai-core'
+import { isEmpty } from 'lodash'
 
-import AiProvider from '@/aiCore'
-import { CompletionsParams } from '@/aiCore/middleware/schemas'
-import { isEmbeddingModel } from '@/config/models/embedding'
-import {
-  isReasoningModel,
-  isSupportedReasoningEffortModel,
-  isSupportedThinkingTokenModel
-} from '@/config/models/reasoning'
+import ModernAiProvider from '@/aiCore'
+import { AiSdkMiddlewareConfig } from '@/aiCore/middleware/aisdk/AiSdkMiddlewareBuilder'
+import { buildStreamTextParams } from '@/aiCore/transformParameters'
 import i18n from '@/i18n'
 import { Assistant, Model, Provider } from '@/types/assistant'
 import { Chunk, ChunkType } from '@/types/chunk'
-import { Message } from '@/types/message'
-import {
-  filterContextMessages,
-  filterEmptyMessages,
-  filterUsefulMessages,
-  filterUserRoleStartMessages
-} from '@/utils/messageUtils/filters'
 
-import { getAssistantById, getAssistantProvider, getAssistantSettings, getDefaultModel } from './AssistantService'
+import { getAssistantProvider } from './AssistantService'
 
 const BASE_URL = 'http://localhost:8081'
 
 export async function fetchChatCompletion({
   messages,
   assistant,
+  options,
   onChunkReceived
 }: {
-  messages: Message[]
+  messages: StreamTextParams['messages']
   assistant: Assistant
+  options: {
+    signal?: AbortSignal
+    timeout?: number
+    headers?: Record<string, string>
+  }
+
   onChunkReceived: (chunk: Chunk) => void
-  // TODO
-  // onChunkStatus: (status: 'searching' | 'processing' | 'success' | 'error') => void
 }) {
   console.log('fetchChatCompletion', messages, assistant)
 
   const provider = await getAssistantProvider(assistant)
-  const AI = new AiProvider(provider)
-
-  // Make sure that 'Clear Context' works for all scenarios including external tool and normal chat.
-  messages = filterContextMessages(messages)
-
-  const lastUserMessage = findLast(messages, m => m.role === 'user')
-  const lastAnswer = findLast(messages, m => m.role === 'assistant')
-
-  // if (!lastUserMessage) {
-  //   console.error('fetchChatCompletion returning early: Missing lastUserMessage or lastAnswer')
-  //   return
-  // }
-
-  // try {
-  // NOTE: The search results are NOT added to the messages sent to the AI here.
-  // They will be retrieved and used by the messageThunk later to create CitationBlocks.
-  // const { mcpTools } = await fetchExternalTool(lastUserMessage, assistant, onChunkReceived, lastAnswer)
-  const model = assistant.model || getDefaultModel()
-
-  const { maxTokens, contextCount } = getAssistantSettings(assistant)
-
-  const filteredMessages = filterUsefulMessages(messages)
-
-  const _messages = filterUserRoleStartMessages(
-    filterEmptyMessages(filterContextMessages(takeRight(filteredMessages, contextCount + 2))) // 取原来几个provider的最大值
-  )
-
-  const enableReasoning =
-    ((isSupportedThinkingTokenModel(model) || isSupportedReasoningEffortModel(model)) &&
-      assistant.settings?.reasoning_effort !== undefined) ||
-    (isReasoningModel(model) && (!isSupportedThinkingTokenModel(model) || !isSupportedReasoningEffortModel(model)))
-
-  // const enableWebSearch =
-  //   (assistant.enableWebSearch && isWebSearchModel(model)) ||
-  //   isOpenRouterBuiltInWebSearchModel(model) ||
-  //   model.id.includes('sonar') ||
-  //   false
-
-  // const enableGenerateImage =
-  //   isGenerateImageModel(model) && (isSupportedDisableGenerationModel(model) ? assistant.enableGenerateImage : true)
+  const AI = new ModernAiProvider(provider)
+  const { params: aiSdkParams, modelId } = await buildStreamTextParams(messages, assistant, {
+    // mcpTools: mcpTools,
+    requestOptions: options
+  })
+  const middlewareConfig: AiSdkMiddlewareConfig = {
+    streamOutput: assistant.settings?.streamOutput ?? true,
+    onChunk: onChunkReceived,
+    model: assistant.model,
+    provider: provider,
+    enableReasoning: assistant.settings?.reasoning_effort !== undefined
+    // mcpTools
+  }
 
   // --- Call AI Completions ---
   onChunkReceived({ type: ChunkType.LLM_RESPONSE_CREATED })
-
-  // if (enableWebSearch) {
-  //   onChunkReceived({ type: ChunkType.LLM_WEB_SEARCH_IN_PROGRESS })
-  // }
-
-  await AI.completions(
-    {
-      callType: 'chat',
-      messages: _messages,
-      assistant,
-      onChunk: onChunkReceived,
-      // mcpTools: mcpTools,
-      maxTokens,
-      streamOutput: assistant.settings?.streamOutput || false,
-      enableReasoning
-      // enableWebSearch,
-      // enableGenerateImage
-    },
-    {
-      streamOutput: assistant.settings?.streamOutput || false
-    }
-  )
+  await AI.completions(modelId, aiSdkParams, middlewareConfig)
 }
 
 export async function checkApi(provider: Provider, model: Model) {
@@ -169,51 +115,51 @@ export function checkApiProvider(provider: Provider): void {
 
 export async function mockCheckApi(provider: Provider, model: Model): Promise<void> {
   checkApiProvider(provider)
+  return
+  // const ai = new AiProvider(provider)
 
-  const ai = new AiProvider(provider)
+  // const assistant = await getAssistantById('1')
+  // assistant.model = model
 
-  const assistant = await getAssistantById('1')
-  assistant.model = model
+  // try {
+  //   if (isEmbeddingModel(model)) {
+  //     const result = await ai.getEmbeddingDimensions(model)
 
-  try {
-    if (isEmbeddingModel(model)) {
-      const result = await ai.getEmbeddingDimensions(model)
+  //     if (result === 0) {
+  //       throw new Error(i18n.t('message.error.enter.model'))
+  //     }
+  //   } else {
+  //     const params: CompletionsParams = {
+  //       callType: 'check',
+  //       messages: 'hi',
+  //       assistant,
+  //       streamOutput: true
+  //     }
 
-      if (result === 0) {
-        throw new Error(i18n.t('message.error.enter.model'))
-      }
-    } else {
-      const params: CompletionsParams = {
-        callType: 'check',
-        messages: 'hi',
-        assistant,
-        streamOutput: true
-      }
+  //     // Try streaming check first
+  //     const result = await ai.completions(params)
 
-      // Try streaming check first
-      const result = await ai.completions(params)
+  //     if (!result.getText()) {
+  //       throw new Error('No response received')
+  //     }
 
-      if (!result.getText()) {
-        throw new Error('No response received')
-      }
+  //     console.log('Check API response:', result.getText())
+  //   }
+  // } catch (error: any) {
+  //   if (error.message.includes('stream')) {
+  //     const params: CompletionsParams = {
+  //       callType: 'check',
+  //       messages: 'hi',
+  //       assistant,
+  //       streamOutput: false
+  //     }
+  //     const result = await ai.completions(params)
 
-      console.log('Check API response:', result.getText())
-    }
-  } catch (error: any) {
-    if (error.message.includes('stream')) {
-      const params: CompletionsParams = {
-        callType: 'check',
-        messages: 'hi',
-        assistant,
-        streamOutput: false
-      }
-      const result = await ai.completions(params)
-
-      if (!result.getText()) {
-        throw new Error('No response received')
-      }
-    } else {
-      throw error
-    }
-  }
+  //     if (!result.getText()) {
+  //       throw new Error('No response received')
+  //     }
+  //   } else {
+  //     throw error
+  //   }
+  // }
 }
