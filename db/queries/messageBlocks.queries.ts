@@ -118,6 +118,7 @@ export function transformDbToMessageBlock(dbRecord: any): MessageBlock {
 
 // MessageBlock 转换为数据库记录
 function transformMessageBlockToDb(messageBlock: MessageBlock): any {
+  console.log('Transforming message block to DB record:', messageBlock)
   const base = {
     id: messageBlock.id,
     message_id: messageBlock.messageId,
@@ -204,6 +205,7 @@ function transformMessageBlockToDb(messageBlock: MessageBlock): any {
 export async function upsertOneBlock(block: MessageBlock) {
   try {
     const dbRecord = transformMessageBlockToDb(block)
+    console.log('Upserting block:', dbRecord)
     await db.insert(messageBlocks).values(dbRecord).onConflictDoUpdate({
       target: messageBlocks.id,
       set: dbRecord // 更新除主键外的所有字段
@@ -270,7 +272,7 @@ export async function updateOneBlock(update: { id: string; changes: Partial<Mess
       if ((jsonFields as string[]).includes(key)) {
         dbChanges[key] = JSON.stringify(value)
       } else if (key === 'thinking_millsec') {
-        dbChanges.thinkingMillsec = value
+        dbChanges.thinking_millsec = value
       } else if (key === 'content' && typeof value === 'object') {
         dbChanges.content = JSON.stringify(value)
       } else {

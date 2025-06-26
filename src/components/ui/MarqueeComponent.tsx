@@ -16,7 +16,7 @@ const MarqueeComponent: React.FC<Props> = ({ block, expanded }) => {
         <XStack gap={10} justifyContent="center" alignItems="center">
           {block.status === MessageBlockStatus.STREAMING && <Spinner size="small" color="rgba(0, 185, 107, 1)" />}
           <YStack gap={5}>
-            <Text fontWeight="bold">Thinking for {(block.thinking_millsec || 0) / 1000} seconds</Text>
+            <Text fontWeight="bold">Thinking for {Math.floor((block.thinking_millsec || 0) / 1000)} seconds</Text>
             <Text fontSize={12} opacity={0.5}>
               Tap to read my mind
             </Text>
