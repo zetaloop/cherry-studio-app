@@ -23,8 +23,8 @@ import {
 } from '@/utils/messageUtils/create'
 import { getMainTextContent } from '@/utils/messageUtils/find'
 
-import { updateOneBlock, upsertManyBlocks, upsertOneBlock } from '../../db/queries/messageBlocks.queries'
-import { getMessageById, getMessagesByTopicId, upsertOneMessage } from '../../db/queries/messages.queries'
+import { updateOneBlock, upsertBlocks } from '../../db/queries/messageBlocks.queries'
+import { getMessageById, getMessagesByTopicId, upsertMessages } from '../../db/queries/messages.queries'
 import { getTopicById, updateTopicMessages } from '../../db/queries/topics.queries'
 import { getDefaultModel } from './AssistantService'
 import { OrchestrationService } from './OrchestrationService'
@@ -127,14 +127,14 @@ export async function sendMessage(
 
     // add message to database
     await saveMessageAndBlocksToDB(userMessage, userMessageBlocks)
-    await upsertOneMessage(userMessage)
+    await upsertMessages(userMessage)
 
     const assistantMessage = createAssistantMessage(assistant.id, topicId, {
       askId: userMessage.id,
       model: assistant.model
     })
     await saveMessageAndBlocksToDB(assistantMessage, [])
-    await upsertOneMessage(assistantMessage)
+    await upsertMessages(assistantMessage)
     await fetchAndProcessAssistantResponseImpl(topicId, assistant, assistantMessage)
   } catch (error) {
     console.error('Error in sendMessage:', error)
@@ -144,7 +144,7 @@ export async function sendMessage(
 export async function saveMessageAndBlocksToDB(message: Message, blocks: MessageBlock[], messageIndex: number = -1) {
   try {
     if (blocks.length > 0) {
-      await upsertManyBlocks(blocks)
+      await upsertBlocks(blocks)
     }
 
     // get topic from database
@@ -212,7 +212,7 @@ export async function fetchAndProcessAssistantResponseImpl(
       }
 
       // add new block to database
-      await upsertOneBlock(newBlock)
+      await upsertBlocks(newBlock)
 
       // change message status
       const toBeUpdatedMessage = await getMessageById(newBlock.messageId)
@@ -239,7 +239,7 @@ export async function fetchAndProcessAssistantResponseImpl(
         toBeUpdatedMessage.status = AssistantMessageStatus.PROCESSING
       }
 
-      const updatedMessage = await upsertOneMessage(toBeUpdatedMessage)
+      const updatedMessage = await upsertMessages(toBeUpdatedMessage)
 
       if (!updatedMessage) {
         console.error(`[handleBlockTransition] Failed to update message ${toBeUpdatedMessage.id} in state.`)
@@ -430,7 +430,7 @@ export async function fetchAndProcessAssistantResponseImpl(
 
         toBeUpdatedMessage.status = errorStatus
 
-        const updatedMessage = await upsertOneMessage(toBeUpdatedMessage)
+        const updatedMessage = await upsertMessages(toBeUpdatedMessage)
 
         if (!updatedMessage) {
           console.error(`[onError] Failed to update message ${toBeUpdatedMessage.id} in state.`)
@@ -515,7 +515,7 @@ export async function fetchAndProcessAssistantResponseImpl(
 
         const messageUpdates: Partial<Message> = { status, metrics: response?.metrics, usage: response?.usage }
 
-        await upsertOneMessage({ ...finalAssistantMsg, ...messageUpdates })
+        await upsertMessages({ ...finalAssistantMsg, ...messageUpdates })
       }
     }
     const streamProcessorCallbacks = createStreamProcessor(callbacks)

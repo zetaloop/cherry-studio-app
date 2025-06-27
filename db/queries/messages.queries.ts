@@ -150,29 +150,35 @@ export async function getMessagesByTopicId(topicId: string): Promise<Message[]> 
 }
 
 /**
- * 插入或更新单个消息。
- * 如果消息已存在，则更新它；如果不存在，则插入新消息。
- * @param topicId - 主题的 ID。
- * @param message - 要插入或更新的消息对象。
+ * 插入或更新一个或多个消息 (Upsert)。
+ * @param messagesToUpsert - 要插入或更新的 Message 对象或对象数组。
+ * @returns 包含已更新或插入的消息的数组的 Promise。
  */
-export async function upsertOneMessage(message: Message): Promise<Message> {
+export async function upsertMessages(messagesToUpsert: Message | Message[]): Promise<Message[]> {
+  const messagesArray = Array.isArray(messagesToUpsert) ? messagesToUpsert : [messagesToUpsert]
+  if (messagesArray.length === 0) return []
+
   try {
-    const existingMessage = await getMessageById(message.id)
+    const dbRecords = messagesArray.map(transformMessageToDb)
 
-    if (existingMessage) {
-      // 更新现有消息
-      const dbRecord = transformMessageToDb(message)
-      return transformDbToMessage(
-        await db.update(messages).set(dbRecord).where(eq(messages.id, message.id)).returning()
-      )
-    } else {
-      // 插入新消息
-      const dbRecord = transformMessageToDb(message)
+    // 为每个记录创建一个 upsert promise
+    const upsertPromises = dbRecords.map(record =>
+      db
+        .insert(messages)
+        .values(record)
+        .onConflictDoUpdate({
+          target: messages.id,
+          set: record // 更新除主键外的所有字段
+        })
+        .returning()
+    )
 
-      return transformDbToMessage(await db.insert(messages).values(dbRecord).returning())
-    }
+    const results = await Promise.all(upsertPromises)
+    const flattenedResults = results.flat() // .returning() 为每个 promise 返回一个数组，因此需要展平
+
+    return flattenedResults.map(transformDbToMessage)
   } catch (error) {
-    console.error(`Error upserting message with ID ${message.id}:`, error)
+    console.error('Error upserting message(s):', error)
     throw error
   }
 }

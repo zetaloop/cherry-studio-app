@@ -199,42 +199,25 @@ function transformMessageBlockToDb(messageBlock: MessageBlock): any {
 }
 
 /**
- * 添加或更新单个块 (Upsert)。
- * @param block - 要更新或插入的 MessageBlock 对象。
+ * 添加或更新一个或多个块 (Upsert)。
+ * @param blocks - 要更新或插入的 MessageBlock 对象或对象数组。
  */
-export async function upsertOneBlock(block: MessageBlock) {
-  try {
-    const dbRecord = transformMessageBlockToDb(block)
-    console.log('Upserting block:', dbRecord)
-    await db.insert(messageBlocks).values(dbRecord).onConflictDoUpdate({
-      target: messageBlocks.id,
-      set: dbRecord // 更新除主键外的所有字段
-    })
-  } catch (error) {
-    console.error('Error upserting one block:', error)
-    throw error
-  }
-}
-
-/**
- * 添加或更新多个块。
- * @param blocks - 要更新或插入的 MessageBlock 对象数组。
- */
-export async function upsertManyBlocks(blocks: MessageBlock[]) {
-  if (blocks.length === 0) return
+export async function upsertBlocks(blocks: MessageBlock | MessageBlock[]) {
+  const blocksArray = Array.isArray(blocks) ? blocks : [blocks]
+  if (blocksArray.length === 0) return
 
   try {
-    const dbRecords = blocks.map(transformMessageBlockToDb)
+    const dbRecords = blocksArray.map(transformMessageBlockToDb)
 
     const upsertPromises = dbRecords.map(record =>
       db.insert(messageBlocks).values(record).onConflictDoUpdate({
         target: messageBlocks.id,
-        set: record
+        set: record // 更新除主键外的所有字段
       })
     )
     await Promise.all(upsertPromises)
   } catch (error) {
-    console.error('Error upserting many blocks:', error)
+    console.error('Error upserting block(s):', error)
     throw error
   }
 }

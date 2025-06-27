@@ -113,19 +113,33 @@ export async function updateTopicMessages(topicId: string, messages: Message[]) 
 }
 
 /**
- * 插入单个主题。
- * @param topics - 要插入或更新的主题数组。
- * @returns 无返回值，但会在数据库中插入或更新主题。
+ * 插入或更新一个或多个主题 (Upsert)。
+ * @param topicsToUpsert - 要插入或更新的主题对象或对象数组。
+ * @returns 包含已更新或插入的主题的数组的 Promise。
  */
-export async function upsertOneTopic(topic: Topic): Promise<void> {
+export async function upsertTopics(topicsToUpsert: Topic | Topic[]): Promise<Topic[]> {
+  const topicsArray = Array.isArray(topicsToUpsert) ? topicsToUpsert : [topicsToUpsert]
+  if (topicsArray.length === 0) return []
+
   try {
-    const dbRecord = transformTopicToDb(topic)
-    await db.insert(topics).values(dbRecord).onConflictDoUpdate({
-      target: topics.id,
-      set: dbRecord
-    })
+    const dbRecords = topicsArray.map(transformTopicToDb)
+
+    const upsertPromises = dbRecords.map(record =>
+      db
+        .insert(topics)
+        .values(record)
+        .onConflictDoUpdate({
+          target: topics.id,
+          set: record
+        })
+        .returning()
+    )
+
+    const results = await Promise.all(upsertPromises)
+    const flattenedResults = results.flat()
+    return flattenedResults.map(transformDbToTopic)
   } catch (error) {
-    console.error(`Error upserting topic with ID ${topic.id}:`, error)
+    console.error('Error upserting topic(s):', error)
     throw error
   }
 }

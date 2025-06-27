@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { Assistant, Topic } from '@/types/assistant'
 import { uuid } from '@/utils'
 
-import { deleteTopicById as _deleteTopicById, getTopics, upsertOneTopic } from '../../db/queries/topics.queries'
+import { deleteTopicById as _deleteTopicById, getTopics, upsertTopics } from '../../db/queries/topics.queries'
 
 export async function createNewTopic(assistant: Assistant): Promise<Topic> {
   const newTopic: Topic = {
@@ -14,7 +14,7 @@ export async function createNewTopic(assistant: Assistant): Promise<Topic> {
     updatedAt: new Date().toISOString(),
     messages: []
   }
-  await upsertOneTopic(newTopic)
+  await upsertTopics(newTopic)
   return newTopic
 }
 
