@@ -6,9 +6,9 @@ import {
   MessageBlock,
   MessageBlockStatus,
   MessageBlockType,
-  PlaceholderMessageBlock
+  PlaceholderMessageBlock,
+  Response
 } from '@/types/message'
-import { Response } from '@/types/message'
 import { uuid } from '@/utils'
 import { formatErrorMessage, isAbortError } from '@/utils/error'
 import {
@@ -26,18 +26,10 @@ import { getMainTextContent } from '@/utils/messageUtils/find'
 import { updateOneBlock, upsertManyBlocks, upsertOneBlock } from '../../db/queries/messageBlocks.queries'
 import { getMessageById, getMessagesByTopicId, upsertOneMessage } from '../../db/queries/messages.queries'
 import { getTopicById, updateTopicMessages } from '../../db/queries/topics.queries'
-import { fetchChatCompletion } from './ApiService'
 import { getDefaultModel } from './AssistantService'
+import { OrchestrationService } from './OrchestrationService'
 import { createStreamProcessor, StreamProcessorCallbacks } from './StreamProcessingService'
 import { estimateMessagesUsage } from './TokenService'
-export {
-  filterContextMessages,
-  filterEmptyMessages,
-  filterMessages,
-  filterUsefulMessages,
-  filterUserRoleStartMessages,
-  getGroupedMessages
-} from '@/utils/messageUtils/filters'
 
 /**
  * Creates a user message object and associated blocks based on input.
@@ -70,16 +62,6 @@ export function getUserMessage({
   const blocks: MessageBlock[] = []
   const blockIds: string[] = []
 
-  // 内容为空也应该创建空文本块
-  if (content !== undefined) {
-    // Pass messageId when creating blocks
-    const textBlock = createMainTextBlock(messageId, content, {
-      status: MessageBlockStatus.SUCCESS
-    })
-    blocks.push(textBlock)
-    blockIds.push(textBlock.id)
-  }
-
   if (files?.length) {
     files.forEach(file => {
       if (file.type === FileTypes.IMAGE) {
@@ -92,6 +74,16 @@ export function getUserMessage({
         blockIds.push(fileBlock.id)
       }
     })
+  }
+
+  // 内容为空也应该创建空文本块
+  if (content !== undefined) {
+    // Pass messageId when creating blocks
+    const textBlock = createMainTextBlock(messageId, content, {
+      status: MessageBlockStatus.SUCCESS
+    })
+    blocks.push(textBlock)
+    blockIds.push(textBlock.id)
   }
 
   // 直接在createMessage中传入id
@@ -502,8 +494,7 @@ export async function fetchAndProcessAssistantResponseImpl(
               response?.usage?.prompt_tokens === 0 ||
               response?.usage?.completion_tokens === 0)
           ) {
-            const usage = await estimateMessagesUsage({ assistant, messages: finalContextWithAssistant })
-            response.usage = usage
+            response.usage = await estimateMessagesUsage({ assistant, messages: finalContextWithAssistant })
           }
 
           // todo set topic loading
@@ -530,11 +521,17 @@ export async function fetchAndProcessAssistantResponseImpl(
     const streamProcessorCallbacks = createStreamProcessor(callbacks)
 
     const startTime = Date.now()
-    await fetchChatCompletion({
-      messages: messagesForContext,
-      assistant: assistant,
-      onChunkReceived: streamProcessorCallbacks
-    })
+    const orchestrationService = new OrchestrationService()
+    await orchestrationService.handleUserMessage(
+      {
+        messages: messagesForContext,
+        assistant,
+        options: {
+          timeout: 30000
+        }
+      },
+      streamProcessorCallbacks
+    )
   } catch (error) {
     console.error('Error in fetchAndProcessAssistantResponseImpl:', error)
   }

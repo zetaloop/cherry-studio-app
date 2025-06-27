@@ -9,7 +9,7 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { getSystemAssistants } from '@/mock'
+import { getSystemAssistants } from '@/config/assistants'
 import { NavigationProps } from '@/types/naviagate'
 
 export default function AssistantScreen() {

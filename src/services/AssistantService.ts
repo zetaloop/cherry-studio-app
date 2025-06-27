@@ -1,10 +1,11 @@
+import { getSystemProviders } from '@/config/providers'
 import { DEFAULT_CONTEXTCOUNT, DEFAULT_MAX_TOKENS, DEFAULT_TEMPERATURE } from '@/constants'
 import i18n from '@/i18n'
-import { INITIAL_PROVIDERS } from '@/mock'
 import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/assistant'
 import { uuid } from '@/utils'
 
 import { getAssistantById as _getAssistantById } from '../../db/queries/assistants.queries'
+import { getProviderById } from '../../db/queries/providers.queries'
 
 export function getDefaultAssistant(): Assistant {
   return {
@@ -39,11 +40,8 @@ export async function getAssistantById(assistantId: string): Promise<Assistant> 
   return assistant
 }
 
-export function getAssistantProvider(assistant: Assistant): Provider {
-  // todo
-  // const providers = store.getState().llm.providers
-  const providers = INITIAL_PROVIDERS
-  const provider = providers.find(p => p.id === assistant.model?.provider)
+export async function getAssistantProvider(assistant: Assistant): Promise<Provider> {
+  const provider = await getProviderById(assistant.model?.provider || '')
   return provider || getDefaultProvider()
 }
 
@@ -66,12 +64,12 @@ export function getDefaultProvider() {
 
 export function getDefaultModel() {
   // todo
-  return INITIAL_PROVIDERS[0].models[0]
+  return getSystemProviders()[0].models[0]
 }
 
 export function getProviderByModel(model?: Model): Provider {
   // todo
-  const providers = INITIAL_PROVIDERS
+  const providers = getSystemProviders()
   const providerId = model ? model.provider : getDefaultProvider().id
   return providers.find(p => p.id === providerId) as Provider
 }

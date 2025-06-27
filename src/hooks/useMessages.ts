@@ -11,7 +11,8 @@ import { messages as messagesSchema } from '../../db/schema/messages'
 
 export const useMessages = (topicId: string) => {
   const query = useMemo(
-    () => db.select().from(messagesSchema).where(eq(messagesSchema.topicId, topicId)).orderBy(messagesSchema.createdAt),
+    () =>
+      db.select().from(messagesSchema).where(eq(messagesSchema.topic_id, topicId)).orderBy(messagesSchema.created_at),
     [topicId]
   )
   const { data: rawMessages } = useLiveQuery(query)

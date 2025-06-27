@@ -1,4 +1,4 @@
-import { getSystemAssistants } from '@/mock'
+import { getSystemAssistants } from '@/config/assistants'
 
 export function useAssistant(id?: string) {
   if (!id) {
@@ -7,6 +7,7 @@ export function useAssistant(id?: string) {
     }
   }
 
+  // todo get assistant from database
   const assistant = getSystemAssistants().find(assistant => assistant.id === id)
 
   if (!assistant) {
@@ -19,6 +20,7 @@ export function useAssistant(id?: string) {
 }
 
 export function useDefaultAssistant() {
+  // todo get assistant from database
   const assistant = getSystemAssistants()[0]
 
   if (!assistant) {

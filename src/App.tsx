@@ -20,9 +20,11 @@ import { setInitialized } from '@/store/app'
 
 import { DATABASE_NAME, db, expoDb } from '../db'
 import { upsertAssistants } from '../db/queries/assistants.queries'
+import { upsertProviders } from '../db/queries/providers.queries'
 import migrations from '../drizzle/migrations'
 import tamaguiConfig from '../tamagui.config'
-import { getSystemAssistants } from './mock'
+import { getSystemAssistants } from './config/assistants'
+import { getSystemProviders } from './config/providers'
 import AppNavigator from './navigators/AppNavigator'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -34,36 +36,39 @@ function AppContent() {
   const initialized = useSelector((state: RootState) => state.app.initialized)
 
   const dispatch = useAppDispatch()
+
+  const InitializeApp = async () => {
+    if (initialized) return
+
+    try {
+      console.log('First launch, initializing app data...')
+      const assistants = getSystemAssistants()
+      await upsertAssistants(assistants)
+      const providers = getSystemProviders()
+      await upsertProviders(providers)
+      dispatch(setInitialized(true))
+      console.log('App data initialized successfully.')
+    } catch (e) {
+      console.error('Failed to initialize app data', e)
+    }
+  }
+
+  const handleMigrations = async () => {
+    if (success) {
+      console.log('Migrations completed successfully', expoDb.databasePath)
+    } else if (error) {
+      console.error('Migrations failed', error)
+    }
+  }
+
   useEffect(() => {
-    const handleMigrations = async () => {
-      if (success) {
-        console.log('Migrations completed successfully', expoDb.databasePath)
-      } else if (error) {
-        console.error('Migrations failed', error)
-      }
+    const initializeAppAsync = async () => {
+      await handleMigrations()
+      await InitializeApp()
     }
 
-    handleMigrations()
+    initializeAppAsync()
   }, [success, error])
-
-  useEffect(() => {
-    const initializeApp = async () => {
-      // 确保迁移成功且尚未初始化
-      if (success && !initialized) {
-        try {
-          console.log('First launch, initializing app data...')
-          const assistants = getSystemAssistants()
-          await upsertAssistants(assistants)
-          dispatch(setInitialized(true))
-          console.log('App data initialized successfully.')
-        } catch (e) {
-          console.error('Failed to initialize app data', e)
-        }
-      }
-    }
-
-    initializeApp()
-  }, [success, initialized, dispatch])
 
   useEffect(() => {
     SplashScreen.hideAsync()

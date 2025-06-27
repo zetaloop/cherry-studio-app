@@ -16,8 +16,14 @@
   "jest": {
     "preset": "jest-expo"
   },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.51.0",
+    "@cherrystudio/ai-core": "workspace:*",
     "@google/genai": "^1.0.1",
     "@gorhom/bottom-sheet": "^5.1.5",
     "@react-native-async-storage/async-storage": "2.1.2",
@@ -31,12 +37,14 @@
     "@react-navigation/stack": "^7.3.2",
     "@reduxjs/toolkit": "^2.5.1",
     "@shopify/flash-list": "1.7.6",
+    "@stardazed/streams-text-encoding": "^1.0.2",
     "@tamagui/accordion": "^1.126.13",
     "@tamagui/babel-plugin": "^1.123.17",
     "@tamagui/core": "^1.123.17",
     "@tamagui/linear-gradient": "^1.126.13",
     "@tamagui/lucide-icons": "^1.125.1",
     "@types/lodash": "^4.17.17",
+    "@ungap/structured-clone": "^1.3.0",
     "babel-plugin-inline-import": "^3.0.0",
     "buffer": "^6.0.3",
     "dayjs": "^1.11.13",
@@ -44,6 +52,7 @@
     "expo": "^53.0.12",
     "expo-asset": "~11.1.5",
     "expo-blur": "~14.1.4",
+    "expo-clipboard": "~7.1.4",
     "expo-constants": "~17.1.6",
     "expo-crypto": "~14.1.5",
     "expo-dev-client": "~5.2.1",
@@ -71,7 +80,9 @@
     "react-i18next": "^15.4.1",
     "react-native": "0.79.4",
     "react-native-device-info": "^14.0.4",
+    "react-native-file-viewer": "^2.1.5",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-image-viewing": "^0.2.2",
     "react-native-ios-context-menu": "3.1.0",
     "react-native-ios-utilities": "5.1.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
@@ -100,6 +111,7 @@
     "@types/qrcode": "^1.5.5",
     "@types/react": "~19.0.0",
     "@types/react-test-renderer": "~19.0.0",
+    "@types/ungap__structured-clone": "^1",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/parser": "^8.18.2",
     "drizzle-kit": "^0.31.1",

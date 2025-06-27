@@ -12,7 +12,7 @@ import CategoryAssistantsTab from '@/components/assistant/market/CategoryAssista
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { getSystemAssistants } from '@/mock'
+import { getSystemAssistants } from '@/config/assistants'
 import { Assistant } from '@/types/assistant'
 import { groupByCategories } from '@/utils/assistants'
 

@@ -1,20 +1,23 @@
-import { INITIAL_PROVIDERS } from '@/mock'
+import { getSystemProviders } from '@/config/providers'
 
 export function useAllProviders() {
+  // todo get all providers from database
   return {
-    providers: INITIAL_PROVIDERS
+    providers: getSystemProviders()
   }
 }
 
 export function useProviders() {
-  const providers = INITIAL_PROVIDERS.filter(provider => provider.enabled)
+  // todo get all providers from database
+  const providers = getSystemProviders().filter(provider => provider.enabled)
   return {
     providers: providers
   }
 }
 
 export function useProvider(id: string) {
-  const provider = INITIAL_PROVIDERS.find(p => p.id === id)
+  // todo get all providers from database
+  const provider = getSystemProviders().find(p => p.id === id)
 
   if (!provider) {
     throw new Error(`Provider with id ${id} not found`)
