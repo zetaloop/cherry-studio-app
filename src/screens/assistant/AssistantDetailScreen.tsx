@@ -36,7 +36,7 @@ export default function AssistantDetailScreen() {
         const assistant = await getAssistantById(assistantId)
         setLocalAssistant(assistant)
       } else if (mode === 'create') {
-        setLocalAssistant(getDefaultAssistant())
+        setLocalAssistant(await getDefaultAssistant())
       }
     })
   }, [assistantId, mode])

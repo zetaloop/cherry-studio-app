@@ -7,25 +7,8 @@ import { uuid } from '@/utils'
 import { getAssistantById as _getAssistantById, upsertAssistants } from '../../db/queries/assistants.queries'
 import { getProviderById } from '../../db/queries/providers.queries'
 
-export function getDefaultAssistant(): Assistant {
-  return {
-    id: 'default',
-    name: i18n.t('chat.default.name'),
-    emoji: '😀',
-    prompt: '',
-    topics: [getDefaultTopic('default')],
-    type: 'assistant',
-    settings: {
-      temperature: DEFAULT_TEMPERATURE,
-      contextCount: DEFAULT_CONTEXTCOUNT,
-      enableMaxTokens: false,
-      maxTokens: 0,
-      streamOutput: true,
-      topP: 1,
-      toolUseMode: 'prompt',
-      customParameters: []
-    }
-  }
+export async function getDefaultAssistant(): Promise<Assistant> {
+  return await getAssistantById('1')
 }
 
 export async function getAssistantById(assistantId: string): Promise<Assistant> {

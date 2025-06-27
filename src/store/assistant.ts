@@ -1,7 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { getDefaultAssistant } from '@/services/AssistantService'
+import { DEFAULT_CONTEXTCOUNT, DEFAULT_TEMPERATURE } from '@/constants'
+import i18n from '@/i18n'
 import { Assistant } from '@/types/assistant'
+
+const initialAssistant: Assistant = {
+  id: 'default',
+  name: i18n.t('chat.default.name'),
+  emoji: '😀',
+  prompt: '',
+  topics: [],
+  type: 'assistant',
+  settings: {
+    temperature: DEFAULT_TEMPERATURE,
+    contextCount: DEFAULT_CONTEXTCOUNT,
+    enableMaxTokens: false,
+    maxTokens: 0,
+    streamOutput: true,
+    topP: 1,
+    toolUseMode: 'prompt',
+    customParameters: []
+  }
+}
 
 export interface AssistantsState {
   defaultAssistant: Assistant
@@ -9,7 +29,7 @@ export interface AssistantsState {
 }
 
 const initialState: AssistantsState = {
-  defaultAssistant: getDefaultAssistant(),
+  defaultAssistant: initialAssistant,
   tagsOrder: []
 }
 

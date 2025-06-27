@@ -1,4 +1,3 @@
-// components/TopEntry.tsx
 import { DrawerNavigationProp } from '@react-navigation/drawer'
 import { DrawerActions, ParamListBase, useNavigation } from '@react-navigation/native'
 import React from 'react'
@@ -28,7 +27,7 @@ export const HeaderBar = ({ assistant }: HeaderBarProps) => {
           <MenuButton onMenuPress={handleMenuPress} />
         </XStack>
         <XStack flex={1} justifyContent="center" alignItems="center">
-          <AssistantSelection assistant={assistant} />
+          <AssistantSelection assistantId={assistant.id} />
         </XStack>
         <XStack alignItems="center" minWidth={40} justifyContent="flex-end">
           <NewTopicButton assistant={assistant} />
