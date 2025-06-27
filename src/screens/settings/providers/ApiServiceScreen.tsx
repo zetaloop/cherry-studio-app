@@ -2,7 +2,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import { sortBy } from 'lodash'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
 
@@ -12,10 +12,11 @@ import { HeaderBar } from '@/components/settings/HeaderBar'
 import { ApiCheckSheet } from '@/components/settings/providers/ApiCheckSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
-import { useProvider } from '@/hooks/useProviders'
 import { checkApi } from '@/services/ApiService'
-import { Model } from '@/types/assistant'
+import { getProviderById, saveProvider } from '@/services/ProviderService'
+import { Model, Provider } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
+import { runAsyncFunction } from '@/utils'
 import { getModelUniqId } from '@/utils/model'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ApiServiceScreen'>
@@ -27,15 +28,20 @@ export default function ApiServiceScreen() {
   const route = useRoute<ProviderSettingsRouteProp>()
 
   const { providerId } = route.params
-  const { provider } = useProvider(providerId)
+  const [provider, setProvider] = useState<Provider | undefined>()
 
   const [showApiKey, setShowApiKey] = useState(false)
   const [selectedModel, setSelectedModel] = useState<Model | undefined>()
-  const [apiKey, setApiKey] = useState(provider?.apiKey || '')
-  const [apiHost, setApiHost] = useState(provider?.apiHost || '')
 
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+
+  useEffect(() => {
+    runAsyncFunction(async () => {
+      const providerData = await getProviderById(providerId)
+      setProvider(providerData)
+    })
+  }, [providerId])
 
   const selectOptions = useMemo(() => {
     if (!provider?.models?.length) return []
@@ -82,13 +88,16 @@ export default function ApiServiceScreen() {
     setShowApiKey(prevShowApiKey => !prevShowApiKey)
   }, [])
 
-  const handleApiKeyChange = useCallback((text: string) => {
-    setApiKey(text)
-  }, [])
+  const handleProviderConfigChange = useCallback(
+    (key: 'apiKey' | 'apiHost', value: string) => {
+      if (!provider) return
 
-  const handleApiHostChange = useCallback((text: string) => {
-    setApiHost(text)
-  }, [])
+      const updatedProvider = { ...provider, [key]: value }
+      setProvider(updatedProvider)
+      saveProvider(updatedProvider)
+    },
+    [provider]
+  )
 
   const handleBackPress = useCallback(() => {
     navigation.goBack()
@@ -96,14 +105,14 @@ export default function ApiServiceScreen() {
 
   // 模型检测处理
   const handleStartModelCheck = useCallback(async () => {
-    if (!selectedModel) return
+    if (!selectedModel || !provider) return
 
     try {
       await checkApi(provider, selectedModel)
     } catch (error) {
       console.error('Model check failed:', error)
     }
-  }, [selectedModel, apiKey, apiHost])
+  }, [selectedModel, provider])
 
   return (
     <SafeAreaContainer
@@ -133,8 +142,8 @@ export default function ApiServiceScreen() {
               placeholder={t('settings.provider.api_key.placeholder')}
               secureTextEntry={!showApiKey}
               paddingRight={48}
-              value={apiKey}
-              onChangeText={handleApiKeyChange}
+              value={provider?.apiKey || ''}
+              onChangeText={text => handleProviderConfigChange('apiKey', text)}
             />
             <Stack
               position="absolute"
@@ -167,8 +176,8 @@ export default function ApiServiceScreen() {
           </XStack>
           <Input
             placeholder={t('settings.provider.api_host.placeholder')}
-            value={apiHost}
-            onChangeText={handleApiHostChange}
+            value={provider?.apiHost || ''}
+            onChangeText={text => handleProviderConfigChange('apiHost', text)}
           />
         </YStack>
       </SettingContainer>
@@ -180,7 +189,7 @@ export default function ApiServiceScreen() {
         selectedModel={selectedModel}
         onModelChange={handleModelChange}
         selectOptions={selectOptions}
-        apiKey={apiKey}
+        apiKey={provider?.apiKey || ''}
         onStartModelCheck={handleStartModelCheck}
       />
     </SafeAreaContainer>
