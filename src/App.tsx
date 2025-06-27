@@ -56,18 +56,14 @@ function AppContent() {
   const handleMigrations = async () => {
     if (success) {
       console.log('Migrations completed successfully', expoDb.databasePath)
+      await InitializeApp()
     } else if (error) {
       console.error('Migrations failed', error)
     }
   }
 
   useEffect(() => {
-    const initializeAppAsync = async () => {
-      await handleMigrations()
-      await InitializeApp()
-    }
-
-    initializeAppAsync()
+    handleMigrations()
   }, [success, error])
 
   useEffect(() => {
