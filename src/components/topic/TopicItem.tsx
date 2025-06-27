@@ -17,14 +17,14 @@ import { getAssistantById } from '../../../db/queries/assistants.queries'
 
 interface TopicItemProps {
   topic: Topic
-  onTopicDeleted: () => void
+  refreshTopics: () => Promise<void>
 }
 
 function RenderRightActions(
   progress: SharedValue<number>,
   swipeableMethods: SwipeableMethods,
   topic: Topic,
-  onTopicDeleted: () => void
+  refreshTopics: () => Promise<void>
 ) {
   const animatedStyle = useAnimatedStyle(() => {
     const translateX = interpolate(progress.value, [0, 1], [80, 0])
@@ -34,15 +34,16 @@ function RenderRightActions(
     }
   })
 
+  // todo：删除后ui仍有渲染
   const handleDelete = async () => {
+    swipeableMethods.close()
+
     try {
       await deleteTopicById(topic.id)
-      onTopicDeleted()
+      await refreshTopics()
     } catch (error) {
       console.error('Failed to delete topic:', error)
     }
-
-    swipeableMethods.close()
   }
 
   return (
@@ -60,7 +61,7 @@ function RenderRightActions(
   )
 }
 
-const TopicItem: FC<TopicItemProps> = ({ topic, onTopicDeleted }) => {
+const TopicItem: FC<TopicItemProps> = ({ topic, refreshTopics }) => {
   const swipeableRef = useRef(null)
   const navigation = useNavigation<NavigationProps>()
   const [assistant, setAssistant] = useState<Assistant | null>(null)
@@ -70,7 +71,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic, onTopicDeleted }) => {
     _: SharedValue<number>,
     swipeableMethods: SwipeableMethods
   ) => {
-    return RenderRightActions(progress, swipeableMethods, topic, onTopicDeleted)
+    return RenderRightActions(progress, swipeableMethods, topic, refreshTopics)
   }
 
   const openTopic = () => {
