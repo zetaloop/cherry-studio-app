@@ -15,7 +15,7 @@ export const topics = sqliteTable(
     messages: text('messages').notNull().default('[]'),
     pinned: integer('pinned', { mode: 'boolean' }),
     prompt: text('prompt'),
-    isNameManuallyEdited: integer('is_name_manually_edited', { mode: 'boolean' })
+    is_name_manually_edited: integer('is_name_manually_edited', { mode: 'boolean' })
   },
   table => [index('idx_topics_assistant_id').on(table.assistant_id)]
 )
