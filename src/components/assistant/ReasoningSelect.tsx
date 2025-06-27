@@ -7,9 +7,10 @@ import { Assistant } from '@/types/assistant'
 
 interface ReasoningSelectProps {
   assistant?: Assistant | null
+  onValueChange?: (value: string) => void
 }
 
-export function ReasoningSelect<T = any>({ assistant }: ReasoningSelectProps) {
+export function ReasoningSelect({ assistant, onValueChange }: ReasoningSelectProps) {
   const { t } = useTranslation()
   const [value, setValue] = useState<string | undefined>(assistant?.settings?.reasoning_effort || 'auto')
 
@@ -27,6 +28,7 @@ export function ReasoningSelect<T = any>({ assistant }: ReasoningSelectProps) {
 
   const handleValueChange = (newValue: string) => {
     setValue(newValue)
+    onValueChange?.(newValue)
   }
 
   return (

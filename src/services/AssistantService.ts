@@ -4,7 +4,7 @@ import i18n from '@/i18n'
 import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/assistant'
 import { uuid } from '@/utils'
 
-import { getAssistantById as _getAssistantById } from '../../db/queries/assistants.queries'
+import { getAssistantById as _getAssistantById, upsertAssistants } from '../../db/queries/assistants.queries'
 import { getProviderById } from '../../db/queries/providers.queries'
 
 export function getDefaultAssistant(): Assistant {
@@ -29,7 +29,6 @@ export function getDefaultAssistant(): Assistant {
 }
 
 export async function getAssistantById(assistantId: string): Promise<Assistant> {
-  // todo get from store
   const assistant = await _getAssistantById(assistantId)
 
   if (!assistant) {
@@ -101,5 +100,14 @@ export const getAssistantSettings = (assistant: Assistant): AssistantSettings =>
     toolUseMode: assistant?.settings?.toolUseMode ?? 'prompt',
     defaultModel: assistant?.defaultModel ?? undefined,
     customParameters: assistant?.settings?.customParameters ?? []
+  }
+}
+
+export async function saveAssistant(assistant: Assistant): Promise<void> {
+  try {
+    await upsertAssistants([assistant])
+  } catch (error) {
+    console.error('Error saving assistant:', error)
+    throw new Error('Failed to save assistant')
   }
 }

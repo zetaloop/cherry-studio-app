@@ -1,8 +1,9 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, ScrollView, styled, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Button, styled, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { ModelTabContent } from '@/components/assistant/ModelTabContent'
 import { PromptTabContent } from '@/components/assistant/PromptTabContent'
@@ -12,8 +13,10 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { AvatarEditButton } from '@/components/ui/AvatarEditButton'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { useAssistant } from '@/hooks/useAssistant'
+import { getAssistantById, getDefaultAssistant, saveAssistant } from '@/services/AssistantService'
+import { Assistant } from '@/types/assistant'
 import { RootStackParamList } from '@/types/naviagate'
+import { runAsyncFunction } from '@/utils'
 
 type AssistantDetailRouteProp = RouteProp<RootStackParamList, 'AssistantDetailScreen'>
 
@@ -24,12 +27,27 @@ export default function AssistantDetailScreen() {
   const route = useRoute<AssistantDetailRouteProp>()
 
   const { assistantId, mode } = route.params
-  const { assistant } = useAssistant(assistantId)
   const [activeTab, setActiveTab] = useState('model')
+  const [localAssistant, setLocalAssistant] = useState<Assistant | null>(null)
 
-  const onAddTopic = () => {
-    // Navigate to the topic creation page or open a modal
-    console.log('Navigate to add topic page')
+  useEffect(() => {
+    runAsyncFunction(async () => {
+      if (assistantId) {
+        const assistant = await getAssistantById(assistantId)
+        setLocalAssistant(assistant)
+      } else if (mode === 'create') {
+        setLocalAssistant(getDefaultAssistant())
+      }
+    })
+  }, [assistantId, mode])
+
+  const onSaveAssistant = async () => {
+    if (!localAssistant) {
+      console.error('No assistant to save')
+      return
+    }
+
+    await saveAssistant(localAssistant)
   }
 
   return (
@@ -39,12 +57,16 @@ export default function AssistantDetailScreen() {
         onBackPress={() => navigation.goBack()}
       />
       {/* todo KeyboardAvoidingView bug */}
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}
+        style={{ flex: 1 }}
+        keyboardShouldPersistTaps="handled">
         <SettingContainer>
           <XStack justifyContent="center" alignItems="center">
             <AvatarEditButton
-              content={assistant?.emoji || <DefaultProviderIcon />}
-              editIcon={assistant?.emoji ? <ArrowLeftRight size={24} /> : <PenLine size={24} />}
+              content={localAssistant?.emoji || <DefaultProviderIcon />}
+              editIcon={localAssistant?.emoji ? <ArrowLeftRight size={24} /> : <PenLine size={24} />}
               onEditPress={() => {
                 // 处理编辑逻辑
                 console.log('Edit avatar')
@@ -75,25 +97,25 @@ export default function AssistantDetailScreen() {
             </Tabs.List>
             <YStack flex={1} paddingTop={30}>
               <Tabs.Content value="prompt" flex={1} gap={30}>
-                <PromptTabContent assistant={assistant} />
+                <PromptTabContent assistant={localAssistant} />
               </Tabs.Content>
 
               <Tabs.Content value="model" flex={1} gap={30}>
-                <ModelTabContent assistant={assistant} />
+                <ModelTabContent assistant={localAssistant} setAssistant={setLocalAssistant} />
               </Tabs.Content>
 
               <Tabs.Content value="tool" flex={1} gap={30}>
-                <ToolTabContent assistant={assistant} />
+                <ToolTabContent assistant={localAssistant} />
               </Tabs.Content>
             </YStack>
           </Tabs>
           <XStack paddingHorizontal={25} width="100%" justifyContent="center" alignItems="center">
-            <Button backgroundColor="$foregroundGreen" width="100%" borderRadius={48}>
+            <Button backgroundColor="$foregroundGreen" width="100%" borderRadius={48} onPress={onSaveAssistant}>
               {t(`assistants.${mode === 'create' ? 'create' : 'save'}`)}
             </Button>
           </XStack>
         </SettingContainer>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaContainer>
   )
 }

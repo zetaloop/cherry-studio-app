@@ -1,9 +1,11 @@
+import { useNavigation } from '@react-navigation/native'
 import { BookmarkMinus, ChevronDown, Settings2 } from '@tamagui/lucide-icons'
 import { BlurView } from 'expo-blur' // 导入 BlurView
 import React, { useState } from 'react'
 import { Button, Popover, Text, useWindowDimensions, View, XStack, YStack } from 'tamagui'
 
 import { Assistant } from '@/types/assistant'
+import { NavigationProps } from '@/types/naviagate'
 
 interface AssistantSelectionProps {
   assistant: Assistant
@@ -12,6 +14,12 @@ interface AssistantSelectionProps {
 export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistant }) => {
   const [open, setOpen] = useState(false)
   const { width } = useWindowDimensions()
+  const navigation = useNavigation<NavigationProps>()
+
+  const navigateToAssistantDetailScreen = () => {
+    setOpen(false)
+    navigation.navigate('AssistantDetailScreen', { assistantId: assistant.id, mode: 'edit' })
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -57,7 +65,13 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
                     borderColor="rgba(240, 244, 250, 0.2)"
                     borderWidth={0.5}>
                     <BookmarkMinus size={15} />
-                    <Settings2 size={15} />
+                    <Button
+                      size={15}
+                      chromeless
+                      circular
+                      icon={<Settings2 size={15} />}
+                      onPress={navigateToAssistantDetailScreen}
+                    />
                   </XStack>
                 </XStack>
                 <XStack>
