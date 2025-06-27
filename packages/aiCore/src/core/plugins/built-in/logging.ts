@@ -2,7 +2,6 @@
  * 内置插件：日志记录
  * 记录AI调用的关键信息，支持性能监控和调试
  */
-import { definePlugin } from '../index'
 import type { AiRequestContext } from '../types'
 
 export interface LoggingConfig {
@@ -26,7 +25,7 @@ export function createLoggingPlugin(config: LoggingConfig = {}) {
 
   const startTimes = new Map<string, number>()
 
-  return definePlugin({
+  return {
     name: 'built-in:logging',
 
     onRequestStart: (context: AiRequestContext) => {
@@ -82,5 +81,5 @@ export function createLoggingPlugin(config: LoggingConfig = {}) {
         }
       })
     }
-  })
+  }
 }
