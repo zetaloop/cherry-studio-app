@@ -54,7 +54,8 @@ export default {
       ]
     ],
     experiments: {
-      typedRoutes: true
+      typedRoutes: true,
+      reactCompiler: true
     },
     extra: {
       eas: {

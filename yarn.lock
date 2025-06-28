@@ -1491,6 +1491,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/types@npm:^7.26.0":
+  version: 7.27.7
+  resolution: "@babel/types@npm:7.27.7"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.27.1"
+    "@babel/helper-validator-identifier": "npm:^7.27.1"
+  checksum: 10c0/1d1dcb5fa7cfba2b4034a3ab99ba17049bfc4af9e170935575246cdb1cee68b04329a0111506d9ae83fb917c47dbd4394a6db5e32fbd041b7834ffbb17ca086b
+  languageName: node
+  linkType: hard
+
 "@bcoe/v8-coverage@npm:^0.2.3":
   version: 0.2.3
   resolution: "@bcoe/v8-coverage@npm:0.2.3"
@@ -7219,6 +7229,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-react-compiler@npm:19.0.0-beta-af1b7da-20250417":
+  version: 19.0.0-beta-af1b7da-20250417
+  resolution: "babel-plugin-react-compiler@npm:19.0.0-beta-af1b7da-20250417"
+  dependencies:
+    "@babel/types": "npm:^7.26.0"
+  checksum: 10c0/dee0a398be02afc6fa35199ef4d8c30025adcaa7056f56130601254c45d8ee8f06730d4e17e26a3f7f0711eef1323a1e6c01a76ac7516f0c34766bfa27fc92e1
+  languageName: node
+  linkType: hard
+
 "babel-plugin-react-native-web@npm:~0.19.13":
   version: 0.19.13
   resolution: "babel-plugin-react-native-web@npm:0.19.13"
@@ -7708,6 +7727,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^8.18.2"
     "@ungap/structured-clone": "npm:^1.3.0"
     babel-plugin-inline-import: "npm:^3.0.0"
+    babel-plugin-react-compiler: "npm:19.0.0-beta-af1b7da-20250417"
     buffer: "npm:^6.0.3"
     dayjs: "npm:^1.11.13"
     drizzle-kit: "npm:^0.31.1"
