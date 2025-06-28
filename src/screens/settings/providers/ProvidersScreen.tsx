@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, useTheme, YStack } from 'tamagui'
 
@@ -28,7 +28,7 @@ export default function ProvidersScreen() {
     navigation.navigate('ProviderListScreen')
   }
 
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     const fetchProviders = async () => {
       try {
         const allProviders = await getAllProviders()
@@ -41,7 +41,7 @@ export default function ProvidersScreen() {
     }
 
     runAsyncFunction(fetchProviders)
-  }
+  }, [])
 
   useFocusEffect(handleFocus)
 

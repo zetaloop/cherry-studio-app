@@ -2,7 +2,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import { ChevronRight, HeartPulse, Plus, Settings, Settings2 } from '@tamagui/lucide-icons'
 import { debounce, groupBy } from 'lodash'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -44,13 +44,13 @@ export default function ProviderSettingsScreen() {
   const { providerId } = route.params
   const [provider, setProvider] = useState<Provider | null>(null)
 
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     getProviderById(providerId)
       .then(setProvider)
       .catch(error => {
         console.error('Failed to fetch provider:', error)
       })
-  }
+  },[providerId])
 
   useFocusEffect(handleFocus)
 
