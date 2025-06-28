@@ -64,9 +64,9 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
     setIsLoading(true)
 
     const fetchAssistant = async () => {
+      // !error
       try {
         const fetchedAssistant = await getAssistantById(assistantId)
-
         if (isActive) {
           setAssistant(fetchedAssistant)
         }

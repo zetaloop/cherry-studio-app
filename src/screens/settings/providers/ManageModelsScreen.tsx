@@ -171,6 +171,7 @@ export default function ManageModelsScreen() {
   }
 
   useEffect(() => {
+    // !error
     setIsLoading(true)
     runAsyncFunction(async () => {
       try {
@@ -197,7 +198,7 @@ export default function ManageModelsScreen() {
       } catch (error) {
         console.error('Failed to fetch models', error)
       } finally {
-        setIsLoading(false)
+    setIsLoading(false)
       }
     })
   }, [providerId])
