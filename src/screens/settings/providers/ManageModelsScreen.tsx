@@ -4,6 +4,7 @@ import { Minus, Plus } from '@tamagui/lucide-icons'
 import { debounce, groupBy, isEmpty, uniqBy } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator } from 'react-native'
 import { Accordion, Button, ScrollView, Tabs, Text, useTheme, YStack } from 'tamagui'
 
 import { SettingContainer } from '@/components/settings'
@@ -18,9 +19,9 @@ import { isReasoningModel } from '@/config/models/reasoning'
 import { isRerankModel } from '@/config/models/rerank'
 import { isVisionModel } from '@/config/models/vision'
 import { isWebSearchModel } from '@/config/models/webSearch'
-import { useProvider } from '@/hooks/useProviders'
 import { fetchModels } from '@/services/ApiService'
-import { Model } from '@/types/assistant'
+import { getProviderById, saveProvider } from '@/services/ProviderService'
+import { Model, Provider } from '@/types/assistant'
 import { RootStackParamList } from '@/types/naviagate'
 import { runAsyncFunction } from '@/utils'
 import { getDefaultGroupName } from '@/utils/naming'
@@ -47,11 +48,12 @@ export default function ManageModelsScreen() {
   const [debouncedSearchText, setDebouncedSearchText] = useState('')
   const [listModels, setListModels] = useState<Model[]>([])
   const [actualFilterType, setActualFilterType] = useState<string>('all')
+  const [provider, setProvider] = useState<Provider | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const { providerId } = route.params
-  const { provider, models: providerModels } = useProvider(providerId)
 
-  const isModelInCurrentProvider = useMemo(() => getIsModelInProvider(providerModels), [providerModels])
+  const isModelInCurrentProvider = useMemo(() => getIsModelInProvider(provider?.models || []), [provider])
   const isAllModelsInCurrentProvider = useMemo(
     () => getIsAllInProvider(isModelInCurrentProvider),
     [isModelInCurrentProvider]
@@ -105,7 +107,7 @@ export default function ManageModelsScreen() {
 
   const modelGroups = useMemo(
     () =>
-      provider.id === 'dashscope'
+      provider?.id === 'dashscope'
         ? {
             ...groupBy(
               list.filter(model => !model.id.startsWith('qwen')),
@@ -114,7 +116,7 @@ export default function ManageModelsScreen() {
             ...groupQwenModels(list.filter(model => model.id.startsWith('qwen')))
           }
         : groupBy(list, 'group'),
-    [list, provider.id]
+    [list, provider?.id]
   )
 
   const sortedModelGroups = useMemo(() => {
@@ -138,75 +140,90 @@ export default function ManageModelsScreen() {
     backgroundColor: actualFilterType === tabValue ? '$background' : 'transparent',
     borderRadius: 15
   })
-
   const onAddModel = useCallback(
     (model: Model) => {
-      console.log('[ManageModelsPage] onAddModel', model)
-      // addModelToProvider(model.id) // Example: Call mutation from useProvider
+      if (!provider) return
+      const updatedProvider = {
+        ...provider,
+        models: uniqBy([...provider.models, model], 'id')
+      }
+      setProvider(updatedProvider)
+      runAsyncFunction(async () => saveProvider(updatedProvider))
     },
-    [
-      /* addModelToProvider */
-    ]
+    [provider]
   )
 
   const onRemoveModel = useCallback(
     (model: Model) => {
-      console.log('[ManageModelsPage] onRemoveModel', model)
-      // removeModelFromProvider(model.id) // Example: Call mutation
+      if (!provider) return
+      const updatedProvider = {
+        ...provider,
+        models: provider.models.filter(m => m.id !== model.id)
+      }
+      setProvider(updatedProvider)
+      runAsyncFunction(async () => saveProvider(updatedProvider))
     },
-    [
-      /* removeModelFromProvider */
-    ]
+    [provider]
   )
 
   const onAddAllModels = useCallback(
     (modelsToAdd: Model[]) => {
-      console.log('[ManageModelsPage] onAddAllModels', modelsToAdd)
-      // addModelsToProvider(modelsToAdd.map(m => m.id)) // Example: Call mutation
-      // modelsToAdd.forEach(model => {
-      //   onAddModel(model)
-      // })
+      if (!provider) return
+      const updatedProvider = {
+        ...provider,
+        models: uniqBy([...provider.models, ...modelsToAdd], 'id')
+      }
+      setProvider(updatedProvider)
+      runAsyncFunction(async () => saveProvider(updatedProvider))
     },
-    [
-      /* addModelsToProvider */
-    ]
+    [provider]
   )
 
   const onRemoveAllModels = useCallback(
     (modelsToRemove: Model[]) => {
-      console.log('[ManageModelsPage] onRemoveAllModels', modelsToRemove)
-      // removeModelsFromProvider(modelsToRemove.map(m => m.id)) // Example: Call mutation
-      // modelsToRemove.forEach(model => {
-      //   onRemoveModel(model)
-      // })
+      if (!provider) return
+      const modelsToRemoveIds = new Set(modelsToRemove.map(m => m.id))
+      const updatedProvider = {
+        ...provider,
+        models: provider.models.filter(m => !modelsToRemoveIds.has(m.id))
+      }
+      setProvider(updatedProvider)
+      runAsyncFunction(async () => saveProvider(updatedProvider))
     },
-    [
-      /* removeModelsFromProvider */
-    ]
+    [provider]
   )
 
   useEffect(() => {
+    setIsLoading(true)
     runAsyncFunction(async () => {
       try {
-        const models = await fetchModels(provider)
+        const p = await getProviderById(providerId)
+        setProvider(p)
+        const models = await fetchModels(p)
         setListModels(
           models
             .map(model => ({
+              // @ts-ignore modelId
               id: model?.id || model?.name,
               // @ts-ignore name
               name: model?.display_name || model?.displayName || model?.name || model?.id,
-              provider: provider.id,
-              group: getDefaultGroupName(model?.id || model?.name, provider.id),
+              provider: p.id,
+              // @ts-ignore group
+              group: getDefaultGroupName(model?.id || model?.name, p.id),
+              // @ts-ignore description
               description: model?.description || '',
+              // @ts-ignore owned_by
               owned_by: model?.owned_by || ''
             }))
             .filter(model => !isEmpty(model.name))
         )
       } catch (error) {
         console.error('Failed to fetch models', error)
+      } finally {
+        setIsLoading(false)
       }
     })
-  }, [])
+  }, [providerId])
 
   const renderModelGroupItem = useCallback(
     ({ item: [groupName, currentModels], index }: ListRenderItemInfo<[string, Model[]]>) => (
@@ -265,7 +282,7 @@ export default function ManageModelsScreen() {
         flex: 1,
         backgroundColor: theme.background.val
       }}>
-      <HeaderBar title={provider.name} onBackPress={() => navigation.goBack()} />
+      <HeaderBar title={provider?.name || t('settings.models.manage_models')} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
         {/* Filter Tabs */}
         <Tabs
@@ -292,22 +309,29 @@ export default function ManageModelsScreen() {
             <SearchInput placeholder={t('settings.models.search')} value={searchText} onChangeText={setSearchText} />
 
             {/* Model List Card with Accordion */}
-            <YStack flex={1}>
-              {sortedModelGroups.length > 0 ? (
-                <Accordion overflow="hidden" type="multiple">
-                  <FlashList
-                    data={sortedModelGroups}
-                    renderItem={renderModelGroupItem}
-                    keyExtractor={([groupName]) => groupName}
-                    estimatedItemSize={60} // 您可能需要根据 ModelGroup 折叠时的高度进行调整
-                  />
-                </Accordion>
-              ) : (
-                <Text textAlign="center" color="$gray10" paddingVertical={24}>
-                  {searchText ? t('settings.models.no_results') : t('models.no_models')}
-                </Text>
-              )}
-            </YStack>
+            {isLoading ? (
+              <YStack flex={1} justifyContent="center" alignItems="center">
+                <ActivityIndicator />
+              </YStack>
+            ) : (
+              <YStack flex={1}>
+                {sortedModelGroups.length > 0 ? (
+                  <Accordion overflow="hidden" type="multiple">
+                    <FlashList
+                      data={sortedModelGroups}
+                      renderItem={renderModelGroupItem}
+                      keyExtractor={([groupName]) => groupName}
+                      estimatedItemSize={60}
+                      extraData={provider}
+                    />
+                  </Accordion>
+                ) : (
+                  <Text textAlign="center" color="$gray10" paddingVertical={24}>
+                    {searchText ? t('settings.models.no_results') : t('models.no_models')}
+                  </Text>
+                )}
+              </YStack>
+            )}
           </YStack>
         </ScrollView>
       </SettingContainer>

@@ -1,12 +1,13 @@
 import { StreamTextParams } from '@cherrystudio/ai-core'
 import { isEmpty } from 'lodash'
 
-import ModernAiProvider from '@/aiCore'
+import ModernAiProvider from '@/aiCore/index_new'
 import { AiSdkMiddlewareConfig } from '@/aiCore/middleware/aisdk/AiSdkMiddlewareBuilder'
 import { buildStreamTextParams } from '@/aiCore/transformParameters'
 import i18n from '@/i18n'
 import { Assistant, Model, Provider } from '@/types/assistant'
 import { Chunk, ChunkType } from '@/types/chunk'
+import { SdkModel } from '@/types/sdk'
 
 import { getAssistantProvider } from './AssistantService'
 
@@ -79,21 +80,13 @@ export async function checkApi(provider: Provider, model: Model) {
   }
 }
 
-export async function fetchModels(provider: Provider): Promise<Model[]> {
+export async function fetchModels(provider: Provider): Promise<SdkModel[]> {
+  const AI = new ModernAiProvider(provider)
+
   try {
-    const url = `${BASE_URL}/api/models`
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ provider })
-    })
-    const { models } = await response.json()
-    return models
+    return await AI.models()
   } catch (error) {
-    console.error('Error in fetchModels:', error)
-    throw error
+    return []
   }
 }
 
