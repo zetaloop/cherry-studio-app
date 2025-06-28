@@ -1,14 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
 import { Trash2 } from '@tamagui/lucide-icons'
+import { MotiView } from 'moti'
 import { FC, useEffect, useRef, useState } from 'react'
 import React from 'react'
-import { Animated } from 'react-native'
 import { RectButton } from 'react-native-gesture-handler'
 import ReanimatedSwipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { Text, XStack, YStack } from 'tamagui'
 
-import { deleteTopicById } from '@/services/TopicService'
 import { Assistant, Topic } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 import { runAsyncFunction } from '@/utils'
@@ -17,37 +16,32 @@ import { getAssistantById } from '../../../db/queries/assistants.queries'
 
 interface TopicItemProps {
   topic: Topic
-  refreshTopics: () => Promise<void>
+  onDelete: (topicId: string) => Promise<void>
 }
 
-function RenderRightActions(
-  progress: SharedValue<number>,
-  swipeableMethods: SwipeableMethods,
-  topic: Topic,
-  refreshTopics: () => Promise<void>
-) {
+interface RenderRightActionsProps {
+  progress: SharedValue<number>
+  topic: Topic
+  onDelete: (topicId: string) => Promise<void>
+  swipeableRef: React.RefObject<SwipeableMethods | null>
+}
+
+const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, topic, onDelete, swipeableRef }) => {
   const animatedStyle = useAnimatedStyle(() => {
-    const translateX = interpolate(progress.value, [0, 1], [80, 0])
+    const translateX = interpolate(progress.value, [0, 1], [50, 0])
 
     return {
       transform: [{ translateX }]
     }
   })
 
-  // todo：删除后ui仍有渲染
-  const handleDelete = async () => {
-    swipeableMethods.close()
-
-    try {
-      await deleteTopicById(topic.id)
-      await refreshTopics()
-    } catch (error) {
-      console.error('Failed to delete topic:', error)
-    }
+  const handleDelete = () => {
+    swipeableRef.current?.close()
+    onDelete(topic.id)
   }
 
   return (
-    <Animated.View style={[{ width: 80 }, animatedStyle]}>
+    <MotiView style={[{ width: 80 }, animatedStyle]}>
       <RectButton
         style={{
           flex: 1,
@@ -57,21 +51,17 @@ function RenderRightActions(
         onPress={handleDelete}>
         <Trash2 color="#C94040" size={20} />
       </RectButton>
-    </Animated.View>
+    </MotiView>
   )
 }
 
-const TopicItem: FC<TopicItemProps> = ({ topic, refreshTopics }) => {
-  const swipeableRef = useRef(null)
+const TopicItem: FC<TopicItemProps> = ({ topic, onDelete }) => {
+  const swipeableRef = useRef<SwipeableMethods>(null)
   const navigation = useNavigation<NavigationProps>()
   const [assistant, setAssistant] = useState<Assistant | null>(null)
 
-  const renderRightActions = (
-    progress: SharedValue<number>,
-    _: SharedValue<number>,
-    swipeableMethods: SwipeableMethods
-  ) => {
-    return RenderRightActions(progress, swipeableMethods, topic, refreshTopics)
+  const renderRightActions = (progress: SharedValue<number>, _: SharedValue<number>) => {
+    return <RenderRightActions progress={progress} topic={topic} onDelete={onDelete} swipeableRef={swipeableRef} />
   }
 
   const openTopic = () => {
@@ -85,6 +75,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic, refreshTopics }) => {
     hour: '2-digit',
     minute: '2-digit'
   })
+
   useEffect(() => {
     runAsyncFunction(async () => {
       try {
@@ -97,7 +88,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic, refreshTopics }) => {
   }, [])
 
   return (
-    <ReanimatedSwipeable ref={swipeableRef} renderRightActions={renderRightActions} friction={2} rightThreshold={40}>
+    <ReanimatedSwipeable ref={swipeableRef} renderRightActions={renderRightActions} friction={1} rightThreshold={40}>
       <XStack
         borderRadius={30}
         backgroundColor="rgba(255, 255, 255, 0.2)"
