@@ -1,5 +1,6 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet'
-import React, { useCallback, useMemo } from 'react'
+import { usePreventRemove } from '@react-navigation/native'
+import React, { useCallback, useImperativeHandle, useMemo, useRef } from 'react'
 import { useTheme } from 'tamagui'
 
 interface ISheetProps {
@@ -21,10 +22,18 @@ export function ISheet({
 }: ISheetProps) {
   const theme = useTheme()
   const memoizedSnapPoints = useMemo(() => snapPoints, [snapPoints])
+  const ref = useRef<BottomSheet | null>(null)
 
   // 根据 isOpen 属性确定 BottomSheet 的 index
   // 当 isOpen 为 true 时，index 为 0 (第一个吸附点)；为 false 时，index 为 -1 (关闭状态)
   const sheetIndex = useMemo(() => (isOpen ? 0 : -1), [isOpen])
+
+  useImperativeHandle(bottomSheetRef, () => ref.current!)
+
+  // 当 Sheet 打开时，阻止默认跳转，并关闭 Sheet
+  usePreventRemove(isOpen, () => {
+    ref.current?.close()
+  })
 
   const renderBackdrop = useCallback(
     (props: any) => <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.8} />,
@@ -33,7 +42,7 @@ export function ISheet({
 
   return (
     <BottomSheet
-      ref={bottomSheetRef}
+      ref={ref}
       index={sheetIndex}
       snapPoints={memoizedSnapPoints}
       enablePanDownToClose={enablePanDownToClose}
