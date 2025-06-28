@@ -1,13 +1,14 @@
 import { sortBy } from 'lodash'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, Text, YStack } from 'tamagui'
 
 import { SettingGroup, SettingRow } from '@/components/settings'
 import { ModelSelect } from '@/components/settings/providers/ModelSelect'
 import { isEmbeddingModel } from '@/config/models/embedding'
-import { useAllProviders } from '@/hooks/useProviders'
-import { Assistant, AssistantSettings, Model } from '@/types/assistant'
+import { getAllProviders } from '@/services/ProviderService'
+import { Assistant, AssistantSettings, Model, Provider } from '@/types/assistant'
+import { runAsyncFunction } from '@/utils'
 import { getModelUniqId } from '@/utils/model'
 
 import { CustomSlider } from '../ui/CustomSlider'
@@ -21,7 +22,19 @@ interface ModelTabContentProps {
 
 export function ModelTabContent({ assistant, setAssistant }: ModelTabContentProps) {
   const { t } = useTranslation()
-  const { providers } = useAllProviders()
+
+  const [providers, setProviders] = useState<Provider[]>([])
+
+  useEffect(() => {
+    runAsyncFunction(async () => {
+      try {
+        const allProviders = await getAllProviders()
+        setProviders(allProviders)
+      } catch (error) {
+        console.error('Failed to fetch providers:', error)
+      }
+    })
+  }, [])
 
   const selectOptions = useMemo(() => {
     return providers
