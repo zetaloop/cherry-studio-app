@@ -82,6 +82,11 @@ export function ModelTabContent({ assistant, setAssistant }: ModelTabContentProp
 
   const handleMaxTokensChange = useCallback(
     (value: string) => {
+      if (value.trim() === '') {
+        handleSettingsChange('maxTokens', undefined)
+        return
+      }
+
       const numValue = parseInt(value, 10)
 
       if (!isNaN(numValue) && numValue > 0) {
@@ -157,7 +162,7 @@ export function ModelTabContent({ assistant, setAssistant }: ModelTabContentProp
               minWidth={80}
               height={25}
               fontSize={12}
-              value={(settings.maxTokens ?? 2048).toString()}
+              value={settings.maxTokens ? settings.maxTokens.toString() : ''}
               onChangeText={handleMaxTokensChange}
               keyboardType="numeric"
             />

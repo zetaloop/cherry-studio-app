@@ -1,6 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
-import React, { useEffect, useState } from 'react'
+import { debounce } from 'lodash'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Button, styled, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
@@ -29,6 +30,17 @@ export default function AssistantDetailScreen() {
   const { assistantId, mode } = route.params
   const [activeTab, setActiveTab] = useState('model')
   const [localAssistant, setLocalAssistant] = useState<Assistant | null>(null)
+  const isInitialMount = useRef(true)
+
+  const debouncedSave = useMemo(
+    () =>
+      debounce((assistant: Assistant) => {
+        runAsyncFunction(async () => {
+          await saveAssistant(assistant)
+        })
+      }, 500),
+    []
+  )
 
   useEffect(() => {
     runAsyncFunction(async () => {
@@ -40,6 +52,17 @@ export default function AssistantDetailScreen() {
       }
     })
   }, [assistantId, mode])
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      return
+    }
+
+    if (mode === 'edit' && localAssistant) {
+      debouncedSave(localAssistant)
+    }
+  }, [localAssistant, mode, debouncedSave])
 
   const onSaveAssistant = async () => {
     if (!localAssistant) {
@@ -56,7 +79,6 @@ export default function AssistantDetailScreen() {
         title={mode === 'create' ? t('assistants.title.create') : t('assistants.title.edit')}
         onBackPress={() => navigation.goBack()}
       />
-      {/* todo KeyboardAvoidingView bug */}
       <KeyboardAwareScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1 }}
@@ -109,11 +131,13 @@ export default function AssistantDetailScreen() {
               </Tabs.Content>
             </YStack>
           </Tabs>
-          <XStack paddingHorizontal={25} width="100%" justifyContent="center" alignItems="center">
-            <Button backgroundColor="$foregroundGreen" width="100%" borderRadius={48} onPress={onSaveAssistant}>
-              {t(`assistants.${mode === 'create' ? 'create' : 'save'}`)}
-            </Button>
-          </XStack>
+          {mode === 'create' && (
+            <XStack paddingHorizontal={25} width="100%" justifyContent="center" alignItems="center">
+              <Button backgroundColor="$foregroundGreen" width="100%" borderRadius={48} onPress={onSaveAssistant}>
+                {t(`assistants.${mode === 'create' ? 'create' : 'save'}`)}
+              </Button>
+            </XStack>
+          )}
         </SettingContainer>
       </KeyboardAwareScrollView>
     </SafeAreaContainer>

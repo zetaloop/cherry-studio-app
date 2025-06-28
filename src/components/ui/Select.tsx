@@ -101,6 +101,14 @@ export function ISelect<T = any>({
             {group.options.map(item => (
               <DropdownMenu.Item key={item.value} onSelect={() => handleValueChange(item.value)}>
                 <DropdownMenu.ItemTitle>{item.label}</DropdownMenu.ItemTitle>
+                {value === item.value && (
+                  // todo
+                  <DropdownMenu.ItemIcon
+                    ios={{
+                      name: 'checkmark',
+                      pointSize: 16
+                    }}></DropdownMenu.ItemIcon>
+                )}
               </DropdownMenu.Item>
             ))}
           </DropdownMenu.Group>
