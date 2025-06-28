@@ -1,5 +1,5 @@
 import BottomSheet from '@gorhom/bottom-sheet'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, usePreventRemove } from '@react-navigation/native'
 import { BookmarkMinus } from '@tamagui/lucide-icons'
 import { debounce } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -31,6 +31,12 @@ export default function AssistantMarketScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
   const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(null)
+
+  // 当 Sheet 打开时，阻止默认跳转，并关闭 Sheet
+  usePreventRemove(isBottomSheetOpen, () => {
+    bottomSheetRef.current?.close()
+  })
+
   const handleBottomSheetClose = useCallback(() => {
     setIsBottomSheetOpen(false)
     setSelectedAssistant(null)
@@ -198,14 +204,22 @@ export default function AssistantMarketScreen() {
           {renderTabContents}
         </Tabs>
       </SettingContainer>
-      {selectedAssistant && (
-        <AssistantItemSheet
-          bottomSheetRef={bottomSheetRef}
-          isOpen={isBottomSheetOpen}
-          onClose={handleBottomSheetClose}
-          assistant={selectedAssistant}
-        />
-      )}
+      {/* {selectedAssistant && ( */}
+      <AssistantItemSheet
+        bottomSheetRef={bottomSheetRef}
+        isOpen={isBottomSheetOpen}
+        onClose={handleBottomSheetClose}
+        assistant={
+          selectedAssistant || {
+            id: '',
+            name: '',
+            prompt: '',
+            topics: [],
+            type: ''
+          }
+        }
+      />
+      {/* )} */}
     </SafeAreaContainer>
   )
 }
