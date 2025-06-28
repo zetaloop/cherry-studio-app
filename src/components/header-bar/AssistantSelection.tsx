@@ -1,7 +1,7 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { BookmarkMinus, ChevronDown, Settings2 } from '@tamagui/lucide-icons'
 import { BlurView } from 'expo-blur'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { Button, Popover, Text, useWindowDimensions, XStack, YStack } from 'tamagui'
 
@@ -59,12 +59,12 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
   const [assistant, setAssistant] = useState<Assistant | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const handleFocus = () => {
+  // 这里必须要手动加 useCallback，否则会疯狂执行
+  const handleFocus = useCallback(() => {
+    //! 这段代码会引起 panic
     let isActive = true
     setIsLoading(true)
-
     const fetchAssistant = async () => {
-      // !error
       try {
         const fetchedAssistant = await getAssistantById(assistantId)
         if (isActive) {
@@ -78,13 +78,11 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
         }
       }
     }
-
     fetchAssistant()
-
     return () => {
       isActive = false
     }
-  }
+  }, [assistantId])
 
   useFocusEffect(handleFocus)
 

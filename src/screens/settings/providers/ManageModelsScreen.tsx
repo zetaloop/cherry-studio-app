@@ -171,7 +171,7 @@ export default function ManageModelsScreen() {
   }
 
   useEffect(() => {
-    // !error
+    //! 这段代码会引起 panic
     setIsLoading(true)
     runAsyncFunction(async () => {
       try {
@@ -198,7 +198,7 @@ export default function ManageModelsScreen() {
       } catch (error) {
         console.error('Failed to fetch models', error)
       } finally {
-    setIsLoading(false)
+        setIsLoading(false)
       }
     })
   }, [providerId])

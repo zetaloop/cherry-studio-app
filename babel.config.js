@@ -5,9 +5,7 @@ module.exports = function (api) {
       [
         'babel-preset-expo',
         {
-          'react-compiler': {
-            panicThreshold: 'all_errors'
-          }
+          'react-compiler': true
         }
       ]
     ],
