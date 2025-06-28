@@ -2,7 +2,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list'
 import { Minus, Plus } from '@tamagui/lucide-icons'
 import { debounce, groupBy, isEmpty, uniqBy } from 'lodash'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native'
 import { Accordion, Button, ScrollView, Tabs, Text, useTheme, YStack } from 'tamagui'
@@ -53,14 +53,11 @@ export default function ManageModelsScreen() {
 
   const { providerId } = route.params
 
-  const isModelInCurrentProvider = useMemo(() => getIsModelInProvider(provider?.models || []), [provider])
-  const isAllModelsInCurrentProvider = useMemo(
-    () => getIsAllInProvider(isModelInCurrentProvider),
-    [isModelInCurrentProvider]
-  )
+  const isModelInCurrentProvider = getIsModelInProvider(provider?.models || [])
+  const isAllModelsInCurrentProvider = getIsAllInProvider(isModelInCurrentProvider)
 
   // Debounce search text
-  const debouncedSetSearchText = useMemo(() => debounce(setDebouncedSearchText, 300), [])
+  const debouncedSetSearchText = debounce(setDebouncedSearchText, 300)
 
   useEffect(() => {
     debouncedSetSearchText(searchText)
@@ -70,58 +67,49 @@ export default function ManageModelsScreen() {
     }
   }, [searchText, debouncedSetSearchText])
 
-  const allModels = useMemo(() => {
-    return uniqBy(listModels, 'id')
-  }, [listModels])
+  const allModels = uniqBy(listModels, 'id')
 
-  const list = useMemo(() => {
-    return allModels.filter(model => {
-      if (
-        debouncedSearchText &&
-        !model.id.toLocaleLowerCase().includes(debouncedSearchText.toLocaleLowerCase()) &&
-        !model.name?.toLocaleLowerCase().includes(debouncedSearchText.toLocaleLowerCase())
-      ) {
-        return false
-      }
+  const list = allModels.filter(model => {
+    if (
+      debouncedSearchText &&
+      !model.id.toLocaleLowerCase().includes(debouncedSearchText.toLocaleLowerCase()) &&
+      !model.name?.toLocaleLowerCase().includes(debouncedSearchText.toLocaleLowerCase())
+    ) {
+      return false
+    }
 
-      switch (actualFilterType) {
-        case 'reasoning':
-          return isReasoningModel(model)
-        case 'vision':
-          return isVisionModel(model)
-        case 'websearch':
-          return isWebSearchModel(model)
-        case 'free':
-          return isFreeModel(model)
-        case 'embedding':
-          return isEmbeddingModel(model)
-        case 'function_calling':
-          return isFunctionCallingModel(model)
-        case 'rerank':
-          return isRerankModel(model)
-        default:
-          return true
-      }
-    })
-  }, [allModels, debouncedSearchText, actualFilterType])
+    switch (actualFilterType) {
+      case 'reasoning':
+        return isReasoningModel(model)
+      case 'vision':
+        return isVisionModel(model)
+      case 'websearch':
+        return isWebSearchModel(model)
+      case 'free':
+        return isFreeModel(model)
+      case 'embedding':
+        return isEmbeddingModel(model)
+      case 'function_calling':
+        return isFunctionCallingModel(model)
+      case 'rerank':
+        return isRerankModel(model)
+      default:
+        return true
+    }
+  })
 
-  const modelGroups = useMemo(
-    () =>
-      provider?.id === 'dashscope'
-        ? {
-            ...groupBy(
-              list.filter(model => !model.id.startsWith('qwen')),
-              'group'
-            ),
-            ...groupQwenModels(list.filter(model => model.id.startsWith('qwen')))
-          }
-        : groupBy(list, 'group'),
-    [list, provider?.id]
-  )
+  const modelGroups =
+    provider?.id === 'dashscope'
+      ? {
+          ...groupBy(
+            list.filter(model => !model.id.startsWith('qwen')),
+            'group'
+          ),
+          ...groupQwenModels(list.filter(model => model.id.startsWith('qwen')))
+        }
+      : groupBy(list, 'group')
 
-  const sortedModelGroups = useMemo(() => {
-    return Object.entries(modelGroups).sort(([a], [b]) => a.localeCompare(b))
-  }, [modelGroups])
+  const sortedModelGroups = Object.entries(modelGroups).sort(([a], [b]) => a.localeCompare(b))
 
   const tabConfigs = [
     { value: 'all', label: t('models.type.all') },
@@ -140,58 +128,47 @@ export default function ManageModelsScreen() {
     backgroundColor: actualFilterType === tabValue ? '$background' : 'transparent',
     borderRadius: 15
   })
-  const onAddModel = useCallback(
-    (model: Model) => {
-      if (!provider) return
-      const updatedProvider = {
-        ...provider,
-        models: uniqBy([...provider.models, model], 'id')
-      }
-      setProvider(updatedProvider)
-      runAsyncFunction(async () => saveProvider(updatedProvider))
-    },
-    [provider]
-  )
 
-  const onRemoveModel = useCallback(
-    (model: Model) => {
-      if (!provider) return
-      const updatedProvider = {
-        ...provider,
-        models: provider.models.filter(m => m.id !== model.id)
-      }
-      setProvider(updatedProvider)
-      runAsyncFunction(async () => saveProvider(updatedProvider))
-    },
-    [provider]
-  )
+  const onAddModel = (model: Model) => {
+    if (!provider) return
+    const updatedProvider = {
+      ...provider,
+      models: uniqBy([...provider.models, model], 'id')
+    }
+    setProvider(updatedProvider)
+    runAsyncFunction(async () => saveProvider(updatedProvider))
+  }
 
-  const onAddAllModels = useCallback(
-    (modelsToAdd: Model[]) => {
-      if (!provider) return
-      const updatedProvider = {
-        ...provider,
-        models: uniqBy([...provider.models, ...modelsToAdd], 'id')
-      }
-      setProvider(updatedProvider)
-      runAsyncFunction(async () => saveProvider(updatedProvider))
-    },
-    [provider]
-  )
+  const onRemoveModel = (model: Model) => {
+    if (!provider) return
+    const updatedProvider = {
+      ...provider,
+      models: provider.models.filter(m => m.id !== model.id)
+    }
+    setProvider(updatedProvider)
+    runAsyncFunction(async () => saveProvider(updatedProvider))
+  }
 
-  const onRemoveAllModels = useCallback(
-    (modelsToRemove: Model[]) => {
-      if (!provider) return
-      const modelsToRemoveIds = new Set(modelsToRemove.map(m => m.id))
-      const updatedProvider = {
-        ...provider,
-        models: provider.models.filter(m => !modelsToRemoveIds.has(m.id))
-      }
-      setProvider(updatedProvider)
-      runAsyncFunction(async () => saveProvider(updatedProvider))
-    },
-    [provider]
-  )
+  const onAddAllModels = (modelsToAdd: Model[]) => {
+    if (!provider) return
+    const updatedProvider = {
+      ...provider,
+      models: uniqBy([...provider.models, ...modelsToAdd], 'id')
+    }
+    setProvider(updatedProvider)
+    runAsyncFunction(async () => saveProvider(updatedProvider))
+  }
+
+  const onRemoveAllModels = (modelsToRemove: Model[]) => {
+    if (!provider) return
+    const modelsToRemoveIds = new Set(modelsToRemove.map(m => m.id))
+    const updatedProvider = {
+      ...provider,
+      models: provider.models.filter(m => !modelsToRemoveIds.has(m.id))
+    }
+    setProvider(updatedProvider)
+    runAsyncFunction(async () => saveProvider(updatedProvider))
+  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -225,55 +202,45 @@ export default function ManageModelsScreen() {
     })
   }, [providerId])
 
-  const renderModelGroupItem = useCallback(
-    ({ item: [groupName, currentModels], index }: ListRenderItemInfo<[string, Model[]]>) => (
-      <ModelGroup
-        groupName={groupName}
-        models={currentModels}
-        index={index}
-        showModelCount={true}
-        renderGroupButton={groupButtonModels => (
-          <Button
-            size={20}
-            chromeless
-            icon={
-              isAllModelsInCurrentProvider(groupButtonModels) ? (
-                <Minus size={14} borderRadius={99} backgroundColor="$backgroundRed" color="$foregroundRed" />
-              ) : (
-                <Plus size={14} borderRadius={99} backgroundColor="$backgroundGreen" color="$foregroundGreen" />
-              )
-            }
-            onPress={
-              isAllModelsInCurrentProvider(groupButtonModels)
-                ? () => onRemoveAllModels(groupButtonModels)
-                : () => onAddAllModels(groupButtonModels)
-            }
-          />
-        )}
-        renderModelButton={model => (
-          <Button
-            size={14}
-            chromeless
-            icon={
-              isModelInCurrentProvider(model.id) ? (
-                <Minus size={14} borderRadius={99} backgroundColor="$backgroundRed" color="$foregroundRed" />
-              ) : (
-                <Plus size={14} borderRadius={99} backgroundColor="$backgroundGreen" color="$foregroundGreen" />
-              )
-            }
-            onPress={isModelInCurrentProvider(model.id) ? () => onRemoveModel(model) : () => onAddModel(model)}
-          />
-        )}
-      />
-    ),
-    [
-      isAllModelsInCurrentProvider,
-      isModelInCurrentProvider,
-      onAddAllModels,
-      onAddModel,
-      onRemoveAllModels,
-      onRemoveModel
-    ]
+  const renderModelGroupItem = ({ item: [groupName, currentModels], index }: ListRenderItemInfo<[string, Model[]]>) => (
+    <ModelGroup
+      groupName={groupName}
+      models={currentModels}
+      index={index}
+      showModelCount={true}
+      renderGroupButton={groupButtonModels => (
+        <Button
+          size={20}
+          chromeless
+          icon={
+            isAllModelsInCurrentProvider(groupButtonModels) ? (
+              <Minus size={14} borderRadius={99} backgroundColor="$backgroundRed" color="$foregroundRed" />
+            ) : (
+              <Plus size={14} borderRadius={99} backgroundColor="$backgroundGreen" color="$foregroundGreen" />
+            )
+          }
+          onPress={
+            isAllModelsInCurrentProvider(groupButtonModels)
+              ? () => onRemoveAllModels(groupButtonModels)
+              : () => onAddAllModels(groupButtonModels)
+          }
+        />
+      )}
+      renderModelButton={model => (
+        <Button
+          size={14}
+          chromeless
+          icon={
+            isModelInCurrentProvider(model.id) ? (
+              <Minus size={14} borderRadius={99} backgroundColor="$backgroundRed" color="$foregroundRed" />
+            ) : (
+              <Plus size={14} borderRadius={99} backgroundColor="$backgroundGreen" color="$foregroundGreen" />
+            )
+          }
+          onPress={isModelInCurrentProvider(model.id) ? () => onRemoveModel(model) : () => onAddModel(model)}
+        />
+      )}
+    />
   )
 
   return (

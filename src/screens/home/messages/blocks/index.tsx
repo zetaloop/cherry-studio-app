@@ -1,4 +1,4 @@
-import { FC, memo, useMemo } from 'react'
+import { FC, memo } from 'react'
 import React from 'react'
 import { View, XStack } from 'tamagui'
 
@@ -39,7 +39,7 @@ const filterImageBlockGroups = (blocks: MessageBlock[]): (MessageBlock[] | Messa
 }
 
 const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ blocks }) => {
-  const groupedBlocks = useMemo(() => filterImageBlockGroups(blocks), [blocks])
+  const groupedBlocks = filterImageBlockGroups(blocks)
 
   return (
     <View flex={1}>

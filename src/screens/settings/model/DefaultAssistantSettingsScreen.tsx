@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -51,37 +51,37 @@ export default function DefaultAssistantSettingsScreen() {
     }
   }, [defaultAssistant])
 
-  const handleTemperatureChange = useCallback((value: number[]) => {
+  const handleTemperatureChange = (value: number[]) => {
     setSettings(prev => ({ ...prev, temperature: value[0] / 10 }))
-  }, [])
+  }
 
-  const handleTopPChange = useCallback((value: number[]) => {
+  const handleTopPChange = (value: number[]) => {
     setSettings(prev => ({ ...prev, topP: value[0] / 10 }))
-  }, [])
+  }
 
-  const handleContextChange = useCallback((value: number[]) => {
+  const handleContextChange = (value: number[]) => {
     setSettings(prev => ({ ...prev, contextCount: value[0] }))
-  }, [])
+  }
 
-  const handleMaxTokensChange = useCallback((value: string) => {
+  const handleMaxTokensChange = (value: string) => {
     const numValue = parseInt(value, 10)
 
     if (!isNaN(numValue) && numValue > 0) {
       setSettings(prev => ({ ...prev, maxTokens: numValue }))
     }
-  }, [])
+  }
 
-  const handleEnableMaxTokensChange = useCallback((checked: boolean) => {
+  const handleEnableMaxTokensChange = (checked: boolean) => {
     setSettings(prev => ({ ...prev, enableMaxTokens: checked }))
-  }, [])
+  }
 
-  const handleAssistantNameChange = useCallback((text: string) => {
+  const handleAssistantNameChange = (text: string) => {
     setSettings(prev => ({ ...prev, assistantName: text }))
-  }, [])
+  }
 
-  const handlePromptChange = useCallback((text: string) => {
+  const handlePromptChange = (text: string) => {
     setSettings(prev => ({ ...prev, prompt: text }))
-  }, [])
+  }
 
   // 使用useEffect来将本地状态同步到Redux store，但避免无限循环
   useEffect(() => {

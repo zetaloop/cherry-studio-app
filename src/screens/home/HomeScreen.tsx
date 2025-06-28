@@ -1,5 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
 import { styled, View, YStack } from 'tamagui'
 
@@ -21,7 +21,7 @@ const HomeScreen = () => {
   const navigation = useNavigation<NavigationProps>()
   const [assistant, setAssistant] = useState<Assistant | null>(null)
   const [topic, setTopic] = useState<Topic | null>(null)
-  const systemAssistants = useMemo(() => getSystemAssistants(), [])
+  const systemAssistants = getSystemAssistants()
   const [hasMessages, setHasMessages] = useState(false)
   const route = useRoute<HomeScreenRouteProp>()
 
@@ -63,14 +63,14 @@ const HomeScreen = () => {
     navigation.navigate('AssistantMarketScreen')
   }
 
-  const handleAssistantSelect = useCallback(async (selectedAssistant: Assistant) => {
+  const handleAssistantSelect = async (selectedAssistant: Assistant) => {
     runAsyncFunction(async () => {
       const newTopic = await createNewTopic(selectedAssistant)
       setAssistant(selectedAssistant)
       setTopic(newTopic)
       setHasMessages(false)
     })
-  }, [])
+  }
 
   return (
     <SafeAreaContainer>

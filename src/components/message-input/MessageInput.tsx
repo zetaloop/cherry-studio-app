@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, XStack, YStack } from 'tamagui'
 
@@ -27,7 +27,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, se
   const [text, setText] = useState('')
   const [files, setFiles] = useState<FileType[]>([])
 
-  const sendMessage = useCallback(async () => {
+  const sendMessage = async () => {
     if (isEmpty(text.trim())) {
       return
     }
@@ -49,7 +49,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, se
     } catch (error) {
       console.error('Error sending message:', error)
     }
-  }, [assistant, topic, text])
+  }
 
   return (
     <YStack gap={10}>

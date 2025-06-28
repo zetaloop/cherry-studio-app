@@ -1,6 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { LoaderCircle } from '@tamagui/lucide-icons'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, Text, XStack, YStack } from 'tamagui'
 
@@ -20,9 +21,9 @@ export default function NamingModelSettingsScreen() {
   const route = useRoute<NamingModelSettingsRouteProp>()
   const navigation = useNavigation()
 
-  const handlePromptChange = useCallback((value: string) => {
+  const handlePromptChange = (value: string) => {
     setPrompt(value)
-  }, [])
+  }
 
   return (
     <SafeAreaContainer>

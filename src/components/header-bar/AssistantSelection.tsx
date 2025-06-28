@@ -1,7 +1,7 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { BookmarkMinus, ChevronDown, Settings2 } from '@tamagui/lucide-icons'
 import { BlurView } from 'expo-blur'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { Button, Popover, Text, useWindowDimensions, XStack, YStack } from 'tamagui'
 
@@ -59,34 +59,34 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
   const [assistant, setAssistant] = useState<Assistant | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  useFocusEffect(
-    useCallback(() => {
-      let isActive = true
-      setIsLoading(true)
+  const handleFocus = () => {
+    let isActive = true
+    setIsLoading(true)
 
-      const fetchAssistant = async () => {
-        try {
-          const fetchedAssistant = await getAssistantById(assistantId)
+    const fetchAssistant = async () => {
+      try {
+        const fetchedAssistant = await getAssistantById(assistantId)
 
-          if (isActive) {
-            setAssistant(fetchedAssistant)
-          }
-        } catch (error) {
-          console.error('Failed to fetch assistant:', error)
-        } finally {
-          if (isActive) {
-            setIsLoading(false)
-          }
+        if (isActive) {
+          setAssistant(fetchedAssistant)
+        }
+      } catch (error) {
+        console.error('Failed to fetch assistant:', error)
+      } finally {
+        if (isActive) {
+          setIsLoading(false)
         }
       }
+    }
 
-      fetchAssistant()
+    fetchAssistant()
 
-      return () => {
-        isActive = false
-      }
-    }, [assistantId])
-  )
+    return () => {
+      isActive = false
+    }
+  }
+
+  useFocusEffect(handleFocus)
 
   const navigateToAssistantDetailScreen = () => {
     if (!assistant) return

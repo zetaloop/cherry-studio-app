@@ -1,5 +1,5 @@
 import { sortBy } from 'lodash'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, Text, YStack } from 'tamagui'
 
@@ -36,78 +36,67 @@ export function ModelTabContent({ assistant, setAssistant }: ModelTabContentProp
     })
   }, [])
 
-  const selectOptions = useMemo(() => {
-    return providers
-      .filter(p => p.models && p.models.length > 0)
-      .map(p => ({
-        label: p.isSystem ? t(`provider.${p.id}`) : p.name,
-        title: p.name,
-        options: sortBy(p.models, 'name')
-          .filter(m => !isEmbeddingModel(m))
-          .map(m => ({
-            label: `${m.name}`,
-            value: getModelUniqId(m),
-            model: m
-          }))
-      }))
-  }, [providers, t])
+  const selectOptions = providers
+    .filter(p => p.models && p.models.length > 0)
+    .map(p => ({
+      label: p.isSystem ? t(`provider.${p.id}`) : p.name,
+      title: p.name,
+      options: sortBy(p.models, 'name')
+        .filter(m => !isEmbeddingModel(m))
+        .map(m => ({
+          label: `${m.name}`,
+          value: getModelUniqId(m),
+          model: m
+        }))
+    }))
 
-  const handleModelChange = useCallback(
-    (value: string) => {
-      if (!assistant || !value) {
-        return
+  const handleModelChange = (value: string) => {
+    if (!assistant || !value) {
+      return
+    }
+
+    let modelToSet: Model | undefined
+
+    for (const group of selectOptions) {
+      const foundOption = group.options.find(opt => opt.value === value)
+
+      if (foundOption) {
+        modelToSet = foundOption.model
+        break
       }
+    }
 
-      let modelToSet: Model | undefined
-
-      for (const group of selectOptions) {
-        const foundOption = group.options.find(opt => opt.value === value)
-
-        if (foundOption) {
-          modelToSet = foundOption.model
-          break
-        }
-      }
-
-      if (modelToSet) {
-        setAssistant({
-          ...assistant,
-          model: modelToSet
-        })
-      }
-    },
-    [assistant, setAssistant, selectOptions]
-  )
-
-  const handleSettingsChange = useCallback(
-    (key: keyof AssistantSettings, value: any) => {
-      if (!assistant) return
+    if (modelToSet) {
       setAssistant({
         ...assistant,
-        settings: {
-          ...assistant.settings,
-          [key]: value
-        }
+        model: modelToSet
       })
-    },
-    [assistant, setAssistant]
-  )
+    }
+  }
 
-  const handleMaxTokensChange = useCallback(
-    (value: string) => {
-      if (value.trim() === '') {
-        handleSettingsChange('maxTokens', undefined)
-        return
+  const handleSettingsChange = (key: keyof AssistantSettings, value: any) => {
+    if (!assistant) return
+    setAssistant({
+      ...assistant,
+      settings: {
+        ...assistant.settings,
+        [key]: value
       }
+    })
+  }
 
-      const numValue = parseInt(value, 10)
+  const handleMaxTokensChange = (value: string) => {
+    if (value.trim() === '') {
+      handleSettingsChange('maxTokens', undefined)
+      return
+    }
 
-      if (!isNaN(numValue) && numValue > 0) {
-        handleSettingsChange('maxTokens', numValue)
-      }
-    },
-    [handleSettingsChange]
-  )
+    const numValue = parseInt(value, 10)
+
+    if (!isNaN(numValue) && numValue > 0) {
+      handleSettingsChange('maxTokens', numValue)
+    }
+  }
 
   if (!assistant) {
     return null

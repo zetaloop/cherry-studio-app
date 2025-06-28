@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
 import { debounce } from 'lodash'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Button, styled, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
@@ -32,16 +32,11 @@ export default function AssistantDetailScreen() {
   const [localAssistant, setLocalAssistant] = useState<Assistant | null>(null)
   const isInitialMount = useRef(true)
 
-  const debouncedSave = useMemo(
-    () =>
-      debounce((assistant: Assistant) => {
-        runAsyncFunction(async () => {
-          await saveAssistant(assistant)
-        })
-      }, 500),
-    []
-  )
-
+  const debouncedSave = debounce((assistant: Assistant) => {
+    runAsyncFunction(async () => {
+      await saveAssistant(assistant)
+    })
+  }, 500)
   useEffect(() => {
     runAsyncFunction(async () => {
       if (assistantId) {

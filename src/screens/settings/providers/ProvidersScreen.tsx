@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, useTheme, YStack } from 'tamagui'
 
@@ -28,22 +28,22 @@ export default function ProvidersScreen() {
     navigation.navigate('ProviderListScreen')
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchProviders = async () => {
-        try {
-          const allProviders = await getAllProviders()
-          const enabledProviders = allProviders.filter(provider => provider.enabled === true)
-          console.log('Fetching enabled providers on screen focus:', enabledProviders)
-          setProviders(enabledProviders)
-        } catch (error) {
-          console.error('Failed to fetch providers on screen focus:', error)
-        }
+  const handleFocus = () => {
+    const fetchProviders = async () => {
+      try {
+        const allProviders = await getAllProviders()
+        const enabledProviders = allProviders.filter(provider => provider.enabled === true)
+        console.log('Fetching enabled providers on screen focus:', enabledProviders)
+        setProviders(enabledProviders)
+      } catch (error) {
+        console.error('Failed to fetch providers on screen focus:', error)
       }
+    }
 
-      runAsyncFunction(fetchProviders)
-    }, [])
-  )
+    runAsyncFunction(fetchProviders)
+  }
+
+  useFocusEffect(handleFocus)
 
   return (
     <SafeAreaContainer

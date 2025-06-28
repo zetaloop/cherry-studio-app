@@ -23,27 +23,27 @@ export default function GeneralSettingsScreen() {
   const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const loadSettings = async () => {
-        const storedLanguage = await AsyncStorage.getItem('language')
+  const handleFocus = () => {
+    const loadSettings = async () => {
+      const storedLanguage = await AsyncStorage.getItem('language')
 
-        if (storedLanguage) {
-          setLanguage(storedLanguage)
-        } else {
-          setLanguage(i18n.language)
-        }
-
-        const storedTheme = await AsyncStorage.getItem('theme')
-
-        if (storedTheme) {
-          setCurrentTheme(storedTheme)
-        }
+      if (storedLanguage) {
+        setLanguage(storedLanguage)
+      } else {
+        setLanguage(i18n.language)
       }
 
-      loadSettings()
-    }, [])
-  )
+      const storedTheme = await AsyncStorage.getItem('theme')
+
+      if (storedTheme) {
+        setCurrentTheme(storedTheme)
+      }
+    }
+
+    loadSettings()
+  }
+
+  useFocusEffect(handleFocus)
 
   const getCurrentLanguage = () => {
     const currentLang = languagesOptions.find(item => item.value === language)
