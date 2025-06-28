@@ -2,10 +2,11 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ChevronRight, HeartPulse, Plus, Settings, Settings2 } from '@tamagui/lucide-icons'
 import { debounce, groupBy } from 'lodash'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { Accordion, Button, Separator, Text, XStack, YStack } from 'tamagui'
+import { Accordion, Button, Separator, Text, View, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
@@ -15,8 +16,8 @@ import { ModelGroup } from '@/components/settings/providers/ModelGroup'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { CustomSwitch } from '@/components/ui/Switch'
-import { useProvider } from '@/hooks/useProviders'
-import { Model } from '@/types/assistant'
+import { getProviderById, saveProvider } from '@/services/ProviderService'
+import { Model, Provider } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ProviderSettingsScreen'>
@@ -39,7 +40,15 @@ export default function ProviderSettingsScreen() {
   }, [])
 
   const { providerId } = route.params
-  const { provider } = useProvider(providerId)
+  const [provider, setProvider] = useState<Provider | null>(null)
+
+  useEffect(() => {
+    getProviderById(providerId)
+      .then(setProvider)
+      .catch(error => {
+        console.error('Failed to fetch provider:', error)
+      })
+  }, [providerId])
 
   // Debounce search text
   const debouncedSetSearchText = useMemo(() => debounce(setDebouncedSearchText, 300), [])
@@ -54,11 +63,12 @@ export default function ProviderSettingsScreen() {
 
   // 根据搜索文本过滤和分组模型
   const modelGroups = useMemo(() => {
+    if (!provider) return {}
     const filteredModels = debouncedSearchText // Use debouncedSearchText
       ? provider.models.filter(model => model.name.toLowerCase().includes(debouncedSearchText.toLowerCase()))
       : provider.models
     return groupBy(filteredModels, 'group')
-  }, [debouncedSearchText, provider.models]) // Use debouncedSearchText
+  }, [debouncedSearchText, provider]) // Use debouncedSearchText
 
   // 对分组进行排序
   const sortedModelGroups = useMemo(() => {
@@ -87,6 +97,28 @@ export default function ProviderSettingsScreen() {
   const onSettingModel = useCallback((model: Model) => {
     console.log('[ProviderSettingsPage] onSettingModel', model)
   }, [])
+
+  const handleEnabledChange = async (checked: boolean) => {
+    if (provider) {
+      const updatedProvider = { ...provider, enabled: checked }
+
+      try {
+        await saveProvider(updatedProvider)
+        setProvider(updatedProvider)
+      } catch (error) {
+        console.error('Failed to save provider:', error)
+      }
+    }
+  }
+
+  if (!provider) {
+    // todo 会产生白屏动画
+    return (
+      <View>
+        <ActivityIndicator />
+      </View>
+    )
+  }
 
   return (
     <SafeAreaContainer>
@@ -122,10 +154,7 @@ export default function ProviderSettingsScreen() {
               <SettingGroup>
                 <SettingRow>
                   <Text>{t('common.enabled')}</Text>
-                  <CustomSwitch
-                    checked={provider.enabled}
-                    // onCheckedChange={checked => updateProvider({ ...provider, enabled: checked })}
-                  />
+                  <CustomSwitch checked={provider.enabled} onCheckedChange={handleEnabledChange} />
                 </SettingRow>
                 <SettingRow onPress={onApiService}>
                   <Text>{t('settings.provider.api_service')}</Text>

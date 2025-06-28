@@ -1,6 +1,6 @@
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, useTheme, YStack } from 'tamagui'
 
@@ -11,8 +11,10 @@ import { ProviderItem } from '@/components/settings/providers/ProviderItem'
 import CustomRadialGradientBackground from '@/components/ui/CustomRadialGradientBackground'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { useAllProviders } from '@/hooks/useProviders'
+import { getAllProviders } from '@/services/ProviderService'
+import { Provider } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
+import { runAsyncFunction } from '@/utils'
 
 export default function ProvidersScreen() {
   const { t } = useTranslation()
@@ -20,11 +22,28 @@ export default function ProvidersScreen() {
   const navigation = useNavigation<NavigationProps>()
   const [searchQuery, setSearchQuery] = useState('')
 
-  const { providers } = useAllProviders()
+  const [providers, setProviders] = useState<Provider[]>([])
 
   const onAddProvider = () => {
     navigation.navigate('ProviderListScreen')
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchProviders = async () => {
+        try {
+          const allProviders = await getAllProviders()
+          const enabledProviders = allProviders.filter(provider => provider.enabled === true)
+          console.log('Fetching enabled providers on screen focus:', enabledProviders)
+          setProviders(enabledProviders)
+        } catch (error) {
+          console.error('Failed to fetch providers on screen focus:', error)
+        }
+      }
+
+      runAsyncFunction(fetchProviders)
+    }, [])
+  )
 
   return (
     <SafeAreaContainer
@@ -51,11 +70,9 @@ export default function ProvidersScreen() {
             <CustomRadialGradientBackground style={{ radius: 2 }}>
               <ScrollView backgroundColor="$colorTransparent">
                 <SettingGroup>
-                  {providers
-                    .filter(p => p.checked)
-                    .map(p => (
-                      <ProviderItem key={p.id} provider={p} mode="enabled" />
-                    ))}
+                  {providers.map(p => (
+                    <ProviderItem key={p.id} provider={p} mode="enabled" />
+                  ))}
                 </SettingGroup>
               </ScrollView>
             </CustomRadialGradientBackground>

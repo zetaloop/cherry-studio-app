@@ -1,6 +1,10 @@
 import { Provider } from '@/types/assistant'
 
-import { getProviderById as _getProviderById, upsertProviders } from '../../db/queries/providers.queries'
+import {
+  getAllProviders as _getAllProviders,
+  getProviderById as _getProviderById,
+  upsertProviders
+} from '../../db/queries/providers.queries'
 
 export async function saveProvider(provider: Provider) {
   try {
@@ -22,6 +26,16 @@ export async function getProviderById(providerId: string) {
     return provider
   } catch (error) {
     console.error('Error getting provider by id:', error)
+    throw error
+  }
+}
+
+export async function getAllProviders() {
+  try {
+    const providers = await _getAllProviders()
+    return providers
+  } catch (error) {
+    console.error('Error getting all providers:', error)
     throw error
   }
 }

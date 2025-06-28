@@ -1,9 +1,9 @@
 import BottomSheet from '@gorhom/bottom-sheet'
 import { useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, useTheme, YStack } from 'tamagui'
+import { ScrollView, Text, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
@@ -12,7 +12,9 @@ import { ProviderItem } from '@/components/settings/providers/ProviderItem'
 import CustomRadialGradientBackground from '@/components/ui/CustomRadialGradientBackground'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { useAllProviders } from '@/hooks/useProviders'
+import { getAllProviders } from '@/services/ProviderService'
+import { Provider } from '@/types/assistant'
+import { runAsyncFunction } from '@/utils'
 
 export default function ProviderListScreen() {
   const { t } = useTranslation()
@@ -21,10 +23,21 @@ export default function ProviderListScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
-  const { providers } = useAllProviders()
+  const [providers, setProviders] = useState<Provider[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedProviderType, setSelectedProviderType] = useState<string | undefined>(undefined)
   const [providerName, setProviderName] = useState('')
+
+  useEffect(() => {
+    runAsyncFunction(async () => {
+      try {
+        const allProviders = await getAllProviders()
+        setProviders(allProviders)
+      } catch (error) {
+        console.error('Failed to fetch providers:', error)
+      }
+    })
+  }, [])
 
   const handleProviderTypeChange = (value: string) => {
     setSelectedProviderType(value)

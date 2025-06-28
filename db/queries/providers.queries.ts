@@ -99,3 +99,18 @@ export async function getProviderById(providerId: string): Promise<Provider | un
     throw error
   }
 }
+
+export async function getAllProviders(): Promise<Provider[]> {
+  try {
+    const result = await db.select().from(providers)
+
+    if (result.length === 0) {
+      return []
+    }
+
+    return result.map(transformDbToProvider)
+  } catch (error) {
+    console.error('Error in getAllProviders:', error)
+    throw error
+  }
+}
