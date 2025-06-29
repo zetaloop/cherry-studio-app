@@ -94,3 +94,16 @@ export async function saveAssistant(assistant: Assistant): Promise<void> {
     throw new Error('Failed to save assistant')
   }
 }
+
+export async function createAssistant() {
+  const newAssistant: Assistant = {
+    id: uuid(),
+    name: i18n.t('assistant.default.name'),
+    prompt: i18n.t('assistant.default.prompt'),
+    topics: [],
+    type: 'assistant'
+  }
+
+  await saveAssistant(newAssistant)
+  return newAssistant
+}

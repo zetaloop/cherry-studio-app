@@ -11,6 +11,7 @@ import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { getSystemAssistants } from '@/config/assistants'
 import { NavigationProps } from '@/types/naviagate'
+import { createAssistant } from '@/services/AssistantService'
 
 export default function AssistantScreen() {
   const { t } = useTranslation()
@@ -22,8 +23,9 @@ export default function AssistantScreen() {
   const [showSaved, setShowSaved] = useState(false)
   const [showRecents, setShowRecents] = useState(false)
 
-  const onAddAssistant = () => {
-    navigation.navigate('AssistantDetailScreen', { assistantId: undefined, mode: 'create' })
+  const onAddAssistant = async () => {
+    const newAssistant = await createAssistant()
+    navigation.navigate('AssistantDetailScreen', { assistantId: newAssistant.id })
   }
 
   const handleRecentFilter = () => {

@@ -8,6 +8,7 @@ import { Button, Popover, Text, useWindowDimensions, XStack, YStack } from 'tama
 import { getAssistantById } from '@/services/AssistantService'
 import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
+import { useAssistant } from '@/hooks/useAssistant'
 
 interface AssistantDetailsProps {
   assistant: Assistant
@@ -56,40 +57,12 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
   const [open, setOpen] = useState(false)
   const { width } = useWindowDimensions()
   const navigation = useNavigation<NavigationProps>()
-  const [assistant, setAssistant] = useState<Assistant | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  // 这里必须要手动加 useCallback，否则会疯狂执行
-  const handleFocus = useCallback(() => {
-    //! 这段代码会引起 panic
-    let isActive = true
-    setIsLoading(true)
-    const fetchAssistant = async () => {
-      try {
-        const fetchedAssistant = await getAssistantById(assistantId)
-        if (isActive) {
-          setAssistant(fetchedAssistant)
-        }
-      } catch (error) {
-        console.error('Failed to fetch assistant:', error)
-      } finally {
-        if (isActive) {
-          setIsLoading(false)
-        }
-      }
-    }
-    fetchAssistant()
-    return () => {
-      isActive = false
-    }
-  }, [assistantId])
-
-  useFocusEffect(handleFocus)
+  const { assistant, isLoading } = useAssistant(assistantId)
 
   const navigateToAssistantDetailScreen = () => {
     if (!assistant) return
     setOpen(false)
-    navigation.navigate('AssistantDetailScreen', { assistantId: assistant.id, mode: 'edit' })
+    navigation.navigate('AssistantDetailScreen', { assistantId: assistant.id })
   }
 
   if (isLoading) {

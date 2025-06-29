@@ -26,7 +26,7 @@ export type RootStackParamList = {
   ApiServiceScreen: { providerId: string }
   TopicScreen: undefined
   AssistantScreen: undefined
-  AssistantDetailScreen: { assistantId?: string; mode: 'create' | 'edit' }
+  AssistantDetailScreen: { assistantId: string }
   AssistantMarketScreen: undefined
   WebSearchProviderSettingsScreen: { providerId: string }
 }

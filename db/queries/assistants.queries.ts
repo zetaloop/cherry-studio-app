@@ -10,7 +10,7 @@ import { assistants } from '../schema'
  * @param dbRecord - 从数据库检索的记录。
  * @returns 一个 Assistant 对象。
  */
-function transformDbToAssistant(dbRecord: any): Assistant {
+export function transformDbToAssistant(dbRecord: any): Assistant {
   const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
     if (typeof jsonString !== 'string') {
       return defaultValue

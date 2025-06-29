@@ -1,10 +1,9 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
-import { debounce } from 'lodash'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { Button, styled, Tabs, Text, useTheme, XStack, YStack } from 'tamagui'
+import { styled, Tabs, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
 import { ModelTabContent } from '@/components/assistant/ModelTabContent'
 import { PromptTabContent } from '@/components/assistant/PromptTabContent'
@@ -14,10 +13,9 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { AvatarEditButton } from '@/components/ui/AvatarEditButton'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { getAssistantById, getDefaultAssistant, saveAssistant } from '@/services/AssistantService'
-import { Assistant } from '@/types/assistant'
 import { RootStackParamList } from '@/types/naviagate'
-import { runAsyncFunction } from '@/utils'
+import { useAssistant } from '@/hooks/useAssistant'
+import { ActivityIndicator } from 'react-native'
 
 type AssistantDetailRouteProp = RouteProp<RootStackParamList, 'AssistantDetailScreen'>
 
@@ -27,51 +25,22 @@ export default function AssistantDetailScreen() {
   const navigation = useNavigation()
   const route = useRoute<AssistantDetailRouteProp>()
 
-  const { assistantId, mode } = route.params
+  const { assistantId } = route.params
   const [activeTab, setActiveTab] = useState('model')
-  const [localAssistant, setLocalAssistant] = useState<Assistant | null>(null)
-  const isInitialMount = useRef(true)
+  const { assistant, isLoading, updateAssistant } = useAssistant(assistantId)
 
-  const debouncedSave = debounce((assistant: Assistant) => {
-    runAsyncFunction(async () => {
-      await saveAssistant(assistant)
-    })
-  }, 500)
-  useEffect(() => {
-    runAsyncFunction(async () => {
-      if (assistantId) {
-        const assistant = await getAssistantById(assistantId)
-        setLocalAssistant(assistant)
-      } else if (mode === 'create') {
-        setLocalAssistant(await getDefaultAssistant())
-      }
-    })
-  }, [assistantId, mode])
-
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false
-      return
-    }
-
-    if (mode === 'edit' && localAssistant) {
-      debouncedSave(localAssistant)
-    }
-  }, [localAssistant, mode, debouncedSave])
-
-  const onSaveAssistant = async () => {
-    if (!localAssistant) {
-      console.error('No assistant to save')
-      return
-    }
-
-    await saveAssistant(localAssistant)
+  if (isLoading) {
+    return (
+      <View>
+        <ActivityIndicator />
+      </View>
+    )
   }
 
   return (
     <SafeAreaContainer>
       <HeaderBar
-        title={mode === 'create' ? t('assistants.title.create') : t('assistants.title.edit')}
+        title={!assistant?.emoji ? t('assistants.title.create') : t('assistants.title.edit')}
         onBackPress={() => navigation.goBack()}
       />
       <KeyboardAwareScrollView
@@ -82,8 +51,8 @@ export default function AssistantDetailScreen() {
         <SettingContainer>
           <XStack justifyContent="center" alignItems="center">
             <AvatarEditButton
-              content={localAssistant?.emoji || <DefaultProviderIcon />}
-              editIcon={localAssistant?.emoji ? <ArrowLeftRight size={24} /> : <PenLine size={24} />}
+              content={assistant?.emoji || <DefaultProviderIcon />}
+              editIcon={assistant?.emoji ? <ArrowLeftRight size={24} /> : <PenLine size={24} />}
               onEditPress={() => {
                 // 处理编辑逻辑
                 console.log('Edit avatar')
@@ -114,25 +83,18 @@ export default function AssistantDetailScreen() {
             </Tabs.List>
             <YStack flex={1} paddingTop={30}>
               <Tabs.Content value="prompt" flex={1} gap={30}>
-                <PromptTabContent assistant={localAssistant} />
+                <PromptTabContent assistant={assistant} />
               </Tabs.Content>
 
               <Tabs.Content value="model" flex={1} gap={30}>
-                <ModelTabContent assistant={localAssistant} setAssistant={setLocalAssistant} />
+                <ModelTabContent assistant={assistant} setAssistant={updateAssistant} />
               </Tabs.Content>
 
               <Tabs.Content value="tool" flex={1} gap={30}>
-                <ToolTabContent assistant={localAssistant} />
+                <ToolTabContent assistant={assistant} />
               </Tabs.Content>
             </YStack>
           </Tabs>
-          {mode === 'create' && (
-            <XStack paddingHorizontal={25} width="100%" justifyContent="center" alignItems="center">
-              <Button backgroundColor="$foregroundGreen" width="100%" borderRadius={48} onPress={onSaveAssistant}>
-                {t(`assistants.${mode === 'create' ? 'create' : 'save'}`)}
-              </Button>
-            </XStack>
-          )}
         </SettingContainer>
       </KeyboardAwareScrollView>
     </SafeAreaContainer>
