@@ -1,12 +1,7 @@
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetFooter,
-  BottomSheetScrollView,
-  BottomSheetView
-} from '@gorhom/bottom-sheet'
+import BottomSheet, { BottomSheetBackdrop, BottomSheetFooter, BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { usePreventRemove } from '@react-navigation/native'
 import React, { useImperativeHandle, useRef } from 'react'
-import { Text, useTheme, View } from 'tamagui'
+import { useTheme } from 'tamagui'
 
 interface ISheetProps {
   bottomSheetRef?: React.RefObject<BottomSheet | null>

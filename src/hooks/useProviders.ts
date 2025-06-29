@@ -1,10 +1,11 @@
-import { getSystemProviders } from '@/config/providers'
-import { db } from '../../db'
-import { providers as providersSchema } from '../../db/schema'
-import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
-import { transformDbToProvider, upsertProviders } from '../../db/queries/providers.queries'
 import { eq } from 'drizzle-orm'
+import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
+
 import { Provider } from '@/types/assistant'
+
+import { db } from '../../db'
+import { transformDbToProvider, upsertProviders } from '../../db/queries/providers.queries'
+import { providers as providersSchema } from '../../db/schema'
 
 export function useAllProviders() {
   const query = db.select().from(providersSchema)
@@ -16,6 +17,7 @@ export function useAllProviders() {
       isLoading: true
     }
   }
+
   const processedProviders = rawProviders.map(provider => transformDbToProvider(provider))
   return {
     providers: processedProviders,
@@ -27,9 +29,11 @@ export function useProvider(providerId: string) {
   console.log('useProvider', providerId)
   const query = db.select().from(providersSchema).where(eq(providersSchema.id, providerId))
   const { data: rawProvider, updatedAt } = useLiveQuery(query)
+
   const updateProvider = async (provider: Provider) => {
     await upsertProviders([provider])
   }
+
   if (!updatedAt) {
     return {
       provider: null,

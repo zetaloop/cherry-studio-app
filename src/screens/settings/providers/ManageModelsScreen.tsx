@@ -19,11 +19,11 @@ import { isReasoningModel } from '@/config/models/reasoning'
 import { isRerankModel } from '@/config/models/rerank'
 import { isVisionModel } from '@/config/models/vision'
 import { isWebSearchModel } from '@/config/models/webSearch'
+import { useProvider } from '@/hooks/useProviders'
 import { fetchModels } from '@/services/ApiService'
 import { Model, Provider } from '@/types/assistant'
 import { RootStackParamList } from '@/types/naviagate'
 import { getDefaultGroupName } from '@/utils/naming'
-import { useProvider } from '@/hooks/useProviders'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ManageModelsScreen'>
 
@@ -160,6 +160,7 @@ export default function ManageModelsScreen() {
     const fetchAndSetModels = async () => {
       if (!provider) return
       setIsLoading(true)
+
       try {
         const modelsFromApi = await fetchModels(provider)
         const transformedModels = transformApiModels(modelsFromApi, provider)

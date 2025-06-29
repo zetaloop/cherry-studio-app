@@ -2,7 +2,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { useNavigation } from '@react-navigation/native'
 import { BookmarkMinus } from '@tamagui/lucide-icons'
 import { debounce } from 'lodash'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Tabs, Text } from 'tamagui'
 
@@ -12,11 +12,11 @@ import CategoryAssistantsTab from '@/components/assistant/market/CategoryAssista
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { SearchInput } from '@/components/ui/SearchInput'
+import { useAssistants } from '@/hooks/useAssistant'
 import { Assistant } from '@/types/assistant'
 import { groupByCategories } from '@/utils/assistants'
 
 import SafeAreaContainer from '../../components/ui/SafeAreaContainer'
-import { useAssistants } from '@/hooks/useAssistant'
 interface TabConfig {
   value: string
   label: string

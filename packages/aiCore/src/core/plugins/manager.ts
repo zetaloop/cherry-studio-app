@@ -24,7 +24,7 @@ export class PluginManager {
    * 移除插件
    */
   remove(pluginName: string): this {
-    this.plugins = this.plugins.filter((p) => p.name !== pluginName)
+    this.plugins = this.plugins.filter(p => p.name !== pluginName)
     return this
   }
 
@@ -36,7 +36,7 @@ export class PluginManager {
     const normal: AiPlugin[] = []
     const post: AiPlugin[] = []
 
-    plugins.forEach((plugin) => {
+    plugins.forEach(plugin => {
       if (plugin.enforce === 'pre') {
         pre.push(plugin)
       } else if (plugin.enforce === 'post') {
@@ -59,13 +59,16 @@ export class PluginManager {
   ): Promise<T | null> {
     for (const plugin of this.plugins) {
       const hook = plugin[hookName]
+
       if (hook) {
         const result = await hook(arg, context)
+
         if (result !== null && result !== undefined) {
           return result as T
         }
       }
     }
+
     return null
   }
 
@@ -81,6 +84,7 @@ export class PluginManager {
 
     for (const plugin of this.plugins) {
       const hook = plugin[hookName]
+
       if (hook) {
         result = await hook(result, context)
       }
@@ -99,7 +103,7 @@ export class PluginManager {
     error?: Error
   ): Promise<void> {
     const promises = this.plugins
-      .map((plugin) => {
+      .map(plugin => {
         const hook = plugin[hookName]
         if (!hook) return null
 
@@ -110,6 +114,7 @@ export class PluginManager {
         } else if (hookName === 'onRequestStart') {
           return (hook as any)(context)
         }
+
         return null
       })
       .filter(Boolean)
@@ -121,18 +126,14 @@ export class PluginManager {
   /**
    * 收集所有流转换器（返回数组，AI SDK 原生支持）
    */
-  collectStreamTransforms<TOOLS extends ToolSet>(): Array<
-    (options: {
+  collectStreamTransforms<TOOLS extends ToolSet>(): ((options: {
+    tools?: TOOLS
+    stopStream: () => void
+  }) => TransformStream<TextStreamPart<TOOLS>, TextStreamPart<TOOLS>>)[] {
+    return this.plugins.map(plugin => plugin.transformStream).filter(Boolean) as ((options: {
       tools?: TOOLS
       stopStream: () => void
-    }) => TransformStream<TextStreamPart<TOOLS>, TextStreamPart<TOOLS>>
-  > {
-    return this.plugins.map((plugin) => plugin.transformStream).filter(Boolean) as Array<
-      (options: {
-        tools?: TOOLS
-        stopStream: () => void
-      }) => TransformStream<TextStreamPart<TOOLS>, TextStreamPart<TOOLS>>
-    >
+    }) => TransformStream<TextStreamPart<TOOLS>, TextStreamPart<TOOLS>>)[]
   }
 
   /**
@@ -163,14 +164,14 @@ export class PluginManager {
       }
     }
 
-    this.plugins.forEach((plugin) => {
+    this.plugins.forEach(plugin => {
       // 统计 enforce 类型
       if (plugin.enforce === 'pre') stats.pre++
       else if (plugin.enforce === 'post') stats.post++
       else stats.normal++
 
       // 统计钩子数量
-      Object.keys(stats.hooks).forEach((hookName) => {
+      Object.keys(stats.hooks).forEach(hookName => {
         if (plugin[hookName as keyof AiPlugin]) {
           stats.hooks[hookName as keyof typeof stats.hooks]++
         }

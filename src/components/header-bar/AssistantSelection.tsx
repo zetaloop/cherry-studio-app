@@ -1,14 +1,14 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { BookmarkMinus, ChevronDown, Settings2 } from '@tamagui/lucide-icons'
 import { BlurView } from 'expo-blur'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { Button, Popover, Text, useWindowDimensions, XStack, YStack } from 'tamagui'
 
+import { useAssistant } from '@/hooks/useAssistant'
 import { getAssistantById } from '@/services/AssistantService'
 import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
-import { useAssistant } from '@/hooks/useAssistant'
 
 interface AssistantDetailsProps {
   assistant: Assistant

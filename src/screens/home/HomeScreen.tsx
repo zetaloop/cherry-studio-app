@@ -6,6 +6,7 @@ import { styled, View, YStack } from 'tamagui'
 import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
+import { useAssistants } from '@/hooks/useAssistant'
 import { getDefaultAssistant } from '@/services/AssistantService'
 import { createNewTopic, getNewestTopic, getTopicById } from '@/services/TopicService'
 import { Assistant, Topic } from '@/types/assistant'
@@ -14,7 +15,6 @@ import { runAsyncFunction } from '@/utils'
 
 import ChatContent from './ChatContent'
 import WelcomeContent from './WelcomeContent'
-import { useAssistants } from '@/hooks/useAssistant'
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'HomeScreen'>
 
 const HomeScreen = () => {

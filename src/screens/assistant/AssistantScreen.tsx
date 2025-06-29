@@ -9,9 +9,9 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { NavigationProps } from '@/types/naviagate'
-import { createAssistant } from '@/services/AssistantService'
 import { useAssistants } from '@/hooks/useAssistant'
+import { createAssistant } from '@/services/AssistantService'
+import { NavigationProps } from '@/types/naviagate'
 
 export default function AssistantScreen() {
   const { t } = useTranslation()

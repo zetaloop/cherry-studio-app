@@ -85,7 +85,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic, onDelete }) => {
         console.error('Failed to fetch assistant:', error)
       }
     })
-  }, [])
+  }, [topic.assistantId])
 
   return (
     <ReanimatedSwipeable ref={swipeableRef} renderRightActions={renderRightActions} friction={1} rightThreshold={40}>

@@ -1,7 +1,7 @@
 import { ChevronRight } from '@tamagui/lucide-icons'
 import { AnimatePresence, MotiView } from 'moti'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Spinner, Text, View, XStack, YStack } from 'tamagui'
+import { Spinner, Text, XStack, YStack } from 'tamagui'
 
 import { MessageBlockStatus, ThinkingMessageBlock } from '@/types/message'
 
@@ -53,7 +53,7 @@ const MarqueeComponent: React.FC<Props> = ({ block, expanded }) => {
       processedLengthRef.current = content.length
       startOutputQueue()
     }
-  }, [block.content, startOutputQueue])
+  }, [block.content, isStreaming, startOutputQueue])
 
   useEffect(() => {
     return () => {

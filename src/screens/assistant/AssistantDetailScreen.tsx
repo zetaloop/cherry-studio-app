@@ -2,6 +2,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ArrowLeftRight, PenLine } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { styled, Tabs, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
@@ -13,9 +14,8 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { AvatarEditButton } from '@/components/ui/AvatarEditButton'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { RootStackParamList } from '@/types/naviagate'
 import { useAssistant } from '@/hooks/useAssistant'
-import { ActivityIndicator } from 'react-native'
+import { RootStackParamList } from '@/types/naviagate'
 
 type AssistantDetailRouteProp = RouteProp<RootStackParamList, 'AssistantDetailScreen'>
 
@@ -36,6 +36,7 @@ export default function AssistantDetailScreen() {
       </View>
     )
   }
+
   if (!assistant) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

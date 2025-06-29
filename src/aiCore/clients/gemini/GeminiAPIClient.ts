@@ -1,4 +1,5 @@
 import { GoogleGenAI, Model as GeminiModel, Tool } from '@google/genai'
+import { fetch } from 'expo/fetch'
 
 import { Provider } from '@/types/assistant'
 import {
@@ -10,7 +11,6 @@ import {
 } from '@/types/sdk'
 
 import { BaseApiClient } from '../BaseApiClient'
-import { fetch } from 'expo/fetch'
 
 export class GeminiAPIClient extends BaseApiClient<
   GoogleGenAI,

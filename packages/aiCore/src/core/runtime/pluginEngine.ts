@@ -29,7 +29,7 @@ export class PluginEngine<T extends ProviderId = ProviderId> {
    * 批量添加插件
    */
   usePlugins(plugins: AiPlugin[]): this {
-    plugins.forEach((plugin) => this.use(plugin))
+    plugins.forEach(plugin => this.use(plugin))
     return this
   }
 
