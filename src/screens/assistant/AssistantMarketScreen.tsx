@@ -2,7 +2,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { useNavigation } from '@react-navigation/native'
 import { BookmarkMinus } from '@tamagui/lucide-icons'
 import { debounce } from 'lodash'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Tabs, Text } from 'tamagui'
 
@@ -12,11 +12,11 @@ import CategoryAssistantsTab from '@/components/assistant/market/CategoryAssista
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { getSystemAssistants } from '@/config/assistants'
 import { Assistant } from '@/types/assistant'
 import { groupByCategories } from '@/utils/assistants'
 
 import SafeAreaContainer from '../../components/ui/SafeAreaContainer'
+import { useAssistants } from '@/hooks/useAssistant'
 interface TabConfig {
   value: string
   label: string
@@ -24,7 +24,6 @@ interface TabConfig {
 
 type FilterType = 'all' | string
 
-// !该页面可能存在性能问题（无重渲染问题）
 export default function AssistantMarketScreen() {
   const { t } = useTranslation()
   const navigation = useNavigation()
@@ -32,6 +31,7 @@ export default function AssistantMarketScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
   const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(null)
+  const { assistants: systemAssistants } = useAssistants()
 
   const handleBottomSheetClose = () => {
     setIsBottomSheetOpen(false)
@@ -46,8 +46,6 @@ export default function AssistantMarketScreen() {
   const [actualFilterType, setActualFilterType] = useState<FilterType>('all')
   const [searchText, setSearchText] = useState('')
   const [debouncedSearchText, setDebouncedSearchText] = useState('')
-
-  const systemAssistants = getSystemAssistants()
 
   const debouncedSetSearchText = debounce(setDebouncedSearchText, 300)
 

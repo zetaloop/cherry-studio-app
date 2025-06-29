@@ -9,9 +9,9 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { getSystemAssistants } from '@/config/assistants'
 import { NavigationProps } from '@/types/naviagate'
 import { createAssistant } from '@/services/AssistantService'
+import { useAssistants } from '@/hooks/useAssistant'
 
 export default function AssistantScreen() {
   const { t } = useTranslation()
@@ -22,6 +22,7 @@ export default function AssistantScreen() {
   const [showTags, setShowTags] = useState(false)
   const [showSaved, setShowSaved] = useState(false)
   const [showRecents, setShowRecents] = useState(false)
+  const { assistants } = useAssistants()
 
   const onAddAssistant = async () => {
     const newAssistant = await createAssistant()
@@ -89,7 +90,7 @@ export default function AssistantScreen() {
         </XStack>
         <ScrollView flex={1} gap={20}>
           <YStack gap={24}>
-            {getSystemAssistants().map(assistant => (
+            {assistants.map(assistant => (
               <AssistantItem key={assistant.id} assistant={assistant} />
             ))}
           </YStack>

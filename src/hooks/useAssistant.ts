@@ -29,3 +29,29 @@ export function useAssistant(assistantId: string) {
     updateAssistant
   }
 }
+
+export function useAssistants() {
+  const query = db.select().from(assistantsSchema)
+
+  const { data: rawAssistants, updatedAt } = useLiveQuery(query)
+
+  const updateAssistants = async (assistants: Assistant[]) => {
+    await upsertAssistants(assistants)
+  }
+
+  if (!updatedAt) {
+    return {
+      assistants: [],
+      isLoading: true,
+      updateAssistants
+    }
+  }
+
+  const processedAssistants = rawAssistants.map(provider => transformDbToAssistant(provider))
+
+  return {
+    assistants: processedAssistants,
+    isLoading: false,
+    updateAssistants
+  }
+}

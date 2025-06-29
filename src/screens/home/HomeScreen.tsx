@@ -6,7 +6,6 @@ import { styled, View, YStack } from 'tamagui'
 import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { getSystemAssistants } from '@/config/assistants'
 import { getDefaultAssistant } from '@/services/AssistantService'
 import { createNewTopic, getNewestTopic, getTopicById } from '@/services/TopicService'
 import { Assistant, Topic } from '@/types/assistant'
@@ -15,13 +14,14 @@ import { runAsyncFunction } from '@/utils'
 
 import ChatContent from './ChatContent'
 import WelcomeContent from './WelcomeContent'
+import { useAssistants } from '@/hooks/useAssistant'
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'HomeScreen'>
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProps>()
   const [assistant, setAssistant] = useState<Assistant | null>(null)
   const [topic, setTopic] = useState<Topic | null>(null)
-  const systemAssistants = getSystemAssistants()
+  const { assistants: systemAssistants } = useAssistants()
   const [hasMessages, setHasMessages] = useState(false)
   const route = useRoute<HomeScreenRouteProp>()
 
