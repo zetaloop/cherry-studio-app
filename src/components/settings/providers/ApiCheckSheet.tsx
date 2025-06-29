@@ -40,7 +40,7 @@ export function ApiCheckSheet({
   onStartModelCheck
 }: ApiCheckSheetProps) {
   const { t } = useTranslation()
-  const sheetSnapPoints = ['32%']
+  const sheetSnapPoints = ['40%']
 
   return (
     <ISheet bottomSheetRef={bottomSheetRef} isOpen={isOpen} onClose={onClose} snapPoints={sheetSnapPoints}>

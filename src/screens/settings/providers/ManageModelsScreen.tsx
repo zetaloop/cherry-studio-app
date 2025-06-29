@@ -20,15 +20,15 @@ import { isRerankModel } from '@/config/models/rerank'
 import { isVisionModel } from '@/config/models/vision'
 import { isWebSearchModel } from '@/config/models/webSearch'
 import { fetchModels } from '@/services/ApiService'
-import { getProviderById, saveProvider } from '@/services/ProviderService'
 import { Model, Provider } from '@/types/assistant'
 import { RootStackParamList } from '@/types/naviagate'
-import { runAsyncFunction } from '@/utils'
 import { getDefaultGroupName } from '@/utils/naming'
+import { useProvider } from '@/hooks/useProviders'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ManageModelsScreen'>
 
-// Check if the model exists in the provider's model list
+// --- Helper Functions (Extracted Logic) ---
+
 const getIsModelInProvider = (providerModels: Model[]) => {
   const providerModelIds = new Set(providerModels.map(m => m.id))
   return (modelId: string): boolean => providerModelIds.has(modelId)
@@ -38,6 +38,71 @@ const getIsAllInProvider = (isModelInProviderFunc: (modelId: string) => boolean)
   return (models: Model[]): boolean => models.every(model => isModelInProviderFunc(model.id))
 }
 
+const modelFilterFunctions = {
+  reasoning: isReasoningModel,
+  vision: isVisionModel,
+  websearch: isWebSearchModel,
+  free: isFreeModel,
+  embedding: isEmbeddingModel,
+  function_calling: isFunctionCallingModel,
+  rerank: isRerankModel
+}
+
+const filterModels = (models: Model[], searchText: string, filterType: string): Model[] => {
+  const lowercasedSearchText = searchText.toLowerCase()
+  const filterFn = modelFilterFunctions[filterType] || (() => true)
+
+  return models.filter(model => {
+    const matchesSearch =
+      !lowercasedSearchText ||
+      model.id.toLowerCase().includes(lowercasedSearchText) ||
+      model.name?.toLowerCase().includes(lowercasedSearchText)
+
+    return matchesSearch && filterFn(model)
+  })
+}
+
+const groupAndSortModels = (models: Model[], providerId: string) => {
+  const modelGroups =
+    providerId === 'dashscope'
+      ? {
+          ...groupBy(
+            models.filter(model => !model.id.startsWith('qwen')),
+            'group'
+          ),
+          ...groupQwenModels(models.filter(model => model.id.startsWith('qwen')))
+        }
+      : groupBy(models, 'group')
+
+  return Object.entries(modelGroups).sort(([a], [b]) => a.localeCompare(b))
+}
+
+const transformApiModels = (apiModels: any[], provider: Provider): Model[] => {
+  return apiModels
+    .map(model => ({
+      id: model?.id || model?.name,
+      name: model?.display_name || model?.displayName || model?.name || model?.id,
+      provider: provider.id,
+      group: getDefaultGroupName(model?.id || model?.name, provider.id),
+      description: model?.description || '',
+      owned_by: model?.owned_by || ''
+    }))
+    .filter(model => !isEmpty(model.name))
+}
+
+// --- Tab Configuration (Static) ---
+
+const TAB_CONFIGS = [
+  { value: 'all', i18nKey: 'models.type.all' },
+  { value: 'reasoning', i18nKey: 'models.type.reasoning' },
+  { value: 'vision', i18nKey: 'models.type.vision' },
+  { value: 'websearch', i18nKey: 'models.type.websearch' },
+  { value: 'free', i18nKey: 'models.type.free' },
+  { value: 'embedding', i18nKey: 'models.type.embedding' },
+  { value: 'rerank', i18nKey: 'models.type.rerank' },
+  { value: 'function_calling', i18nKey: 'models.type.function_calling' }
+]
+
 export default function ManageModelsScreen() {
   const { t } = useTranslation()
   const theme = useTheme()
@@ -46,12 +111,12 @@ export default function ManageModelsScreen() {
 
   const [searchText, setSearchText] = useState('')
   const [debouncedSearchText, setDebouncedSearchText] = useState('')
-  const [listModels, setListModels] = useState<Model[]>([])
-  const [actualFilterType, setActualFilterType] = useState<string>('all')
-  const [provider, setProvider] = useState<Provider | null>(null)
+  const [allModels, setAllModels] = useState<Model[]>([])
+  const [activeFilterType, setActiveFilterType] = useState<string>('all')
   const [isLoading, setIsLoading] = useState(true)
 
   const { providerId } = route.params
+  const { provider, updateProvider } = useProvider(providerId)
 
   const isModelInCurrentProvider = getIsModelInProvider(provider?.models || [])
   const isAllModelsInCurrentProvider = getIsAllInProvider(isModelInCurrentProvider)
@@ -60,148 +125,55 @@ export default function ManageModelsScreen() {
   const debouncedSetSearchText = debounce(setDebouncedSearchText, 300)
 
   useEffect(() => {
-    debouncedSetSearchText(searchText)
+    const handler = debounce(() => setDebouncedSearchText(searchText), 300)
+    handler()
+    return () => handler.cancel()
+  }, [searchText])
 
-    return () => {
-      debouncedSetSearchText.cancel()
-    }
-  }, [searchText, debouncedSetSearchText])
+  const filteredModels = filterModels(allModels, debouncedSearchText, activeFilterType)
+  const sortedModelGroups = groupAndSortModels(filteredModels, provider?.id || '')
 
-  const allModels = uniqBy(listModels, 'id')
-
-  const list = allModels.filter(model => {
-    if (
-      debouncedSearchText &&
-      !model.id.toLocaleLowerCase().includes(debouncedSearchText.toLocaleLowerCase()) &&
-      !model.name?.toLocaleLowerCase().includes(debouncedSearchText.toLocaleLowerCase())
-    ) {
-      return false
-    }
-
-    switch (actualFilterType) {
-      case 'reasoning':
-        return isReasoningModel(model)
-      case 'vision':
-        return isVisionModel(model)
-      case 'websearch':
-        return isWebSearchModel(model)
-      case 'free':
-        return isFreeModel(model)
-      case 'embedding':
-        return isEmbeddingModel(model)
-      case 'function_calling':
-        return isFunctionCallingModel(model)
-      case 'rerank':
-        return isRerankModel(model)
-      default:
-        return true
-    }
-  })
-
-  const modelGroups =
-    provider?.id === 'dashscope'
-      ? {
-          ...groupBy(
-            list.filter(model => !model.id.startsWith('qwen')),
-            'group'
-          ),
-          ...groupQwenModels(list.filter(model => model.id.startsWith('qwen')))
-        }
-      : groupBy(list, 'group')
-
-  const sortedModelGroups = Object.entries(modelGroups).sort(([a], [b]) => a.localeCompare(b))
-
-  const tabConfigs = [
-    { value: 'all', label: t('models.type.all') },
-    { value: 'reasoning', label: t('models.type.reasoning') },
-    { value: 'vision', label: t('models.type.vision') },
-    { value: 'websearch', label: t('models.type.websearch') },
-    { value: 'free', label: t('models.type.free') },
-    { value: 'embedding', label: t('models.type.embedding') },
-    { value: 'rerank', label: t('models.type.rerank') },
-    { value: 'function_calling', label: t('models.type.function_calling') }
-  ]
-
-  // 添加通用 tab 样式函数
-  const getTabStyle = (tabValue: string) => ({
-    height: '100%',
-    backgroundColor: actualFilterType === tabValue ? '$background' : 'transparent',
-    borderRadius: 15
-  })
-
-  const onAddModel = (model: Model) => {
+  const handleUpdateModels = async (newModels: Model[]) => {
     if (!provider) return
-    const updatedProvider = {
-      ...provider,
-      models: uniqBy([...provider.models, model], 'id')
-    }
-    setProvider(updatedProvider)
-    runAsyncFunction(async () => saveProvider(updatedProvider))
+    const updatedProvider = { ...provider, models: newModels }
+    await updateProvider(updatedProvider)
   }
 
-  const onRemoveModel = (model: Model) => {
-    if (!provider) return
-    const updatedProvider = {
-      ...provider,
-      models: provider.models.filter(m => m.id !== model.id)
-    }
-    setProvider(updatedProvider)
-    runAsyncFunction(async () => saveProvider(updatedProvider))
+  const onAddModel = async (model: Model) => {
+    await handleUpdateModels(uniqBy([...(provider?.models || []), model], 'id'))
   }
 
-  const onAddAllModels = (modelsToAdd: Model[]) => {
-    if (!provider) return
-    const updatedProvider = {
-      ...provider,
-      models: uniqBy([...provider.models, ...modelsToAdd], 'id')
-    }
-    setProvider(updatedProvider)
-    runAsyncFunction(async () => saveProvider(updatedProvider))
+  const onRemoveModel = async (model: Model) => {
+    await handleUpdateModels((provider?.models || []).filter(m => m.id !== model.id))
   }
 
-  const onRemoveAllModels = (modelsToRemove: Model[]) => {
-    if (!provider) return
+  const onAddAllModels = async (modelsToAdd: Model[]) => {
+    await handleUpdateModels(uniqBy([...(provider?.models || []), ...modelsToAdd], 'id'))
+  }
+
+  const onRemoveAllModels = async (modelsToRemove: Model[]) => {
     const modelsToRemoveIds = new Set(modelsToRemove.map(m => m.id))
-    const updatedProvider = {
-      ...provider,
-      models: provider.models.filter(m => !modelsToRemoveIds.has(m.id))
-    }
-    setProvider(updatedProvider)
-    runAsyncFunction(async () => saveProvider(updatedProvider))
+    await handleUpdateModels((provider?.models || []).filter(m => !modelsToRemoveIds.has(m.id)))
   }
 
   useEffect(() => {
-    //! 这段代码会引起 panic
-    setIsLoading(true)
-    runAsyncFunction(async () => {
+    const fetchAndSetModels = async () => {
+      if (!provider) return
+      setIsLoading(true)
       try {
-        const p = await getProviderById(providerId)
-        setProvider(p)
-        const models = await fetchModels(p)
-        setListModels(
-          models
-            .map(model => ({
-              // @ts-ignore modelId
-              id: model?.id || model?.name,
-              // @ts-ignore name
-              name: model?.display_name || model?.displayName || model?.name || model?.id,
-              provider: p.id,
-              // @ts-ignore group
-              group: getDefaultGroupName(model?.id || model?.name, p.id),
-              // @ts-ignore description
-              description: model?.description || '',
-              // @ts-ignore owned_by
-              owned_by: model?.owned_by || ''
-            }))
-            .filter(model => !isEmpty(model.name))
-        )
+        const modelsFromApi = await fetchModels(provider)
+        const transformedModels = transformApiModels(modelsFromApi, provider)
+        setAllModels(uniqBy(transformedModels, 'id'))
       } catch (error) {
         console.error('Failed to fetch models', error)
+        setAllModels([])
       } finally {
         setIsLoading(false)
       }
-    })
-  }, [providerId])
+    }
+
+    fetchAndSetModels()
+  }, [provider?.id])
 
   const renderModelGroupItem = ({ item: [groupName, currentModels], index }: ListRenderItemInfo<[string, Model[]]>) => (
     <ModelGroup
@@ -244,6 +216,12 @@ export default function ManageModelsScreen() {
     />
   )
 
+  const getTabStyle = (isActive: boolean) => ({
+    height: '100%',
+    backgroundColor: isActive ? '$background' : 'transparent',
+    borderRadius: 15
+  })
+
   return (
     <SafeAreaContainer
       style={{
@@ -255,16 +233,16 @@ export default function ManageModelsScreen() {
         {/* Filter Tabs */}
         <Tabs
           defaultValue="all"
-          value={actualFilterType}
-          onValueChange={setActualFilterType}
+          value={activeFilterType}
+          onValueChange={setActiveFilterType}
           orientation="horizontal"
           flexDirection="column"
           height={34}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <Tabs.List aria-label="Model filter tabs" gap="10" flexDirection="row">
-              {tabConfigs.map(({ value, label }) => (
-                <Tabs.Tab key={value} value={value} {...getTabStyle(value)}>
-                  <Text>{label}</Text>
+              {TAB_CONFIGS.map(({ value, i18nKey }) => (
+                <Tabs.Tab key={value} value={value} {...getTabStyle(activeFilterType === value)}>
+                  <Text>{t(i18nKey)}</Text>
                 </Tabs.Tab>
               ))}
             </Tabs.List>

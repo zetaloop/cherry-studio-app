@@ -19,6 +19,7 @@ import { CustomSwitch } from '@/components/ui/Switch'
 import { getProviderById, saveProvider } from '@/services/ProviderService'
 import { Model, Provider } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
+import { useProvider } from '@/hooks/useProviders'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ProviderSettingsScreen'>
 
@@ -42,17 +43,7 @@ export default function ProviderSettingsScreen() {
   }
 
   const { providerId } = route.params
-  const [provider, setProvider] = useState<Provider | null>(null)
-
-  const handleFocus = useCallback(() => {
-    getProviderById(providerId)
-      .then(setProvider)
-      .catch(error => {
-        console.error('Failed to fetch provider:', error)
-      })
-  },[providerId])
-
-  useFocusEffect(handleFocus)
+  const { provider, isLoading, updateProvider } = useProvider(providerId)
 
   // Debounce search text
   const debouncedSetSearchText = debounce(setDebouncedSearchText, 300)
@@ -105,20 +96,31 @@ export default function ProviderSettingsScreen() {
       const updatedProvider = { ...provider, enabled: checked }
 
       try {
-        await saveProvider(updatedProvider)
-        setProvider(updatedProvider)
+        await updateProvider(updatedProvider)
       } catch (error) {
         console.error('Failed to save provider:', error)
       }
     }
   }
 
-  if (!provider) {
+  if (isLoading) {
     // todo 会产生白屏动画
     return (
       <View>
         <ActivityIndicator />
       </View>
+    )
+  }
+  if (!provider) {
+    return (
+      <SafeAreaContainer>
+        <HeaderBar title={t('settings.provider.not_found')} onBackPress={() => navigation.goBack()} />
+        <SettingContainer>
+          <Text textAlign="center" color="$gray10" paddingVertical={24}>
+            {t('settings.provider.not_found_message')}
+          </Text>
+        </SettingContainer>
+      </SafeAreaContainer>
     )
   }
 

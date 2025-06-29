@@ -1,30 +1,47 @@
 import { getSystemProviders } from '@/config/providers'
+import { db } from '../../db'
+import { providers as providersSchema } from '../../db/schema'
+import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
+import { transformDbToProvider, upsertProviders } from '../../db/queries/providers.queries'
+import { eq } from 'drizzle-orm'
+import { Provider } from '@/types/assistant'
 
 export function useAllProviders() {
-  // todo get all providers from database
+  const query = db.select().from(providersSchema)
+  const { data: rawProviders, updatedAt } = useLiveQuery(query)
+
+  if (!updatedAt) {
+    return {
+      providers: [],
+      isLoading: true
+    }
+  }
+  const processedProviders = rawProviders.map(provider => transformDbToProvider(provider))
   return {
-    providers: getSystemProviders()
+    providers: processedProviders,
+    isLoading: false
   }
 }
 
-export function useProviders() {
-  // todo get all providers from database
-  const providers = getSystemProviders().filter(provider => provider.enabled)
-  return {
-    providers: providers
+export function useProvider(providerId: string) {
+  console.log('useProvider', providerId)
+  const query = db.select().from(providersSchema).where(eq(providersSchema.id, providerId))
+  const { data: rawProvider, updatedAt } = useLiveQuery(query)
+  const updateProvider = async (provider: Provider) => {
+    await upsertProviders([provider])
   }
-}
-
-export function useProvider(id: string) {
-  // todo get all providers from database
-  const provider = getSystemProviders().find(p => p.id === id)
-
-  if (!provider) {
-    throw new Error(`Provider with id ${id} not found`)
+  if (!updatedAt) {
+    return {
+      provider: null,
+      isLoading: true,
+      updateProvider
+    }
   }
 
+  const provider = transformDbToProvider(rawProvider[0])
   return {
     provider,
-    models: provider?.models || []
+    isLoading: false,
+    updateProvider
   }
 }

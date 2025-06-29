@@ -10,7 +10,7 @@ import { providers } from '../schema'
  * @param dbRecord - 从数据库检索的记录。
  * @returns 一个 Provider 对象。
  */
-function transformDbToProvider(dbRecord: any): Provider {
+export function transformDbToProvider(dbRecord: any): Provider {
   const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
     if (typeof jsonString !== 'string') {
       return defaultValue

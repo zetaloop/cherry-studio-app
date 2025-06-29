@@ -4,7 +4,7 @@ import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import { sortBy } from 'lodash'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
+import { Button, Input, Stack, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
 import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
@@ -13,11 +13,11 @@ import { ApiCheckSheet } from '@/components/settings/providers/ApiCheckSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { checkApi } from '@/services/ApiService'
-import { getProviderById, saveProvider } from '@/services/ProviderService'
-import { Model, Provider } from '@/types/assistant'
+import { Model } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
-import { runAsyncFunction } from '@/utils'
 import { getModelUniqId } from '@/utils/model'
+import { useProvider } from '@/hooks/useProviders'
+import { ActivityIndicator } from 'react-native'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ApiServiceScreen'>
 
@@ -28,7 +28,7 @@ export default function ApiServiceScreen() {
   const route = useRoute<ProviderSettingsRouteProp>()
 
   const { providerId } = route.params
-  const [provider, setProvider] = useState<Provider | undefined>()
+  const { provider, isLoading, updateProvider } = useProvider(providerId)
 
   const [showApiKey, setShowApiKey] = useState(false)
   const [selectedModel, setSelectedModel] = useState<Model | undefined>()
@@ -36,14 +36,27 @@ export default function ApiServiceScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
-  useEffect(() => {
-    runAsyncFunction(async () => {
-      const providerData = await getProviderById(providerId)
-      setProvider(providerData)
-    })
-  }, [providerId])
+  if (isLoading) {
+    return (
+      <View>
+        <ActivityIndicator />
+      </View>
+    )
+  }
+  if (!provider) {
+    return (
+      <SafeAreaContainer>
+        <HeaderBar title={t('settings.provider.not_found')} onBackPress={() => navigation.goBack()} />
+        <SettingContainer>
+          <Text textAlign="center" color="$gray10" paddingVertical={24}>
+            {t('settings.provider.not_found_message')}
+          </Text>
+        </SettingContainer>
+      </SafeAreaContainer>
+    )
+  }
 
-  const selectOptions = !provider?.models?.length
+  const selectOptions = !provider.models?.length
     ? []
     : [
         {
@@ -83,12 +96,9 @@ export default function ApiServiceScreen() {
     setShowApiKey(prevShowApiKey => !prevShowApiKey)
   }
 
-  const handleProviderConfigChange = (key: 'apiKey' | 'apiHost', value: string) => {
-    if (!provider) return
-
+  const handleProviderConfigChange = async (key: 'apiKey' | 'apiHost', value: string) => {
     const updatedProvider = { ...provider, [key]: value }
-    setProvider(updatedProvider)
-    saveProvider(updatedProvider)
+    await updateProvider(updatedProvider)
   }
 
   const handleBackPress = () => {
@@ -97,7 +107,7 @@ export default function ApiServiceScreen() {
 
   // 模型检测处理
   const handleStartModelCheck = async () => {
-    if (!selectedModel || !provider) return
+    if (!selectedModel) return
 
     try {
       await checkApi(provider, selectedModel)
