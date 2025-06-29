@@ -23,7 +23,7 @@ const ThinkingBlock: React.FC<Props> = ({ block }) => {
       <Pressable onPress={toggleExpanded}>
         <MarqueeComponent block={block} expanded={expanded} />
       </Pressable>
-      {!expanded && (
+      {expanded && (
         <View style={styles.contentContainer}>
           <ReactNativeMarkdown block={block} />
         </View>
@@ -34,6 +34,8 @@ const ThinkingBlock: React.FC<Props> = ({ block }) => {
 
 const styles = StyleSheet.create({
   container: {
+    // TODO: 里面的文本不会自动撑开，当有文字时才会撑开，不知道为什么，这里目前先写死
+    width: 340,
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 16,
@@ -43,8 +45,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   contentContainer: {
-    marginTop: 8,
-    padding: 12,
+    paddingHorizontal: 0,
+    paddingVertical: 5,
     borderRadius: 8
   }
 })
