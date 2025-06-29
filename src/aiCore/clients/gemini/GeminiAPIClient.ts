@@ -10,6 +10,7 @@ import {
 } from '@/types/sdk'
 
 import { BaseApiClient } from '../BaseApiClient'
+import { fetch } from 'expo/fetch'
 
 export class GeminiAPIClient extends BaseApiClient<
   GoogleGenAI,
@@ -25,15 +26,23 @@ export class GeminiAPIClient extends BaseApiClient<
   }
 
   override async listModels(): Promise<GeminiModel[]> {
-    const sdk = await this.getSdkInstance()
-    const response = await sdk.models.list()
-    const models: GeminiModel[] = []
-
-    for await (const model of response) {
-      models.push(model)
+    const response = await fetch(`${this.getBaseURL()}/v1beta/models?key=${this.apiKey}`, {
+      method: 'GET'
+    }).then(res => res.json())
+    if (!response || !response.models) {
+      throw new Error('Failed to fetch models from Gemini API')
     }
+    console.log('Gemini models:', response.models)
+    return response.models as GeminiModel[]
+    // const sdk = await this.getSdkInstance()
+    // const response = await sdk.models.list()
+    // const models: GeminiModel[] = []
 
-    return models
+    // for await (const model of response) {
+    //   models.push(model)
+    // }
+
+    // return models
   }
 
   override async getSdkInstance() {
