@@ -1,15 +1,24 @@
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet'
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetFooter,
+  BottomSheetScrollView,
+  BottomSheetView
+} from '@gorhom/bottom-sheet'
 import { usePreventRemove } from '@react-navigation/native'
 import React, { useImperativeHandle, useRef } from 'react'
-import { useTheme } from 'tamagui'
+import { Text, useTheme, View } from 'tamagui'
 
 interface ISheetProps {
   bottomSheetRef?: React.RefObject<BottomSheet | null>
   isOpen: boolean
   onClose: () => void
   snapPoints: string[]
+  maxDynamicContentSize?: number
+  header?: React.ReactNode
   children: React.ReactNode
+  footer?: React.ReactNode
   enablePanDownToClose?: boolean
+  enableDynamicSizing?: boolean
 }
 
 export function ISheet({
@@ -17,8 +26,12 @@ export function ISheet({
   isOpen,
   onClose,
   snapPoints,
+  maxDynamicContentSize,
   children,
-  enablePanDownToClose = true
+  footer,
+  header,
+  enablePanDownToClose = true,
+  enableDynamicSizing = true
 }: ISheetProps) {
   const theme = useTheme()
   const memoizedSnapPoints = snapPoints
@@ -39,13 +52,18 @@ export function ISheet({
     <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.8} />
   )
 
+  const renderFooter = props => <BottomSheetFooter {...props}>{footer}</BottomSheetFooter>
+
   return (
     <BottomSheet
+      enableDynamicSizing={enableDynamicSizing}
+      maxDynamicContentSize={maxDynamicContentSize}
       ref={ref}
       index={sheetIndex}
       snapPoints={memoizedSnapPoints}
       enablePanDownToClose={enablePanDownToClose}
       backdropComponent={renderBackdrop}
+      footerComponent={renderFooter}
       onClose={onClose} // 当用户通过手势关闭或调用 close() 方法时触发
       backgroundStyle={{
         borderRadius: 30,
@@ -54,7 +72,10 @@ export function ISheet({
       handleIndicatorStyle={{
         backgroundColor: theme.color.val
       }}>
-      <BottomSheetView style={{ flex: 1 }}>{children}</BottomSheetView>
+      {header}
+      <BottomSheetScrollView showsVerticalScrollIndicator={false} enableFooterMarginAdjustment style={{ flex: 1 }}>
+        {children}
+      </BottomSheetScrollView>
     </BottomSheet>
   )
 }

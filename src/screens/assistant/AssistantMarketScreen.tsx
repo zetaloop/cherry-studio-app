@@ -31,6 +31,7 @@ export default function AssistantMarketScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
   const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(null)
+  //TODO: hook 会反复执行引起性能问题
   const { assistants: systemAssistants } = useAssistants()
 
   const handleBottomSheetClose = () => {

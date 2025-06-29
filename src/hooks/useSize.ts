@@ -19,3 +19,19 @@ export const useWidth = (size: Size) => {
 
   return width >= size
 }
+
+export const useSize = () => {
+  if (typeof window === 'undefined') {
+    return {
+      width: 0,
+      height: 0
+    }
+  }
+
+  const { width, height } = useWindowDimensions()
+
+  return {
+    width,
+    height
+  }
+}
