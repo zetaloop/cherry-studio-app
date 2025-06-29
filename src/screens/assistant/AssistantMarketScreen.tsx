@@ -24,6 +24,7 @@ interface TabConfig {
 
 type FilterType = 'all' | string
 
+// !该页面可能存在性能问题（无重渲染问题）
 export default function AssistantMarketScreen() {
   const { t } = useTranslation()
   const navigation = useNavigation()
@@ -59,8 +60,7 @@ export default function AssistantMarketScreen() {
   }, [searchText, debouncedSetSearchText])
 
   // Filter assistants by search text first
-  // !test
-  const getBaseFilteredAssistantsget = (getSystemAssistants: Assistant[], debouncedSearchText: string) => {
+  const getBaseFilteredAssistants = (systemAssistants: Assistant[], debouncedSearchText: string) => {
     if (!debouncedSearchText) {
       return systemAssistants
     }
@@ -78,7 +78,7 @@ export default function AssistantMarketScreen() {
     )
   }
 
-  const baseFilteredAssistants = getBaseFilteredAssistantsget(systemAssistants, debouncedSearchText)
+  const baseFilteredAssistants = getBaseFilteredAssistants(systemAssistants, debouncedSearchText)
 
   const assistantGroupsForDisplay = groupByCategories(baseFilteredAssistants)
 
