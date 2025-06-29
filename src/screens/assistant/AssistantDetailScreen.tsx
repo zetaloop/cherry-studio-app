@@ -36,6 +36,13 @@ export default function AssistantDetailScreen() {
       </View>
     )
   }
+  if (!assistant) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>{t('assistants.error.notFound')}</Text>
+      </View>
+    )
+  }
 
   return (
     <SafeAreaContainer>
@@ -83,15 +90,15 @@ export default function AssistantDetailScreen() {
             </Tabs.List>
             <YStack flex={1} paddingTop={30}>
               <Tabs.Content value="prompt" flex={1} gap={30}>
-                <PromptTabContent assistant={assistant} />
+                <PromptTabContent assistant={assistant} updateAssistant={updateAssistant} />
               </Tabs.Content>
 
               <Tabs.Content value="model" flex={1} gap={30}>
-                <ModelTabContent assistant={assistant} setAssistant={updateAssistant} />
+                <ModelTabContent assistant={assistant} updateAssistant={updateAssistant} />
               </Tabs.Content>
 
               <Tabs.Content value="tool" flex={1} gap={30}>
-                <ToolTabContent assistant={assistant} />
+                <ToolTabContent assistant={assistant} updateAssistant={updateAssistant} />
               </Tabs.Content>
             </YStack>
           </Tabs>

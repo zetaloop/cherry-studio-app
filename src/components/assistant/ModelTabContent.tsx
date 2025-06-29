@@ -16,11 +16,11 @@ import { CustomSwitch } from '../ui/Switch'
 import { ReasoningSelect } from './ReasoningSelect'
 
 interface ModelTabContentProps {
-  assistant: Assistant | null
-  setAssistant: (assistant: Assistant) => void
+  assistant: Assistant
+  updateAssistant: (assistant: Assistant) => void
 }
 
-export function ModelTabContent({ assistant, setAssistant }: ModelTabContentProps) {
+export function ModelTabContent({ assistant, updateAssistant }: ModelTabContentProps) {
   const { t } = useTranslation()
 
   const [providers, setProviders] = useState<Provider[]>([])
@@ -51,7 +51,7 @@ export function ModelTabContent({ assistant, setAssistant }: ModelTabContentProp
     }))
 
   const handleModelChange = (value: string) => {
-    if (!assistant || !value) {
+    if (!value) {
       return
     }
 
@@ -67,7 +67,7 @@ export function ModelTabContent({ assistant, setAssistant }: ModelTabContentProp
     }
 
     if (modelToSet) {
-      setAssistant({
+      updateAssistant({
         ...assistant,
         model: modelToSet
       })
@@ -75,8 +75,7 @@ export function ModelTabContent({ assistant, setAssistant }: ModelTabContentProp
   }
 
   const handleSettingsChange = (key: keyof AssistantSettings, value: any) => {
-    if (!assistant) return
-    setAssistant({
+    updateAssistant({
       ...assistant,
       settings: {
         ...assistant.settings,
@@ -96,10 +95,6 @@ export function ModelTabContent({ assistant, setAssistant }: ModelTabContentProp
     if (!isNaN(numValue) && numValue > 0) {
       handleSettingsChange('maxTokens', numValue)
     }
-  }
-
-  if (!assistant) {
-    return null
   }
 
   const settings = assistant.settings || {}
