@@ -4,6 +4,7 @@ import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import { sortBy } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator } from 'react-native'
 import { Button, Input, Stack, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
@@ -12,12 +13,11 @@ import { HeaderBar } from '@/components/settings/HeaderBar'
 import { ApiCheckSheet } from '@/components/settings/providers/ApiCheckSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
+import { useProvider } from '@/hooks/useProviders'
 import { checkApi } from '@/services/ApiService'
 import { Model } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { getModelUniqId } from '@/utils/model'
-import { useProvider } from '@/hooks/useProviders'
-import { ActivityIndicator } from 'react-native'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ApiServiceScreen'>
 
@@ -43,6 +43,7 @@ export default function ApiServiceScreen() {
       </View>
     )
   }
+
   if (!provider) {
     return (
       <SafeAreaContainer>

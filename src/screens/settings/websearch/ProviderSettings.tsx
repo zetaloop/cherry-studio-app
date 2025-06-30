@@ -16,11 +16,7 @@ export default function ProviderSettings() {
         <SettingGroupTitle>{t('settings.websearch.provider.free.title')}</SettingGroupTitle>
         <SettingGroup>
           {freeProviders.map((provider, index) => (
-            <WebsearchProviderRow
-              key={index}
-              provider={provider}
-              need_config={provider.id === 'searxng' ? true : false}
-            />
+            <WebsearchProviderRow key={index} provider={provider} need_config={provider.id === 'searxng'} />
           ))}
         </SettingGroup>
       </YStack>

@@ -1,6 +1,7 @@
 import { Directory, File, Paths } from 'expo-file-system/next'
 
 import { FileType } from '@/types/file'
+
 const fileStorageDir = new Directory(Paths.cache, 'Files')
 
 export async function uploadFiles(files: FileType[]): Promise<FileType[]> {
@@ -22,7 +23,6 @@ export async function uploadFiles(files: FileType[]): Promise<FileType[]> {
       throw new Error(`Failed to upload file: ${file.name}`)
     }
   })
-  const uploadedFiles = await Promise.all(filePromises)
 
-  return uploadedFiles
+  return await Promise.all(filePromises)
 }
