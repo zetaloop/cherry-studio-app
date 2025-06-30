@@ -16,10 +16,9 @@ import { ModelGroup } from '@/components/settings/providers/ModelGroup'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { CustomSwitch } from '@/components/ui/Switch'
-import { getProviderById, saveProvider } from '@/services/ProviderService'
+import { useProvider } from '@/hooks/useProviders'
 import { Model, Provider } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
-import { useProvider } from '@/hooks/useProviders'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ProviderSettingsScreen'>
 
@@ -111,6 +110,7 @@ export default function ProviderSettingsScreen() {
       </View>
     )
   }
+
   if (!provider) {
     return (
       <SafeAreaContainer>
