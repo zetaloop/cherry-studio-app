@@ -22,6 +22,7 @@ import {
   createThinkingBlock
 } from '@/utils/messageUtils/create'
 import { getMainTextContent } from '@/utils/messageUtils/find'
+import { getTopicQueue } from '@/utils/queue'
 
 import { updateOneBlock, upsertBlocks } from '../../db/queries/messageBlocks.queries'
 import { getMessageById, getMessagesByTopicId, upsertMessages } from '../../db/queries/messages.queries'
@@ -120,6 +121,12 @@ export async function sendMessage(
   topicId: Topic['id']
 ) {
   try {
+    // mock mentions model
+    userMessage.mentions = [
+      { id: 'deepseek-ai/DeepSeek-V3', name: 'deepseek-ai/DeepSeek-V3', provider: 'silicon', group: 'deepseek-ai' },
+      { id: 'deepseek-ai/DeepSeek-R1', name: 'deepseek-ai/DeepSeek-R1', provider: 'silicon', group: 'deepseek-ai' }
+    ]
+
     if (userMessage.blocks.length === 0) {
       console.warn('sendMessage: No blocks in the provided message.')
       return
@@ -129,13 +136,19 @@ export async function sendMessage(
     await saveMessageAndBlocksToDB(userMessage, userMessageBlocks)
     await upsertMessages(userMessage)
 
-    const assistantMessage = createAssistantMessage(assistant.id, topicId, {
-      askId: userMessage.id,
-      model: assistant.model
-    })
-    await saveMessageAndBlocksToDB(assistantMessage, [])
-    await upsertMessages(assistantMessage)
-    await fetchAndProcessAssistantResponseImpl(topicId, assistant, assistantMessage)
+    const mentionedModels = userMessage.mentions
+
+    if (mentionedModels && mentionedModels.length > 0) {
+      await multiModelResponses(topicId, assistant, userMessage, mentionedModels)
+    } else {
+      const assistantMessage = createAssistantMessage(assistant.id, topicId, {
+        askId: userMessage.id,
+        model: assistant.model
+      })
+      await saveMessageAndBlocksToDB(assistantMessage, [])
+      await upsertMessages(assistantMessage)
+      await fetchAndProcessAssistantResponseImpl(topicId, assistant, assistantMessage)
+    }
   } catch (error) {
     console.error('Error in sendMessage:', error)
   }
@@ -174,10 +187,11 @@ export async function saveMessageAndBlocksToDB(message: Message, blocks: Message
   }
 }
 
+// Internal function extracted from sendMessage to handle fetching and processing assistant response
 export async function fetchAndProcessAssistantResponseImpl(
   topicId: string,
   assistant: Assistant,
-  assistantMessage: Message // Pass the prepared assistant message (new or reset)
+  assistantMessage: Message
 ) {
   const assistantMsgId = assistantMessage.id
   let callbacks: StreamProcessorCallbacks = {}
@@ -536,3 +550,37 @@ export async function fetchAndProcessAssistantResponseImpl(
     console.error('Error in fetchAndProcessAssistantResponseImpl:', error)
   }
 }
+
+// --- Helper Function for Multi-Model Dispatch ---
+// 多模型创建和发送请求的逻辑，用于用户消息多模型发送和重发
+export async function multiModelResponses(
+  topicId: string,
+  assistant: Assistant,
+  triggeringMessage: Message, // userMessage or messageToResend
+  mentionedModels: Model[]
+) {
+  console.log('multiModelResponses')
+  const assistantMessageStubs: Message[] = []
+  const tasksToQueue: { assistantConfig: Assistant; messageStub: Message }[] = []
+
+  for (const mentionedModel of mentionedModels) {
+    const assistantForThisMention = { ...assistant, model: mentionedModel }
+    const assistantMessage = createAssistantMessage(assistant.id, topicId, {
+      askId: triggeringMessage.id,
+      model: mentionedModel,
+      modelId: mentionedModel.id
+    })
+    await upsertMessages(assistantMessage)
+    assistantMessageStubs.push(assistantMessage)
+    tasksToQueue.push({ assistantConfig: assistantForThisMention, messageStub: assistantMessage })
+  }
+
+  const queue = getTopicQueue(topicId)
+
+  for (const task of tasksToQueue) {
+    queue.add(async () => {
+      await fetchAndProcessAssistantResponseImpl(topicId, task.assistantConfig, task.messageStub)
+    })
+  }
+}
+// --- End Helper Function ---
