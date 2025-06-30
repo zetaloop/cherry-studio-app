@@ -1,8 +1,7 @@
 // May need Block types if refactoring to use them
 // import type { MessageBlock, MainTextMessageBlock } from '@renderer/types/newMessageTypes';
-import { remove } from 'lodash'
 
-import type { Message } from '@/types/message' // Assuming correct Message type import
+import type { GroupedMessage, Message } from '@/types/message' // Assuming correct Message type import
 // Assuming getGroupedMessages is also moved here or imported
 // import { getGroupedMessages } from './path/to/getGroupedMessages';
 
@@ -91,8 +90,8 @@ export function filterEmptyMessages(messages: Message[]): Message[] {
 /**
  * Groups messages by user message ID or assistant askId.
  */
-export function getGroupedMessages(messages: Message[]): { [key: string]: (Message & { index: number })[] } {
-  const groups: { [key: string]: (Message & { index: number })[] } = {}
+export function getGroupedMessages(messages: Message[]): { [key: string]: GroupedMessage[] } {
+  const groups: { [key: string]: GroupedMessage[] } = {}
   messages.forEach((message, index) => {
     // Use askId if available (should be on assistant messages), otherwise group user messages individually
     const key = message.role === 'assistant' && message.askId ? 'assistant' + message.askId : message.role + message.id
@@ -123,14 +122,14 @@ export function filterUsefulMessages(messages: Message[]): Message[] {
         // Remove all messages in the group except the useful one
         groupedMsgs.forEach(m => {
           if (m.id !== usefulMessage.id) {
-            remove(_messages, o => o.id === m.id)
+            _messages = _messages.filter(o => o.id !== m.id)
           }
         })
       } else if (groupedMsgs.length > 0) {
         // Keep only the last message if none are marked useful
         const messagesToRemove = groupedMsgs.slice(0, -1)
         messagesToRemove.forEach(m => {
-          remove(_messages, o => o.id === m.id)
+          _messages = _messages.filter(o => o.id !== m.id)
         })
       }
     }

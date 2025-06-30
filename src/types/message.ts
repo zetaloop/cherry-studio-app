@@ -181,6 +181,8 @@ export type Message = {
   blocks: MessageBlock['id'][]
 }
 
+export type GroupedMessage = Message & { index: number }
+
 export interface Response {
   text?: string
   reasoning_content?: string
