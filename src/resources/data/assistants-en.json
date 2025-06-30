@@ -1,5 +1,13 @@
 [
   {
+    "id": "0",
+    "name": "Default Assistant",
+    "emoji": "😀",
+    "prompt": "",
+    "topics": [],
+    "type": "assistant"
+  },
+  {
     "id": "1",
     "name": "Product Manager",
     "emoji": "👨‍💼",

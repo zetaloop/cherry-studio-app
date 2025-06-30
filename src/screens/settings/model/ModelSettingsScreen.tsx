@@ -70,7 +70,7 @@ export default function ModelSettingsScreen() {
               size={14}
               icon={<Settings2 size={14} />}
               backgroundColor="$colorTransparent"
-              onPress={() => navigation.navigate('DefaultAssistantSettingsScreen')}
+              onPress={() => navigation.navigate('AssistantDetailScreen', { assistantId: '0' })}
             />
           </XStack>
           <XStack>
