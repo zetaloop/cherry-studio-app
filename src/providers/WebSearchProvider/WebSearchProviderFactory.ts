@@ -4,11 +4,11 @@ import BaseWebSearchProvider from './BaseWebSearchProvider'
 import BochaProvider from './BochaProvider'
 import DefaultProvider from './DefaultProvider'
 import ExaProvider from './ExaProvider'
+import TavilyProvider from './TavilyProvider'
 // import LocalBaiduProvider from './LocalBaiduProvider'
 // import LocalBingProvider from './LocalBingProvider'
 // import LocalGoogleProvider from './LocalGoogleProvider'
 // import SearxngProvider from './SearxngProvider'
-import TavilyProvider from './TavilyProvider'
 
 export default class WebSearchProviderFactory {
   static create(provider: WebSearchProvider): BaseWebSearchProvider {

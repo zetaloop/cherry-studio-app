@@ -5792,31 +5792,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/toast@npm:^1.129.11":
-  version: 1.129.11
-  resolution: "@tamagui/toast@npm:1.129.11"
-  dependencies:
-    "@tamagui/animate-presence": "npm:1.129.11"
-    "@tamagui/compose-refs": "npm:1.129.11"
-    "@tamagui/constants": "npm:1.129.11"
-    "@tamagui/core": "npm:1.129.11"
-    "@tamagui/create-context": "npm:1.129.11"
-    "@tamagui/dismissable": "npm:1.129.11"
-    "@tamagui/helpers": "npm:1.129.11"
-    "@tamagui/polyfill-dev": "npm:1.129.11"
-    "@tamagui/portal": "npm:1.129.11"
-    "@tamagui/stacks": "npm:1.129.11"
-    "@tamagui/start-transition": "npm:1.129.11"
-    "@tamagui/text": "npm:1.129.11"
-    "@tamagui/use-controllable-state": "npm:1.129.11"
-    "@tamagui/visually-hidden": "npm:1.129.11"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10c0/512fc898a4fb396398689cfe4b0630bb425bbeaed644abe1fed892705fafc42c06508211b6a6a35fe35a452c176e9602d2318873b0d95eb8d9dfc833a25244f7
-  languageName: node
-  linkType: hard
-
 "@tamagui/toggle-group@npm:1.129.11":
   version: 1.129.11
   resolution: "@tamagui/toggle-group@npm:1.129.11"
@@ -7782,7 +7757,6 @@ __metadata:
     "@tamagui/core": "npm:^1.129.11"
     "@tamagui/linear-gradient": "npm:^1.129.11"
     "@tamagui/lucide-icons": "npm:^1.129.11"
-    "@tamagui/toast": "npm:^1.129.11"
     "@trivago/prettier-plugin-sort-imports": "npm:^5.2.2"
     "@types/jest": "npm:^29.5.12"
     "@types/lodash": "npm:^4.17.17"

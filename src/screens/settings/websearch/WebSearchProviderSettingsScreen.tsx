@@ -1,9 +1,9 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
-import { useToastController } from '@tamagui/toast'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
+import { Alert } from 'react-native'
+import { Button, Input, Spinner, Stack, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
 import { SettingContainer, SettingGroupTitle } from '@/components/settings'
@@ -20,7 +20,6 @@ export default function WebSearchProviderSettingsScreen() {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigation = useNavigation()
-  const { show } = useToastController()
 
   const route = useRoute<WebsearchProviderSettingsRouteProp>()
   const { provider } = useWebsearchProvider(route.params.providerId)
@@ -50,11 +49,6 @@ export default function WebSearchProviderSettingsScreen() {
   }
 
   async function checkSearch() {
-    if (!provider) {
-      show(t('settings.websearch.no_provider_selected'))
-      return
-    }
-
     // TODO : 支持多个 API Key 检测
     // if (apiKey.includes(',')) {
     //   const keys = apiKey
@@ -80,19 +74,22 @@ export default function WebSearchProviderSettingsScreen() {
     try {
       setApiChecking(true)
       const { valid, error } = await WebSearchService.checkSearch(provider)
-
       const errorMessage = error && error?.message ? ' ' + error?.message : ''
 
       if (valid) {
-        show(t('settings.websearch.check_success')) // Simple string message
+        Alert.alert(t('settings.websearch.check_success'), t('settings.websearch.check_success_message'), [
+          { text: t('common.ok'), style: 'cancel' }
+        ])
       } else {
-        show(t('settings.websearch.check_failed') + errorMessage) // Simple string message
+        Alert.alert(t('settings.websearch.check_failed'), errorMessage, [{ text: t('common.ok'), style: 'cancel' }])
       }
 
       setApiValid(valid)
     } catch (err) {
       setApiValid(false)
-      show(t('settings.websearch.check_failed'))
+      Alert.alert(t('settings.websearch.check_failed'), t('common.error_occurred'), [
+        { text: t('common.ok'), style: 'cancel' }
+      ])
     } finally {
       setApiChecking(false)
       setTimeout(() => setApiValid(false), 2500)
@@ -109,7 +106,19 @@ export default function WebSearchProviderSettingsScreen() {
           <YStack gap={8}>
             <XStack paddingHorizontal={10} height={20} justifyContent="space-between" alignItems="center">
               <SettingGroupTitle>{t('settings.websearch.api_key')}</SettingGroupTitle>
-              <Button size={16} icon={<ShieldCheck size={16} />} backgroundColor="$colorTransparent" circular />
+              <Button
+                size={16}
+                icon={
+                  apiChecking ? (
+                    <Spinner size="small" color="$gray10" />
+                  ) : (
+                    <ShieldCheck size={16} color={apiValid ? '$green10' : undefined} />
+                  )
+                }
+                backgroundColor="$colorTransparent"
+                circular
+                onPress={checkSearch}
+                disabled={apiChecking}></Button>
             </XStack>
 
             <XStack paddingVertical={8} gap={8} position="relative">

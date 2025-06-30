@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import { ExaClient } from '@agentic/exa'
 
 import { WebSearchState } from '@/store/websearch'

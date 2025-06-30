@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import { TavilyClient } from '@agentic/tavily'
 
 import { WebSearchState } from '@/store/websearch'
@@ -11,6 +10,7 @@ export default class TavilyProvider extends BaseWebSearchProvider {
 
   constructor(provider: WebSearchProvider) {
     super(provider)
+    console.log('TavilyProvider initialized with provider:', provider)
 
     if (!this.apiKey) {
       throw new Error('API key is required for Tavily provider')

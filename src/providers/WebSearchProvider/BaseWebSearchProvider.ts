@@ -1,5 +1,10 @@
+import { eq } from 'drizzle-orm'
+
 import { WebSearchState } from '@/store/websearch'
 import { WebSearchProvider, WebSearchProviderResponse } from '@/types'
+
+import { db } from '../../../db'
+import { websearch_providers } from '../../../db/schema'
 
 export default abstract class BaseWebSearchProvider {
   // @ts-ignore this
@@ -20,7 +25,8 @@ export default abstract class BaseWebSearchProvider {
   ): Promise<WebSearchProviderResponse>
 
   public getApiHost() {
-    return this.provider.apiHost
+    const provider = db.select().from(websearch_providers).where(eq(websearch_providers.id, this.provider.id)).get()
+    return provider?.api_host || ''
   }
 
   public defaultHeaders() {
@@ -30,29 +36,12 @@ export default abstract class BaseWebSearchProvider {
     }
   }
 
+  // TODO 暂时单key处理
   public getApiKey() {
-    const keys = this.provider.apiKey?.split(',').map(key => key.trim()) || []
-    // const keyName = `web-search-provider:${this.provider.id}:last_used_key`
-    //
-    // if (keys.length === 1) {
-    //   return keys[0]
-    // }
-    //
-    // const lastUsedKey = window.keyv.get(keyName)
-    //
-    // if (!lastUsedKey) {
-    //   window.keyv.set(keyName, keys[0])
-    //   return keys[0]
-    // }
-    //
-    // const currentIndex = keys.indexOf(lastUsedKey)
-    // const nextIndex = (currentIndex + 1) % keys.length
-    // const nextKey = keys[nextIndex]
-    // window.keyv.set(keyName, nextKey)
-    //
-    // return nextKey
+    const provider = db.select().from(websearch_providers).where(eq(websearch_providers.id, this.provider.id)).get()
 
-    // TODO 暂时只返回第一个 API Key
+    const keys = provider?.api_key?.split(',').map(key => key.trim()) || []
+
     if (keys.length > 0) {
       return keys[0]
     }
