@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-native-markdown-display'
-import { Button, Text, View, XStack, YStack } from 'tamagui'
+import { Button, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
 import { ISheet } from '@/components/ui/Sheet'
 import { useSize } from '@/hooks/useSize'
@@ -23,6 +23,7 @@ export default function AssistantItemSheet({ assistant, bottomSheetRef, isOpen, 
   const { t } = useTranslation()
   const snapPoints = ['75%']
   const { height } = useSize()
+  const theme = useTheme()
 
   return (
     <ISheet
@@ -30,7 +31,7 @@ export default function AssistantItemSheet({ assistant, bottomSheetRef, isOpen, 
       bottomSheetRef={bottomSheetRef}
       footer={
         // 按钮区域
-        <BlurView intensity={100} style={{ backgroundColor: '#ffffffcc' }}>
+        <BlurView intensity={100} style={{ backgroundColor: theme.background075.val }}>
           <XStack justifyContent="center" alignItems="center" paddingHorizontal={20} padding={10} gap={20}>
             <BookmarkMinus size={24} />
             <Button backgroundColor="$foregroundGreen" borderRadius={40} height={42} width="70%">
@@ -40,7 +41,7 @@ export default function AssistantItemSheet({ assistant, bottomSheetRef, isOpen, 
         </BlurView>
       }
       header={
-        <YStack alignItems="center" paddingVertical={10} top={0}>
+        <YStack justifyContent="center" alignItems="center" paddingVertical={10} top={0}>
           <Text fontSize={84}>{assistant.emoji?.replace(/\r\n/g, '')}</Text>
           <XStack gap={20}>
             {assistant.group &&
@@ -57,9 +58,19 @@ export default function AssistantItemSheet({ assistant, bottomSheetRef, isOpen, 
       <YStack flex={1} paddingTop={10}>
         <View flex={1} paddingHorizontal={20} maxHeight="100%">
           <YStack alignItems="center" gap={10} paddingVertical={10}>
-            <Text>{assistant.description}</Text>
+            <Text style={{}}>{assistant.description}</Text>
             <Text>
-              <Markdown>{assistant.prompt}</Markdown>
+              <Markdown
+                style={{
+                  text: {
+                    color: theme.color.val
+                  },
+                  list_item: {
+                    color: theme.color.val
+                  }
+                }}>
+                {assistant.prompt}
+              </Markdown>
             </Text>
           </YStack>
         </View>
