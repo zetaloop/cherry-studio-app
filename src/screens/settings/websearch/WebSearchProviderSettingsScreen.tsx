@@ -81,13 +81,13 @@ export default function WebSearchProviderSettingsScreen() {
           { text: t('common.ok'), style: 'cancel' }
         ])
       } else {
-        Alert.alert(t('settings.websearch.check_failed'), errorMessage, [{ text: t('common.ok'), style: 'cancel' }])
+        Alert.alert(t('settings.websearch.check_fail'), errorMessage, [{ text: t('common.ok'), style: 'cancel' }])
       }
 
       setApiValid(valid)
     } catch (err) {
       setApiValid(false)
-      Alert.alert(t('settings.websearch.check_failed'), t('common.error_occurred'), [
+      Alert.alert(t('settings.websearch.check_error'), t('common.error_occurred'), [
         { text: t('common.ok'), style: 'cancel' }
       ])
     } finally {

@@ -90,7 +90,9 @@
       "tool": "工具",
       "added": "已添加",
       "visit": "訪問",
-      "see_all": "查看全部"
+      "see_all": "查看全部",
+      "ok": "確定",
+      "error_occurred": "發生錯誤"
     },
     "history": {
       "topics.empty": "未找到主題",
@@ -230,7 +232,11 @@
           "api": {
             "title": "API 服務提供商"
           }
-        }
+        },
+        "check_success": "檢查成功",
+        "check_success_message": "API 運作正常",
+        "check_fail": "檢查失敗",
+        "check_error": "檢查錯誤"
       },
       "modelAndService": "AI 模型與服務",
       "dataAndSecurity": "資料與安全性",

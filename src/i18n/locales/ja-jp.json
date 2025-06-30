@@ -90,7 +90,9 @@
       "tool": "ツール",
       "added": "追加済み",
       "visit": "訪問",
-      "see_all": "すべて表示"
+      "see_all": "すべて表示",
+      "ok": "OK",
+      "error_occurred": "エラーが発生しました"
     },
     "history": {
       "topics.empty": "トピックが見つかりません。",
@@ -230,7 +232,11 @@
           "api": {
             "title": "APIサービスプロバイダー"
           }
-        }
+        },
+        "check_success": "チェック成功",
+        "check_success_message": "APIは正常に動作しています",
+        "check_fail": "チェック失敗",
+        "check_error": "チェックエラー"
       },
       "modelAndService": "AIモデル＆サービス",
       "dataAndSecurity": "データ & セキュリティ",

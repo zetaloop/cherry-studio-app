@@ -90,7 +90,9 @@
       "tool": "Инструмент",
       "added": "Добавлено",
       "visit": "Посетить",
-      "see_all": "Показать все"
+      "see_all": "Показать все",
+      "ok": "ОК",
+      "error_occurred": "Произошла ошибка"
     },
     "history": {
       "topics.empty": "Темы не найдены",
@@ -230,7 +232,11 @@
           "api": {
             "title": "Поставщики API услуг"
           }
-        }
+        },
+        "check_success": "Проверка успешна",
+        "check_success_message": "API работает правильно",
+        "check_fail": "Ошибка проверки",
+        "check_error": "Ошибка проверки"
       },
       "modelAndService": "Модели и сервисы ИИ",
       "dataAndSecurity": "Данные и безопасность",
