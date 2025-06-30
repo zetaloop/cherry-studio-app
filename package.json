@@ -53,6 +53,7 @@
     "babel-plugin-inline-import": "^3.0.0",
     "babel-plugin-react-compiler": "19.0.0-beta-af1b7da-20250417",
     "buffer": "^6.0.3",
+    "burnt": "^0.13.0",
     "dayjs": "^1.11.13",
     "drizzle-orm": "^0.43.1",
     "expo": "^53.0.12",

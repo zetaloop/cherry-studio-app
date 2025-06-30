@@ -7965,6 +7965,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"burnt@npm:^0.13.0":
+  version: 0.13.0
+  resolution: "burnt@npm:0.13.0"
+  dependencies:
+    sf-symbols-typescript: "npm:^1.0.0"
+    sonner: "npm:^2.0.1"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/7bb3187c77adcf042f0879a8519fd9d5fb60f67dbdf8fca98218c06156262924214363652e6d02a78ab0f00e9fa168e5a31e3ebe297e0da38b02efca525c93e1
+  languageName: node
+  linkType: hard
+
 "bytes@npm:3.1.2":
   version: 3.1.2
   resolution: "bytes@npm:3.1.2"
@@ -8201,6 +8215,7 @@ __metadata:
     babel-plugin-inline-import: "npm:^3.0.0"
     babel-plugin-react-compiler: "npm:19.0.0-beta-af1b7da-20250417"
     buffer: "npm:^6.0.3"
+    burnt: "npm:^0.13.0"
     dayjs: "npm:^1.11.13"
     drizzle-kit: "npm:^0.31.1"
     drizzle-orm: "npm:^0.43.1"
@@ -15848,6 +15863,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sf-symbols-typescript@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "sf-symbols-typescript@npm:1.0.0"
+  checksum: 10c0/690314f401fb37b79382decf158fc7f511de5c113ec3fb265ce4e1e06341050d17c1327c581342367f0ba6e41d2b3e82637789fab8cd41a4470ef952e05241bb
+  languageName: node
+  linkType: hard
+
 "sf-symbols-typescript@npm:^2.0.0":
   version: 2.1.0
   resolution: "sf-symbols-typescript@npm:2.1.0"
@@ -16031,6 +16053,16 @@ __metadata:
     ip-address: "npm:^9.0.5"
     smart-buffer: "npm:^4.2.0"
   checksum: 10c0/e427d0eb0451cfd04e20b9156ea8c0e9b5e38a8d70f21e55c30fbe4214eda37cfc25d782c63f9adc5fbdad6d062a0f127ef2cefc9a44b6fee2b9ea5d1ed10827
+  languageName: node
+  linkType: hard
+
+"sonner@npm:^2.0.1":
+  version: 2.0.5
+  resolution: "sonner@npm:2.0.5"
+  peerDependencies:
+    react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+  checksum: 10c0/38ec98e2f5d7e086825307f737a90bdc8639182d184e002719c2368bf3a9259c340f41afda731716d2b78c40e5e3aa9165058375be42f6a93bda0876b9b433ba
   languageName: node
   linkType: hard
 
