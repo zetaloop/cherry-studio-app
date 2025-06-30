@@ -11,7 +11,6 @@ import { MessageInputBaseParams } from '@/types/message'
 
 import { AddFileButton } from './AddFileButton'
 import FilePreview from './FilePreview'
-import { MentionButton } from './MentionButton'
 import { SendButton } from './SendButton'
 import { ThinkButton } from './ThinkButton'
 import { VoiceButton } from './VoiceButton'
@@ -68,7 +67,6 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, se
       {/* button */}
       <XStack justifyContent="space-between" alignItems="center">
         <XStack gap={5} alignItems="center">
-          <MentionButton />
           <AddFileButton files={files} setFiles={setFiles} />
           <WebsearchButton />
           <ThinkButton />
