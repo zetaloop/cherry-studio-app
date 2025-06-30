@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
-import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
+import { SettingContainer, SettingGroupTitle } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { useWebsearchProvider } from '@/hooks/useWebsearchProviders'
@@ -78,7 +78,6 @@ export default function WebSearchProviderSettingsScreen() {
             </XStack>
 
             <XStack justifyContent="space-between">
-              <SettingHelpText>{t('settings.websearch.api_key.tip')}</SettingHelpText>
               {/* todo */}
               <ExternalLink href="" size={12}>
                 {t('settings.websearch.api_key.get')}

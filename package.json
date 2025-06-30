@@ -22,6 +22,9 @@
     ]
   },
   "dependencies": {
+    "@agentic/exa": "^7.6.9",
+    "@agentic/searxng": "^7.6.9",
+    "@agentic/tavily": "^7.6.9",
     "@anthropic-ai/sdk": "^0.51.0",
     "@cherrystudio/ai-core": "workspace:*",
     "@google/genai": "^1.0.1",
