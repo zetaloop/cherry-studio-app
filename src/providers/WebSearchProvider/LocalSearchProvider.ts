@@ -1,10 +1,10 @@
 import { nanoid } from '@reduxjs/toolkit'
-import { fetchWebContent, noContent } from '@renderer/utils/fetch'
 
 import { WebSearchState } from '@/store/websearch'
 import { WebSearchProvider, WebSearchProviderResponse, WebSearchProviderResult } from '@/types'
 import { createAbortPromise } from '@/utils/abortController'
 import { isAbortError } from '@/utils/error'
+import { fetchWebContent, noContent } from '@/utils/fetch'
 
 import BaseWebSearchProvider from './BaseWebSearchProvider'
 

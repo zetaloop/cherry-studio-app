@@ -109,11 +109,13 @@
     "redux-persist": "^6.0.0",
     "tamagui": "^1.123.17",
     "tokenx": "^1.0.1",
+    "turndown": "7.2.0",
     "zeego": "^3.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-class-static-block": "^7.27.1",
+    "@mozilla/readability": "^0.6.0",
     "@tamagui/config": "^1.123.17",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/jest": "^29.5.12",
