@@ -131,7 +131,7 @@
         "empty.add_model": "Давайте добавим вашу первую модель.",
         "translate_model": "Модель перевода",
         "translate_model_description": "Модель, используемая для службы перевода",
-        "translate_model_setting": {
+        "translate_model_settings": {
           "hint": {
             "assistant": "Помощник по переводу",
             "specify_language": "Указать язык",
@@ -141,24 +141,25 @@
           },
           "language_choose": {
             "title": "Выбор языка"
-          }
+          },
+          "title": "Параметры перевода модели"
         },
         "search": "Поиск моделей...",
         "title": "Модели",
         "topic_naming_model": "Именование тем",
         "topic_naming_settings": {
           "hint.autonaming": "Автоматическое именование сессий",
-          "hint.prompt": "Подсказка"
+          "hint.prompt": "Подсказка",
+          "title": "Настройки наименования тем"
         },
-        "quick_assistant": "Быстрый помощник",
-        "quick_assistant_description": "Модель, используемая быстрым помощником",
         "add.model": "Добавить модель",
         "add.model.id": "ID модели",
         "add.model.id.placeholder": "Обязательно, например gpt-4o",
         "add.model.name": "Имя модели",
         "add.model.name.placeholder": "Необязательно, например GPT-4o",
         "add.model.group": "Группа моделей",
-        "add.model.group.placeholder": "Необязательно, например OpenAI"
+        "add.model.group.placeholder": "Необязательно, например OpenAI",
+        "topic_naming_model_description": "Модель, используемая для присвоения имен новым темам"
       },
       "provider": {
         "add.name": "Имя провайдера",

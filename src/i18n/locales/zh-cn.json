@@ -131,13 +131,14 @@
         "empty.add_model": "让我们添加你的第一个模型。",
         "translate_model": "翻译模型",
         "translate_model_description": "用于翻译服务的模型",
-        "translate_model_setting": {
+        "translate_model_settings": {
+          "title": "翻译模型设置",
           "hint": {
-            "assistant": "翻译助手",
+            "assistant": "翻译模型",
             "specify_language": "指定语言",
             "target_language": "目标语言",
             "local_language": "本地语言",
-            "prompt": "提示词"
+            "prompt": "翻译模型提示词"
           },
           "language_choose": {
             "title": "语言选择"
@@ -145,14 +146,13 @@
         },
         "search": "搜索模型...",
         "title": "模型",
-        "topic_naming_model": "主题命名",
-        "topic_naming_model_description": "当命名一个新主题时使用的模型",
+        "topic_naming_model": "话题命名",
+        "topic_naming_model_description": "当命名一个新话题时使用的模型",
         "topic_naming_settings": {
-          "hint.autonaming": "会话自动命名",
-          "hint.prompt": "提示词"
+          "title": "话题命名设置",
+          "hint.autonaming": "话题自动命名",
+          "hint.prompt": "话题命名提示词"
         },
-        "quick_assistant": "快速助手",
-        "quick_assistant_description": "快速助手使用的模型",
         "add.model": "添加模型",
         "add.model.id": "模型 ID",
         "add.model.id.placeholder": "必填，例如 gpt-4o",

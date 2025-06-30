@@ -13,7 +13,7 @@ export type RootStackParamList = {
   DefaultAssistantSettingsScreen: undefined
   NamingModelSettingsScreen: undefined
   TranslateModelSettingsScreen: undefined
-  TranslateLanguageChooseScreen: undefined
+  TranslateLanguageChooseScreen: { mode: 'source' | 'target' }
   ProvidersScreen: undefined
   AboutScreen: undefined
   GeneralSettingsScreen: undefined

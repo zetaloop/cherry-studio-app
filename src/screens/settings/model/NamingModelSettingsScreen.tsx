@@ -1,45 +1,45 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { LoaderCircle } from '@tamagui/lucide-icons'
-import { useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { RotateCw } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Input, Text, XStack, YStack } from 'tamagui'
+import { Text, TextArea, XStack, YStack } from 'tamagui'
 
 import { SettingContainer, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { CustomSwitch } from '@/components/ui/Switch'
-import { RootStackParamList } from '@/types/naviagate'
-
-type NamingModelSettingsRouteProp = RouteProp<RootStackParamList, 'NamingModelSettingsScreen'>
+import { useSettings } from '@/hooks/useSettings'
 
 export default function NamingModelSettingsScreen() {
   const { t } = useTranslation()
-  const [autoNaming, setAutoNaming] = useState(true)
-  const [prompt, setPrompt] = useState('')
+  const { topicNamingSetting, setTopicNamingSetting } = useSettings()
 
-  const route = useRoute<NamingModelSettingsRouteProp>()
   const navigation = useNavigation()
-
-  const handlePromptChange = (value: string) => {
-    setPrompt(value)
-  }
 
   return (
     <SafeAreaContainer>
-      <HeaderBar title={t('settings.models.topic_naming_model')} onBackPress={() => navigation.goBack()} />
+      <HeaderBar title={t('settings.models.topic_naming_settings.title')} onBackPress={() => navigation.goBack()} />
       <SettingContainer>
         <YStack flex={1} paddingTop={24} gap={8}>
           <SettingRow>
             <Text>{t('settings.models.topic_naming_settings.hint.autonaming')}</Text>
-            <CustomSwitch checked={autoNaming} onCheckedChange={setAutoNaming}></CustomSwitch>
+            <CustomSwitch
+              checked={topicNamingSetting.autoNaming}
+              onCheckedChange={() =>
+                setTopicNamingSetting({ ...topicNamingSetting, autoNaming: !topicNamingSetting.autoNaming })
+              }></CustomSwitch>
           </SettingRow>
 
           <XStack paddingHorizontal={10} height={20} justifyContent="space-between">
             <Text>{t('settings.models.topic_naming_settings.hint.prompt')}</Text>
-            <LoaderCircle size={12} />
+            <RotateCw size={12} />
           </XStack>
-          <Input flex={1} maxHeight={'60%'} value={prompt} onChangeText={handlePromptChange} />
+          <TextArea
+            flex={1}
+            maxHeight={'60%'}
+            value={topicNamingSetting.prompt}
+            onChangeText={text => setTopicNamingSetting({ ...topicNamingSetting, prompt: text })}
+          />
         </YStack>
       </SettingContainer>
     </SafeAreaContainer>

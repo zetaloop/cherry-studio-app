@@ -1,5 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, useTheme, XStack, YStack } from 'tamagui'
 
@@ -7,6 +7,7 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { languagesOptions } from '@/config/languages'
+import { useSettings } from '@/hooks/useSettings'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 
 type TranslateLanguageChooseRouteProp = RouteProp<RootStackParamList, 'TranslateLanguageChooseScreen'>
@@ -16,17 +17,31 @@ export default function TranslateLanguageChooseScreen() {
   const navigation = useNavigation<NavigationProps>()
   const theme = useTheme()
   const route = useRoute<TranslateLanguageChooseRouteProp>()
-
-  const [currentLanguage, setCurrentLanguage] = useState('')
+  const { translateModelSetting, setTranslateModelSetting } = useSettings()
+  const { mode } = route.params
+  const currentLanguage =
+    mode === 'source' ? translateModelSetting.sourceLanguage : translateModelSetting.targetLanguage
 
   const changeLanguage = (language: string) => {
-    setCurrentLanguage(language)
+    if (mode === 'source') {
+      setTranslateModelSetting({
+        ...translateModelSetting,
+        sourceLanguage: language
+      })
+    } else if (mode === 'target') {
+      setTranslateModelSetting({
+        ...translateModelSetting,
+        targetLanguage: language
+      })
+    }
+
+    navigation.goBack()
   }
 
   return (
     <SafeAreaContainer>
       <HeaderBar
-        title={t('settings.models.translate_model_setting.language_choose.title')}
+        title={t('settings.models.translate_model_settings.language_choose.title')}
         onBackPress={() => navigation.goBack()}
       />
       <SettingContainer>

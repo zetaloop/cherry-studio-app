@@ -131,7 +131,7 @@
         "empty.add_model": "最初のモデルを追加しましょう。",
         "translate_model": "翻訳モデル",
         "translate_model_description": "翻訳サービスに使用されるモデル",
-        "translate_model_setting": {
+        "translate_model_settings": {
           "hint": {
             "assistant": "翻訳アシスタント",
             "specify_language": "言語を指定",
@@ -141,24 +141,25 @@
           },
           "language_choose": {
             "title": "言語選択"
-          }
+          },
+          "title": "モデル設定を翻訳"
         },
         "search": "モデルを検索...",
         "title": "モデル",
         "topic_naming_model": "トピック命名",
         "topic_naming_settings": {
           "hint.autonaming": "セッションの自動命名",
-          "hint.prompt": "プロンプト"
+          "hint.prompt": "プロンプト",
+          "title": "トピック命名設定"
         },
-        "quick_assistant": "クイックアシスタント",
-        "quick_assistant_description": "クイックアシスタントが使用するモデル",
         "add.model": "モデルを追加",
         "add.model.id": "モデルID",
         "add.model.id.placeholder": "必須 例: gpt-4o",
         "add.model.name": "モデル名",
         "add.model.name.placeholder": "任意 例: GPT-4o",
         "add.model.group": "モデルグループ",
-        "add.model.group.placeholder": "任意 例: OpenAI"
+        "add.model.group.placeholder": "任意 例: OpenAI",
+        "topic_naming_model_description": "新しいトピックの命名に使用するモデル"
       },
       "provider": {
         "add.name": "プロバイダー名",

@@ -173,13 +173,14 @@
         "empty.add_model": "Let's add your first model",
         "translate_model": "Translate Model",
         "translate_model_description": "Model used for translation service",
-        "translate_model_setting": {
+        "translate_model_settings": {
+          "title": "Translate Model Settings",
           "hint": {
-            "assistant": "Translation Assistant",
+            "assistant": "Translate Model",
             "specify_language": "Specify Language",
             "target_language": "Target Language",
             "local_language": "Local Language",
-            "prompt": "Prompt"
+            "prompt": "Translate Prompt"
           },
           "language_choose": {
             "title": "Language Selection"
@@ -190,11 +191,10 @@
         "topic_naming_model": "Topic Naming Model",
         "topic_naming_model_description": "Model used for naming new topic",
         "topic_naming_settings": {
-          "hint.autonaming": "Session Auto Naming",
-          "hint.prompt": "Prompt"
+          "title": "Topic Naming Settings",
+          "hint.autonaming": "Topic Auto Naming",
+          "hint.prompt": "Topic Naming Prompt"
         },
-        "quick_assistant": "Quick Assistant",
-        "quick_assistant_description": "The model used by the Quick Assistant",
         "add.model": "Add Model",
         "add.model.id": "Model ID",
         "add.model.id.placeholder": "Required e.g. gpt-4o",

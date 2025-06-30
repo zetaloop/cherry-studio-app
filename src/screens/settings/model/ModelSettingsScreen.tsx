@@ -57,6 +57,7 @@ export default function ModelSettingsScreen() {
       <HeaderBar title={t('settings.models.default_model')} onBackPress={() => navigation.goBack()} />
       <YStack padding="$4" backgroundColor="$background" flex={1} gap={24}>
         <YStack gap={8}>
+          {/* todo 这是默认助手设置，是否应该放在此处？ */}
           <XStack justifyContent="space-between" height={20}>
             <Text>{t('settings.models.default_assistant_model')}</Text>
             <Button
