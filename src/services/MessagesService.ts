@@ -122,10 +122,10 @@ export async function sendMessage(
 ) {
   try {
     // mock mentions model
-    userMessage.mentions = [
-      { id: 'deepseek-ai/DeepSeek-V3', name: 'deepseek-ai/DeepSeek-V3', provider: 'silicon', group: 'deepseek-ai' },
-      { id: 'deepseek-ai/DeepSeek-R1', name: 'deepseek-ai/DeepSeek-R1', provider: 'silicon', group: 'deepseek-ai' }
-    ]
+    // userMessage.mentions = [
+    //   { id: 'deepseek-ai/DeepSeek-V3', name: 'deepseek-ai/DeepSeek-V3', provider: 'silicon', group: 'deepseek-ai' },
+    //   { id: 'deepseek-ai/DeepSeek-R1', name: 'deepseek-ai/DeepSeek-R1', provider: 'silicon', group: 'deepseek-ai' }
+    // ]
 
     if (userMessage.blocks.length === 0) {
       console.warn('sendMessage: No blocks in the provided message.')
