@@ -6,7 +6,6 @@ import { ActivityIndicator } from 'react-native'
 import { Button, Popover, Text, useWindowDimensions, XStack, YStack } from 'tamagui'
 
 import { useAssistant } from '@/hooks/useAssistant'
-import { getAssistantById } from '@/services/AssistantService'
 import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import React from 'react'
-import { styled, Tabs, Text, View, XStack } from 'tamagui'
+import { Tabs, Text, View, XStack } from 'tamagui'
 
 import { MultiModalIcon } from '@/components/icons/MultiModelIcon'
 import { Assistant } from '@/types/assistant'
@@ -78,13 +78,3 @@ const MessageGroup: FC<MessageGroupProps> = ({ assistant, item }) => {
 }
 
 export default MessageGroup
-
-const StyledTab = styled(Tabs.Tab, {
-  variants: {
-    active: {
-      true: {
-        backgroundColor: 'rgba(0, 185, 107, 1)'
-      }
-    }
-  } as const
-})
