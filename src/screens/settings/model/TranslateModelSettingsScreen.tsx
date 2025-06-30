@@ -9,12 +9,12 @@ import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { CustomSwitch } from '@/components/ui/Switch'
-import { RootStackParamList } from '@/types/naviagate'
+import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 
 type TranslateModelSettingsRouteProp = RouteProp<RootStackParamList, 'TranslateModelSettingsScreen'>
 
 export default function TranslateModelSettingsScreen() {
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProps>()
   const { t } = useTranslation()
   const [specifyLanguage, setSpecifyLanguage] = useState(false)
   const [sourceLanguage, setSourceLanguage] = useState('')

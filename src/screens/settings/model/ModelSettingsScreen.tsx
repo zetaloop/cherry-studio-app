@@ -10,20 +10,21 @@ import { HeaderBar } from '@/components/settings/HeaderBar'
 import { ModelSelect } from '@/components/settings/providers/ModelSelect'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
-import { useProviders } from '@/hooks/useProviders'
+import { useAllProviders } from '@/hooks/useProviders'
 import { Model } from '@/types/assistant'
+import { NavigationProps } from '@/types/naviagate'
 import { getModelUniqId } from '@/utils/model'
 
 export default function ModelSettingsScreen() {
   const { t } = useTranslation()
   const theme = useTheme()
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProps>()
   const [selectedModel, setSelectedModel] = useState<Model | undefined>()
   const [selectedTopicNamingModel, setSelectedTopicNamingModel] = useState<Model | undefined>()
   const [selectedTranslateModel, setSelectedTranslateModel] = useState<Model | undefined>()
   const [selectedQuickAssistant, setSelectedQuickAssistant] = useState<Model | undefined>()
 
-  const { providers } = useProviders()
+  const { providers } = useAllProviders()
   const selectOptions = providers
     .filter(p => p.models && p.models.length > 0)
     .map(p => ({

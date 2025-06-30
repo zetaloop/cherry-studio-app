@@ -7,13 +7,13 @@ import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { languagesOptions } from '@/config/languages'
-import { RootStackParamList } from '@/types/naviagate'
+import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 
 type TranslateLanguageChooseRouteProp = RouteProp<RootStackParamList, 'TranslateLanguageChooseScreen'>
 
 export default function TranslateLanguageChooseScreen() {
   const { t } = useTranslation()
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProps>()
   const theme = useTheme()
   const route = useRoute<TranslateLanguageChooseRouteProp>()
 
