@@ -2,7 +2,6 @@ import 'react-native-reanimated'
 import '@/i18n'
 
 import { DefaultTheme, NavigationContainer, ThemeProvider } from '@react-navigation/native'
-import { TamaguiProvider } from '@tamagui/core'
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator'
 import * as SplashScreen from 'expo-splash-screen'
 import { SQLiteProvider } from 'expo-sqlite'
@@ -13,7 +12,7 @@ import { ActivityIndicator, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Provider, useSelector } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import { PortalProvider } from 'tamagui'
+import { PortalProvider, TamaguiProvider } from 'tamagui'
 
 import store, { persistor, RootState, useAppDispatch } from '@/store'
 import { setInitialized } from '@/store/app'
@@ -37,34 +36,34 @@ function AppContent() {
 
   const dispatch = useAppDispatch()
 
-  const InitializeApp = async () => {
-    if (initialized) return
-
-    try {
-      console.log('First launch, initializing app data...')
-      const assistants = getSystemAssistants()
-      await upsertAssistants(assistants)
-      const providers = getSystemProviders()
-      await upsertProviders(providers)
-      dispatch(setInitialized(true))
-      console.log('App data initialized successfully.')
-    } catch (e) {
-      console.error('Failed to initialize app data', e)
-    }
-  }
-
-  const handleMigrations = async () => {
-    if (success) {
-      console.log('Migrations completed successfully', expoDb.databasePath)
-      await InitializeApp()
-    } else if (error) {
-      console.error('Migrations failed', error)
-    }
-  }
-
   useEffect(() => {
+    const InitializeApp = async () => {
+      if (initialized) return
+
+      try {
+        console.log('First launch, initializing app data...')
+        const assistants = getSystemAssistants()
+        await upsertAssistants(assistants)
+        const providers = getSystemProviders()
+        await upsertProviders(providers)
+        dispatch(setInitialized(true))
+        console.log('App data initialized successfully.')
+      } catch (e) {
+        console.error('Failed to initialize app data', e)
+      }
+    }
+
+    const handleMigrations = async () => {
+      if (success) {
+        console.log('Migrations completed successfully', expoDb.databasePath)
+        await InitializeApp()
+      } else if (error) {
+        console.error('Migrations failed', error)
+      }
+    }
+
     handleMigrations()
-  }, [success, error])
+  }, [success, error, initialized, dispatch])
 
   useEffect(() => {
     SplashScreen.hideAsync()

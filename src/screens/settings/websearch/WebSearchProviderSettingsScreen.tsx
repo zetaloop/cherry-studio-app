@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
-import { Toast, useToastController } from '@tamagui/toast'
+import { useToastController } from '@tamagui/toast'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
@@ -20,7 +20,7 @@ export default function WebSearchProviderSettingsScreen() {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigation = useNavigation()
-  const toast = useToastController()
+  const { show } = useToastController()
 
   const route = useRoute<WebsearchProviderSettingsRouteProp>()
   const { provider } = useWebsearchProvider(route.params.providerId)
@@ -32,7 +32,6 @@ export default function WebSearchProviderSettingsScreen() {
 
   const webSearchProviderConfig = WEB_SEARCH_PROVIDER_CONFIG[provider.id]
   const apiKeyWebsite = webSearchProviderConfig?.websites?.apiKey
-  // const officialWebsite = webSearchProviderConfig?.websites?.official
 
   const handleBackPress = () => {
     navigation.goBack()
@@ -52,11 +51,7 @@ export default function WebSearchProviderSettingsScreen() {
 
   async function checkSearch() {
     if (!provider) {
-      toast.show(t('settings.websearch.no_provider_selected'), {
-        type: 'error',
-        duration: 3000
-      })
-
+      show(t('settings.websearch.no_provider_selected'))
       return
     }
 
@@ -89,24 +84,15 @@ export default function WebSearchProviderSettingsScreen() {
       const errorMessage = error && error?.message ? ' ' + error?.message : ''
 
       if (valid) {
-        toast.show(t('settings.websearch.check_success'), {
-          type: 'success',
-          duration: 2000
-        })
+        show(t('settings.websearch.check_success')) // Simple string message
       } else {
-        toast.show(t('settings.websearch.check_failed') + errorMessage, {
-          type: 'error',
-          duration: 8000
-        })
+        show(t('settings.websearch.check_failed') + errorMessage) // Simple string message
       }
 
       setApiValid(valid)
     } catch (err) {
       setApiValid(false)
-      toast.show(t('settings.websearch.check_failed'), {
-        type: 'error',
-        duration: 8000
-      })
+      show(t('settings.websearch.check_failed'))
     } finally {
       setApiChecking(false)
       setTimeout(() => setApiValid(false), 2500)
@@ -115,7 +101,6 @@ export default function WebSearchProviderSettingsScreen() {
 
   return (
     <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
-      <Toast />
       <HeaderBar title={provider.name} onBackPress={handleBackPress} />
 
       <SettingContainer>
