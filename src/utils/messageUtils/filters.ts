@@ -1,25 +1,36 @@
 // May need Block types if refactoring to use them
 // import type { MessageBlock, MainTextMessageBlock } from '@renderer/types/newMessageTypes';
 
-import type { GroupedMessage, Message } from '@/types/message' // Assuming correct Message type import
+import { isEmpty } from 'lodash'
+
+import { type GroupedMessage, type Message, MessageBlockType } from '@/types/message' // Assuming correct Message type import
+
+import { getBlockById } from '../../../db/queries/messageBlocks.queries'
 // Assuming getGroupedMessages is also moved here or imported
 // import { getGroupedMessages } from './path/to/getGroupedMessages';
 
 /**
  * Filters out messages of type '@' or 'clear' and messages without main text content.
  */
-export const filterMessages = (messages: Message[]) => {
-  console.log('filterMessages called with', messages.length, 'messages')
-  return
-  // return messages
-  //   .filter(message => !['@', 'clear'].includes(message.type!))
-  //   .filter(message => {
-  //     const state = store.getState()
-  //     const mainTextBlock = message.blocks
-  //       ?.map(blockId => messageBlocksSelectors.selectById(state, blockId))
-  //       .find(block => block?.type === MessageBlockType.MAIN_TEXT)
-  //     return !isEmpty((mainTextBlock as any)?.content?.trim()) // Type assertion needed
-  //   })
+export const filterMessages = async (messages: Message[]) => {
+  const filteredByType = messages.filter(message => !['@', 'clear'].includes(message.type!))
+
+  const filteredMessages: Message[] = []
+
+  for (const message of filteredByType) {
+    if (!message.blocks) {
+      continue
+    }
+
+    const blocks = await Promise.all(message.blocks.map(blockId => getBlockById(blockId)))
+    const mainTextBlock = blocks.find(block => block?.type === MessageBlockType.MAIN_TEXT)
+
+    if (!isEmpty((mainTextBlock as any)?.content?.trim())) {
+      filteredMessages.push(message)
+    }
+  }
+
+  return filteredMessages
 }
 
 /**
@@ -53,38 +64,35 @@ export function filterUserRoleStartMessages(messages: Message[]): Message[] {
  * Filters out messages considered "empty" based on block content.
  */
 export function filterEmptyMessages(messages: Message[]): Message[] {
-  // todo
-  return messages
-  // return messages.filter(message => {
-  //   const state = store.getState()
-  //   let hasContent = false
+  return messages.filter(async message => {
+    let hasContent = false
 
-  //   for (const blockId of message.blocks) {
-  //     const block = messageBlocksSelectors.selectById(state, blockId)
-  //     if (!block) continue
+    for (const blockId of message.blocks) {
+      const block = await getBlockById(blockId)
+      if (!block) continue
 
-  //     if (block.type === MessageBlockType.MAIN_TEXT && !isEmpty((block as any).content?.trim())) {
-  //       // Type assertion needed
-  //       hasContent = true
-  //       break
-  //     }
+      if (block.type === MessageBlockType.MAIN_TEXT && !isEmpty((block as any).content?.trim())) {
+        // Type assertion needed
+        hasContent = true
+        break
+      }
 
-  //     if (
-  //       [
-  //         MessageBlockType.IMAGE,
-  //         MessageBlockType.FILE,
-  //         MessageBlockType.CODE,
-  //         MessageBlockType.TOOL,
-  //         MessageBlockType.CITATION
-  //       ].includes(block.type)
-  //     ) {
-  //       hasContent = true
-  //       break
-  //     }
-  //   }
+      if (
+        [
+          MessageBlockType.IMAGE,
+          MessageBlockType.FILE,
+          MessageBlockType.CODE,
+          MessageBlockType.TOOL,
+          MessageBlockType.CITATION
+        ].includes(block.type)
+      ) {
+        hasContent = true
+        break
+      }
+    }
 
-  //   return hasContent
-  // })
+    return hasContent
+  })
 }
 
 /**

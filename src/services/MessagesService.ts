@@ -19,12 +19,13 @@ import {
   createImageBlock,
   createMainTextBlock,
   createMessage,
-  createThinkingBlock
+  createThinkingBlock,
+  resetAssistantMessage
 } from '@/utils/messageUtils/create'
 import { getMainTextContent } from '@/utils/messageUtils/find'
 import { getTopicQueue } from '@/utils/queue'
 
-import { updateOneBlock, upsertBlocks } from '../../db/queries/messageBlocks.queries'
+import { removeManyBlocks, updateOneBlock, upsertBlocks } from '../../db/queries/messageBlocks.queries'
 import { getMessageById, getMessagesByTopicId, upsertMessages } from '../../db/queries/messages.queries'
 import { getTopicById, updateTopicMessages } from '../../db/queries/topics.queries'
 import { getDefaultModel } from './AssistantService'
@@ -151,6 +152,78 @@ export async function sendMessage(
     }
   } catch (error) {
     console.error('Error in sendMessage:', error)
+  }
+}
+
+export async function regenerateAssistantMessage(assistantMessage: Message, assistant: Assistant) {
+  const topicId = assistantMessage.topicId
+
+  try {
+    // 1. Use selector to get all messages for the topic
+    const allMessagesForTopic = await getMessagesByTopicId(topicId)
+
+    // 2. Find the original user query (Restored Logic)
+    const originalUserQuery = allMessagesForTopic.find(m => m.id === assistantMessage.askId)
+
+    if (!originalUserQuery) {
+      console.error(
+        `[regenerateAssistantResponseThunk] Original user query (askId: ${assistantMessage.askId}) not found for assistant message ${assistantMessage.id}. Cannot regenerate.`
+      )
+      return
+    }
+
+    // 3. Verify the assistant message itself exists in entities
+    const messageToResetEntity = await getMessageById(assistantMessage.id)
+
+    if (!messageToResetEntity) {
+      // No need to check topicId again as selector implicitly handles it
+      console.error(
+        `[regenerateAssistantResponseThunk] Assistant message ${assistantMessage.id} not found in entities despite being in the topic list. State might be inconsistent.`
+      )
+      return
+    }
+
+    // 4. Get Block IDs to delete
+    const blockIdsToDelete = [...(messageToResetEntity.blocks || [])]
+
+    // 5. Reset the message entity in Database
+    const resetAssistantMsg = resetAssistantMessage(
+      messageToResetEntity,
+      // Grouped message (mentioned model message) should not reset model and modelId, always use the original model
+      assistantMessage.modelId
+        ? {
+            status: AssistantMessageStatus.PENDING,
+            updatedAt: new Date().toISOString()
+          }
+        : {
+            status: AssistantMessageStatus.PENDING,
+            updatedAt: new Date().toISOString(),
+            model: assistant.model
+          }
+    )
+
+    await upsertMessages(resetAssistantMsg)
+    // 6. Remove old blocks from Database
+    await cleanupMultipleBlocks(blockIdsToDelete)
+
+    // // 7. Update DB: Save the reset message state within the topic and delete old blocks
+    // // Fetch the current state *after* Database updates to get the latest message list
+    // // Use the selector to get the final ordered list of messages for the topic
+    // const finalMessagesToSave = await getMessagesByTopicId(topicId)
+
+    // 7. Add fetch/process call to the queue
+    const queue = getTopicQueue(topicId)
+    const assistantConfigForRegen = {
+      ...assistant,
+      ...(resetAssistantMsg.model ? { model: resetAssistantMsg.model } : {})
+    }
+
+    // Add the fetch/process call to the queue
+    queue.add(
+      async () => await fetchAndProcessAssistantResponseImpl(topicId, assistantConfigForRegen, resetAssistantMsg)
+    )
+  } catch (error) {
+    console.error('Error in regenerateAssistantMessage:', error)
   }
 }
 
@@ -584,3 +657,33 @@ export async function multiModelResponses(
   }
 }
 // --- End Helper Function ---
+
+/**
+ * 批量清理多个消息块。
+ */
+export async function cleanupMultipleBlocks(blockIds: string[]) {
+  // blockIds.forEach(id => {
+  //   cancelThrottledBlockUpdate(id)
+  // })
+
+  // const getBlocksFiles = async (blockIds: string[]) => {
+  //   const blocks = await Promise.all(blockIds.map(id => getBlockById(id)))
+
+  //   const files = blocks
+  //     .filter((block): block is MessageBlock => block !== null)
+  //     .filter(block => block.type === MessageBlockType.FILE || block.type === MessageBlockType.IMAGE)
+  //     .map(block => block.file)
+  //     .filter((file): file is FileType => file !== undefined)
+  //   return isEmpty(files) ? [] : files
+  // }
+
+  // const cleanupFiles = async (files: FileType[]) => {
+  //   await Promise.all(files.map(file => FileManager.deleteFile(file.id, false)))
+  // }
+
+  // getBlocksFiles(blockIds).then(cleanupFiles)
+
+  if (blockIds.length > 0) {
+    await removeManyBlocks(blockIds)
+  }
+}

@@ -7,6 +7,7 @@ import { Assistant } from '@/types/assistant'
 import { GroupedMessage } from '@/types/message'
 
 import MessageItem from './Message'
+import MessageFooter from './MessageFooter'
 import MessageHeader from './MessageHeader'
 interface MessageGroupProps {
   assistant: Assistant
@@ -26,6 +27,7 @@ const MessageGroup: FC<MessageGroupProps> = ({ assistant, item }) => {
         <View>
           <MessageHeader assistant={assistant} message={messagesInGroup[0]} />
           <MessageItem message={messagesInGroup[0]} />
+          <MessageFooter assistant={assistant} message={messagesInGroup[0]} />
         </View>
       )
     }
@@ -61,6 +63,7 @@ const MessageGroup: FC<MessageGroupProps> = ({ assistant, item }) => {
             {messagesInGroup.map((message, index) => (
               <Tabs.Content key={index} value={index.toString()}>
                 <MessageItem message={message} />
+                <MessageFooter assistant={assistant} message={message} />
               </Tabs.Content>
             ))}
           </Tabs>
