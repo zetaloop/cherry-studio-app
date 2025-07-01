@@ -3,18 +3,10 @@ import dayjs from 'dayjs'
 import WebSearchEngineProvider from '@/providers/WebSearchProvider'
 import { setWebSearchStatus } from '@/store/runtime'
 import { WebSearchState } from '@/store/websearch'
-import { WebSearchProviderResponse, WebSearchStatus } from '@/types'
-import { WebSearchProvider } from '@/types/websearch'
+import { WebSearchProvider, WebSearchProviderResponse, WebSearchStatus } from '@/types/websearch'
 import { hasObjectKey } from '@/utils'
 
 import { getAllWebSearchProviders } from '../../db/queries/providers.queries'
-
-// interface RequestState {
-//   signal: AbortSignal | null
-//   searchBase?: KnowledgeBase
-//   isPaused: boolean
-//   createdAt: number
-// }
 
 class WebSearchService {
   /**

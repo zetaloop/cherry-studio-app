@@ -54,6 +54,14 @@ export type WebSearchResults =
   | WebSearchResultBlock[]
   | any[]
 
+export type WebSearchPhase = 'default' | 'fetch_complete' | 'rag' | 'rag_complete' | 'rag_failed' | 'cutoff'
+
+export type WebSearchStatus = {
+  phase: WebSearchPhase
+  countBefore?: number
+  countAfter?: number
+}
+
 export interface Citation {
   number: number
   url: string

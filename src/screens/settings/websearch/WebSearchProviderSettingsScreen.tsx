@@ -1,16 +1,18 @@
+import BottomSheet from '@gorhom/bottom-sheet'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert } from 'react-native'
-import { Button, Input, Spinner, Stack, useTheme, XStack, YStack } from 'tamagui'
+import { ActivityIndicator, Alert } from 'react-native'
+import { Button, Input, Stack, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
-import { SettingContainer, SettingGroupTitle } from '@/components/settings'
+import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
+import { ApiCheckSheet } from '@/components/settings/websearch/ApiCheckSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { WEB_SEARCH_PROVIDER_CONFIG } from '@/config/websearchProviders'
-import { useWebsearchProvider } from '@/hooks/useWebsearchProviders'
+import { useWebSearchProvider } from '@/hooks/useWebsearchProviders'
 import WebSearchService from '@/services/WebSearchService'
 import { RootStackParamList } from '@/types/naviagate'
 
@@ -20,86 +22,100 @@ export default function WebSearchProviderSettingsScreen() {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigation = useNavigation()
-
   const route = useRoute<WebsearchProviderSettingsRouteProp>()
-  const { provider } = useWebsearchProvider(route.params.providerId)
-  const [showApiKey, setShowApiKey] = useState(false)
-  const [apiKey, setApiKey] = useState(provider.apiKey || '')
-  const [apiHost, setApiHost] = useState(provider.apiHost || '')
-  const [apiChecking, setApiChecking] = useState(false)
-  const [apiValid, setApiValid] = useState(false)
 
-  const webSearchProviderConfig = WEB_SEARCH_PROVIDER_CONFIG[provider.id]
+  const { providerId } = route.params
+  const { provider, isLoading, updateProvider } = useWebSearchProvider(providerId)
+
+  const [showApiKey, setShowApiKey] = useState(false)
+  const bottomSheetRef = useRef<BottomSheet>(null)
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+
+  const webSearchProviderConfig = provider?.id ? WEB_SEARCH_PROVIDER_CONFIG[provider.id] : undefined
   const apiKeyWebsite = webSearchProviderConfig?.websites?.apiKey
+
+  if (isLoading) {
+    return (
+      <View>
+        <ActivityIndicator />
+      </View>
+    )
+  }
+
+  if (!provider) {
+    return (
+      <SafeAreaContainer>
+        <HeaderBar title={t('settings.provider.not_found')} onBackPress={() => navigation.goBack()} />
+        <SettingContainer>
+          <Text textAlign="center" color="$gray10" paddingVertical={24}>
+            {t('settings.provider.not_found_message')}
+          </Text>
+        </SettingContainer>
+      </SafeAreaContainer>
+    )
+  }
 
   const handleBackPress = () => {
     navigation.goBack()
+  }
+
+  const handleOpenBottomSheet = () => {
+    bottomSheetRef.current?.expand()
+    setIsBottomSheetOpen(true)
+  }
+
+  const handleBottomSheetClose = () => {
+    setIsBottomSheetOpen(false)
   }
 
   const toggleApiKeyVisibility = () => {
     setShowApiKey(prevShowApiKey => !prevShowApiKey)
   }
 
-  const handleApiKeyChange = (text: string) => {
-    setApiKey(text)
-  }
-
-  const handleApiHostChange = (text: string) => {
-    setApiHost(text)
+  const handleProviderConfigChange = async (key: 'apiKey' | 'apiHost', value: string) => {
+    const updatedProvider = { ...provider, [key]: value }
+    await updateProvider(updatedProvider)
   }
 
   async function checkSearch() {
     // TODO : 支持多个 API Key 检测
-    // if (apiKey.includes(',')) {
-    //   const keys = apiKey
-    //     .split(',')
-    //     .map(k => k.trim())
-    //     .filter(k => k)
-    //
-    //   const result = await ApiCheckPopup.show({
-    //     title: t('settings.provider.check_multiple_keys'),
-    //     provider: { ...provider, apiHost },
-    //     apiKeys: keys,
-    //     type: 'websearch'
-    //   })
-    //
-    //   if (result?.validKeys) {
-    //     setApiKey(result.validKeys.join(','))
-    //     updateProvider({ ...provider, apiKey: result.validKeys.join(',') })
-    //   }
-    //
-    //   return
-    // }
+    if (!provider) return
 
     try {
-      setApiChecking(true)
       const { valid, error } = await WebSearchService.checkSearch(provider)
       const errorMessage = error && error?.message ? ' ' + error?.message : ''
 
       if (valid) {
         Alert.alert(t('settings.websearch.check_success'), t('settings.websearch.check_success_message'), [
-          { text: t('common.ok'), style: 'cancel' }
+          {
+            text: t('common.ok'),
+            style: 'cancel',
+            onPress: () => setIsBottomSheetOpen(false)
+          }
         ])
       } else {
-        Alert.alert(t('settings.websearch.check_fail'), errorMessage, [{ text: t('common.ok'), style: 'cancel' }])
+        Alert.alert(t('settings.websearch.check_fail'), errorMessage, [
+          {
+            text: t('common.ok'),
+            style: 'cancel',
+            onPress: () => setIsBottomSheetOpen(false)
+          }
+        ])
       }
-
-      setApiValid(valid)
     } catch (err) {
-      setApiValid(false)
       Alert.alert(t('settings.websearch.check_error'), t('common.error_occurred'), [
-        { text: t('common.ok'), style: 'cancel' }
+        {
+          text: t('common.ok'),
+          style: 'cancel',
+          onPress: () => setIsBottomSheetOpen(false)
+        }
       ])
-    } finally {
-      setApiChecking(false)
-      setTimeout(() => setApiValid(false), 2500)
     }
   }
 
   return (
     <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar title={provider.name} onBackPress={handleBackPress} />
-
       <SettingContainer>
         {/* API Key 配置 */}
         {provider.type === 'api' && (
@@ -108,17 +124,11 @@ export default function WebSearchProviderSettingsScreen() {
               <SettingGroupTitle>{t('settings.websearch.api_key')}</SettingGroupTitle>
               <Button
                 size={16}
-                icon={
-                  apiChecking ? (
-                    <Spinner size="small" color="$gray10" />
-                  ) : (
-                    <ShieldCheck size={16} color={apiValid ? '$green10' : undefined} />
-                  )
-                }
+                icon={<ShieldCheck size={16} />}
                 backgroundColor="$colorTransparent"
                 circular
-                onPress={checkSearch}
-                disabled={apiChecking}></Button>
+                onPress={handleOpenBottomSheet}
+              />
             </XStack>
 
             <XStack paddingVertical={8} gap={8} position="relative">
@@ -127,8 +137,8 @@ export default function WebSearchProviderSettingsScreen() {
                 placeholder={t('settings.websearch.api_key.placeholder')}
                 secureTextEntry={!showApiKey}
                 paddingRight={48}
-                value={apiKey}
-                onChangeText={handleApiKeyChange}
+                value={provider?.apiKey || ''}
+                onChangeText={text => handleProviderConfigChange('apiKey', text)}
               />
               <Stack
                 position="absolute"
@@ -146,6 +156,7 @@ export default function WebSearchProviderSettingsScreen() {
             </XStack>
 
             <XStack justifyContent="space-between">
+              <SettingHelpText>{t('settings.provider.api_key.tip')}</SettingHelpText>
               <ExternalLink href={apiKeyWebsite} size={12}>
                 {t('settings.websearch.api_key.get')}
               </ExternalLink>
@@ -155,16 +166,24 @@ export default function WebSearchProviderSettingsScreen() {
 
         {/* API Host 配置 */}
         <YStack gap={8}>
-          <XStack paddingHorizontal={10} height={20} alignItems="center" justifyContent="space-between">
+          <XStack paddingHorizontal={10} height={20} alignItems="center">
             <SettingGroupTitle>{t('settings.websearch.api_host')}</SettingGroupTitle>
           </XStack>
           <Input
             placeholder={t('settings.websearch.api_host.placeholder')}
-            value={apiHost}
-            onChangeText={handleApiHostChange}
+            value={provider?.apiHost || ''}
+            onChangeText={text => handleProviderConfigChange('apiHost', text)}
           />
         </YStack>
       </SettingContainer>
+      {/*TODO 添加loading*/}
+      <ApiCheckSheet
+        bottomSheetRef={bottomSheetRef}
+        isOpen={isBottomSheetOpen}
+        onClose={handleBottomSheetClose}
+        apiKey={provider?.apiKey || ''}
+        onStartModelCheck={checkSearch}
+      />
     </SafeAreaContainer>
   )
 }

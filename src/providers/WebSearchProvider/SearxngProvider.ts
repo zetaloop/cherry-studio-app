@@ -4,8 +4,7 @@ import axios from 'axios'
 import ky from 'ky'
 
 import { WebSearchState } from '@/store/websearch'
-import { WebSearchProviderResponse } from '@/types'
-import { WebSearchProvider } from '@/types/websearch'
+import { WebSearchProvider, WebSearchProviderResponse } from '@/types/websearch'
 
 import BaseWebSearchProvider from './BaseWebSearchProvider'
 

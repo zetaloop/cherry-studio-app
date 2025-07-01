@@ -1,23 +1,27 @@
 import { WebSearchState } from '@/store/websearch'
-import { WebSearchProviderResponse } from '@/types'
-import { WebSearchProvider } from '@/types/websearch'
-
-import { getWebSearchProviderById } from '../../../db/queries/providers.queries'
+import { WebSearchProvider, WebSearchProviderResponse } from '@/types/websearch'
 
 export default abstract class BaseWebSearchProvider {
   protected provider: WebSearchProvider
   protected apiHost?: string
-  protected apiKey: string
+  protected apiKey?: string
 
   constructor(provider: WebSearchProvider) {
     this.provider = provider
-    this.apiHost = ''
-    this.apiKey = ''
+
+    if (provider.apiHost) this.apiHost = provider.apiHost
+    if (provider.apiKey) this.apiKey = provider.apiKey
   }
 
   public async initialize(): Promise<void> {
-    this.apiHost = await this.getApiHost()
-    this.apiKey = await this.getApiKey()
+    const { getWebSearchProviderById } = await import('../../../db/queries/providers.queries')
+    const fullProvider = await getWebSearchProviderById(this.provider.id)
+
+    if (fullProvider) {
+      this.provider = fullProvider
+      this.apiHost = fullProvider.apiHost || ''
+      this.apiKey = fullProvider.apiKey || ''
+    }
   }
 
   abstract search(
@@ -26,11 +30,6 @@ export default abstract class BaseWebSearchProvider {
     httpOptions?: RequestInit
   ): Promise<WebSearchProviderResponse>
 
-  public async getApiHost() {
-    const provider = await getWebSearchProviderById(this.provider.id)
-    return provider?.apiHost || ''
-  }
-
   public defaultHeaders() {
     return {
       'HTTP-Referer': 'https://cherry-ai.com',
@@ -38,13 +37,15 @@ export default abstract class BaseWebSearchProvider {
     }
   }
 
+  public getApiHost(): string {
+    return this.apiHost || ''
+  }
+
   // TODO 暂时单key处理
-  public async getApiKey() {
-    const provider = await getWebSearchProviderById(this.provider.id)
+  public getApiKey(): string {
+    if (!this.provider?.apiKey) return ''
 
-    if (!provider?.apiKey) return ''
-
-    const keys = provider.apiKey.split(',').map(key => key.trim())
+    const keys = this.provider.apiKey.split(',').map(key => key.trim())
 
     if (keys.length > 0) {
       return keys[0]

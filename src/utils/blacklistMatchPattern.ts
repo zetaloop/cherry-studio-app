@@ -1,5 +1,5 @@
 import { WebSearchState } from '@/store/websearch'
-import { WebSearchProviderResponse } from '@/types'
+import { WebSearchProviderResponse } from '@/types/websearch'
 
 /*
  * MIT License

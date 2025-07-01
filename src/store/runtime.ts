@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import dayjs from 'dayjs'
 
-import { WebSearchStatus } from '@/types'
+import { WebSearchStatus } from '@/types/websearch'
 
 export interface WebSearchState {
   activeSearches: Record<string, WebSearchStatus>

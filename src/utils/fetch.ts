@@ -2,7 +2,7 @@ import { Readability } from '@mozilla/readability'
 import { nanoid } from '@reduxjs/toolkit'
 import TurndownService from 'turndown'
 
-import { WebSearchProviderResult } from '@/types'
+import { WebSearchProviderResult } from '@/types/websearch'
 import { createAbortPromise } from '@/utils/abortController'
 import { isAbortError } from '@/utils/error'
 
