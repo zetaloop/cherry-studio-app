@@ -32,8 +32,7 @@ export async function getProviderById(providerId: string) {
 
 export async function getAllProviders() {
   try {
-    const providers = await _getAllProviders()
-    return providers
+    return await _getAllProviders()
   } catch (error) {
     console.error('Error getting all providers:', error)
     throw error

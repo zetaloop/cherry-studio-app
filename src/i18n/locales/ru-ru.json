@@ -92,7 +92,8 @@
       "visit": "Посетить",
       "see_all": "Показать все",
       "ok": "ОК",
-      "error_occurred": "Произошла ошибка"
+      "error_occurred": "Произошла ошибка",
+      "loading": "Загрузка..."
     },
     "history": {
       "topics.empty": "Темы не найдены",

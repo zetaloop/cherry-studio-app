@@ -92,7 +92,8 @@
       "visit": "訪問",
       "see_all": "查看全部",
       "ok": "確定",
-      "error_occurred": "發生錯誤"
+      "error_occurred": "發生錯誤",
+      "loading": "載入中..."
     },
     "history": {
       "topics.empty": "未找到主題",

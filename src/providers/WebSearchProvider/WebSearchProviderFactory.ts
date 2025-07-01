@@ -1,4 +1,4 @@
-import { WebSearchProvider } from '@/types'
+import { WebSearchProvider } from '@/types/websearch'
 
 import BaseWebSearchProvider from './BaseWebSearchProvider'
 import BochaProvider from './BochaProvider'

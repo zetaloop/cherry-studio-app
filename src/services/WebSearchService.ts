@@ -3,11 +3,11 @@ import dayjs from 'dayjs'
 import WebSearchEngineProvider from '@/providers/WebSearchProvider'
 import { setWebSearchStatus } from '@/store/runtime'
 import { WebSearchState } from '@/store/websearch'
-import { WebSearchProvider, WebSearchProviderResponse, WebSearchStatus } from '@/types'
+import { WebSearchProviderResponse, WebSearchStatus } from '@/types'
+import { WebSearchProvider } from '@/types/websearch'
 import { hasObjectKey } from '@/utils'
 
-import { db } from '../../db'
-import { websearch_providers } from '../../db/schema'
+import { getAllWebSearchProviders } from '../../db/queries/providers.queries'
 
 // interface RequestState {
 //   signal: AbortSignal | null
@@ -38,8 +38,8 @@ class WebSearchService {
    * @public
    * @returns 如果默认搜索提供商已启用则返回true，否则返回false
    */
-  public isWebSearchEnabled(providerId?: WebSearchProvider['id']): boolean {
-    const providers = db.select().from(websearch_providers).all()
+  public async isWebSearchEnabled(providerId?: WebSearchProvider['id']): Promise<boolean> {
+    const providers = await getAllWebSearchProviders()
     const provider = providers.find(provider => provider.id === providerId)
 
     if (!provider) {
@@ -51,40 +51,14 @@ class WebSearchService {
     }
 
     if (hasObjectKey(provider, 'api_key')) {
-      return provider.api_key !== ''
+      return provider.apiKey !== ''
     }
 
     if (hasObjectKey(provider, 'api_host')) {
-      return provider.api_host !== ''
+      return provider.apiHost !== ''
     }
 
     return false
-  }
-
-  /**
-   * 获取当前默认的网络搜索提供商
-   * @public
-   * @returns 网络搜索提供商
-   */
-  public getWebSearchProvider(providerId?: string): WebSearchProvider | undefined {
-    const providers = db.select().from(websearch_providers).all()
-    const provider = providers.find(provider => provider.id === providerId)
-
-    if (!provider) {
-      return undefined
-    }
-
-    return {
-      id: provider.id,
-      name: provider.name ?? '',
-      apiKey: provider.api_key,
-      apiHost: provider.api_host,
-      engines: provider.engines ? JSON.parse(provider.engines) : undefined,
-      url: provider.url ?? undefined,
-      basicAuthUsername: provider.basic_auth_username ?? undefined,
-      basicAuthPassword: provider.basic_auth_password ?? undefined,
-      usingBrowser: provider.using_browser ?? undefined
-    }
   }
 
   /**

@@ -1,21 +1,23 @@
-import { eq } from 'drizzle-orm'
-
 import { WebSearchState } from '@/store/websearch'
-import { WebSearchProvider, WebSearchProviderResponse } from '@/types'
+import { WebSearchProviderResponse } from '@/types'
+import { WebSearchProvider } from '@/types/websearch'
 
-import { db } from '../../../db'
-import { websearch_providers } from '../../../db/schema'
+import { getWebSearchProviderById } from '../../../db/queries/providers.queries'
 
 export default abstract class BaseWebSearchProvider {
-  // @ts-ignore this
   protected provider: WebSearchProvider
   protected apiHost?: string
   protected apiKey: string
 
   constructor(provider: WebSearchProvider) {
     this.provider = provider
-    this.apiHost = this.getApiHost()
-    this.apiKey = this.getApiKey()
+    this.apiHost = ''
+    this.apiKey = ''
+  }
+
+  public async initialize(): Promise<void> {
+    this.apiHost = await this.getApiHost()
+    this.apiKey = await this.getApiKey()
   }
 
   abstract search(
@@ -24,9 +26,9 @@ export default abstract class BaseWebSearchProvider {
     httpOptions?: RequestInit
   ): Promise<WebSearchProviderResponse>
 
-  public getApiHost() {
-    const provider = db.select().from(websearch_providers).where(eq(websearch_providers.id, this.provider.id)).get()
-    return provider?.api_host || ''
+  public async getApiHost() {
+    const provider = await getWebSearchProviderById(this.provider.id)
+    return provider?.apiHost || ''
   }
 
   public defaultHeaders() {
@@ -37,10 +39,12 @@ export default abstract class BaseWebSearchProvider {
   }
 
   // TODO 暂时单key处理
-  public getApiKey() {
-    const provider = db.select().from(websearch_providers).where(eq(websearch_providers.id, this.provider.id)).get()
+  public async getApiKey() {
+    const provider = await getWebSearchProviderById(this.provider.id)
 
-    const keys = provider?.api_key?.split(',').map(key => key.trim()) || []
+    if (!provider?.apiKey) return ''
+
+    const keys = provider.apiKey.split(',').map(key => key.trim())
 
     if (keys.length > 0) {
       return keys[0]

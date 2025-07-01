@@ -92,7 +92,8 @@
       "visit": "訪問",
       "see_all": "すべて表示",
       "ok": "OK",
-      "error_occurred": "エラーが発生しました"
+      "error_occurred": "エラーが発生しました",
+      "loading": "読み込み中..."
     },
     "history": {
       "topics.empty": "トピックが見つかりません。",

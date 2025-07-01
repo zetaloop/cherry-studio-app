@@ -1,5 +1,6 @@
 import { WebSearchState } from '@/store/websearch'
-import { WebSearchProvider, WebSearchProviderResponse } from '@/types'
+import { WebSearchProviderResponse } from '@/types'
+import { WebSearchProvider } from '@/types/websearch'
 import { BochaSearchParams, BochaSearchResponse } from '@/utils/bocha'
 
 import BaseWebSearchProvider from './BaseWebSearchProvider'

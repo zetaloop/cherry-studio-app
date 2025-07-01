@@ -7,6 +7,9 @@ import { db } from '../../db'
 import { transformDbToProvider, upsertProviders } from '../../db/queries/providers.queries'
 import { providers as providersSchema } from '../../db/schema'
 
+/**
+ * Fetch all providers from the database.
+ */
 export function useAllProviders() {
   const query = db.select().from(providersSchema)
   const { data: rawProviders, updatedAt } = useLiveQuery(query)
@@ -25,6 +28,10 @@ export function useAllProviders() {
   }
 }
 
+/**
+ * Fetch a single provider by its ID.
+ * @param providerId
+ */
 export function useProvider(providerId: string) {
   console.log('useProvider', providerId)
   const query = db.select().from(providersSchema).where(eq(providersSchema.id, providerId))

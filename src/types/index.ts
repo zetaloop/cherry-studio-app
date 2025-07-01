@@ -29,18 +29,6 @@ export type ExternalToolResult = {
   knowledge?: KnowledgeReference[]
 }
 
-export type WebSearchProvider = {
-  id: string
-  name: string
-  apiKey?: string
-  apiHost?: string
-  engines?: string[]
-  url?: string
-  basicAuthUsername?: string
-  basicAuthPassword?: string
-  usingBrowser?: boolean
-}
-
 export type WebSearchProviderResult = {
   title: string
   content: string
