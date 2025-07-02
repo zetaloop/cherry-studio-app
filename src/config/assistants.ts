@@ -4,8 +4,7 @@ import { Assistant } from '@/types/assistant'
 export function getSystemAssistants(): Assistant[] {
   try {
     if (assistantsEnJsonData) {
-      const assistants = JSON.parse(JSON.stringify(assistantsEnJsonData)) || []
-      return assistants
+      return JSON.parse(JSON.stringify(assistantsEnJsonData)) || []
     } else {
       return []
     }

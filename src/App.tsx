@@ -14,12 +14,13 @@ import { Provider, useSelector } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { PortalProvider, TamaguiProvider } from 'tamagui'
 
+import { getWebSearchProviders } from '@/config/websearchProviders'
 import store, { persistor, RootState, useAppDispatch } from '@/store'
 import { setInitialized } from '@/store/app'
 
 import { DATABASE_NAME, db, expoDb } from '../db'
 import { upsertAssistants } from '../db/queries/assistants.queries'
-import { upsertProviders } from '../db/queries/providers.queries'
+import { upsertProviders, upsertWebSearchProviders } from '../db/queries/providers.queries'
 import migrations from '../drizzle/migrations'
 import tamaguiConfig from '../tamagui.config'
 import { getSystemAssistants } from './config/assistants'
@@ -46,6 +47,8 @@ function AppContent() {
         await upsertAssistants(assistants)
         const providers = getSystemProviders()
         await upsertProviders(providers)
+        const websearchProviders = getWebSearchProviders()
+        await upsertWebSearchProviders(websearchProviders)
         dispatch(setInitialized(true))
         console.log('App data initialized successfully.')
       } catch (e) {

@@ -1,7 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
 
-import { INITIAL_WEBSEARCH_PROVIDERS } from '@/mock'
 import { WebSearchProvider } from '@/types/websearch'
 
 import { db } from '../../db'
@@ -9,24 +8,25 @@ import { transformDbToWebSearchProvider, upsertWebSearchProviders } from '../../
 import { websearch_providers } from '../../db/schema'
 
 export function useWebsearchProviders() {
-  const freeProviders: WebSearchProvider[] = INITIAL_WEBSEARCH_PROVIDERS.filter(provider => provider.type === 'free')
-  const apiProviders: WebSearchProvider[] = INITIAL_WEBSEARCH_PROVIDERS.filter(provider => provider.type === 'api')
+  const query = db.select().from(websearch_providers)
+  const { data: rawProviders, updatedAt } = useLiveQuery(query)
+
+  if (!updatedAt) {
+    return {
+      freeProviders: [],
+      apiProviders: [],
+      isLoading: true
+    }
+  }
+
+  const processedProviders = rawProviders.map(provider => transformDbToWebSearchProvider(provider))
+  const freeProviders = processedProviders.filter(provider => provider.id.startsWith('local-'))
+  const apiProviders = processedProviders.filter(provider => !provider.id.startsWith('local-'))
 
   return {
     freeProviders,
-    apiProviders
-  }
-}
-
-export function useWebsearchProvider(id: string) {
-  const provider = INITIAL_WEBSEARCH_PROVIDERS.find(provider => provider.id === id)
-
-  if (!provider) {
-    throw new Error(`Web search provider with id ${id} not found`)
-  }
-
-  return {
-    provider
+    apiProviders,
+    isLoading: false
   }
 }
 
