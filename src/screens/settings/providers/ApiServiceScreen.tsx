@@ -13,6 +13,7 @@ import { HeaderBar } from '@/components/settings/HeaderBar'
 import { ApiCheckSheet } from '@/components/settings/providers/ApiCheckSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
+import { PROVIDER_CONFIG } from '@/config/providers'
 import { useProvider } from '@/hooks/useProviders'
 import { checkApi } from '@/services/ApiService'
 import { Model } from '@/types/assistant'
@@ -35,6 +36,9 @@ export default function ApiServiceScreen() {
 
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+
+  const webSearchProviderConfig = provider?.id ? PROVIDER_CONFIG[provider.id] : undefined
+  const apiKeyWebsite = webSearchProviderConfig?.websites?.apiKey
 
   if (isLoading) {
     return (
@@ -165,8 +169,7 @@ export default function ApiServiceScreen() {
 
           <XStack justifyContent="space-between">
             <SettingHelpText>{t('settings.provider.api_key.tip')}</SettingHelpText>
-            {/* todo */}
-            <ExternalLink href="" size={12}>
+            <ExternalLink href={apiKeyWebsite} size={12}>
               {t('settings.provider.api_key.get')}
             </ExternalLink>
           </XStack>
