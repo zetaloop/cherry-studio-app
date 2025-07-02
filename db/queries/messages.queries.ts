@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm'
 
 import { Message } from '@/types/message'
+import { safeJsonParse } from '@/utils/json'
 
 import { db } from '..'
 import { messages } from '../schema'
@@ -12,19 +13,6 @@ import { getBlocksIdByMessageId } from './messageBlocks.queries'
  * @returns 一个 Message 对象。
  */
 export function transformDbToMessage(dbRecord: any): Message {
-  const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
-    if (typeof jsonString !== 'string') {
-      return defaultValue
-    }
-
-    try {
-      return JSON.parse(jsonString)
-    } catch (e) {
-      console.error('JSON parse error for string:', jsonString)
-      return defaultValue
-    }
-  }
-
   return {
     id: dbRecord.id,
     role: dbRecord.role,

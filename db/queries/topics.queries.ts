@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm'
 
 import { Topic } from '@/types/assistant'
 import { Message } from '@/types/message'
+import { safeJsonParse } from '@/utils/json'
 
 import { db } from '..'
 import { topics } from '../schema'
@@ -12,19 +13,6 @@ import { topics } from '../schema'
  * @returns 一个 Topic 对象。
  */
 function transformDbToTopic(dbRecord: any): Topic {
-  const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
-    if (typeof jsonString !== 'string') {
-      return defaultValue
-    }
-
-    try {
-      return JSON.parse(jsonString)
-    } catch (e) {
-      console.error('JSON parse error for string:', jsonString)
-      return defaultValue
-    }
-  }
-
   return {
     id: dbRecord.id,
     assistantId: dbRecord.assistant_id,

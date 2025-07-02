@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm'
 
 import { Assistant } from '@/types/assistant'
+import { safeJsonParse } from '@/utils/json'
 
 import { db } from '..'
 import { assistants } from '../schema'
@@ -11,19 +12,6 @@ import { assistants } from '../schema'
  * @returns 一个 Assistant 对象。
  */
 export function transformDbToAssistant(dbRecord: any): Assistant {
-  const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
-    if (typeof jsonString !== 'string') {
-      return defaultValue
-    }
-
-    try {
-      return JSON.parse(jsonString)
-    } catch (e) {
-      console.error('JSON parse error for string:', e, jsonString)
-      return defaultValue
-    }
-  }
-
   return {
     id: dbRecord.id,
     name: dbRecord.name,

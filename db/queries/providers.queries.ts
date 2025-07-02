@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm'
 
 import { Provider } from '@/types/assistant'
 import { WebSearchProvider } from '@/types/websearch'
+import { safeJsonParse } from '@/utils/json'
 
 import { db } from '..'
 import { providers, websearch_providers } from '../schema'
@@ -12,19 +13,6 @@ import { providers, websearch_providers } from '../schema'
  * @returns 一个 Provider 对象。
  */
 export function transformDbToProvider(dbRecord: any): Provider {
-  const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
-    if (typeof jsonString !== 'string') {
-      return defaultValue
-    }
-
-    try {
-      return JSON.parse(jsonString)
-    } catch (e) {
-      console.error('JSON parse error for string:', jsonString)
-      return defaultValue
-    }
-  }
-
   return {
     id: dbRecord.id,
     type: dbRecord.type,
@@ -126,19 +114,6 @@ export async function getAllProviders(): Promise<Provider[]> {
  * @return 一个 WebSearchProvider 对象。
  */
 export function transformDbToWebSearchProvider(dbRecord: any): WebSearchProvider {
-  const safeJsonParse = (jsonString: string | null, defaultValue: any = undefined) => {
-    if (typeof jsonString !== 'string') {
-      return defaultValue
-    }
-
-    try {
-      return JSON.parse(jsonString)
-    } catch (e) {
-      console.error('JSON parse error for string:', jsonString)
-      return defaultValue
-    }
-  }
-
   return {
     id: dbRecord.id,
     name: dbRecord.name,
