@@ -36,7 +36,7 @@ export default function SettingsScreen() {
         },
         {
           title: t('settings.assistant.title'),
-          screen: 'ModelSettingsScreen',
+          screen: 'AssistantSettingsScreen',
           icon: <Package size={24} />
         },
         {

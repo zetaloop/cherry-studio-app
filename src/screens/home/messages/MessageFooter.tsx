@@ -1,13 +1,18 @@
-import { Copy, Download, ExternalLink, Languages, RefreshCw } from '@tamagui/lucide-icons'
+import { Copy, Download, ExternalLink, RefreshCw } from '@tamagui/lucide-icons'
 import * as Clipboard from 'expo-clipboard'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, View, XStack } from 'tamagui'
 
+import { TranslatedIcon, TranslationIcon } from '@/components/icons/TranslationIcon'
+import { fetchTranslate } from '@/services/ApiService'
 import { regenerateAssistantMessage } from '@/services/MessagesService'
 import { Assistant } from '@/types/assistant'
 import { Message } from '@/types/message'
 import { filterMessages } from '@/utils/messageUtils/filters'
-import { getMainTextContent } from '@/utils/messageUtils/find'
+import { findTranslationBlocks, getMainTextContent } from '@/utils/messageUtils/find'
+
+import { removeManyBlocks } from '../../../../db/queries/messageBlocks.queries'
+import { upsertMessages } from '../../../../db/queries/messages.queries'
 
 interface MessageFooterProps {
   assistant: Assistant
@@ -15,21 +20,106 @@ interface MessageFooterProps {
 }
 
 const MessageFooter = ({ message, assistant }: MessageFooterProps) => {
+  const [isTranslating, setIsTranslating] = useState(false)
+
+  const [isTranslated, setIsTranslated] = useState(false)
+
+  React.useEffect(() => {
+    const checkTranslation = async () => {
+      try {
+        const translationBlocks = await findTranslationBlocks(message)
+        setIsTranslated(translationBlocks.length > 0)
+      } catch (error) {
+        console.error('Error checking translation:', error)
+        setIsTranslated(false)
+      }
+    }
+
+    checkTranslation()
+  }, [message.id, message.blocks])
+
   const onCopy = async () => {
-    const filteredMessages = await filterMessages([message])
-    const mainContent = await getMainTextContent(filteredMessages[0])
-    await Clipboard.setStringAsync(mainContent)
+    try {
+      const filteredMessages = await filterMessages([message])
+      const mainContent = await getMainTextContent(filteredMessages[0])
+      await Clipboard.setStringAsync(mainContent)
+    } catch (error) {
+      console.error('Error copying message:', error)
+      // 可以添加 toast 提示用户复制失败
+    }
   }
 
   const onRegenerate = async () => {
-    await regenerateAssistantMessage(message, assistant)
+    try {
+      await regenerateAssistantMessage(message, assistant)
+    } catch (error) {
+      console.error('Error regenerating message:', error)
+      // 可以添加 toast 提示用户重新生成失败
+    }
+  }
+
+  const onTranslate = async () => {
+    try {
+      if (isTranslating) return
+      setIsTranslating(true)
+      const messageId = message.id
+      await fetchTranslate({ assistantMessageId: messageId, messages: [message] })
+      setIsTranslated(true) // 翻译成功后更新状态
+    } catch (error) {
+      console.error('Error during translation:', error)
+      // 可以添加 toast 提示用户翻译失败
+    } finally {
+      setIsTranslating(false)
+    }
+  }
+
+  const onDeleteTranslation = async () => {
+    try {
+      // 1. 删除 translation block
+      const translationBlocks = await findTranslationBlocks(message)
+      await removeManyBlocks(translationBlocks.map(block => block.id))
+
+      // 2. 删除 message 中的 translation block id
+      const updatedMessage = {
+        ...message,
+        blocks: message.blocks.filter(blockId => !translationBlocks.some(block => block.id === blockId))
+      }
+      await upsertMessages(updatedMessage)
+      setIsTranslated(false) // 删除成功后更新状态
+    } catch (error) {
+      console.error('Error deleting translation:', error)
+      // 可以添加 toast 提示用户删除失败
+    }
+  }
+
+  const onDownload = async () => {
+    try {
+      // TODO: 实现下载功能
+      console.log('Download functionality not implemented yet')
+    } catch (error) {
+      console.error('Error downloading message:', error)
+    }
+  }
+
+  const onExternalLink = async () => {
+    try {
+      // TODO: 实现外部链接功能
+      console.log('External link functionality not implemented yet')
+    } catch (error) {
+      console.error('Error opening external link:', error)
+    }
   }
 
   return (
     <View>
       <XStack gap={20}>
         <Button chromeless circular size={24} icon={<Copy size={18} />} onPress={onCopy}></Button>
-        <Button chromeless circular size={24} icon={<Languages size={18} />}></Button>
+        <Button
+          chromeless
+          circular
+          size={24}
+          icon={isTranslated ? <TranslatedIcon size={18} /> : <TranslationIcon size={18} />}
+          onPress={isTranslated ? onDeleteTranslation : onTranslate}></Button>
         <Button chromeless circular size={24} icon={<RefreshCw size={18} />} onPress={onRegenerate}></Button>
         <Button chromeless circular size={24} icon={<Download size={18} />}></Button>
         <Button chromeless circular size={24} icon={<ExternalLink size={18} />}></Button>

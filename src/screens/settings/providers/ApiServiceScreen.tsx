@@ -15,7 +15,6 @@ import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { PROVIDER_CONFIG } from '@/config/providers'
 import { useProvider } from '@/hooks/useProviders'
-import { checkApi } from '@/services/ApiService'
 import { Model } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { getModelUniqId } from '@/utils/model'
@@ -115,7 +114,7 @@ export default function ApiServiceScreen() {
     if (!selectedModel) return
 
     try {
-      await checkApi(provider, selectedModel)
+      // await checkApi(provider, selectedModel)
     } catch (error) {
       console.error('Model check failed:', error)
     }

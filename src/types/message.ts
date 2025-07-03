@@ -72,8 +72,6 @@ export interface TranslationMessageBlock extends BaseMessageBlock {
   type: MessageBlockType.TRANSLATION
   content: string
   sourceBlockId?: string // Optional: ID of the block that was translated
-  sourceLanguage?: string
-  targetLanguage: string
 }
 
 // 代码块 - 专门处理代码

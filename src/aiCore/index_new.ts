@@ -145,7 +145,6 @@ export default class ModernAiProvider {
     // 检查是否应该使用现代化客户端
     // if (this.modernClient && model && isModernSdkSupported(this.provider, model)) {
     // try {
-    console.log('completions', modelId, params, middlewareConfig)
     return await this.modernCompletions(modelId, params, middlewareConfig)
     // } catch (error) {
     // console.warn('Modern client failed, falling back to legacy:', error)

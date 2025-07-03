@@ -15,6 +15,7 @@ import ImageBlock from './ImageBlock'
 import MainTextBlock from './MainTextBlock'
 import PlaceholderBlock from './PlaceholderBlock'
 import ThinkingBlock from './ThinkingBlock'
+import TranslationBlock from './TranslationBlock'
 
 interface MessageBlockRendererProps {
   blocks: MessageBlock[]
@@ -90,6 +91,9 @@ const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ blocks }) => {
             break
           case MessageBlockType.THINKING:
             blockComponent = <ThinkingBlock key={block.id} block={block} />
+            break
+          case MessageBlockType.TRANSLATION:
+            blockComponent = <TranslationBlock key={block.id} block={block} />
             break
           default:
             console.warn('Unsupported block type in MessageBlockRenderer:', (block as any).type, block)

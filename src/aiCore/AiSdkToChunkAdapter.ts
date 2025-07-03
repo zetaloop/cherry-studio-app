@@ -76,8 +76,6 @@ export class AiSdkToChunkAdapter {
    * @param chunk AI SDK 的 chunk 数据
    */
   private convertAndEmitChunk(chunk: any, final: { text: string; reasoning_content: string }) {
-    console.log('AI SDK chunk type:', chunk.type, chunk)
-
     switch (chunk.type) {
       // === 文本相关事件 ===
       case 'text-delta':
