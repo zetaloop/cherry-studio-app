@@ -8,7 +8,7 @@ import { getAssistantById as _getAssistantById, upsertAssistants } from '../../d
 import { getProviderById } from '../../db/queries/providers.queries'
 
 export async function getDefaultAssistant(): Promise<Assistant> {
-  return await getAssistantById('1')
+  return await getAssistantById('default')
 }
 
 export async function getAssistantById(assistantId: string): Promise<Assistant> {

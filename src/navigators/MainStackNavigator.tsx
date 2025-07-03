@@ -8,6 +8,7 @@ import AssistantMarketScreen from '@/screens/assistant/AssistantMarketScreen'
 import AssistantScreen from '@/screens/assistant/AssistantScreen'
 import HomeScreen from '@/screens/home/HomeScreen'
 import AboutScreen from '@/screens/settings/about/AboutScreen'
+import AssistantSettingsScreen from '@/screens/settings/assistant/AssistantSettingsScreen'
 import BasicDataSettingsScreen from '@/screens/settings/data/BasicDataSettingsScreen'
 import DataSettingsScreen from '@/screens/settings/data/DataSettingsScreen'
 import NutstoreLoginScreen from '@/screens/settings/data/NutstoreLoginScreen'
@@ -16,11 +17,6 @@ import WebDavScreen from '@/screens/settings/data/WebDavScreen'
 import GeneralSettingsScreen from '@/screens/settings/general/GeneralSettingsScreen'
 import LanguageChangeScreen from '@/screens/settings/general/LanguageChangeScreen'
 import ThemeSettingsScreen from '@/screens/settings/general/ThemeSettingsScreen'
-import DefaultAssistantSettingsScreen from '@/screens/settings/model/DefaultAssistantSettingsScreen'
-import ModelSettingsScreen from '@/screens/settings/model/ModelSettingsScreen'
-import NamingModelSettingsScreen from '@/screens/settings/model/NamingModelSettingsScreen'
-import TranslateLanguageChooseScreen from '@/screens/settings/model/TranslateLanguageChooseScreen'
-import TranslateModelSettingsScreen from '@/screens/settings/model/TranslateModelSettingsScreen'
 import ApiServiceScreen from '@/screens/settings/providers/ApiServiceScreen'
 import ManageModelsScreen from '@/screens/settings/providers/ManageModelsScreen'
 import ProviderListScreen from '@/screens/settings/providers/ProviderListScreen'
@@ -60,11 +56,7 @@ export default function MainStackNavigator() {
       <Stack.Screen name="ApiServiceScreen" component={ApiServiceScreen} />
 
       {/* Model Settings Screen */}
-      <Stack.Screen name="ModelSettingsScreen" component={ModelSettingsScreen} />
-      <Stack.Screen name="DefaultAssistantSettingsScreen" component={DefaultAssistantSettingsScreen} />
-      <Stack.Screen name="NamingModelSettingsScreen" component={NamingModelSettingsScreen} />
-      <Stack.Screen name="TranslateModelSettingsScreen" component={TranslateModelSettingsScreen} />
-      <Stack.Screen name="TranslateLanguageChooseScreen" component={TranslateLanguageChooseScreen} />
+      <Stack.Screen name="AssistantSettingsScreen" component={AssistantSettingsScreen} />
 
       {/* Web Search Screen */}
       <Stack.Screen name="WebSearchSettingsScreen" component={WebSearchSettingsScreen} />

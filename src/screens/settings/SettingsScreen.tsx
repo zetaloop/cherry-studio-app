@@ -35,7 +35,7 @@ export default function SettingsScreen() {
           icon: <Cloud size={24} />
         },
         {
-          title: t('settings.models.default_model'),
+          title: t('settings.assistant.title'),
           screen: 'ModelSettingsScreen',
           icon: <Package size={24} />
         },

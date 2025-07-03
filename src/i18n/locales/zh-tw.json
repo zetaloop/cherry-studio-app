@@ -121,48 +121,18 @@
       },
       "models": {
         "default_model": "預設模型",
-        "default_assistant_model": "預設助理模型",
-        "default_assistant_model_description": "建立新助理時使用的模型，如果未設定助理，將使用此模型。",
-        "default_assistant_settings": {
-          "hint.name": "名稱",
-          "hint.placeholder": "預設助理",
-          "hint.prompt": "提示詞",
-          "hint.params": "模型參數"
-        },
         "empty": "還沒有模型...",
         "empty.tooltip": "您正在尋找的頁面超出了我們的範圍。對於帶來的不便，我們深感歉意。",
         "empty.add_model": "讓我們添加你的第一個模型",
-        "translate_model": "翻譯模型",
-        "translate_model_description": "用於翻譯服務的模型",
-        "translate_model_settings": {
-          "hint": {
-            "assistant": "翻譯助手",
-            "specify_language": "指定語言",
-            "target_language": "目標語言",
-            "local_language": "本地語言",
-            "prompt": "提示詞"
-          },
-          "language_choose": {
-            "title": "語言選擇"
-          },
-          "title": "翻譯模型設定"
-        },
         "search": "搜尋模型...",
         "title": "模型",
-        "topic_naming_model": "主題命名",
-        "topic_naming_settings": {
-          "hint.autonaming": "會話自動命名",
-          "hint.prompt": "提示詞",
-          "title": "主題命名設定"
-        },
         "add.model": "添加模型",
         "add.model.id": "模型 ID",
         "add.model.id.placeholder": "必填 例如 gpt-4o",
         "add.model.name": "模型名稱",
         "add.model.name.placeholder": "可選 例如 GPT-4o",
         "add.model.group": "模型組",
-        "add.model.group.placeholder": "可選 例如 OpenAI",
-        "topic_naming_model_description": "用於命名新主題的模型"
+        "add.model.group.placeholder": "可選 例如 OpenAI"
       },
       "provider": {
         "add.name": "提供者名稱",

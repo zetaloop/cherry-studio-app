@@ -121,48 +121,18 @@
       },
       "models": {
         "default_model": "Модель по умолчанию",
-        "default_assistant_model": "Модель помощника по умолчанию",
-        "default_assistant_model_description": "Модель, используемая при создании нового ассистента; если ассистент не установлен, будет использована эта модель.",
-        "default_assistant_settings": {
-          "hint.name": "Имя",
-          "hint.placeholder": "Помощник по умолчанию",
-          "hint.prompt": "Промпт",
-          "hint.params": "Параметры модели"
-        },
         "empty": "Модели пока нет...",
         "empty.tooltip": "Страница, которую вы искали, недоступна. Приносим извинения за неудобства.",
         "empty.add_model": "Давайте добавим вашу первую модель.",
-        "translate_model": "Модель перевода",
-        "translate_model_description": "Модель, используемая для службы перевода",
-        "translate_model_settings": {
-          "hint": {
-            "assistant": "Помощник по переводу",
-            "specify_language": "Указать язык",
-            "target_language": "Целевой язык",
-            "local_language": "Локальный язык",
-            "prompt": "Подсказка"
-          },
-          "language_choose": {
-            "title": "Выбор языка"
-          },
-          "title": "Параметры перевода модели"
-        },
         "search": "Поиск моделей...",
         "title": "Модели",
-        "topic_naming_model": "Именование тем",
-        "topic_naming_settings": {
-          "hint.autonaming": "Автоматическое именование сессий",
-          "hint.prompt": "Подсказка",
-          "title": "Настройки наименования тем"
-        },
         "add.model": "Добавить модель",
         "add.model.id": "ID модели",
         "add.model.id.placeholder": "Обязательно, например gpt-4o",
         "add.model.name": "Имя модели",
         "add.model.name.placeholder": "Необязательно, например GPT-4o",
         "add.model.group": "Группа моделей",
-        "add.model.group.placeholder": "Необязательно, например OpenAI",
-        "topic_naming_model_description": "Модель, используемая для присвоения имен новым темам"
+        "add.model.group.placeholder": "Необязательно, например OpenAI"
       },
       "provider": {
         "add.name": "Имя провайдера",

@@ -8,11 +8,10 @@ import websearch from '@/store/websearch'
 
 import app from './app'
 import assistant from './assistant'
-import llm from './llm'
 import runtime from './runtime'
 import settings from './settings'
 
-const rootReducer = combineReducers({ app, runtime, assistant, websearch, llm, settings })
+const rootReducer = combineReducers({ app, runtime, assistant, websearch, settings })
 
 const persistedReducer = persistReducer(
   {

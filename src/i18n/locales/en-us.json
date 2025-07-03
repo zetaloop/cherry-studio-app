@@ -143,6 +143,22 @@
           "button": "Website"
         }
       },
+      "assistant": {
+        "title": "Default Assistant",
+        "default_assistant": {
+          "name": "Default Assistant",
+          "description": "Assistant used when creating a new assistant, if the assistant is not set, this assistant will be used"
+        },
+        "topic_naming_assistant": {
+          "name": "Topic Naming Assistant",
+          "description": "Assistant used when automatically naming a new topic"
+        },
+        "translate_assistant": {
+          "name": "Translation Assistant",
+          "description": "Assistant used for translation service"
+        },
+        "empty": "No Assistant yet..."
+      },
       "data": {
         "app_data": "App Data",
         "app_logs": "App Logs",
@@ -163,41 +179,11 @@
       },
       "models": {
         "default_model": "Default Model",
-        "default_assistant_model": "Default Assistant",
-        "default_assistant_model_description": "Model used when creating a new assistant, if the assistant is not set, this model will be used",
-        "default_assistant_settings": {
-          "hint.name": "Name",
-          "hint.placeholder": "Default Assistant",
-          "hint.prompt": "Prompt",
-          "hint.params": "Model Parameters"
-        },
         "empty": "No Model yet...",
         "empty.tooltip": "The page you were looking for is beyond our reach. Sorry for the inconvenience.",
         "empty.add_model": "Let's add your first model",
-        "translate_model": "Translate Model",
-        "translate_model_description": "Model used for translation service",
-        "translate_model_settings": {
-          "title": "Translate Model Settings",
-          "hint": {
-            "assistant": "Translate Model",
-            "specify_language": "Specify Language",
-            "target_language": "Target Language",
-            "local_language": "Local Language",
-            "prompt": "Translate Prompt"
-          },
-          "language_choose": {
-            "title": "Language Selection"
-          }
-        },
         "search": "Search Models...",
         "title": "Models",
-        "topic_naming_model": "Topic Naming Model",
-        "topic_naming_model_description": "Model used for naming new topic",
-        "topic_naming_settings": {
-          "title": "Topic Naming Settings",
-          "hint.autonaming": "Topic Auto Naming",
-          "hint.prompt": "Topic Naming Prompt"
-        },
         "add.model": "Add Model",
         "add.model.id": "Model ID",
         "add.model.id.placeholder": "Required e.g. gpt-4o",
