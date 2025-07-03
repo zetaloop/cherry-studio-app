@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Plus } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator } from 'react-native'
 import { ScrollView, useTheme, View, YStack } from 'tamagui'
 
 import { SettingContainer, SettingGroup, SettingGroupTitle } from '@/components/settings'
@@ -11,9 +12,8 @@ import { ProviderItem } from '@/components/settings/providers/ProviderItem'
 import CustomRadialGradientBackground from '@/components/ui/CustomRadialGradientBackground'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { NavigationProps } from '@/types/naviagate'
 import { useAllProviders } from '@/hooks/useProviders'
-import { ActivityIndicator } from 'react-native'
+import { NavigationProps } from '@/types/naviagate'
 
 export default function ProvidersScreen() {
   const { t } = useTranslation()
