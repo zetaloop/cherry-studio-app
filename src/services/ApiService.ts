@@ -5,9 +5,9 @@ import { AiSdkMiddlewareConfig } from '@/aiCore/middleware/aisdk/AiSdkMiddleware
 import { buildStreamTextParams, convertMessagesToSdkMessages } from '@/aiCore/transformParameters'
 import { Assistant, Provider } from '@/types/assistant'
 import { Chunk, ChunkType } from '@/types/chunk'
-import { AssistantMessageStatus, Message, MessageBlock, MessageBlockStatus } from '@/types/message'
+import { AssistantMessageStatus, Message, MessageBlock, MessageBlockStatus, MessageBlockType } from '@/types/message'
 import { SdkModel } from '@/types/sdk'
-import { createTranslationBlock } from '@/utils/messageUtils/create'
+import { createBaseMessageBlock, createTranslationBlock } from '@/utils/messageUtils/create'
 
 import { updateOneBlock, upsertBlocks } from '../../db/queries/messageBlocks.queries'
 import { getMessageById, upsertMessages } from '../../db/queries/messages.queries'
@@ -62,17 +62,35 @@ export async function fetchModels(provider: Provider): Promise<SdkModel[]> {
 
 export async function fetchTranslate({
   assistantMessageId,
-  messages
+  message
 }: {
   assistantMessageId: string
-  messages: Message[]
+  message: Message
 }) {
-  console.log('Fetching translation for messages:', messages)
-
   let accumulatedContent = ''
+  let initialPlaceholderBlockId: string | null = null
   let translationBlockId: string | null = null
   let callbacks: StreamProcessorCallbacks = {}
   callbacks = {
+    onLLMResponseCreated: async () => {
+      console.log(`[onLLMResponseCreated] Created initial placeholder block with ID`)
+
+      const baseBlock = createBaseMessageBlock(assistantMessageId, MessageBlockType.UNKNOWN, {
+        status: MessageBlockStatus.PROCESSING
+      })
+      initialPlaceholderBlockId = baseBlock.id
+      await upsertBlocks(baseBlock)
+
+      const toBeUpdatedMessage = await getMessageById(baseBlock.messageId)
+
+      if (!toBeUpdatedMessage) {
+        console.error(`[onLLMResponseCreated] Message ${baseBlock.messageId} not found.`)
+        return
+      }
+
+      toBeUpdatedMessage.status = AssistantMessageStatus.PROCESSING
+      await upsertMessages(toBeUpdatedMessage)
+    },
     onTextChunk: async text => {
       accumulatedContent += text
 
@@ -82,44 +100,23 @@ export async function fetchTranslate({
           status: MessageBlockStatus.STREAMING
         }
         await updateOneBlock({ id: translationBlockId, changes: blockChanges })
+      } else if (initialPlaceholderBlockId) {
+        // 将占位块转换为翻译块
+        const initialChanges: Partial<MessageBlock> = {
+          type: MessageBlockType.TRANSLATION,
+          content: accumulatedContent,
+          status: MessageBlockStatus.STREAMING
+        }
+        translationBlockId = initialPlaceholderBlockId
+        initialPlaceholderBlockId = null // 清理占位块ID
+        await updateOneBlock({ id: translationBlockId, changes: initialChanges })
       } else {
+        // Fallback in case onLLMResponseCreated was not triggered
         const newBlock = createTranslationBlock(assistantMessageId, accumulatedContent, {
           status: MessageBlockStatus.STREAMING
         })
-        translationBlockId = newBlock.id // 立即设置ID，防止竞态条件
-        // add new block to database
+        translationBlockId = newBlock.id
         await upsertBlocks(newBlock)
-        // change message status
-        const toBeUpdatedMessage = await getMessageById(newBlock.messageId)
-
-        if (!toBeUpdatedMessage) {
-          console.error(`[upsertBlockReference] Message ${newBlock.messageId} not found.`)
-          return
-        }
-
-        // Update Message Status based on Block Status
-        if (newBlock.status === MessageBlockStatus.ERROR) {
-          toBeUpdatedMessage.status = AssistantMessageStatus.ERROR
-        } else if (
-          newBlock.status === MessageBlockStatus.SUCCESS &&
-          toBeUpdatedMessage.status !== AssistantMessageStatus.PROCESSING &&
-          toBeUpdatedMessage.status !== AssistantMessageStatus.SUCCESS &&
-          toBeUpdatedMessage.status !== AssistantMessageStatus.ERROR
-        ) {
-          toBeUpdatedMessage.status = AssistantMessageStatus.SUCCESS
-        } else if (
-          newBlock.status === MessageBlockStatus.PROCESSING ||
-          newBlock.status === MessageBlockStatus.STREAMING
-        ) {
-          toBeUpdatedMessage.status = AssistantMessageStatus.PROCESSING
-        }
-
-        const updatedMessage = await upsertMessages(toBeUpdatedMessage)
-
-        if (!updatedMessage) {
-          console.error(`[handleBlockTransition] Failed to update message ${toBeUpdatedMessage.id} in state.`)
-          return
-        }
       }
     },
     onTextComplete: async finalText => {
@@ -146,9 +143,11 @@ export async function fetchTranslate({
   }
 
   const provider = await getAssistantProvider(translateAssistant)
-  const llmMessages = await convertMessagesToSdkMessages(messages, translateAssistant.model)
-
-  console.log('LLM Messages for Translation:', llmMessages)
+  message = {
+    ...message,
+    role: 'user'
+  }
+  const llmMessages = await convertMessagesToSdkMessages([message], translateAssistant.model)
 
   const AI = new ModernAiProvider(provider)
   const { params: aiSdkParams, modelId } = await buildStreamTextParams(llmMessages, translateAssistant)

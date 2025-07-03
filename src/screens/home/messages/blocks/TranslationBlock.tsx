@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import React from 'react'
-import { Separator, Spinner, View } from 'tamagui'
+import { Separator, View } from 'tamagui'
 
-import { MessageBlockStatus, TranslationMessageBlock } from '@/types/message'
+import { TranslationMessageBlock } from '@/types/message'
 
 import ReactNativeMarkdown from '../../markdown/ReactNativeMarkdown'
 
@@ -14,7 +14,7 @@ const TranslationBlock: FC<Props> = ({ block }) => {
   return (
     <View>
       <Separator />
-      {block.status === MessageBlockStatus.STREAMING ? <Spinner size="small" /> : <ReactNativeMarkdown block={block} />}
+      <ReactNativeMarkdown block={block} />
     </View>
   )
 }

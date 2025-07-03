@@ -1,4 +1,4 @@
-import { Copy, Download, ExternalLink, RefreshCw } from '@tamagui/lucide-icons'
+import { Copy, RefreshCw } from '@tamagui/lucide-icons'
 import * as Clipboard from 'expo-clipboard'
 import React, { useState } from 'react'
 import { Button, View, XStack } from 'tamagui'
@@ -39,8 +39,10 @@ const MessageFooter = ({ message, assistant }: MessageFooterProps) => {
   }, [message.id, message.blocks])
 
   const onCopy = async () => {
+    // todo: 暂时无法复制翻译后的message
     try {
       const filteredMessages = await filterMessages([message])
+      console.log('Filtered Messages:', filteredMessages)
       const mainContent = await getMainTextContent(filteredMessages[0])
       await Clipboard.setStringAsync(mainContent)
     } catch (error) {
@@ -63,7 +65,7 @@ const MessageFooter = ({ message, assistant }: MessageFooterProps) => {
       if (isTranslating) return
       setIsTranslating(true)
       const messageId = message.id
-      await fetchTranslate({ assistantMessageId: messageId, messages: [message] })
+      await fetchTranslate({ assistantMessageId: messageId, message: message })
       setIsTranslated(true) // 翻译成功后更新状态
     } catch (error) {
       console.error('Error during translation:', error)
@@ -92,23 +94,23 @@ const MessageFooter = ({ message, assistant }: MessageFooterProps) => {
     }
   }
 
-  const onDownload = async () => {
-    try {
-      // TODO: 实现下载功能
-      console.log('Download functionality not implemented yet')
-    } catch (error) {
-      console.error('Error downloading message:', error)
-    }
-  }
+  // const onDownload = async () => {
+  //   try {
+  //     // TODO: 实现下载功能
+  //     console.log('Download functionality not implemented yet')
+  //   } catch (error) {
+  //     console.error('Error downloading message:', error)
+  //   }
+  // }
 
-  const onExternalLink = async () => {
-    try {
-      // TODO: 实现外部链接功能
-      console.log('External link functionality not implemented yet')
-    } catch (error) {
-      console.error('Error opening external link:', error)
-    }
-  }
+  // const onExternalLink = async () => {
+  //   try {
+  //     // TODO: 实现外部链接功能
+  //     console.log('External link functionality not implemented yet')
+  //   } catch (error) {
+  //     console.error('Error opening external link:', error)
+  //   }
+  // }
 
   return (
     <View>
@@ -121,8 +123,8 @@ const MessageFooter = ({ message, assistant }: MessageFooterProps) => {
           icon={isTranslated ? <TranslatedIcon size={18} /> : <TranslationIcon size={18} />}
           onPress={isTranslated ? onDeleteTranslation : onTranslate}></Button>
         <Button chromeless circular size={24} icon={<RefreshCw size={18} />} onPress={onRegenerate}></Button>
-        <Button chromeless circular size={24} icon={<Download size={18} />}></Button>
-        <Button chromeless circular size={24} icon={<ExternalLink size={18} />}></Button>
+        {/* <Button chromeless circular size={24} icon={<Download size={18} />}></Button> */}
+        {/* <Button chromeless circular size={24} icon={<ExternalLink size={18} />}></Button> */}
       </XStack>
     </View>
   )

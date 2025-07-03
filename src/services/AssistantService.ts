@@ -107,7 +107,3 @@ export async function createAssistant() {
   await saveAssistant(newAssistant)
   return newAssistant
 }
-
-export function getTranslateModel() {
-  return store.getState().llm.translateModel
-}
