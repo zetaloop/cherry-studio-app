@@ -1,9 +1,14 @@
 import { StreamTextParams } from '@cherrystudio/ai-core'
+import { isEmpty } from 'lodash'
 
+import LegacyAiProvider from '@/aiCore'
 import ModernAiProvider from '@/aiCore/index_new'
 import { AiSdkMiddlewareConfig } from '@/aiCore/middleware/aisdk/AiSdkMiddlewareBuilder'
+import { CompletionsParams } from '@/aiCore/middleware/schemas'
 import { buildStreamTextParams, convertMessagesToSdkMessages } from '@/aiCore/transformParameters'
-import { Assistant, Provider } from '@/types/assistant'
+import { isEmbeddingModel } from '@/config/models/embedding'
+import i18n from '@/i18n'
+import { Assistant, Model, Provider } from '@/types/assistant'
 import { Chunk, ChunkType } from '@/types/chunk'
 import { AssistantMessageStatus, Message, MessageBlock, MessageBlockStatus, MessageBlockType } from '@/types/message'
 import { SdkModel } from '@/types/sdk'
@@ -11,7 +16,7 @@ import { createBaseMessageBlock, createTranslationBlock } from '@/utils/messageU
 
 import { updateOneBlock, upsertBlocks } from '../../db/queries/messageBlocks.queries'
 import { getMessageById, upsertMessages } from '../../db/queries/messages.queries'
-import { getAssistantById, getAssistantProvider } from './AssistantService'
+import { createBlankAssistant, getAssistantById, getAssistantProvider } from './AssistantService'
 import { createStreamProcessor, StreamProcessorCallbacks } from './StreamProcessingService'
 
 export async function fetchChatCompletion({
@@ -149,8 +154,11 @@ export async function fetchTranslate({
   }
   const llmMessages = await convertMessagesToSdkMessages([message], translateAssistant.model)
 
+  console.log('llmMessages', llmMessages)
+
   const AI = new ModernAiProvider(provider)
   const { params: aiSdkParams, modelId } = await buildStreamTextParams(llmMessages, translateAssistant)
+  console.log('modelId', modelId)
   const middlewareConfig: AiSdkMiddlewareConfig = {
     streamOutput: translateAssistant.settings?.streamOutput ?? true,
     onChunk: streamProcessorCallbacks,
@@ -164,5 +172,73 @@ export async function fetchTranslate({
   } catch (error: any) {
     console.error('Error during translation:', error)
     return ''
+  }
+}
+
+export function checkApiProvider(provider: Provider): void {
+  if (
+    provider.id !== 'ollama' &&
+    provider.id !== 'lmstudio' &&
+    provider.type !== 'vertexai' &&
+    provider.id !== 'copilot'
+  ) {
+    if (!provider.apiKey) {
+      throw new Error(i18n.t('message.error.enter.api.key'))
+    }
+  }
+
+  if (!provider.apiHost && provider.type !== 'vertexai') {
+    throw new Error(i18n.t('message.error.enter.api.host'))
+  }
+
+  if (isEmpty(provider.models)) {
+    throw new Error(i18n.t('message.error.enter.model'))
+  }
+}
+
+export async function checkApi(provider: Provider, model: Model): Promise<void> {
+  checkApiProvider(provider)
+
+  const ai = new LegacyAiProvider(provider)
+
+  const assistant = createBlankAssistant()
+  assistant.model = model
+
+  try {
+    if (isEmbeddingModel(model)) {
+      await ai.getEmbeddingDimensions(model)
+    } else {
+      const params: CompletionsParams = {
+        callType: 'check',
+        messages: 'hi',
+        assistant,
+        streamOutput: true,
+        shouldThrow: true
+      }
+
+      // Try streaming check first
+      const result = await ai.completions(params)
+
+      if (!result.getText()) {
+        throw new Error('No response received')
+      }
+    }
+  } catch (error: any) {
+    if (error.message.includes('stream')) {
+      const params: CompletionsParams = {
+        callType: 'check',
+        messages: 'hi',
+        assistant,
+        streamOutput: false,
+        shouldThrow: true
+      }
+      const result = await ai.completions(params)
+
+      if (!result.getText()) {
+        throw new Error('No response received')
+      }
+    } else {
+      throw error
+    }
   }
 }

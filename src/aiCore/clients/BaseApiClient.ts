@@ -1,5 +1,12 @@
-import { Provider } from '@/types/assistant'
+import { isEmpty } from 'lodash'
+
+import { GenerateImageParams } from '@/config/models/image'
+import { DEFAULT_TIMEOUT } from '@/constants'
+import { Assistant, Model, Provider } from '@/types/assistant'
+import { MCPCallToolResponse, MCPTool, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
+import { Message } from '@/types/message'
 import {
+  RequestOptions,
   SdkInstance,
   SdkMessageParam,
   SdkModel,
@@ -9,8 +16,11 @@ import {
   SdkTool,
   SdkToolCall
 } from '@/types/sdk'
+import { addAbortController, removeAbortController } from '@/utils/abortController'
+import { isJSON, parseJSON } from '@/utils/json'
+import { getMainTextContent } from '@/utils/messageUtils/find'
 
-import { ApiClient } from './types'
+import { ApiClient, RawStreamListener, RequestTransformer, ResponseChunkTransformer } from './types'
 
 /**
  * Abstract base class for API clients.
@@ -46,11 +56,11 @@ export abstract class BaseApiClient<
    * 核心API Endpoint
    **/
 
-  // abstract createCompletions(payload: TSdkParams, options?: RequestOptions): Promise<TRawOutput>
+  abstract createCompletions(payload: TSdkParams, options?: RequestOptions): Promise<TRawOutput>
 
-  // abstract generateImage(generateImageParams: GenerateImageParams): Promise<string[]>
+  abstract generateImage(generateImageParams: GenerateImageParams): Promise<string[]>
 
-  // abstract getEmbeddingDimensions(model?: Model): Promise<number>
+  abstract getEmbeddingDimensions(model?: Model): Promise<number>
 
   abstract listModels(): Promise<SdkModel[]>
 
@@ -61,52 +71,52 @@ export abstract class BaseApiClient<
    **/
 
   // 在 CoreRequestToSdkParamsMiddleware中使用
-  // abstract getRequestTransformer(): RequestTransformer<TSdkParams, TMessageParam>
-  // // 在RawSdkChunkToGenericChunkMiddleware中使用
-  // abstract getResponseChunkTransformer(): ResponseChunkTransformer<TRawChunk>
+  abstract getRequestTransformer(): RequestTransformer<TSdkParams, TMessageParam>
+  // 在RawSdkChunkToGenericChunkMiddleware中使用
+  abstract getResponseChunkTransformer(): ResponseChunkTransformer<TRawChunk>
 
   /**
    * 工具转换
    **/
 
   // Optional tool conversion methods - implement if needed by the specific provider
-  // abstract convertMcpToolsToSdkTools(mcpTools: MCPTool[]): TSdkSpecificTool[]
+  abstract convertMcpToolsToSdkTools(mcpTools: MCPTool[]): TSdkSpecificTool[]
 
-  // abstract convertSdkToolCallToMcp(toolCall: TToolCall, mcpTools: MCPTool[]): MCPTool | undefined
+  abstract convertSdkToolCallToMcp(toolCall: TToolCall, mcpTools: MCPTool[]): MCPTool | undefined
 
-  // abstract convertSdkToolCallToMcpToolResponse(toolCall: TToolCall, mcpTool: MCPTool): ToolCallResponse
+  abstract convertSdkToolCallToMcpToolResponse(toolCall: TToolCall, mcpTool: MCPTool): ToolCallResponse
 
-  // abstract buildSdkMessages(
-  //   currentReqMessages: TMessageParam[],
-  //   output: TRawOutput | string,
-  //   toolResults: TMessageParam[],
-  //   toolCalls?: TToolCall[]
-  // ): TMessageParam[]
+  abstract buildSdkMessages(
+    currentReqMessages: TMessageParam[],
+    output: TRawOutput | string,
+    toolResults: TMessageParam[],
+    toolCalls?: TToolCall[]
+  ): TMessageParam[]
 
-  // abstract estimateMessageTokens(message: TMessageParam): number
+  abstract estimateMessageTokens(message: TMessageParam): number
 
-  // abstract convertMcpToolResponseToSdkMessageParam(
-  //   mcpToolResponse: MCPToolResponse,
-  //   resp: MCPCallToolResponse,
-  //   model: Model
-  // ): TMessageParam | undefined
+  abstract convertMcpToolResponseToSdkMessageParam(
+    mcpToolResponse: MCPToolResponse,
+    resp: MCPCallToolResponse,
+    model: Model
+  ): TMessageParam | undefined
 
-  // /**
-  //  * 从SDK载荷中提取消息数组（用于中间件中的类型安全访问）
-  //  * 不同的提供商可能使用不同的字段名（如messages、history等）
-  //  */
-  // abstract extractMessagesFromSdkPayload(sdkPayload: TSdkParams): TMessageParam[]
+  /**
+   * 从SDK载荷中提取消息数组（用于中间件中的类型安全访问）
+   * 不同的提供商可能使用不同的字段名（如messages、history等）
+   */
+  abstract extractMessagesFromSdkPayload(sdkPayload: TSdkParams): TMessageParam[]
 
-  // /**
-  //  * 附加原始流监听器
-  //  */
-  // public attachRawStreamListener<TListener extends RawStreamListener<TRawChunk>>(
-  //   rawOutput: TRawOutput,
-  //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //   _listener: TListener
-  // ): TRawOutput {
-  //   return rawOutput
-  // }
+  /**
+   * 附加原始流监听器
+   */
+  public attachRawStreamListener<TListener extends RawStreamListener<TRawChunk>>(
+    rawOutput: TRawOutput,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _listener: TListener
+  ): TRawOutput {
+    return rawOutput
+  }
 
   /**
    * 通用函数
@@ -182,191 +192,191 @@ export abstract class BaseApiClient<
   //   return serviceTier
   // }
 
-  // protected getTimeout(model: Model) {
-  //   // if (isSupportedFlexServiceTier(model)) {
-  //   //   return 15 * 1000 * 60
-  //   // }
+  protected getTimeout(model: Model) {
+    // if (isSupportedFlexServiceTier(model)) {
+    //   return 15 * 1000 * 60
+    // }
 
-  //   return DEFAULT_TIMEOUT
+    return DEFAULT_TIMEOUT
+  }
+
+  public async getMessageContent(message: Message): Promise<string> {
+    const content = getMainTextContent(message)
+
+    if (isEmpty(content)) {
+      return ''
+    }
+
+    // const webSearchReferences = await this.getWebSearchReferencesFromCache(message)
+    // const knowledgeReferences = await this.getKnowledgeBaseReferencesFromCache(message)
+
+    // // 添加偏移量以避免ID冲突
+    // const reindexedKnowledgeReferences = knowledgeReferences.map(ref => ({
+    //   ...ref,
+    //   id: ref.id + webSearchReferences.length // 为知识库引用的ID添加网络搜索引用的数量作为偏移量
+    // }))
+
+    // const allReferences = [...webSearchReferences, ...reindexedKnowledgeReferences]
+
+    // console.log(`Found ${allReferences.length} references for ID: ${message.id}`, allReferences)
+
+    // if (!isEmpty(allReferences)) {
+    //   const referenceContent = `\`\`\`json\n${JSON.stringify(allReferences, null, 2)}\n\`\`\``
+    //   return REFERENCE_PROMPT.replace('{question}', content).replace('{references}', referenceContent)
+    // }
+
+    return content
+  }
+
+  /**
+   * Extract the file content from the message
+   * @param message - The message
+   * @returns The file content
+   */
+  // protected async extractFileContent(message: Message) {
+  //   const fileBlocks = findFileBlocks(message)
+
+  //   if (fileBlocks.length > 0) {
+  //     const textFileBlocks = fileBlocks.filter(
+  //       fb => fb.file && [FileTypes.TEXT, FileTypes.DOCUMENT].includes(fb.file.type)
+  //     )
+
+  //     if (textFileBlocks.length > 0) {
+  //       let text = ''
+  //       const divider = '\n\n---\n\n'
+
+  //       for (const fileBlock of textFileBlocks) {
+  //         const file = fileBlock.file
+  //         const fileContent = (await window.api.file.read(file.id + file.ext)).trim()
+  //         const fileNameRow = 'file: ' + file.origin_name + '\n\n'
+  //         text = text + fileNameRow + fileContent + divider
+  //       }
+
+  //       return text
+  //     }
+  //   }
+
+  //   return ''
   // }
 
-  // public async getMessageContent(message: Message): Promise<string> {
+  // private async getWebSearchReferencesFromCache(message: Message) {
   //   const content = getMainTextContent(message)
 
   //   if (isEmpty(content)) {
-  //     return ''
+  //     return []
   //   }
 
-  //   // const webSearchReferences = await this.getWebSearchReferencesFromCache(message)
-  //   // const knowledgeReferences = await this.getKnowledgeBaseReferencesFromCache(message)
+  //   const webSearch: WebSearchResponse = window.keyv.get(`web-search-${message.id}`)
 
-  //   // // 添加偏移量以避免ID冲突
-  //   // const reindexedKnowledgeReferences = knowledgeReferences.map(ref => ({
-  //   //   ...ref,
-  //   //   id: ref.id + webSearchReferences.length // 为知识库引用的ID添加网络搜索引用的数量作为偏移量
-  //   // }))
+  //   if (webSearch) {
+  //     return (webSearch.results as WebSearchProviderResponse).results.map(
+  //       (result, index) =>
+  //         ({
+  //           id: index + 1,
+  //           content: result.content,
+  //           sourceUrl: result.url,
+  //           type: 'url'
+  //         }) as KnowledgeReference
+  //     )
+  //   }
 
-  //   // const allReferences = [...webSearchReferences, ...reindexedKnowledgeReferences]
-
-  //   // console.log(`Found ${allReferences.length} references for ID: ${message.id}`, allReferences)
-
-  //   // if (!isEmpty(allReferences)) {
-  //   //   const referenceContent = `\`\`\`json\n${JSON.stringify(allReferences, null, 2)}\n\`\`\``
-  //   //   return REFERENCE_PROMPT.replace('{question}', content).replace('{references}', referenceContent)
-  //   // }
-
-  //   return content
+  //   return []
   // }
 
-  // /**
-  //  * Extract the file content from the message
-  //  * @param message - The message
-  //  * @returns The file content
-  //  */
-  // // protected async extractFileContent(message: Message) {
-  // //   const fileBlocks = findFileBlocks(message)
+  /**
+   * 从缓存中获取知识库引用
+   */
+  // private async getKnowledgeBaseReferencesFromCache(message: Message): Promise<KnowledgeReference[]> {
+  //   const content = getMainTextContent(message)
 
-  // //   if (fileBlocks.length > 0) {
-  // //     const textFileBlocks = fileBlocks.filter(
-  // //       fb => fb.file && [FileTypes.TEXT, FileTypes.DOCUMENT].includes(fb.file.type)
-  // //     )
+  //   if (isEmpty(content)) {
+  //     return []
+  //   }
 
-  // //     if (textFileBlocks.length > 0) {
-  // //       let text = ''
-  // //       const divider = '\n\n---\n\n'
+  //   const knowledgeReferences: KnowledgeReference[] = window.keyv.get(`knowledge-search-${message.id}`)
 
-  // //       for (const fileBlock of textFileBlocks) {
-  // //         const file = fileBlock.file
-  // //         const fileContent = (await window.api.file.read(file.id + file.ext)).trim()
-  // //         const fileNameRow = 'file: ' + file.origin_name + '\n\n'
-  // //         text = text + fileNameRow + fileContent + divider
-  // //       }
+  //   if (!isEmpty(knowledgeReferences)) {
+  //     // Logger.log(`Found ${knowledgeReferences.length} knowledge base references in cache for ID: ${message.id}`)
+  //     return knowledgeReferences
+  //   }
 
-  // //       return text
-  // //     }
-  // //   }
-
-  // //   return ''
-  // // }
-
-  // // private async getWebSearchReferencesFromCache(message: Message) {
-  // //   const content = getMainTextContent(message)
-
-  // //   if (isEmpty(content)) {
-  // //     return []
-  // //   }
-
-  // //   const webSearch: WebSearchResponse = window.keyv.get(`web-search-${message.id}`)
-
-  // //   if (webSearch) {
-  // //     return (webSearch.results as WebSearchProviderResponse).results.map(
-  // //       (result, index) =>
-  // //         ({
-  // //           id: index + 1,
-  // //           content: result.content,
-  // //           sourceUrl: result.url,
-  // //           type: 'url'
-  // //         }) as KnowledgeReference
-  // //     )
-  // //   }
-
-  // //   return []
-  // // }
-
-  // /**
-  //  * 从缓存中获取知识库引用
-  //  */
-  // // private async getKnowledgeBaseReferencesFromCache(message: Message): Promise<KnowledgeReference[]> {
-  // //   const content = getMainTextContent(message)
-
-  // //   if (isEmpty(content)) {
-  // //     return []
-  // //   }
-
-  // //   const knowledgeReferences: KnowledgeReference[] = window.keyv.get(`knowledge-search-${message.id}`)
-
-  // //   if (!isEmpty(knowledgeReferences)) {
-  // //     // Logger.log(`Found ${knowledgeReferences.length} knowledge base references in cache for ID: ${message.id}`)
-  // //     return knowledgeReferences
-  // //   }
-
-  // //   // Logger.log(`No knowledge base references found in cache for ID: ${message.id}`)
-  // //   return []
-  // // }
-
-  // protected getCustomParameters(assistant: Assistant) {
-  //   return (
-  //     assistant?.settings?.customParameters?.reduce((acc, param) => {
-  //       if (!param.name?.trim()) {
-  //         return acc
-  //       }
-
-  //       if (param.type === 'json') {
-  //         const value = param.value as string
-
-  //         if (value === 'undefined') {
-  //           return { ...acc, [param.name]: undefined }
-  //         }
-
-  //         return { ...acc, [param.name]: isJSON(value) ? parseJSON(value) : value }
-  //       }
-
-  //       return {
-  //         ...acc,
-  //         [param.name]: param.value
-  //       }
-  //     }, {}) || {}
-  //   )
+  //   // Logger.log(`No knowledge base references found in cache for ID: ${message.id}`)
+  //   return []
   // }
 
-  // public createAbortController(messageId?: string, isAddEventListener?: boolean) {
-  //   const abortController = new AbortController()
-  //   const abortFn = () => abortController.abort()
+  protected getCustomParameters(assistant: Assistant) {
+    return (
+      assistant?.settings?.customParameters?.reduce((acc, param) => {
+        if (!param.name?.trim()) {
+          return acc
+        }
 
-  //   if (messageId) {
-  //     addAbortController(messageId, abortFn)
-  //   }
+        if (param.type === 'json') {
+          const value = param.value as string
 
-  //   const cleanup = () => {
-  //     if (messageId) {
-  //       signalPromise.resolve?.(undefined)
-  //       removeAbortController(messageId, abortFn)
-  //     }
-  //   }
+          if (value === 'undefined') {
+            return { ...acc, [param.name]: undefined }
+          }
 
-  //   const signalPromise: {
-  //     resolve: (value: unknown) => void
-  //     promise: Promise<unknown>
-  //   } = {
-  //     resolve: () => {},
-  //     promise: Promise.resolve()
-  //   }
+          return { ...acc, [param.name]: isJSON(value) ? parseJSON(value) : value }
+        }
 
-  //   if (isAddEventListener) {
-  //     signalPromise.promise = new Promise((resolve, reject) => {
-  //       signalPromise.resolve = resolve
+        return {
+          ...acc,
+          [param.name]: param.value
+        }
+      }, {}) || {}
+    )
+  }
 
-  //       if (abortController.signal.aborted) {
-  //         reject(new Error('Request was aborted.'))
-  //       }
+  public createAbortController(messageId?: string, isAddEventListener?: boolean) {
+    const abortController = new AbortController()
+    const abortFn = () => abortController.abort()
 
-  //       // 捕获abort事件,有些abort事件必须
-  //       abortController.signal.addEventListener('abort', () => {
-  //         reject(new Error('Request was aborted.'))
-  //       })
-  //     })
-  //     return {
-  //       abortController,
-  //       cleanup,
-  //       signalPromise
-  //     }
-  //   }
+    if (messageId) {
+      addAbortController(messageId, abortFn)
+    }
 
-  //   return {
-  //     abortController,
-  //     cleanup
-  //   }
-  // }
+    const cleanup = () => {
+      if (messageId) {
+        signalPromise.resolve?.(undefined)
+        removeAbortController(messageId, abortFn)
+      }
+    }
+
+    const signalPromise: {
+      resolve: (value: unknown) => void
+      promise: Promise<unknown>
+    } = {
+      resolve: () => {},
+      promise: Promise.resolve()
+    }
+
+    if (isAddEventListener) {
+      signalPromise.promise = new Promise((resolve, reject) => {
+        signalPromise.resolve = resolve
+
+        if (abortController.signal.aborted) {
+          reject(new Error('Request was aborted.'))
+        }
+
+        // 捕获abort事件,有些abort事件必须
+        abortController.signal.addEventListener('abort', () => {
+          reject(new Error('Request was aborted.'))
+        })
+      })
+      return {
+        abortController,
+        cleanup,
+        signalPromise
+      }
+    }
+
+    return {
+      abortController,
+      cleanup
+    }
+  }
 
   // Setup tools configuration based on provided parameters
   // public setupToolsConfig(params: { mcpTools?: MCPTool[]; model: Model; enableToolUse?: boolean }): {

@@ -1,7 +1,10 @@
 import OpenAI, { AzureOpenAI } from 'openai'
 
 import { isSupportedModel } from '@/config/models'
-import { Provider } from '@/types/assistant'
+import { GenerateImageParams } from '@/config/models/image'
+import { isOpenAIReasoningModel, isSupportedReasoningEffortOpenAIModel } from '@/config/models/reasoning'
+import { getAssistantSettings } from '@/services/AssistantService'
+import { Assistant, Model, Provider } from '@/types/assistant'
 import {
   OpenAIResponseSdkMessageParam,
   OpenAIResponseSdkParams,
@@ -12,7 +15,8 @@ import {
   OpenAISdkMessageParam,
   OpenAISdkParams,
   OpenAISdkRawChunk,
-  OpenAISdkRawOutput
+  OpenAISdkRawOutput,
+  ReasoningEffortOptionalParams
 } from '@/types/sdk'
 import { formatApiHost } from '@/utils/api'
 
@@ -38,6 +42,54 @@ export abstract class OpenAIBaseClient<
   override getBaseURL(): string {
     const host = this.provider.apiHost
     return formatApiHost(host)
+  }
+
+  override async generateImage({
+    model,
+    prompt,
+    negativePrompt,
+    imageSize,
+    batchSize,
+    seed,
+    numInferenceSteps,
+    guidanceScale,
+    signal,
+    promptEnhancement
+  }: GenerateImageParams): Promise<string[]> {
+    const sdk = await this.getSdkInstance()
+    const response = (await sdk.request({
+      method: 'post',
+      path: '/images/generations',
+      signal,
+      body: {
+        model,
+        prompt,
+        negative_prompt: negativePrompt,
+        image_size: imageSize,
+        batch_size: batchSize,
+        seed: seed ? parseInt(seed) : undefined,
+        num_inference_steps: numInferenceSteps,
+        guidance_scale: guidanceScale,
+        prompt_enhancement: promptEnhancement
+      }
+    })) as { data: { url: string }[] }
+
+    return response.data.map(item => item.url)
+  }
+
+  override async getEmbeddingDimensions(model: Model): Promise<number> {
+    const sdk = await this.getSdkInstance()
+
+    try {
+      const data = await sdk.embeddings.create({
+        model: model.id,
+        input: model?.provider === 'baidu-cloud' ? ['hi'] : 'hi',
+        encoding_format: 'float'
+      })
+      return data.data[0].embedding.length
+    } catch (e) {
+      return 0
+    }
   }
 
   override async listModels(): Promise<OpenAI.Models.Model[]> {
@@ -115,5 +167,95 @@ export abstract class OpenAIBaseClient<
     }
 
     return this.sdkInstance
+  }
+
+  // override getTemperature(assistant: Assistant, model: Model): number | undefined {
+  //   if (
+  //     isNotSupportTemperatureAndTopP(model) ||
+  //     (assistant.settings?.reasoning_effort && isClaudeReasoningModel(model))
+  //   ) {
+  //     return undefined
+  //   }
+
+  //   return assistant.settings?.temperature
+  // }
+
+  // override getTopP(assistant: Assistant, model: Model): number | undefined {
+  //   if (
+  //     isNotSupportTemperatureAndTopP(model) ||
+  //     (assistant.settings?.reasoning_effort && isClaudeReasoningModel(model))
+  //   ) {
+  //     return undefined
+  //   }
+
+  //   return assistant.settings?.topP
+  // }
+
+  /**
+   * Get the provider specific parameters for the assistant
+   * @param assistant - The assistant
+   * @param model - The model
+   * @returns The provider specific parameters
+   */
+  protected getProviderSpecificParameters(assistant: Assistant, model: Model) {
+    const { maxTokens } = getAssistantSettings(assistant)
+
+    if (this.provider.id === 'openrouter') {
+      if (model.id.includes('deepseek-r1')) {
+        return {
+          include_reasoning: true
+        }
+      }
+    }
+
+    if (isOpenAIReasoningModel(model)) {
+      return {
+        max_tokens: undefined,
+        max_completion_tokens: maxTokens
+      }
+    }
+
+    return {}
+  }
+
+  /**
+   * Get the reasoning effort for the assistant
+   * @param assistant - The assistant
+   * @param model - The model
+   * @returns The reasoning effort
+   */
+  protected getReasoningEffort(assistant: Assistant, model: Model): ReasoningEffortOptionalParams {
+    if (!isSupportedReasoningEffortOpenAIModel(model)) {
+      return {}
+    }
+
+    // const openAI = getStoreSetting('openAI') as SettingsState['openAI']
+    // const summaryText = openAI?.summaryText || 'off'
+    const summaryText = 'off' // TODO: Replace with actual setting retrieval logic
+
+    let summary: string | undefined = undefined
+
+    if (summaryText === 'off' || model.id.includes('o1-pro')) {
+      summary = undefined
+    } else {
+      summary = summaryText
+    }
+
+    const reasoningEffort = assistant?.settings?.reasoning_effort
+
+    if (!reasoningEffort) {
+      return {}
+    }
+
+    if (isSupportedReasoningEffortOpenAIModel(model)) {
+      return {
+        reasoning: {
+          effort: reasoningEffort as OpenAI.ReasoningEffort,
+          summary: summary
+        } as OpenAI.Reasoning
+      }
+    }
+
+    return {}
   }
 }

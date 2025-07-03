@@ -2,7 +2,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { ChevronsRight } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Text, XStack, YStack } from 'tamagui'
+import { Button, Spinner, Text, View, XStack, YStack } from 'tamagui'
 
 import { ISheet } from '@/components/ui/Sheet'
 import { Model } from '@/types/assistant'
@@ -27,6 +27,7 @@ interface ApiCheckSheetProps {
   }[]
   apiKey: string
   onStartModelCheck: () => void
+  isCheckingApi: boolean
 }
 
 export function ApiCheckSheet({
@@ -37,7 +38,8 @@ export function ApiCheckSheet({
   onModelChange,
   selectOptions,
   apiKey,
-  onStartModelCheck
+  onStartModelCheck,
+  isCheckingApi
 }: ApiCheckSheetProps) {
   const { t } = useTranslation()
   const sheetSnapPoints = ['40%']
@@ -67,12 +69,18 @@ export function ApiCheckSheet({
             backgroundColor="$color1"
             disabled={!selectedModel || !apiKey}
             onPress={onStartModelCheck}>
-            <XStack width="100%" alignItems="center" justifyContent="space-between">
-              <Text fontSize={18} fontWeight="bold">
-                {t('button.start_check_model')}
-              </Text>
-              <ChevronsRight />
-            </XStack>
+            {isCheckingApi ? (
+              <Spinner size="small" />
+            ) : (
+              <View>
+                <XStack width="100%" alignItems="center" justifyContent="space-between">
+                  <Text fontSize={18} fontWeight="bold">
+                    {t('button.start_check_model')}
+                  </Text>
+                  <ChevronsRight />
+                </XStack>
+              </View>
+            )}
           </Button>
         </XStack>
       </YStack>

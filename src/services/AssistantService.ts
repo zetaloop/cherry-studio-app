@@ -107,3 +107,14 @@ export async function createAssistant() {
   await saveAssistant(newAssistant)
   return newAssistant
 }
+
+export function createBlankAssistant() {
+  const blankAssistant: Assistant = {
+    id: 'blank',
+    name: 'Blank Assistant',
+    prompt: '',
+    topics: [],
+    type: 'assistant'
+  }
+  return blankAssistant
+}

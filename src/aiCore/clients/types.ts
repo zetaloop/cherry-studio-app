@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import OpenAI from 'openai'
 
 import { Assistant, Model, Provider } from '@/types/assistant'
-import { MCPTool } from '@/types/mcp'
+import { MCPTool, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
 import {
   AnthropicSdkRawChunk,
   OpenAISdkRawChunk,
@@ -97,34 +97,34 @@ export interface ApiClient<
   // 实际的SDK调用由SdkCallMiddleware处理
   // completions(params: CompletionsParams): Promise<CompletionsResult>
 
-  // createCompletions(payload: TSdkParams): Promise<TRawOutput>
+  createCompletions(payload: TSdkParams): Promise<TRawOutput>
 
   // SDK相关方法
   getSdkInstance(): Promise<TSdkInstance> | TSdkInstance
-  // getRequestTransformer(): RequestTransformer<TSdkParams, TMessageParam>
-  // getResponseChunkTransformer(): ResponseChunkTransformer<TRawChunk>
+  getRequestTransformer(): RequestTransformer<TSdkParams, TMessageParam>
+  getResponseChunkTransformer(): ResponseChunkTransformer<TRawChunk>
 
-  // // 原始流监听方法
-  // attachRawStreamListener?(rawOutput: TRawOutput, listener: RawStreamListener<TRawChunk>): TRawOutput
+  // 原始流监听方法
+  attachRawStreamListener?(rawOutput: TRawOutput, listener: RawStreamListener<TRawChunk>): TRawOutput
 
-  // // 工具转换相关方法 (保持可选，因为不是所有Provider都支持工具)
-  // convertMcpToolsToSdkTools(mcpTools: MCPTool[]): TSdkSpecificTool[]
-  // convertMcpToolResponseToSdkMessageParam?(
-  //   mcpToolResponse: MCPToolResponse,
-  //   resp: any,
-  //   model: Model
-  // ): TMessageParam | undefined
-  // convertSdkToolCallToMcp?(toolCall: TToolCall, mcpTools: MCPTool[]): MCPTool | undefined
-  // convertSdkToolCallToMcpToolResponse(toolCall: TToolCall, mcpTool: MCPTool): ToolCallResponse
+  // 工具转换相关方法 (保持可选，因为不是所有Provider都支持工具)
+  convertMcpToolsToSdkTools(mcpTools: MCPTool[]): TSdkSpecificTool[]
+  convertMcpToolResponseToSdkMessageParam?(
+    mcpToolResponse: MCPToolResponse,
+    resp: any,
+    model: Model
+  ): TMessageParam | undefined
+  convertSdkToolCallToMcp?(toolCall: TToolCall, mcpTools: MCPTool[]): MCPTool | undefined
+  convertSdkToolCallToMcpToolResponse(toolCall: TToolCall, mcpTool: MCPTool): ToolCallResponse
 
-  // // 构建SDK特定的消息列表，用于工具调用后的递归调用
-  // buildSdkMessages(
-  //   currentReqMessages: TMessageParam[],
-  //   output: TRawOutput | string,
-  //   toolResults: TMessageParam[],
-  //   toolCalls?: TToolCall[]
-  // ): TMessageParam[]
+  // 构建SDK特定的消息列表，用于工具调用后的递归调用
+  buildSdkMessages(
+    currentReqMessages: TMessageParam[],
+    output: TRawOutput | string,
+    toolResults: TMessageParam[],
+    toolCalls?: TToolCall[]
+  ): TMessageParam[]
 
-  // // 从SDK载荷中提取消息数组（用于中间件中的类型安全访问）
-  // extractMessagesFromSdkPayload(sdkPayload: TSdkParams): TMessageParam[]
+  // 从SDK载荷中提取消息数组（用于中间件中的类型安全访问）
+  extractMessagesFromSdkPayload(sdkPayload: TSdkParams): TMessageParam[]
 }

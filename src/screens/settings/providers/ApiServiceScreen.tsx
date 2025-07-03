@@ -15,6 +15,7 @@ import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { isEmbeddingModel } from '@/config/models/embedding'
 import { PROVIDER_CONFIG } from '@/config/providers'
 import { useProvider } from '@/hooks/useProviders'
+import { checkApi } from '@/services/ApiService'
 import { Model } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { getModelUniqId } from '@/utils/model'
@@ -32,6 +33,7 @@ export default function ApiServiceScreen() {
 
   const [showApiKey, setShowApiKey] = useState(false)
   const [selectedModel, setSelectedModel] = useState<Model | undefined>()
+  const [isCheckingApi, setIsCheckingApi] = useState(false)
 
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
@@ -114,9 +116,14 @@ export default function ApiServiceScreen() {
     if (!selectedModel) return
 
     try {
-      // await checkApi(provider, selectedModel)
+      setIsCheckingApi(true)
+      await checkApi(provider, selectedModel)
+      await updateProvider({ ...provider, checked: true })
     } catch (error) {
       console.error('Model check failed:', error)
+      await updateProvider({ ...provider, checked: false })
+    } finally {
+      setIsCheckingApi(false)
     }
   }
 
@@ -135,7 +142,7 @@ export default function ApiServiceScreen() {
             <SettingGroupTitle>{t('settings.provider.api_key')}</SettingGroupTitle>
             <Button
               size={16}
-              icon={<ShieldCheck size={16} />}
+              icon={<ShieldCheck size={16} color={provider.checked ? 'green' : 'white'} />}
               backgroundColor="$colorTransparent"
               circular
               onPress={handleOpenBottomSheet}
@@ -196,6 +203,7 @@ export default function ApiServiceScreen() {
         selectOptions={selectOptions}
         apiKey={provider?.apiKey || ''}
         onStartModelCheck={handleStartModelCheck}
+        isCheckingApi={isCheckingApi}
       />
     </SafeAreaContainer>
   )
