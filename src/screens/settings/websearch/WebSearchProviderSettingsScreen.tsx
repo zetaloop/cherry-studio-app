@@ -82,7 +82,10 @@ export default function WebSearchProviderSettingsScreen() {
 
     try {
       const { valid, error } = await WebSearchService.checkSearch(provider)
-      const errorMessage = error && error?.message ? ' ' + error?.message : ''
+      const errorMessage =
+        error && error?.message
+          ? ' ' + (error.message.length > 100 ? error.message.substring(0, 100) + '...' : error.message)
+          : ''
 
       if (valid) {
         Alert.alert(t('settings.websearch.check_success'), t('settings.websearch.check_success_message'), [
