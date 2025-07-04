@@ -7844,6 +7844,7 @@ __metadata:
     react-native-svg: "npm:15.11.2"
     react-native-web: "npm:^0.20.0"
     react-native-webview: "npm:13.13.5"
+    react-native-zip-archive: "npm:^7.0.2"
     react-redux: "npm:^9.2.0"
     react-test-renderer: "npm:~19.0.0"
     redux-devtools-expo-dev-plugin: "npm:^2.0.0"
@@ -14669,6 +14670,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/187441eac5a747acb58ae388b07611fcb13c6c8c801b7e3fc5175ea46e20cbc28db38ce777459fa4f405a3b4703e3011cd04c9218ac4a088a8a06031a8a2629c
+  languageName: node
+  linkType: hard
+
+"react-native-zip-archive@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "react-native-zip-archive@npm:7.0.2"
+  peerDependencies:
+    react: ">=16.8.6"
+    react-native: ">=0.60.0"
+  checksum: 10c0/d769a4028c2165d5d428a0c32247d486b460a68d740abc043e435cadf98e73b7b6d9b0f9888251af17baeb40093aac775ed6dadfcf5eb0fb385bf38816e69626
   languageName: node
   linkType: hard
 
