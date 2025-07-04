@@ -7800,7 +7800,7 @@ __metadata:
     expo-crypto: "npm:~14.1.5"
     expo-dev-client: "npm:~5.2.2"
     expo-document-picker: "npm:~13.1.6"
-    expo-drizzle-studio-plugin: "npm:^0.1.2"
+    expo-drizzle-studio-plugin: "npm:^0.2.0"
     expo-file-system: "npm:~18.1.10"
     expo-font: "npm:~13.3.1"
     expo-haptics: "npm:~14.1.4"
@@ -9818,14 +9818,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-drizzle-studio-plugin@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "expo-drizzle-studio-plugin@npm:0.1.2"
+"expo-drizzle-studio-plugin@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "expo-drizzle-studio-plugin@npm:0.2.0"
   dependencies:
-    expo-sqlite: "npm:^15.0.3"
+    expo-sqlite: "npm:^15.2.9"
   peerDependencies:
-    expo: "*"
-  checksum: 10c0/a4bb76844b5a2728c6abed1c89794de70a8b07fc8102341ee29b78607f04a63001bb0a7af6762c46789b64dbdfb92a76ee18248b1ed959cee982b7077598d235
+    expo: ^53.0.5
+  checksum: 10c0/f3bef9e890f94ca53192cc711c72479a9bdd0f1fdfe7db228b9e6ab06d379d5225e023d5da7ef55e24b07fd3bf67a83a253e0ae62e66c4a848532ad7d5c4ede2
   languageName: node
   linkType: hard
 
@@ -9982,7 +9982,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-sqlite@npm:^15.0.3, expo-sqlite@npm:~15.2.10":
+"expo-sqlite@npm:^15.2.9":
+  version: 15.2.13
+  resolution: "expo-sqlite@npm:15.2.13"
+  dependencies:
+    await-lock: "npm:^2.2.2"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/9e749cbc31cc69b268d53c51ce97977e3e43fcd0a8463802917a3bb96c57848523b704c9e3ca02adb1f68444fa33905f435abf922a1b76edd0809937e3661388
+  languageName: node
+  linkType: hard
+
+"expo-sqlite@npm:~15.2.10":
   version: 15.2.12
   resolution: "expo-sqlite@npm:15.2.12"
   dependencies:

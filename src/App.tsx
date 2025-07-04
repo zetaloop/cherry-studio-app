@@ -3,6 +3,7 @@ import '@/i18n'
 
 import { DefaultTheme, NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator'
+import { useDrizzleStudio } from 'expo-drizzle-studio-plugin'
 import * as SplashScreen from 'expo-splash-screen'
 import { SQLiteProvider } from 'expo-sqlite'
 import { StatusBar } from 'expo-status-bar'
@@ -34,6 +35,8 @@ function AppContent() {
   const colorScheme = useColorScheme()
   const { success, error } = useMigrations(db, migrations)
   const initialized = useSelector((state: RootState) => state.app.initialized)
+
+  useDrizzleStudio(expoDb)
 
   const dispatch = useAppDispatch()
 
