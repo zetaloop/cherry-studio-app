@@ -24,13 +24,12 @@ export default function WebSearchProviderSettingsScreen() {
   const navigation = useNavigation()
   const route = useRoute<WebsearchProviderSettingsRouteProp>()
 
-  const { providerId } = route.params
-  const { provider, isLoading, updateProvider } = useWebSearchProvider(providerId)
-
   const [showApiKey, setShowApiKey] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
+  const { providerId } = route.params
+  const { provider, isLoading, updateProvider } = useWebSearchProvider(providerId)
   const webSearchProviderConfig = provider?.id ? WEB_SEARCH_PROVIDER_CONFIG[provider.id] : undefined
   const apiKeyWebsite = webSearchProviderConfig?.websites?.apiKey
 
