@@ -80,8 +80,8 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
   }
 
   const handleAddPress = async () => {
-    await handleAddImage()
-    // await handleAddFile()
+    // await handleAddImage()
+    await handleAddFile()
   }
 
   return <Button chromeless size={24} icon={<CirclePlus size={24} />} onPress={handleAddPress} />
