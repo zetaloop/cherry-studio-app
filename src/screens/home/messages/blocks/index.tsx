@@ -43,13 +43,13 @@ const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ blocks }) => {
   const groupedBlocks = filterImageBlockGroups(blocks)
 
   return (
-    <View flex={1}>
+    <View flex={1} width="100%">
       {groupedBlocks.map(block => {
         if (Array.isArray(block)) {
           const groupKey = block.map(imageBlock => imageBlock.id).join('-')
           return (
-            <View key={groupKey}>
-              <XStack>
+            <View key={groupKey} width="100%">
+              <XStack flexWrap="wrap" gap="5" width="100%">
                 {block.map(imageBlock => (
                   <ImageBlock key={imageBlock.id} block={imageBlock as ImageMessageBlock} />
                 ))}
