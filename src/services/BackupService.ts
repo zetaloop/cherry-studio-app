@@ -1,8 +1,8 @@
 import { Directory, File, Paths } from 'expo-file-system/next'
-import { unzip } from 'react-native-zip-archive'
 
-import { BackupData } from '@/types/databackup'
+import { BackupData, BackupReduxData } from '@/types/databackup'
 import { FileType } from '@/types/file'
+import { ValueJSONed } from '@/types/utils'
 
 const fileStorageDir = new Directory(Paths.cache, 'Files')
 
@@ -18,19 +18,18 @@ export async function restore(backupFile: Omit<FileType, 'md5'>) {
   }
 
   try {
-    // unzip
-    const backupDir = new Directory(fileStorageDir, backupFile.name)
-    await unzip(backupFile.path, backupDir.uri)
-    console.log('backupDir: ', backupDir)
-
     // read data.json
-    const data = JSON.parse(new File(backupDir.uri, 'data.json').text()) as BackupData
+    const data = JSON.parse(new File(backupFile.path).text()) as BackupData
 
-    const reduxData = JSON.parse(data.localStorage['persist:cherry-studio']) as {
-      agents
+    const reduxData = JSON.parse(data.localStorage['persist:cherry-studio']) as ValueJSONed<BackupReduxData>
+
+    console.log('reduxData: ', reduxData.agents)
+
+    for (const key of Object.keys(reduxData) as (keyof BackupReduxData)[]) {
+      const value = reduxData[key]
+      console.log('key: ', key)
+      console.log('value: ', JSON.parse(value))
     }
-
-    console.log('reduxData: ', reduxData)
 
     // restore data
   } catch (error) {
