@@ -17,8 +17,6 @@ interface FileItemProps {
 }
 
 const FileItem: FC<FileItemProps> = ({ file, onRemove }) => {
-  console.log('FileItem render', file)
-
   const handlePreview = () => {
     FileViewer.open(file.path, { displayName: file.name }).catch(error => {
       console.error('打开文件时出错:', error)
