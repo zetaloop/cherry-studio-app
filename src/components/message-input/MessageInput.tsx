@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, View, XStack, YStack } from 'tamagui'
 
+import { useAssistant } from '@/hooks/useAssistant'
 import { sendMessage as _sendMessage } from '@/services/MessagesService'
 import { getUserMessage } from '@/services/MessagesService'
 import { Assistant, Model, Topic } from '@/types/assistant'
@@ -17,20 +18,21 @@ import { ThinkButton } from './ThinkButton'
 import { VoiceButton } from './VoiceButton'
 import { WebsearchButton } from './WebsearchButton'
 interface MessageInputProps {
-  assistant: Assistant
   topic: Topic
   setHasMessages: (hasMessages: boolean) => void
   updateAssistant: (assistant: Assistant) => Promise<void>
 }
 
-export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, setHasMessages, updateAssistant }) => {
+export const MessageInput: React.FC<MessageInputProps> = ({ topic, setHasMessages, updateAssistant }) => {
   const { t } = useTranslation()
+  const { assistant, isLoading } = useAssistant(topic.assistantId)
+
   const [text, setText] = useState('')
   const [files, setFiles] = useState<FileType[]>([])
   const [mentions, setMentions] = useState<Model[]>([])
 
   const sendMessage = async () => {
-    if (isEmpty(text.trim())) {
+    if (isEmpty(text.trim()) || !assistant) {
       return
     }
 
@@ -55,6 +57,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, se
     } catch (error) {
       console.error('Error sending message:', error)
     }
+  }
+
+  if (isLoading || !assistant) {
+    return null
   }
 
   return (
