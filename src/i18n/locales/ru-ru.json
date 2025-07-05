@@ -269,7 +269,7 @@
           "title": "Настройки резервного копирования",
           "to_webdav": "Резервное копирование в WebDAV",
           "from_webdav": "Восстановление из WebDAV",
-          "auto_backup": "Автоматическое резервное копирование",
+          "auto_backup": "Автоматическое р��зервное копирование",
           "slim_backup": "Компактное резервное копирование",
           "max_backups": "Максимальное количество резервных копий",
           "unlimited": "Без ограничений"
@@ -359,7 +359,7 @@
         "title": "Конфигурация Obsidian",
         "default_vault": "Хранилище Obsidian по умолчанию",
         "default_vault_placeholder": "Пожалуйста, выберите хранилище Obsidian по умолчанию",
-        "default_vault_loading": "Загрузка хранилища Obsidian...",
+        "default_vault_loading": "Загрузка хранил��ща Obsidian...",
         "default_vault_no_vaults": "Хранилища Obsidian не найдены",
         "default_vault_fetch_error": "Не удалось получить хранилище Obsidian",
         "default_vault_export_failed": "Экспорт не удался"
@@ -472,6 +472,12 @@
     "topics": {
       "title": "Тема",
       "title.recent": "Недавние темы"
+    },
+    "errors": {
+      "cannotOpenLink": "Не удается открыть ссылку: {{error}}",
+      "linkErrorTitle": "Ошибка открытия ссылки",
+      "deviceCannotHandleLink": "Ваше устройство не может обработать эту ссылку: {{href}}",
+      "cannotOpenLinkTitle": "Не удается открыть ссылку"
     }
   }
 }

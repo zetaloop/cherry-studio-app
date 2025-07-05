@@ -99,6 +99,12 @@
       "camera": "Camera",
       "clear_all": "Clear All"
     },
+    "errors": {
+      "cannotOpenLink": "Cannot open link: {{error}}",
+      "linkErrorTitle": "Link Opening Error",
+      "deviceCannotHandleLink": "Your device cannot handle this link: {{href}}",
+      "cannotOpenLinkTitle": "Cannot Open Link"
+    },
     "history": {
       "topics.empty": " No topics found",
       "search.placeholder": "Search topics or messages...",

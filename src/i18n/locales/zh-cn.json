@@ -99,6 +99,12 @@
       "clear_all": "清除全部",
       "camera": "相机"
     },
+    "errors": {
+      "cannotOpenLink": "无法打开链接: {{error}}",
+      "linkErrorTitle": "打开链接出错",
+      "deviceCannotHandleLink": "您的设备无法处理此链接: {{href}}",
+      "cannotOpenLinkTitle": "无法打开链接"
+    },
     "history": {
       "topics.empty": "未找到主题",
       "search.placeholder": "搜索主题或消息...",

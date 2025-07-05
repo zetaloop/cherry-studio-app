@@ -472,6 +472,12 @@
     "topics": {
       "title": "トピック",
       "title.recent": "最近のトピック"
+    },
+    "errors": {
+      "cannotOpenLink": "リンクを開けません: {{error}}",
+      "linkErrorTitle": "リンクのオープンに失敗",
+      "deviceCannotHandleLink": "このデバイスはリンクを処理できません: {{href}}",
+      "cannotOpenLinkTitle": "リンクを開けません"
     }
   }
 }
