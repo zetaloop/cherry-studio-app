@@ -101,7 +101,7 @@
     },
     "history": {
       "topics.empty": "未找到主題",
-      "search.placeholder": "搜尋主題或���息...",
+      "search.placeholder": "搜尋主題或訊息...",
       "search.topics.empty": "未找到主題，按 Enter 鍵搜索所有訊息"
     },
     "settings": {
@@ -156,7 +156,7 @@
         "api_service": "API 服務",
         "list.title": "提供商列表",
         "api_key.placeholder": "請輸入 API 金鑰",
-        "api_key.get": "��取 API 金鑰",
+        "api_key.get": "獲取 API 金鑰",
         "api_check.title": "檢測",
         "api_check.tooltip": "選擇用於檢測的模型",
         "enabled": "開啟",
