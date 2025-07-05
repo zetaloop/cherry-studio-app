@@ -1,6 +1,7 @@
 import 'react-native-reanimated'
 import '@/i18n'
 
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { DefaultTheme, NavigationContainer, ThemeProvider } from '@react-navigation/native'
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator'
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin'
@@ -80,8 +81,10 @@ function AppContent() {
       <PortalProvider>
         <NavigationContainer theme={DefaultTheme}>
           <ThemeProvider value={DefaultTheme}>
-            <AppNavigator />
-            <StatusBar style="auto" />
+            <BottomSheetModalProvider>
+              <AppNavigator />
+              <StatusBar style="auto" />
+            </BottomSheetModalProvider>
           </ThemeProvider>
         </NavigationContainer>
       </PortalProvider>

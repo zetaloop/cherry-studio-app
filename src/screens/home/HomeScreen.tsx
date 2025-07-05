@@ -6,34 +6,25 @@ import { styled, View, YStack } from 'tamagui'
 import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { useAssistants } from '@/hooks/useAssistant'
+import { useAssistant, useAssistants } from '@/hooks/useAssistant'
 import { getDefaultAssistant } from '@/services/AssistantService'
 import { createNewTopic, getNewestTopic, getTopicById } from '@/services/TopicService'
-import { Assistant, Model, ReasoningEffortOptions, Topic } from '@/types/assistant'
-import { FileType } from '@/types/file'
+import { Assistant, Topic } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { runAsyncFunction } from '@/utils'
 
 import ChatContent from './ChatContent'
-import SheetView, { SheetType } from './sheets'
 import WelcomeContent from './WelcomeContent'
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'HomeScreen'>
 
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProps>()
   const [assistant, setAssistant] = useState<Assistant | null>(null)
+  const { updateAssistant } = useAssistant('default')
   const [topic, setTopic] = useState<Topic | null>(null)
   const { assistants: systemAssistants } = useAssistants()
   const [hasMessages, setHasMessages] = useState(false)
   const route = useRoute<HomeScreenRouteProp>()
-
-  // mention sheet
-  const [activeSheet, setActiveSheet] = useState<SheetType | null>(null)
-  const [mentions, setMentions] = useState<Model[]>([])
-  const [files, setFiles] = useState<FileType[]>([])
-  const [reasoningEffort, setReasoningEffort] = useState<ReasoningEffortOptions | undefined>(
-    assistant?.settings?.reasoning_effort
-  )
 
   const { topicId } = route.params || {}
 
@@ -104,26 +95,12 @@ const HomeScreen = () => {
                 assistant={assistant}
                 topic={topic}
                 setHasMessages={setHasMessages}
-                setActiveSheet={setActiveSheet}
-                mentions={mentions}
-                files={files}
-                setFiles={setFiles}
-                reasoningEffort={reasoningEffort}
+                updateAssistant={updateAssistant}
               />
             )}
           </InputContainer>
         </YStack>
       </KeyboardAvoidingView>
-      <SheetView
-        activeSheet={activeSheet}
-        setActiveSheet={setActiveSheet}
-        mentions={mentions}
-        setMentions={setMentions}
-        files={files}
-        setFiles={setFiles}
-        reasoningEffort={reasoningEffort}
-        setReasoningEffort={setReasoningEffort}
-      />
     </SafeAreaContainer>
   )
 }

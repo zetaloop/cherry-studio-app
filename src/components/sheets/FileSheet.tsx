@@ -1,25 +1,24 @@
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import { FileText, Image } from '@tamagui/lucide-icons'
 import * as DocumentPicker from 'expo-document-picker'
 import * as ImagePicker from 'expo-image-picker'
-import React, { FC } from 'react'
+import React, { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Text, XStack, YStack } from 'tamagui'
+import { Button, Text, useTheme, XStack, YStack } from 'tamagui'
 
-import { ISheet } from '@/components/ui/Sheet'
 import { uploadFiles } from '@/services/FileService'
 import { FileType } from '@/types/file'
 import { uuid } from '@/utils'
 import { getFileType } from '@/utils/file'
 
 interface FileSheetProps {
-  isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
   files: FileType[]
   setFiles: (files: FileType[]) => void
 }
 
-const FileSheet: FC<FileSheetProps> = ({ isOpen, setIsOpen, files, setFiles }) => {
+const FileSheet = forwardRef<BottomSheetModal, FileSheetProps>(({ files, setFiles }, ref) => {
   const { t } = useTranslation()
+  const theme = useTheme()
 
   const handleAddImage = async () => {
     try {
@@ -53,7 +52,7 @@ const FileSheet: FC<FileSheetProps> = ({ isOpen, setIsOpen, files, setFiles }) =
     } catch (error) {
       console.error('Error selecting image:', error)
     } finally {
-      setIsOpen(false) // 选择完文件后关闭 sheet
+      ;(ref as React.MutableRefObject<BottomSheetModal>)?.current?.dismiss()
     }
   }
 
@@ -85,47 +84,62 @@ const FileSheet: FC<FileSheetProps> = ({ isOpen, setIsOpen, files, setFiles }) =
     } catch (error) {
       console.error('Error selecting file:', error)
     } finally {
-      setIsOpen(false) // 选择完文件后关闭 sheet
+      ;(ref as React.MutableRefObject<BottomSheetModal>)?.current?.dismiss()
     }
   }
 
+  const options = [
+    {
+      key: 'photo',
+      label: t('common.photo'),
+      icon: <Image size={24} />,
+      onPress: handleAddImage
+    },
+    {
+      key: 'file',
+      label: t('common.file'),
+      icon: <FileText size={24} />,
+      onPress: handleAddFile
+    }
+  ]
+
   return (
-    <ISheet isOpen={isOpen} onClose={() => setIsOpen(false)} snapPoints={['25%']} enableDynamicSizing={false}>
-      <YStack gap={20} padding="20">
-        <YStack gap={12}>
-          {/* 拍照 */}
-          {/* <Button size="$4" color="white" onPress={handleTakePhoto} justifyContent="flex-start" paddingHorizontal={20}>
-            <XStack gap={12} alignItems="center">
-              <Camera size={24} />
-              <Text color="white" fontSize={16}>
-                {t('common.camera')}
-              </Text>
-            </XStack>
-          </Button> */}
-
-          {/* 选择照片 */}
-          <Button size="$4" color="white" onPress={handleAddImage} justifyContent="flex-start" paddingHorizontal={20}>
-            <XStack gap={12} alignItems="center">
-              <Image size={24} />
-              <Text color="white" fontSize={16}>
-                {t('common.photo')}
-              </Text>
-            </XStack>
-          </Button>
-
-          {/* 选择文件 */}
-          <Button size="$4" color="white" onPress={handleAddFile} justifyContent="flex-start" paddingHorizontal={20}>
-            <XStack gap={12} alignItems="center">
-              <FileText size={24} />
-              <Text color="white" fontSize={16}>
-                {t('common.file')}
-              </Text>
-            </XStack>
-          </Button>
+    <BottomSheetModal
+      snapPoints={['25%']}
+      enableDynamicSizing={false}
+      ref={ref}
+      backgroundStyle={{
+        borderRadius: 30,
+        backgroundColor: theme.gray2.val
+      }}
+      handleIndicatorStyle={{
+        backgroundColor: theme.color.val
+      }}>
+      <BottomSheetView>
+        <YStack gap={12} padding="20">
+          {options.map(option => (
+            <Button
+              key={option.key}
+              size="$4"
+              color="white"
+              onPress={option.onPress}
+              justifyContent="flex-start"
+              paddingHorizontal={20}
+              chromeless>
+              <XStack gap={12} alignItems="center">
+                {option.icon}
+                <Text color="white" fontSize={16}>
+                  {option.label}
+                </Text>
+              </XStack>
+            </Button>
+          ))}
         </YStack>
-      </YStack>
-    </ISheet>
+      </BottomSheetView>
+    </BottomSheetModal>
   )
-}
+})
+
+FileSheet.displayName = 'FileSheet'
 
 export default FileSheet

@@ -1,7 +1,7 @@
-import React from 'react'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import React, { useRef } from 'react'
 import { Button } from 'tamagui'
 
-import { SheetType } from '@/screens/home/sheets'
 import { ReasoningEffortOptions } from '@/types/assistant'
 
 import {
@@ -11,13 +11,16 @@ import {
   MdiLightbulbOn50,
   MdiLightbulbOn90
 } from '../icons/MdiLightbulbIcon'
+import { ReasoningSheet } from '../sheets/ReasoningSheet'
 
 interface ThinkButtonProps {
   reasoningEffort: ReasoningEffortOptions | undefined
-  setActiveSheet: (sheet: SheetType | null) => void
+  onReasoningEffortChange: (value: ReasoningEffortOptions) => void
 }
 
-export const ThinkButton: React.FC<ThinkButtonProps> = ({ reasoningEffort, setActiveSheet }) => {
+export const ThinkButton: React.FC<ThinkButtonProps> = ({ reasoningEffort, onReasoningEffortChange }) => {
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+
   const getIcon = () => {
     const size = 24
 
@@ -36,13 +39,25 @@ export const ThinkButton: React.FC<ThinkButtonProps> = ({ reasoningEffort, setAc
     }
   }
 
+  const handlePress = () => {
+    bottomSheetModalRef.current?.present()
+  }
+
+  const handleValueChange = (newValue: ReasoningEffortOptions) => {
+    onReasoningEffortChange(newValue)
+  }
+
   return (
-    <Button
-      chromeless
-      size={24}
-      icon={getIcon()}
-      onPress={() => setActiveSheet(SheetType.THINK)}
-      color={reasoningEffort !== undefined ? 'rgba(0, 185, 107, 1)' : undefined}
-    />
+    <>
+      <Button
+        chromeless
+        size={24}
+        icon={getIcon()}
+        onPress={handlePress}
+        color={reasoningEffort !== undefined ? 'rgba(0, 185, 107, 1)' : undefined}
+      />
+
+      <ReasoningSheet ref={bottomSheetModalRef} value={reasoningEffort || 'auto'} onValueChange={handleValueChange} />
+    </>
   )
 }

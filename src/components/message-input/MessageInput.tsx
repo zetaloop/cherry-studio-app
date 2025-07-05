@@ -3,10 +3,9 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, View, XStack, YStack } from 'tamagui'
 
-import { SheetType } from '@/screens/home/sheets'
 import { sendMessage as _sendMessage } from '@/services/MessagesService'
 import { getUserMessage } from '@/services/MessagesService'
-import { Assistant, Model, ReasoningEffortOptions, Topic } from '@/types/assistant'
+import { Assistant, Model, Topic } from '@/types/assistant'
 import { FileType } from '@/types/file'
 import { MessageInputBaseParams } from '@/types/message'
 
@@ -21,25 +20,14 @@ interface MessageInputProps {
   assistant: Assistant
   topic: Topic
   setHasMessages: (hasMessages: boolean) => void
-  setActiveSheet: (sheet: SheetType | null) => void
-  mentions: Model[]
-  files: FileType[]
-  setFiles: (files: FileType[]) => void
-  reasoningEffort: ReasoningEffortOptions | undefined
+  updateAssistant: (assistant: Assistant) => Promise<void>
 }
 
-export const MessageInput: React.FC<MessageInputProps> = ({
-  assistant,
-  topic,
-  setHasMessages,
-  setActiveSheet,
-  mentions,
-  files,
-  setFiles,
-  reasoningEffort
-}) => {
+export const MessageInput: React.FC<MessageInputProps> = ({ assistant, topic, setHasMessages, updateAssistant }) => {
   const { t } = useTranslation()
   const [text, setText] = useState('')
+  const [files, setFiles] = useState<FileType[]>([])
+  const [mentions, setMentions] = useState<Model[]>([])
 
   const sendMessage = async () => {
     if (isEmpty(text.trim())) {
@@ -87,10 +75,21 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         {/* button */}
         <XStack justifyContent="space-between" alignItems="center">
           <XStack gap={5} alignItems="center">
-            <MentionButton mentions={mentions} setActiveSheet={setActiveSheet} />
-            <AddFileButton setActiveSheet={setActiveSheet} />
+            <MentionButton mentions={mentions} setMentions={setMentions} />
+            <AddFileButton files={files} setFiles={setFiles} />
             <WebsearchButton />
-            <ThinkButton reasoningEffort={reasoningEffort} setActiveSheet={setActiveSheet} />
+            <ThinkButton
+              reasoningEffort={assistant.settings?.reasoning_effort}
+              onReasoningEffortChange={async value =>
+                await updateAssistant({
+                  ...assistant,
+                  settings: {
+                    ...assistant.settings,
+                    reasoning_effort: value
+                  }
+                })
+              }
+            />
           </XStack>
           <XStack gap={5} alignItems="center">
             <VoiceButton />
