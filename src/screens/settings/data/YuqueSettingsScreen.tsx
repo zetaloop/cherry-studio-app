@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Alert } from 'react-native'
 import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
@@ -17,6 +18,7 @@ export default function YuqueSettingsScreen() {
   const navigation = useNavigation()
 
   const [showApiKey, setShowApiKey] = useState(false)
+  const [checkLoading, setCheckLoading] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
@@ -42,7 +44,16 @@ export default function YuqueSettingsScreen() {
   }
 
   async function checkConnection() {
-    console.log('Checking Notion connection...')
+    setCheckLoading(true)
+
+    try {
+      console.log('Checking Yuque connection...')
+      Alert.alert(t('settings.yuque.check.success'))
+    } catch (error) {
+      Alert.alert(t('settings.yuque.check.fail'))
+    } finally {
+      setCheckLoading(false)
+    }
   }
 
   return (
@@ -103,13 +114,13 @@ export default function YuqueSettingsScreen() {
           </XStack>
         </YStack>
       </SettingContainer>
-      {/*TODO 添加loading*/}
       <ApiCheckSheet
         bottomSheetRef={bottomSheetRef}
         isOpen={isBottomSheetOpen}
         onClose={handleBottomSheetClose}
         apiKey={''}
         onStartModelCheck={checkConnection}
+        loading={checkLoading}
       />
     </SafeAreaContainer>
   )

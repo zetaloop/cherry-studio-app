@@ -25,6 +25,7 @@ export default function WebSearchProviderSettingsScreen() {
   const route = useRoute<WebsearchProviderSettingsRouteProp>()
 
   const [showApiKey, setShowApiKey] = useState(false)
+  const [checkLoading, setCheckLoading] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
@@ -79,6 +80,7 @@ export default function WebSearchProviderSettingsScreen() {
   async function checkSearch() {
     // TODO : 支持多个 API Key 检测
     if (!provider) return
+    setCheckLoading(true)
 
     try {
       const { valid, error } = await WebSearchService.checkSearch(provider)
@@ -112,6 +114,8 @@ export default function WebSearchProviderSettingsScreen() {
           onPress: () => setIsBottomSheetOpen(false)
         }
       ])
+    } finally {
+      setCheckLoading(false)
     }
   }
 
@@ -178,13 +182,13 @@ export default function WebSearchProviderSettingsScreen() {
           />
         </YStack>
       </SettingContainer>
-      {/*TODO 添加loading*/}
       <ApiCheckSheet
         bottomSheetRef={bottomSheetRef}
         isOpen={isBottomSheetOpen}
         onClose={handleBottomSheetClose}
         apiKey={provider?.apiKey || ''}
         onStartModelCheck={checkSearch}
+        loading={checkLoading}
       />
     </SafeAreaContainer>
   )
