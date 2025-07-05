@@ -70,7 +70,7 @@ const MentionSheet: FC<MentionSheetProps> = ({ isOpen, mentions, setMentions, se
   }
 
   return (
-    <ISheet isOpen={isOpen} onClose={() => setIsOpen(false)} snapPoints={['50%', '90%']}>
+    <ISheet isOpen={isOpen} onClose={() => setIsOpen(false)} snapPoints={['50%', '90%']} enableDynamicSizing={false}>
       <YStack gap={5} padding="20">
         <Button onPress={handleClearAll}>{t('common.clear_all')}</Button>
         {selectOptions.map((group, groupIndex) => (

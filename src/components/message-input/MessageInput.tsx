@@ -25,7 +25,7 @@ interface MessageInputProps {
   mentions: Model[]
   files: FileType[]
   setFiles: (files: FileType[]) => void
-  reasoningEffort: ReasoningEffortOptions | null
+  reasoningEffort: ReasoningEffortOptions | undefined
 }
 
 export const MessageInput: React.FC<MessageInputProps> = ({

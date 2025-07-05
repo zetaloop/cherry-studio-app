@@ -13,7 +13,7 @@ import {
 } from '../icons/MdiLightbulbIcon'
 
 interface ThinkButtonProps {
-  reasoningEffort: ReasoningEffortOptions | null
+  reasoningEffort: ReasoningEffortOptions | undefined
   setActiveSheet: (sheet: SheetType | null) => void
 }
 
@@ -42,7 +42,7 @@ export const ThinkButton: React.FC<ThinkButtonProps> = ({ reasoningEffort, setAc
       size={24}
       icon={getIcon()}
       onPress={() => setActiveSheet(SheetType.THINK)}
-      color={reasoningEffort !== null ? 'rgba(0, 185, 107, 1)' : undefined}
+      color={reasoningEffort !== undefined ? 'rgba(0, 185, 107, 1)' : undefined}
     />
   )
 }

@@ -1,4 +1,4 @@
-import { Camera, FileText, Image } from '@tamagui/lucide-icons'
+import { FileText, Image } from '@tamagui/lucide-icons'
 import * as DocumentPicker from 'expo-document-picker'
 import * as ImagePicker from 'expo-image-picker'
 import React, { FC } from 'react'
@@ -50,45 +50,10 @@ const FileSheet: FC<FileSheetProps> = ({ isOpen, setIsOpen, files, setFiles }) =
       })
       const uploadedFiles = await uploadFiles(_files)
       setFiles([...files, ...uploadedFiles])
-      setIsOpen(false) // 选择完文件后关闭 sheet
     } catch (error) {
       console.error('Error selecting image:', error)
-    }
-  }
-
-  const handleTakePhoto = async () => {
-    try {
-      const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        quality: 1
-      })
-
-      if (result.canceled) {
-        console.log('Camera was canceled')
-        return
-      }
-
-      const asset = result.assets[0]
-      const id = uuid()
-      const _file: Omit<FileType, 'md5'> = {
-        id: id,
-        name: asset.fileName || id,
-        origin_name: asset.fileName || id,
-        path: asset.uri,
-        size: asset.fileSize || 0,
-        ext: asset.fileName?.split('.').pop() || 'jpg',
-        type: getFileType(asset.fileName?.split('.').pop() || 'jpg'),
-        mime_type: asset.mimeType || '',
-        created_at: new Date().toISOString(),
-        count: 1
-      }
-
-      const uploadedFiles = await uploadFiles([_file])
-      setFiles([...files, ...uploadedFiles])
-      setIsOpen(false) // 拍照完成后关闭 sheet
-    } catch (error) {
-      console.error('Error taking photo:', error)
+    } finally {
+      setIsOpen(false) // 选择完文件后关闭 sheet
     }
   }
 
@@ -117,25 +82,26 @@ const FileSheet: FC<FileSheetProps> = ({ isOpen, setIsOpen, files, setFiles }) =
       })
       const uploadedFiles = await uploadFiles(_files)
       setFiles([...files, ...uploadedFiles])
-      setIsOpen(false) // 选择完文件后关闭 sheet
     } catch (error) {
       console.error('Error selecting file:', error)
+    } finally {
+      setIsOpen(false) // 选择完文件后关闭 sheet
     }
   }
 
   return (
-    <ISheet isOpen={isOpen} onClose={() => setIsOpen(false)} snapPoints={['40%']}>
+    <ISheet isOpen={isOpen} onClose={() => setIsOpen(false)} snapPoints={['25%']} enableDynamicSizing={false}>
       <YStack gap={20} padding="20">
         <YStack gap={12}>
           {/* 拍照 */}
-          <Button size="$4" color="white" onPress={handleTakePhoto} justifyContent="flex-start" paddingHorizontal={20}>
+          {/* <Button size="$4" color="white" onPress={handleTakePhoto} justifyContent="flex-start" paddingHorizontal={20}>
             <XStack gap={12} alignItems="center">
               <Camera size={24} />
               <Text color="white" fontSize={16}>
                 {t('common.camera')}
               </Text>
             </XStack>
-          </Button>
+          </Button> */}
 
           {/* 选择照片 */}
           <Button size="$4" color="white" onPress={handleAddImage} justifyContent="flex-start" paddingHorizontal={20}>

@@ -31,7 +31,9 @@ const HomeScreen = () => {
   const [activeSheet, setActiveSheet] = useState<SheetType | null>(null)
   const [mentions, setMentions] = useState<Model[]>([])
   const [files, setFiles] = useState<FileType[]>([])
-  const [reasoningEffort, setReasoningEffort] = useState<ReasoningEffortOptions | null>(null)
+  const [reasoningEffort, setReasoningEffort] = useState<ReasoningEffortOptions | undefined>(
+    assistant?.settings?.reasoning_effort
+  )
 
   const { topicId } = route.params || {}
 

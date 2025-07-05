@@ -29,7 +29,7 @@ interface SheetViewProps {
   setFiles: (files: FileType[]) => void
 
   // Think sheet 相关
-  reasoningEffort: ReasoningEffortOptions | null
+  reasoningEffort: ReasoningEffortOptions | undefined
   setReasoningEffort: (options: ReasoningEffortOptions) => void
 }
 

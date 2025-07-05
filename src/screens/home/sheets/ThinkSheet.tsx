@@ -16,7 +16,7 @@ import { ReasoningEffortOptions } from '@/types/assistant'
 interface ThinkSheetProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  reasoningEffort: ReasoningEffortOptions | null
+  reasoningEffort: ReasoningEffortOptions | undefined
   setReasoningEffort: (options: ReasoningEffortOptions) => void
 }
 
