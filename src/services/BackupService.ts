@@ -10,11 +10,14 @@ import { updateTopics } from './TopicService'
 const fileStorageDir = new Directory(Paths.cache, 'Files')
 
 async function restoreDBData(data: BackupData['indexedDB']) {
+  if (1) return
   updateTopics(data.topics)
   upsertBlocks(data.message_blocks)
 }
 
-async function restoreReduxData(data: BackupReduxData) {}
+async function restoreReduxData(data: BackupReduxData) {
+  console.log(data)
+}
 
 export async function restore(backupFile: Omit<FileType, 'md5'>) {
   console.log('start to restore data...')
