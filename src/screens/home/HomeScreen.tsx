@@ -9,11 +9,12 @@ import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { useAssistants } from '@/hooks/useAssistant'
 import { getDefaultAssistant } from '@/services/AssistantService'
 import { createNewTopic, getNewestTopic, getTopicById } from '@/services/TopicService'
-import { Assistant, Topic } from '@/types/assistant'
+import { Assistant, Model, Topic } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { runAsyncFunction } from '@/utils'
 
 import ChatContent from './ChatContent'
+import SheetView from './sheets'
 import WelcomeContent from './WelcomeContent'
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'HomeScreen'>
 
@@ -24,6 +25,10 @@ const HomeScreen = () => {
   const { assistants: systemAssistants } = useAssistants()
   const [hasMessages, setHasMessages] = useState(false)
   const route = useRoute<HomeScreenRouteProp>()
+
+  // mention sheet
+  const [mentions, setMentions] = useState<Model[]>([])
+  const [isMentionSheetOpen, setIsMentionSheetOpen] = useState(false)
 
   const { topicId } = route.params || {}
 
@@ -89,10 +94,24 @@ const HomeScreen = () => {
           )}
 
           <InputContainer>
-            {assistant && topic && <MessageInput assistant={assistant} topic={topic} setHasMessages={setHasMessages} />}
+            {assistant && topic && (
+              <MessageInput
+                assistant={assistant}
+                topic={topic}
+                setHasMessages={setHasMessages}
+                setIsMentionSheetOpen={setIsMentionSheetOpen}
+                mentions={mentions}
+              />
+            )}
           </InputContainer>
         </YStack>
       </KeyboardAvoidingView>
+      <SheetView
+        isMentionSheetOpen={isMentionSheetOpen}
+        setIsMentionSheetOpen={setIsMentionSheetOpen}
+        mentions={mentions}
+        setMentions={setMentions}
+      />
     </SafeAreaContainer>
   )
 }

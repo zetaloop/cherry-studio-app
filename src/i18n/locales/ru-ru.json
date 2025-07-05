@@ -95,7 +95,8 @@
       "error_occurred": "Произошла ошибка",
       "loading": "Загрузка...",
       "file": "Файл",
-      "photo": "Фото"
+      "photo": "Фото",
+      "clear_all": "Очистить всё"
     },
     "history": {
       "topics.empty": "Темы не найдены",

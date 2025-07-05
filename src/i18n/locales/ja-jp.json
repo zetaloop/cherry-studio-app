@@ -95,7 +95,8 @@
       "error_occurred": "エラーが発生しました",
       "loading": "読み込み中...",
       "file": "ファイル",
-      "photo": "写真"
+      "photo": "写真",
+      "clear_all": "すべてクリア"
     },
     "history": {
       "topics.empty": "トピックが見つかりません。",

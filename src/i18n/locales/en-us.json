@@ -95,7 +95,8 @@
       "error_occurred": "An error occurred",
       "loading": "Loading...",
       "file": "File",
-      "photo": "Photo"
+      "photo": "Photo",
+      "clear_all": "Clear All"
     },
     "history": {
       "topics.empty": " No topics found",
