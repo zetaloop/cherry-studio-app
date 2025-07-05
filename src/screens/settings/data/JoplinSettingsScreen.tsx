@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Alert } from 'react-native'
 import { Button, Input, Stack, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
@@ -18,6 +19,7 @@ export default function JoplinSettingsScreen() {
   const navigation = useNavigation()
 
   const [showApiKey, setShowApiKey] = useState(false)
+  const [checkLoading, setCheckLoading] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 
@@ -43,7 +45,16 @@ export default function JoplinSettingsScreen() {
   }
 
   async function checkConnection() {
-    console.log('Checking Notion connection...')
+    setCheckLoading(true)
+
+    try {
+      console.log('Checking Joplin connection...')
+      Alert.alert(t('settings.joplin.check.success'))
+    } catch (error) {
+      Alert.alert(t('settings.joplin.check.fail'))
+    } finally {
+      setCheckLoading(false)
+    }
   }
 
   return (
@@ -114,13 +125,13 @@ export default function JoplinSettingsScreen() {
           </Text>
         </YStack>
       </SettingContainer>
-      {/*TODO 添加loading*/}
       <ApiCheckSheet
         bottomSheetRef={bottomSheetRef}
         isOpen={isBottomSheetOpen}
         onClose={handleBottomSheetClose}
         apiKey={''}
         onStartModelCheck={checkConnection}
+        loading={checkLoading}
       />
     </SafeAreaContainer>
   )
