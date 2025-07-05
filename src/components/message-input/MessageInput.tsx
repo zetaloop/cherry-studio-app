@@ -3,9 +3,10 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, View, XStack, YStack } from 'tamagui'
 
+import { SheetType } from '@/screens/home/sheets'
 import { sendMessage as _sendMessage } from '@/services/MessagesService'
 import { getUserMessage } from '@/services/MessagesService'
-import { Assistant, Model, Topic } from '@/types/assistant'
+import { Assistant, Model, ReasoningEffortOptions, Topic } from '@/types/assistant'
 import { FileType } from '@/types/file'
 import { MessageInputBaseParams } from '@/types/message'
 
@@ -20,20 +21,25 @@ interface MessageInputProps {
   assistant: Assistant
   topic: Topic
   setHasMessages: (hasMessages: boolean) => void
+  setActiveSheet: (sheet: SheetType | null) => void
   mentions: Model[]
-  setIsMentionSheetOpen: (isOpen: boolean) => void
+  files: FileType[]
+  setFiles: (files: FileType[]) => void
+  reasoningEffort: ReasoningEffortOptions | null
 }
 
 export const MessageInput: React.FC<MessageInputProps> = ({
   assistant,
   topic,
   setHasMessages,
+  setActiveSheet,
   mentions,
-  setIsMentionSheetOpen
+  files,
+  setFiles,
+  reasoningEffort
 }) => {
   const { t } = useTranslation()
   const [text, setText] = useState('')
-  const [files, setFiles] = useState<FileType[]>([])
 
   const sendMessage = async () => {
     if (isEmpty(text.trim())) {
@@ -81,10 +87,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         {/* button */}
         <XStack justifyContent="space-between" alignItems="center">
           <XStack gap={5} alignItems="center">
-            <MentionButton mentions={mentions} setIsMentionSheetOpen={setIsMentionSheetOpen} />
-            <AddFileButton files={files} setFiles={setFiles} />
+            <MentionButton mentions={mentions} setActiveSheet={setActiveSheet} />
+            <AddFileButton setActiveSheet={setActiveSheet} />
             <WebsearchButton />
-            <ThinkButton />
+            <ThinkButton reasoningEffort={reasoningEffort} setActiveSheet={setActiveSheet} />
           </XStack>
           <XStack gap={5} alignItems="center">
             <VoiceButton />

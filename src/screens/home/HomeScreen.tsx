@@ -9,12 +9,13 @@ import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { useAssistants } from '@/hooks/useAssistant'
 import { getDefaultAssistant } from '@/services/AssistantService'
 import { createNewTopic, getNewestTopic, getTopicById } from '@/services/TopicService'
-import { Assistant, Model, Topic } from '@/types/assistant'
+import { Assistant, Model, ReasoningEffortOptions, Topic } from '@/types/assistant'
+import { FileType } from '@/types/file'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { runAsyncFunction } from '@/utils'
 
 import ChatContent from './ChatContent'
-import SheetView from './sheets'
+import SheetView, { SheetType } from './sheets'
 import WelcomeContent from './WelcomeContent'
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'HomeScreen'>
 
@@ -27,8 +28,10 @@ const HomeScreen = () => {
   const route = useRoute<HomeScreenRouteProp>()
 
   // mention sheet
+  const [activeSheet, setActiveSheet] = useState<SheetType | null>(null)
   const [mentions, setMentions] = useState<Model[]>([])
-  const [isMentionSheetOpen, setIsMentionSheetOpen] = useState(false)
+  const [files, setFiles] = useState<FileType[]>([])
+  const [reasoningEffort, setReasoningEffort] = useState<ReasoningEffortOptions | null>(null)
 
   const { topicId } = route.params || {}
 
@@ -99,18 +102,25 @@ const HomeScreen = () => {
                 assistant={assistant}
                 topic={topic}
                 setHasMessages={setHasMessages}
-                setIsMentionSheetOpen={setIsMentionSheetOpen}
+                setActiveSheet={setActiveSheet}
                 mentions={mentions}
+                files={files}
+                setFiles={setFiles}
+                reasoningEffort={reasoningEffort}
               />
             )}
           </InputContainer>
         </YStack>
       </KeyboardAvoidingView>
       <SheetView
-        isMentionSheetOpen={isMentionSheetOpen}
-        setIsMentionSheetOpen={setIsMentionSheetOpen}
+        activeSheet={activeSheet}
+        setActiveSheet={setActiveSheet}
         mentions={mentions}
         setMentions={setMentions}
+        files={files}
+        setFiles={setFiles}
+        reasoningEffort={reasoningEffort}
+        setReasoningEffort={setReasoningEffort}
       />
     </SafeAreaContainer>
   )

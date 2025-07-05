@@ -27,10 +27,10 @@
       "settings.max_tokens": "启用最大令牌限制",
       "settings.max_tokens_value": "最大令牌限制",
       "settings.reasoning": "推理努力",
-      "settings.reasoning.auto": "自动",
-      "settings.reasoning.low": "低",
-      "settings.reasoning.medium": "中等",
-      "settings.reasoning.high": "高",
+      "settings.reasoning.auto": "默认",
+      "settings.reasoning.low": "浮想",
+      "settings.reasoning.medium": "斟酌",
+      "settings.reasoning.high": "沉思",
       "market": {
         "title": "助理市场",
         "search_placeholder": "搜索助手...",
@@ -96,7 +96,8 @@
       "loading": "加载中...",
       "file": "文件",
       "photo": "照片",
-      "clear_all": "清除全部"
+      "clear_all": "清除全部",
+      "camera": "相机"
     },
     "history": {
       "topics.empty": "未找到主题",

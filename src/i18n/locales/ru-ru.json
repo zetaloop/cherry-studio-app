@@ -96,7 +96,8 @@
       "loading": "Загрузка...",
       "file": "Файл",
       "photo": "Фото",
-      "clear_all": "Очистить всё"
+      "clear_all": "Очистить всё",
+      "camera": "Камера"
     },
     "history": {
       "topics.empty": "Темы не найдены",

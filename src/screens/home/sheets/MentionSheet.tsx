@@ -14,13 +14,13 @@ import { Model } from '@/types/assistant'
 import { getModelUniqId } from '@/utils/model'
 
 interface MentionSheetProps {
-  isMentionSheetOpen: boolean
-  setIsMentionSheetOpen: (isOpen: boolean) => void
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
   mentions: Model[]
   setMentions: (mentions: Model[]) => void
 }
 
-const MentionSheet: FC<MentionSheetProps> = ({ isMentionSheetOpen, mentions, setMentions, setIsMentionSheetOpen }) => {
+const MentionSheet: FC<MentionSheetProps> = ({ isOpen, mentions, setMentions, setIsOpen }) => {
   const { t } = useTranslation()
   const [selectedModels, setSelectedModels] = useState<string[]>(() => mentions.map(m => getModelUniqId(m)))
 
@@ -66,52 +66,50 @@ const MentionSheet: FC<MentionSheetProps> = ({ isMentionSheetOpen, mentions, set
   const handleClearAll = () => {
     setSelectedModels([])
     setMentions([])
-    setIsMentionSheetOpen(false)
+    setIsOpen(false)
   }
 
   return (
-    <>
-      <ISheet isOpen={isMentionSheetOpen} onClose={() => setIsMentionSheetOpen(false)} snapPoints={['50%', '90%']}>
-        <YStack gap={5} padding="20">
-          <Button onPress={handleClearAll}>{t('common.clear_all')}</Button>
-          {selectOptions.map((group, groupIndex) => (
-            <View key={group.title || group.label || groupIndex}>
-              {group.label && group.label.trim() !== '' && <Text fontSize={12}>{group.label}</Text>}
-              {group.options.map(item => (
-                <Button
-                  key={item.value}
-                  onPress={() => handleModelToggle(item.value)}
-                  justifyContent="space-between"
-                  chromeless
-                  paddingHorizontal={8}
-                  paddingVertical={8}>
-                  <XStack gap={8} flex={1} alignItems="center" justifyContent="space-between" width="100%">
-                    <XStack gap={8} flex={1} alignItems="center" maxWidth="70%">
-                      {/* Model icon */}
-                      <XStack justifyContent="center" alignItems="center" flexShrink={0}>
-                        <ModelIcon model={item.model} />
-                      </XStack>
-                      {/* Model name */}
-                      <Text numberOfLines={1} ellipsizeMode="tail" flex={1}>
-                        {item.label}
-                      </Text>
+    <ISheet isOpen={isOpen} onClose={() => setIsOpen(false)} snapPoints={['50%', '90%']}>
+      <YStack gap={5} padding="20">
+        <Button onPress={handleClearAll}>{t('common.clear_all')}</Button>
+        {selectOptions.map((group, groupIndex) => (
+          <View key={group.title || group.label || groupIndex}>
+            {group.label && group.label.trim() !== '' && <Text fontSize={12}>{group.label}</Text>}
+            {group.options.map(item => (
+              <Button
+                key={item.value}
+                onPress={() => handleModelToggle(item.value)}
+                justifyContent="space-between"
+                chromeless
+                paddingHorizontal={8}
+                paddingVertical={8}>
+                <XStack gap={8} flex={1} alignItems="center" justifyContent="space-between" width="100%">
+                  <XStack gap={8} flex={1} alignItems="center" maxWidth="70%">
+                    {/* Model icon */}
+                    <XStack justifyContent="center" alignItems="center" flexShrink={0}>
+                      <ModelIcon model={item.model} />
                     </XStack>
-                    <XStack gap={8} alignItems="center" flexShrink={0}>
-                      {/* Model tags */}
-                      <ModelTags model={item.model} size={11} style={{ flexShrink: 0 }} />
-                      {/* Check icon */}
-                      <XStack justifyContent="center" alignItems="center" flexShrink={0}>
-                        {selectedModels.includes(item.value) ? <Check size={20} /> : <View width={20} />}
-                      </XStack>
+                    {/* Model name */}
+                    <Text numberOfLines={1} ellipsizeMode="tail" flex={1}>
+                      {item.label}
+                    </Text>
+                  </XStack>
+                  <XStack gap={8} alignItems="center" flexShrink={0}>
+                    {/* Model tags */}
+                    <ModelTags model={item.model} size={11} style={{ flexShrink: 0 }} />
+                    {/* Check icon */}
+                    <XStack justifyContent="center" alignItems="center" flexShrink={0}>
+                      {selectedModels.includes(item.value) ? <Check size={20} /> : <View width={20} />}
                     </XStack>
                   </XStack>
-                </Button>
-              ))}
-            </View>
-          ))}
-        </YStack>
-      </ISheet>
-    </>
+                </XStack>
+              </Button>
+            ))}
+          </View>
+        ))}
+      </YStack>
+    </ISheet>
   )
 }
 

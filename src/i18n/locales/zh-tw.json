@@ -96,7 +96,8 @@
       "loading": "載入中...",
       "file": "檔案",
       "photo": "相片",
-      "clear_all": "清除全部"
+      "clear_all": "清除全部",
+      "camera": "相機"
     },
     "history": {
       "topics.empty": "未找到主題",

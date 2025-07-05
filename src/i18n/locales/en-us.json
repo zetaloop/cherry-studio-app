@@ -96,6 +96,7 @@
       "loading": "Loading...",
       "file": "File",
       "photo": "Photo",
+      "camera": "Camera",
       "clear_all": "Clear All"
     },
     "history": {
