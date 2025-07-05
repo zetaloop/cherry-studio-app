@@ -2,7 +2,9 @@ import { CirclePlus } from '@tamagui/lucide-icons'
 import * as DocumentPicker from 'expo-document-picker'
 import * as ImagePicker from 'expo-image-picker'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from 'tamagui'
+import * as DropdownMenu from 'zeego/dropdown-menu'
 
 import { uploadFiles } from '@/services/FileService'
 import { FileType } from '@/types/file'
@@ -15,6 +17,8 @@ interface AddFileButtonProps {
 }
 
 export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles }) => {
+  const { t } = useTranslation()
+
   const handleAddImage = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -79,10 +83,19 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
     }
   }
 
-  const handleAddPress = async () => {
-    // await handleAddImage()
-    await handleAddFile()
-  }
-
-  return <Button chromeless size={24} icon={<CirclePlus size={24} />} onPress={handleAddPress} />
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <Button chromeless size={24} icon={<CirclePlus size={24} />} />
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item key="file" onSelect={handleAddFile}>
+          <DropdownMenu.ItemTitle>{t('common.file')}</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item key="photo" onSelect={handleAddImage}>
+          <DropdownMenu.ItemTitle>{t('common.photo')}</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  )
 }

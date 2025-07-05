@@ -93,7 +93,9 @@
       "see_all": "查看全部",
       "ok": "确定",
       "error_occurred": "发生错误",
-      "loading": "加载中..."
+      "loading": "加载中...",
+      "file": "文件",
+      "photo": "照片"
     },
     "history": {
       "topics.empty": "未找到主题",

@@ -93,7 +93,9 @@
       "see_all": "See All",
       "ok": "OK",
       "error_occurred": "An error occurred",
-      "loading": "Loading..."
+      "loading": "Loading...",
+      "file": "File",
+      "photo": "Photo"
     },
     "history": {
       "topics.empty": " No topics found",
