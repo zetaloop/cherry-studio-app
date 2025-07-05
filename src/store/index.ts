@@ -8,10 +8,26 @@ import websearch from '@/store/websearch'
 
 import app from './app'
 import assistant from './assistant'
+import backup from './backup'
+import copilot from './copilot'
+import knowledge from './knowledge'
+import llm from './llm'
 import runtime from './runtime'
+import selectionStore from './selectionStore'
 import settings from './settings'
 
-const rootReducer = combineReducers({ app, runtime, assistant, websearch, settings })
+const rootReducer = combineReducers({
+  app,
+  runtime,
+  assistant,
+  websearch,
+  settings,
+  llm,
+  backup,
+  copilot,
+  knowledge,
+  selectionStore
+})
 
 const persistedReducer = persistReducer(
   {
