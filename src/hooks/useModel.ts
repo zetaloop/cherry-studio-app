@@ -10,8 +10,8 @@ export function useModel() {
     defaultModel,
     topicNamingModel,
     translateModel,
-    setDefaultModel: (model: Model) => dispatch(setDefaultModel({ model })),
-    setTopicNamingModel: (model: Model) => dispatch(setTopicNamingModel({ model })),
-    setTranslateModel: (model: Model) => dispatch(setTranslateModel({ model }))
+    setDefaultModel: (model: Model) => dispatch(setDefaultModel(model)),
+    setTopicNamingModel: (model: Model) => dispatch(setTopicNamingModel(model)),
+    setTranslateModel: (model: Model) => dispatch(setTranslateModel(model))
   }
 }
