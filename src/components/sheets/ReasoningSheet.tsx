@@ -1,4 +1,4 @@
-import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import { Check } from '@tamagui/lucide-icons'
 import React, { forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -49,10 +49,16 @@ export const ReasoningSheet = forwardRef<BottomSheetModal, ReasoningSheetProps>(
     }
   ]
 
+  // 添加背景组件渲染函数
+  const renderBackdrop = (props: any) => (
+    <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} opacity={0.5} pressBehavior="close" />
+  )
+
   return (
     <BottomSheetModal
-      snapPoints={['50%']}
-      enableDynamicSizing={false}
+      snapPoints={['30%']}
+      backdropComponent={renderBackdrop}
+      enableDynamicSizing={true}
       ref={ref}
       backgroundStyle={{
         borderRadius: 30,

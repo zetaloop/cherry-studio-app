@@ -1,4 +1,4 @@
-import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import { FileText, Image } from '@tamagui/lucide-icons'
 import * as DocumentPicker from 'expo-document-picker'
 import * as ImagePicker from 'expo-image-picker'
@@ -103,10 +103,15 @@ const FileSheet = forwardRef<BottomSheetModal, FileSheetProps>(({ files, setFile
     }
   ]
 
+  // 添加背景组件渲染函数
+  const renderBackdrop = (props: any) => (
+    <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} opacity={0.5} pressBehavior="close" />
+  )
+
   return (
     <BottomSheetModal
       snapPoints={['25%']}
-      enableDynamicSizing={false}
+      enableDynamicSizing={true}
       ref={ref}
       backgroundStyle={{
         borderRadius: 30,
@@ -114,7 +119,8 @@ const FileSheet = forwardRef<BottomSheetModal, FileSheetProps>(({ files, setFile
       }}
       handleIndicatorStyle={{
         backgroundColor: theme.color.val
-      }}>
+      }}
+      backdropComponent={renderBackdrop}>
       <BottomSheetView>
         <YStack gap={12} padding="20">
           {options.map(option => (

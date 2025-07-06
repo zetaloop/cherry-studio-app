@@ -1,4 +1,4 @@
-import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import { Check } from '@tamagui/lucide-icons'
 import { sortBy } from 'lodash'
 import { forwardRef, useEffect, useState } from 'react'
@@ -68,10 +68,15 @@ const MentionSheet = forwardRef<BottomSheetModal, MentionSheetProps>(({ mentions
     ;(ref as React.MutableRefObject<BottomSheetModal>)?.current?.dismiss()
   }
 
+  // 添加背景组件渲染函数
+  const renderBackdrop = (props: any) => (
+    <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} opacity={0.5} pressBehavior="close" />
+  )
+
   return (
     <BottomSheetModal
       snapPoints={['50%', '90%']}
-      enableDynamicSizing={false}
+      enableDynamicSizing={true}
       ref={ref}
       backgroundStyle={{
         borderRadius: 30,
@@ -79,7 +84,8 @@ const MentionSheet = forwardRef<BottomSheetModal, MentionSheetProps>(({ mentions
       }}
       handleIndicatorStyle={{
         backgroundColor: theme.color.val
-      }}>
+      }}
+      backdropComponent={renderBackdrop}>
       <BottomSheetView>
         <YStack gap={5} padding="20">
           <Button onPress={handleClearAll}>{t('common.clear_all')}</Button>
