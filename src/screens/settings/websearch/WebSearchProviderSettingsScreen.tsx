@@ -4,7 +4,7 @@ import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, Alert } from 'react-native'
-import { Button, Input, Stack, Text, useTheme, View, XStack, YStack } from 'tamagui'
+import { Button, Input, Stack, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
 import { SettingContainer, SettingGroupTitle, SettingHelpText } from '@/components/settings'
@@ -36,9 +36,9 @@ export default function WebSearchProviderSettingsScreen() {
 
   if (isLoading) {
     return (
-      <View>
+      <SafeAreaContainer>
         <ActivityIndicator />
-      </View>
+      </SafeAreaContainer>
     )
   }
 

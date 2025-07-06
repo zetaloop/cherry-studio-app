@@ -32,17 +32,16 @@ import AppNavigator from './navigators/AppNavigator'
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
-function AppContent() {
-  const colorScheme = useColorScheme()
+// 数据库初始化组件
+function DatabaseInitializer() {
   const { success, error } = useMigrations(db, migrations)
   const initialized = useSelector((state: RootState) => state.app.initialized)
+  const dispatch = useAppDispatch()
 
   useDrizzleStudio(expoDb)
 
-  const dispatch = useAppDispatch()
-
   useEffect(() => {
-    const InitializeApp = async () => {
+    const initializeApp = async () => {
       if (initialized) return
 
       try {
@@ -63,7 +62,7 @@ function AppContent() {
     const handleMigrations = async () => {
       if (success) {
         console.log('Migrations completed successfully', expoDb.databasePath)
-        await InitializeApp()
+        await initializeApp()
       } else if (error) {
         console.error('Migrations failed', error)
       }
@@ -76,12 +75,20 @@ function AppContent() {
     SplashScreen.hideAsync()
   }, [])
 
+  return null
+}
+
+// 主题和导航组件
+function ThemedApp() {
+  const colorScheme = useColorScheme()
+
   return (
     <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme ?? 'light'}>
       <PortalProvider>
         <NavigationContainer theme={DefaultTheme}>
           <ThemeProvider value={DefaultTheme}>
             <BottomSheetModalProvider>
+              <DatabaseInitializer />
               <AppNavigator />
               <StatusBar style="auto" />
             </BottomSheetModalProvider>
@@ -92,16 +99,24 @@ function AppContent() {
   )
 }
 
+// Redux 状态管理组件
+function AppWithRedux() {
+  return (
+    <Provider store={store}>
+      <PersistGate loading={<ActivityIndicator size="large" />} persistor={persistor}>
+        <ThemedApp />
+      </PersistGate>
+    </Provider>
+  )
+}
+
+// 根组件 - 只负责最基础的 Provider 设置
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Suspense fallback={<ActivityIndicator size="large" />}>
         <SQLiteProvider databaseName={DATABASE_NAME} options={{ enableChangeListener: true }} useSuspense>
-          <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <AppContent />
-            </PersistGate>
-          </Provider>
+          <AppWithRedux />
         </SQLiteProvider>
       </Suspense>
     </GestureHandlerRootView>
