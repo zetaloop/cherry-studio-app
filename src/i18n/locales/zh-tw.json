@@ -167,7 +167,9 @@
           "balance_recharge": "餘額充值",
           "free_bills": "免費帳單"
         },
-        "api_host.placeholder": "請輸入 API 主機"
+        "api_host.placeholder": "請輸入 API 主機",
+        "not_found": "找不到提供商",
+        "not_found_message": "導航到提供商頁面時發生錯誤"
       },
       "proxy.title": "代理地址",
       "theme.window.style.opaque": "不透明窗口",

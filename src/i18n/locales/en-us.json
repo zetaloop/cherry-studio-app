@@ -231,7 +231,9 @@
           "login": "Log in",
           "balance_recharge": "Balance Recharge",
           "free_bills": "Free Bills"
-        }
+        },
+        "not_found": "Provider not found",
+        "not_found_message": "There is an error navigate to the provider page."
       },
       "proxy.title": "Proxy Address",
       "theme.window.style.opaque": "Opaque Window",

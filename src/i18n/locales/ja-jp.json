@@ -167,7 +167,9 @@
           "balance_recharge": "残高チャージ",
           "free_bills": "無料請求"
         },
-        "api_host.placeholder": "APIホストを入力してください"
+        "api_host.placeholder": "APIホストを入力してください",
+        "not_found": "プロバイダーが見つかりません",
+        "not_found_message": "プロバイダーページに移動する際にエラーが発生しました。"
       },
       "proxy.title": "プロキシ アドレス",
       "theme.window.style.opaque": "不透明ウィンドウ",

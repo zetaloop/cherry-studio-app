@@ -173,7 +173,9 @@
           "balance_recharge": "余额充值",
           "free_bills": "免费额度"
         },
-        "api_host.placeholder": "请输入 API 主机"
+        "api_host.placeholder": "请输入 API 主机",
+        "not_found": "未找到提供商",
+        "not_found_message": "导航到提供商页面时出现错误"
       },
       "proxy.title": "代理地址",
       "theme.window.style.opaque": "不透明窗口",
@@ -192,7 +194,7 @@
         },
         "title": "网络搜索",
         "selectPlaceholder": "请选择网页搜索提供商...",
-        "searchWithDates": "包含日期搜索",
+        "searchWithDates": "包含日期��索",
         "overrideSearchService": "覆盖搜索服务",
         "searchCount": "搜索数量",
         "contentLengthLimit": "内容长度限制",

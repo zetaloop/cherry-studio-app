@@ -167,7 +167,9 @@
           "balance_recharge": "Пополнение баланса",
           "free_bills": "Бесплатные счета"
         },
-        "api_host.placeholder": "Пожалуйста, введите API хост"
+        "api_host.placeholder": "Пожалуйста, введите API хост",
+        "not_found": "Поставщик не найден",
+        "not_found_message": "Произошла ошибка при переходе на страницу провайдера."
       },
       "proxy.title": "Адрес прокси",
       "theme.window.style.opaque": "Непрозрачное окно",

@@ -2,56 +2,71 @@ import { db } from '../index'
 import { backup_providers } from '../schema'
 
 export function transformDbToDataBackupProvider(dbRecord: any) {
+  if (!dbRecord) return null
+  const config = typeof dbRecord.config === 'string' ? JSON.parse(dbRecord.config) : dbRecord.config
+
   if (dbRecord.id === 'webdav') {
     return {
-      webdavHost: dbRecord.config.webdavHost,
-      webdavUser: dbRecord.config.webdavUser,
-      webdavPass: dbRecord.config.webdavPass,
-      webdavPath: dbRecord.config.webdavPath
+      id: dbRecord.id,
+      name: dbRecord.name,
+      webdavHost: config.webdavHost,
+      webdavUser: config.webdavUser,
+      webdavPass: config.webdavPass,
+      webdavPath: config.webdavPath
     }
   }
 
   if (dbRecord.id === 'nutstore') {
     return {
-      nutstoreToken: dbRecord.config.nutstoreToken,
-      nutstorePath: dbRecord.config.nutstorePath,
-      nutstoreAutoSync: dbRecord.config.nutstoreAutoSync,
-      nutstoreSyncInterval: dbRecord.config.nutstoreSyncInterval,
-      nutstoreSyncState: dbRecord.config.nutstoreSyncState
+      id: dbRecord.id,
+      name: dbRecord.name,
+      nutstoreToken: config.nutstoreToken,
+      nutstorePath: config.nutstorePath,
+      nutstoreAutoSync: config.nutstoreAutoSync,
+      nutstoreSyncInterval: config.nutstoreSyncInterval,
+      nutstoreSyncState: config.nutstoreSyncState
     }
   }
 
   if (dbRecord.id === 'notion') {
     return {
-      notionDatabaseID: dbRecord.config.notionDatabaseID,
-      notionApiKey: dbRecord.config.notionApiKey,
-      notionPageNameKey: dbRecord.config.notionPageNameKey,
-      notionExportReasoning: dbRecord.config.notionExportReasoning
+      id: dbRecord.id,
+      name: dbRecord.name,
+      notionDatabaseID: config.notionDatabaseID,
+      notionApiKey: config.notionApiKey,
+      notionPageNameKey: config.notionPageNameKey,
+      notionExportReasoning: config.notionExportReasoning
     }
   }
 
   if (dbRecord.id === 'yuque') {
     return {
-      yuqueToken: dbRecord.config.yuqueToken,
-      yuqueUrl: dbRecord.config.yuqueUrl,
-      yuqueRepoId: dbRecord.config.yuqueRepoId
+      id: dbRecord.id,
+      name: dbRecord.name,
+      yuqueToken: config.yuqueToken,
+      yuqueUrl: config.yuqueUrl,
+      yuqueRepoId: config.yuqueRepoId
     }
   }
 
   if (dbRecord.id === 'joplin') {
     return {
-      joplinToken: dbRecord.config.joplinToken,
-      joplinUrl: dbRecord.config.joplinUrl,
-      joplinExportReasoning: dbRecord.config.joplinExportReasoning
+      id: dbRecord.id,
+      name: dbRecord.name,
+      joplinToken: config.joplinToken,
+      joplinUrl: config.joplinUrl,
+      joplinExportReasoning: config.joplinExportReasoning
     }
   }
 
   if (dbRecord.id === 'siyuan') {
     return {
-      siyuanApiUrl: dbRecord.config.siyuanApiUrl,
-      siyuanToken: dbRecord.config.siyuanToken,
-      siyuanBoxId: dbRecord.config.siyuanBoxId,
-      siyuanRootPath: dbRecord.config.siyuanRootPath
+      id: dbRecord.id,
+      name: dbRecord.name,
+      siyuanApiUrl: config.siyuanApiUrl,
+      siyuanToken: config.siyuanToken,
+      siyuanBoxId: config.siyuanBoxId,
+      siyuanRootPath: config.siyuanRootPath
     }
   }
 }
