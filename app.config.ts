@@ -26,6 +26,7 @@ export default {
       favicon: './src/assets/images/favicon.png'
     },
     plugins: [
+      ['expo-build-properties', { ios: { deploymentTarget: '15.5' } }],
       [
         'expo-splash-screen',
         {
