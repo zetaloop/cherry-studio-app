@@ -19,11 +19,10 @@ import { VoiceButton } from './VoiceButton'
 import { WebsearchButton } from './WebsearchButton'
 interface MessageInputProps {
   topic: Topic
-  setHasMessages: (hasMessages: boolean) => void
   updateAssistant: (assistant: Assistant) => Promise<void>
 }
 
-export const MessageInput: React.FC<MessageInputProps> = ({ topic, setHasMessages, updateAssistant }) => {
+export const MessageInput: React.FC<MessageInputProps> = ({ topic, updateAssistant }) => {
   const { t } = useTranslation()
   const { assistant, isLoading } = useAssistant(topic.assistantId)
 
@@ -38,7 +37,6 @@ export const MessageInput: React.FC<MessageInputProps> = ({ topic, setHasMessage
 
     setText('')
     setFiles([])
-    setHasMessages(true)
 
     try {
       const baseUserMessage: MessageInputBaseParams = { assistant, topic, content: text }
