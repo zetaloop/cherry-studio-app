@@ -1,6 +1,6 @@
 import { File, Paths } from 'expo-file-system/next'
 import * as Network from 'expo-network'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert } from 'react-native'
 import { io, Socket } from 'socket.io-client'
@@ -52,7 +52,7 @@ export function useWebSocket(): UseWebSocketReturn {
   const receivedFilenameRef = useRef('')
   const lastProgressUpdateRef = useRef(0)
 
-  const resetFileTransferState = useCallback(() => {
+  const resetFileTransferState = () => {
     setState(prev => ({
       ...prev,
       status: prev.status === WebSocketStatus.RECEIVING ? WebSocketStatus.CONNECTED : prev.status,
@@ -63,17 +63,14 @@ export function useWebSocket(): UseWebSocketReturn {
     totalSizeRef.current = 0
     receivedSizeRef.current = 0
     receivedFilenameRef.current = ''
-  }, [])
+  }
 
-  const handleConnectionError = useCallback(
-    (message: string, error?: any) => {
-      if (error) console.error(message, error)
-      Alert.alert(t('settings.data.landrop.error'), message)
-      setState(prev => ({ ...prev, status: WebSocketStatus.ERROR, error: message }))
-      resetFileTransferState()
-    },
-    [t, resetFileTransferState]
-  )
+  const handleConnectionError = (message: string, error?: any) => {
+    if (error) console.error(message, error)
+    Alert.alert(t('settings.data.landrop.error'), message)
+    setState(prev => ({ ...prev, status: WebSocketStatus.ERROR, error: message }))
+    resetFileTransferState()
+  }
 
   useEffect(() => {
     if (connectAttempt === 0) return
@@ -125,6 +122,7 @@ export function useWebSocket(): UseWebSocketReturn {
           }))
         })
 
+        // todo: progress 无法实时更新
         socket.on('zip-file-chunk', (chunk: ArrayBuffer) => {
           if (!isMounted) return
           const chunkData = new Uint8Array(chunk)
