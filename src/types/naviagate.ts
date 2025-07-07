@@ -6,6 +6,7 @@ export type RootStackParamList = {
   SettingsScreen: undefined
   DataSettingsScreen: undefined
   BasicDataSettingsScreen: undefined
+  LandropSettingsScreen: undefined
   WebDavScreen: undefined
   WebDavConfigScreen: undefined
   NutstoreLoginScreen: undefined

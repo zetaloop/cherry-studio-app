@@ -185,7 +185,10 @@
         "recovery": "Data Recovery",
         "reset": "Data Reset",
         "cloud_backup": "Cloud Backup Settings",
-        "third_party": "Third-party Connections"
+        "third_party": "Third-party Connections",
+        "landrop": {
+          "title": "Landrop"
+        }
       },
       "models": {
         "default_model": "Default Model",
