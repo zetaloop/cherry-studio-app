@@ -43,7 +43,6 @@ export default function NotionSettingsScreen() {
   const config: ProviderConfig = {
     providerType: 'notion',
     titleKey: 'settings.notion.title',
-    configField: 'notionApiKey',
     fields: [
       {
         type: 'input',

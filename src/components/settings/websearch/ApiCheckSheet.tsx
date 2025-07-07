@@ -11,7 +11,7 @@ interface ApiCheckSheetProps {
   bottomSheetRef: React.RefObject<BottomSheet | null>
   isOpen: boolean
   onClose: () => void
-  apiKey: string
+  apiKey?: string
   onStartModelCheck: () => void
   loading?: boolean
 }

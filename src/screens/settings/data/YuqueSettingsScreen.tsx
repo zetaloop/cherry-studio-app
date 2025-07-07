@@ -56,7 +56,6 @@ export default function YuqueSettingsScreen() {
   const config: ProviderConfig = {
     providerType: 'yuque',
     titleKey: 'settings.yuque.title',
-    configField: 'yuqueToken',
     fields: [
       {
         type: 'input',

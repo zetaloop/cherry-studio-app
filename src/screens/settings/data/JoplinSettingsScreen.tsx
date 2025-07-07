@@ -41,7 +41,6 @@ export default function JoplinSettingsScreen() {
   const config: ProviderConfig = {
     providerType: 'joplin',
     titleKey: 'settings.joplin.title',
-    configField: 'joplinToken',
     fields: [
       {
         type: 'input',

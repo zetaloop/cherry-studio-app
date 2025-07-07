@@ -48,7 +48,6 @@ export default function SiyuanSettingsScreen() {
   const config: ProviderConfig = {
     providerType: 'siyuan',
     titleKey: 'settings.siyuan.title',
-    configField: 'siyuanToken',
     fields: [
       {
         type: 'input',

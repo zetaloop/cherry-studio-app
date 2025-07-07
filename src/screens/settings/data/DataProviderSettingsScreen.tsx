@@ -29,7 +29,6 @@ export type ProviderConfig = {
   titleKey: string
   fields: ProviderField[]
   checkConnectionFn: () => Promise<void>
-  configField?: string
 }
 
 export default function ProviderSettingsScreen({ config }: { config: ProviderConfig }) {
@@ -69,10 +68,8 @@ export default function ProviderSettingsScreen({ config }: { config: ProviderCon
   }
 
   const handleOpenBottomSheet = () => {
-    console.log('Config field:', config.configField);
-    console.log('API Key:', config.configField ? provider[config.configField] : 'No config field');
-    bottomSheetRef.current?.expand();
-    setIsBottomSheetOpen(true);
+    bottomSheetRef.current?.expand()
+    setIsBottomSheetOpen(true)
   }
 
   const handleBottomSheetClose = () => {
@@ -211,7 +208,6 @@ export default function ProviderSettingsScreen({ config }: { config: ProviderCon
         bottomSheetRef={bottomSheetRef}
         isOpen={isBottomSheetOpen}
         onClose={handleBottomSheetClose}
-        apiKey={config.configField ? provider[config.configField] || '' : ''}
         onStartModelCheck={checkConnection}
         loading={checkLoading}
       />
