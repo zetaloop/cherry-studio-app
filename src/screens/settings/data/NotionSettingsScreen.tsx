@@ -69,15 +69,7 @@ export default function NotionSettingsScreen() {
 
       const updatedProvider = {
         ...provider,
-        [key === 'apiKey'
-          ? 'notionApiKey'
-          : key === 'apiHost'
-            ? 'notionDatabaseID'
-            : key === 'pageNameKey'
-              ? 'notionPageNameKey'
-              : key === 'exportReasoning'
-                ? 'notionExportReasoning'
-                : key]: value
+        [key]: value
       }
 
       await updateProvider(updatedProvider)

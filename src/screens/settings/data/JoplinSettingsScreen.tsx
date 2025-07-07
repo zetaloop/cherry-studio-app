@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert } from 'react-native'
+import { ActivityIndicator, Alert } from 'react-native'
 import { Button, Input, Stack, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
@@ -12,6 +12,7 @@ import { HeaderBar } from '@/components/settings/HeaderBar'
 import { ApiCheckSheet } from '@/components/settings/websearch/ApiCheckSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { CustomSwitch } from '@/components/ui/Switch'
+import { useDataBackupProvider } from '@/hooks/useDataBackup'
 
 export default function JoplinSettingsScreen() {
   const { t } = useTranslation()
@@ -22,6 +23,28 @@ export default function JoplinSettingsScreen() {
   const [checkLoading, setCheckLoading] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+  const { provider, isLoading, updateProvider } = useDataBackupProvider('joplin')
+
+  if (isLoading) {
+    return (
+      <SafeAreaContainer>
+        <ActivityIndicator />
+      </SafeAreaContainer>
+    )
+  }
+
+  if (!provider) {
+    return (
+      <SafeAreaContainer>
+        <HeaderBar title={t('settings.provider.not_found')} onBackPress={() => navigation.goBack()} />
+        <SettingContainer>
+          <Text textAlign="center" color="$gray10" paddingVertical={24}>
+            {t('settings.provider.not_found_message')}
+          </Text>
+        </SettingContainer>
+      </SafeAreaContainer>
+    )
+  }
 
   const handleBackPress = () => {
     navigation.goBack()
@@ -40,8 +63,21 @@ export default function JoplinSettingsScreen() {
     setShowApiKey(prevShowApiKey => !prevShowApiKey)
   }
 
-  const handleProviderConfigChange = async (key: 'apiKey' | 'apiHost', value: string) => {
-    console.log('Updating provider config:', key, value)
+  const handleProviderConfigChange = async (key: string, value: any) => {
+    try {
+      if (!provider) return
+
+      const updatedProvider = {
+        ...provider,
+        [key]: value
+      }
+
+      await updateProvider(updatedProvider)
+      console.log('Provider config updated:', key, value)
+    } catch (error) {
+      console.error('Error updating provider config:', error)
+      Alert.alert(t('settings.joplin.update.fail'))
+    }
   }
 
   async function checkConnection() {
@@ -67,8 +103,8 @@ export default function JoplinSettingsScreen() {
           </XStack>
           <Input
             placeholder={t('settings.joplin.url_placeholder')}
-            value={''}
-            onChangeText={text => handleProviderConfigChange('apiHost', text)}
+            value={provider.joplinUrl || ''}
+            onChangeText={text => handleProviderConfigChange('joplinUrl', text)}
           />
         </YStack>
 
@@ -90,8 +126,8 @@ export default function JoplinSettingsScreen() {
               placeholder={t('settings.joplin.token_placeholder')}
               secureTextEntry={!showApiKey}
               paddingRight={48}
-              value={''}
-              onChangeText={text => handleProviderConfigChange('apiKey', text)}
+              value={provider.joplinToken || ''}
+              onChangeText={text => handleProviderConfigChange('joplinToken', text)}
             />
             <Stack
               position="absolute"
@@ -118,7 +154,10 @@ export default function JoplinSettingsScreen() {
         <YStack gap={8}>
           <XStack paddingHorizontal={10} height={20} justifyContent="space-between">
             <SettingGroupTitle>{t('settings.notion.export_reasoning.title')}</SettingGroupTitle>
-            <CustomSwitch />
+            <CustomSwitch
+              checked={provider.joplinExportReasoning || false}
+              onCheckedChange={value => handleProviderConfigChange('joplinExportReasoning', value)}
+            />
           </XStack>
           <Text fontSize="$3" color="$gray11" paddingHorizontal={10}>
             {t('settings.notion.export_reasoning.help')}

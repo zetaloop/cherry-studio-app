@@ -3,14 +3,15 @@ import { useNavigation } from '@react-navigation/native'
 import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert } from 'react-native'
-import { Button, Input, Stack, useTheme, XStack, YStack } from 'tamagui'
+import { ActivityIndicator, Alert } from 'react-native'
+import { Button, Input, Stack, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
 import { SettingContainer, SettingGroupTitle } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { ApiCheckSheet } from '@/components/settings/websearch/ApiCheckSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
+import { useDataBackupProvider } from '@/hooks/useDataBackup'
 
 export default function YuqueSettingsScreen() {
   const { t } = useTranslation()
@@ -21,6 +22,28 @@ export default function YuqueSettingsScreen() {
   const [checkLoading, setCheckLoading] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+  const { provider, isLoading, updateProvider } = useDataBackupProvider('yuque')
+
+  if (isLoading) {
+    return (
+      <SafeAreaContainer>
+        <ActivityIndicator />
+      </SafeAreaContainer>
+    )
+  }
+
+  if (!provider) {
+    return (
+      <SafeAreaContainer>
+        <HeaderBar title={t('settings.provider.not_found')} onBackPress={() => navigation.goBack()} />
+        <SettingContainer>
+          <Text textAlign="center" color="$gray10" paddingVertical={24}>
+            {t('settings.provider.not_found_message')}
+          </Text>
+        </SettingContainer>
+      </SafeAreaContainer>
+    )
+  }
 
   const handleBackPress = () => {
     navigation.goBack()
@@ -39,8 +62,21 @@ export default function YuqueSettingsScreen() {
     setShowApiKey(prevShowApiKey => !prevShowApiKey)
   }
 
-  const handleProviderConfigChange = async (key: 'apiKey' | 'apiHost', value: string) => {
-    console.log('Updating provider config:', key, value)
+  const handleProviderConfigChange = async (key: string, value: any) => {
+    try {
+      if (!provider) return
+
+      const updatedProvider = {
+        ...provider,
+        [key]: value
+      }
+
+      await updateProvider(updatedProvider)
+      console.log('Provider config updated:', key, value)
+    } catch (error) {
+      console.error('Error updating provider config:', error)
+      Alert.alert(t('settings.yuque.update.fail'))
+    }
   }
 
   async function checkConnection() {
@@ -51,6 +87,7 @@ export default function YuqueSettingsScreen() {
       Alert.alert(t('settings.yuque.check.success'))
     } catch (error) {
       Alert.alert(t('settings.yuque.check.fail'))
+      throw error
     } finally {
       setCheckLoading(false)
     }
@@ -66,8 +103,8 @@ export default function YuqueSettingsScreen() {
           </XStack>
           <Input
             placeholder={t('settings.yuque.repo_url_placeholder')}
-            value={''}
-            onChangeText={text => handleProviderConfigChange('apiHost', text)}
+            value={provider.yuqueUrl || ''}
+            onChangeText={text => handleProviderConfigChange('yuqueUrl', text)}
           />
         </YStack>
 
@@ -89,8 +126,8 @@ export default function YuqueSettingsScreen() {
               placeholder={t('settings.yuque.token_placeholder')}
               secureTextEntry={!showApiKey}
               paddingRight={48}
-              value={''}
-              onChangeText={text => handleProviderConfigChange('apiKey', text)}
+              value={provider.yuqueToken || ''}
+              onChangeText={text => handleProviderConfigChange('yuqueToken', text)}
             />
             <Stack
               position="absolute"
