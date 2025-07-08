@@ -207,6 +207,7 @@ export default function ProviderSettingsScreen({ config }: { config: ProviderCon
       <ApiCheckSheet
         bottomSheetRef={bottomSheetRef}
         isOpen={isBottomSheetOpen}
+        apiKey={provider[config.fields.find(f => f.type === 'password')?.key || ''] || ''}
         onClose={handleBottomSheetClose}
         onStartModelCheck={checkConnection}
         loading={checkLoading}
