@@ -127,7 +127,24 @@
         "recovery": "数据恢复",
         "reset": "数据重置",
         "cloud_backup": "云端备份设置",
-        "third_party": "第三方连接"
+        "third_party": "第三方连接",
+        "landrop": {
+          "title": "[to be translated]:Landrop",
+          "scan_qr_code": {
+            "title": "[to be translated]:Scan QR Code",
+            "description": "[to be translated]:Scan QR Code from Cherry Studio"
+          },
+          "status": {
+            "title": "[to be translated]:Connection Status",
+            "idle": "[to be translated]:Idle",
+            "connecting": "[to be translated]:Connecting...",
+            "connected": "[to be translated]:Connected",
+            "zip_file_start": "[to be translated]:File Transfer Started",
+            "zip_file_end": "[to be translated]:File Transfer Completed",
+            "disconnected": "[to be translated]:Disconnected",
+            "error": "[to be translated]:Connection Error"
+          }
+        }
       },
       "models": {
         "default_model": "默认模型",

@@ -56,8 +56,8 @@ export default {
       [
         'expo-camera',
         {
-          cameraPermission: 'Allow $(PRODUCT_NAME) to access your camera',
-          microphonePermission: 'Allow $(PRODUCT_NAME) to access your microphone',
+          cameraPermission: 'Allow Cherry Studio App to access your camera',
+          // microphonePermission: 'Allow Cherry Studio App to access your microphone',
           recordAudioAndroid: true
         }
       ]

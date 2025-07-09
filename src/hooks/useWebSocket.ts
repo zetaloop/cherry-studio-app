@@ -1,4 +1,4 @@
-import * as Network from 'expo-network'
+import { File, Paths } from 'expo-file-system/next'
 import { useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 
@@ -7,8 +7,8 @@ export enum WebSocketStatus {
   IDLE = 'idle',
   CONNECTING = 'connecting',
   CONNECTED = 'connected',
-  ZIP_FILE_START = 'zip-file-start',
-  ZIP_FILE_END = 'zip-file-end',
+  ZIP_FILE_START = 'zip_file_start',
+  ZIP_FILE_END = 'zip_file_end',
   DISCONNECTED = 'disconnected',
   ERROR = 'error'
 }
@@ -29,19 +29,51 @@ export function useWebSocket() {
     }
   }, [])
 
-  useEffect(() => {
-    console.log('progress', progress)
-  }, [progress])
+  // 写入文件的函数
+  const writeZipFile = async () => {
+    try {
+      // 文件路径 Paths.cache + zipFileInfo.current.filename
+      const file = new File(Paths.cache, zipFileInfo.current.filename)
 
-  const connect = async () => {
+      if (file.exists) {
+        file.delete()
+      }
+
+      // 合并所有 chunk 为一个完整的 Uint8Array
+      const totalSize = zipFileChunk.current.size
+      const completeData = new Uint8Array(totalSize)
+      let offset = 0
+
+      for (const chunk of zipFileChunk.current.chunk) {
+        completeData.set(chunk, offset)
+        offset += chunk.length
+      }
+
+      // 创建文件并写入数据
+      file.create()
+      file.write(completeData)
+
+      console.log(`File ${file.name} saved successfully`)
+      console.log(`File Path: ${file.uri}`)
+
+      // 清理缓存数据
+      zipFileChunk.current = { chunk: [], size: 0 }
+      zipFileInfo.current = { filename: '', totalSize: 0 }
+    } catch (error) {
+      console.error('Failed to write zip file:', error)
+      setStatus(WebSocketStatus.ERROR)
+    }
+  }
+
+  const connect = async (ip: string) => {
     if (socket.current) {
       return
     }
 
     try {
       setStatus(WebSocketStatus.CONNECTING)
-      const ip = await Network.getIpAddressAsync()
-      socket.current = io(`http://${ip}:3000`, { timeout: 5000, reconnection: true })
+      console.log('ip', ip)
+      socket.current = io(`http://${ip}`, { timeout: 5000, reconnection: true })
 
       // 连接客户端
       socket.current.on('connect', () => {
@@ -78,22 +110,24 @@ export function useWebSocket() {
       })
 
       // 文件接收过程
+      // todo: progress无法实时更新
       socket.current.on('zip-file-chunk', (chunk: ArrayBuffer) => {
         const chunkData = new Uint8Array(chunk)
         zipFileChunk.current.chunk.push(chunkData)
         zipFileChunk.current.size += chunkData.length
         const progress = Math.min((zipFileChunk.current.size / zipFileInfo.current.totalSize) * 100, 100)
-        setTimeout(() => {
-          setProgress(progress)
-        }, 0)
-
-        // console.log('zip-file-chunk:', progress, '%')
+        setProgress(progress)
+        console.log('zip-file-chunk:', Math.floor(progress), '%')
       })
 
       // 文件接收结束
-      socket.current.on('zip-file-end', () => {
+      socket.current.on('zip-file-end', async () => {
         console.log('zip-file-end')
         setStatus(WebSocketStatus.ZIP_FILE_END)
+        setProgress(100)
+
+        // 写入文件
+        // await writeZipFile()
       })
     } catch (error) {
       console.error('Failed to get IP address:', error)
