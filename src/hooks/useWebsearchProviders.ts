@@ -4,7 +4,7 @@ import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
 import { WebSearchProvider } from '@/types/websearch'
 
 import { db } from '../../db'
-import { transformDbToWebSearchProvider, upsertWebSearchProviders } from '../../db/queries/providers.queries'
+import { transformDbToWebSearchProvider, upsertWebSearchProviders } from '../../db/queries/websearchProviders.queries'
 import { websearch_providers } from '../../db/schema'
 
 export function useWebsearchProviders() {

@@ -6,7 +6,7 @@ import { WebSearchState } from '@/store/websearch'
 import { WebSearchProvider, WebSearchProviderResponse, WebSearchStatus } from '@/types/websearch'
 import { hasObjectKey } from '@/utils'
 
-import { getAllWebSearchProviders } from '../../db/queries/providers.queries'
+import { getAllWebSearchProviders } from '../../db/queries/websearchProviders.queries'
 
 class WebSearchService {
   /**
