@@ -19,9 +19,8 @@ function ConnectionStatus({ status }: { status: WebSocketStatus }) {
   )
 }
 
-function FileReceiver({ status, filename, progress }: { status: WebSocketStatus; filename: string; progress: number }) {
+function FileReceiver({ filename, progress }: { filename: string; progress: number }) {
   const { t } = useTranslation()
-  if (status !== WebSocketStatus.RECEIVING) return null
 
   return (
     <YStack space="$2" alignItems="center">
@@ -38,15 +37,14 @@ export default function LandropSettingsScreen() {
   const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
   const { t } = useTranslation()
-  const { state, actions } = useWebSocket()
-  const { status, progress, receivedFilename, error } = state
-  const { connect } = actions
+  const { status, progress, filename, connect } = useWebSocket()
+  console.log('progress', progress)
 
   const isConnecting = status === WebSocketStatus.CONNECTING
   const isButtonDisabled =
     status === WebSocketStatus.CONNECTING ||
     status === WebSocketStatus.CONNECTED ||
-    status === WebSocketStatus.RECEIVING
+    status === WebSocketStatus.ZIP_FILE_START
 
   const getButtonText = () => {
     switch (status) {
@@ -54,12 +52,14 @@ export default function LandropSettingsScreen() {
         return t('settings.data.landrop.connecting')
       case WebSocketStatus.CONNECTED:
         return t('settings.data.landrop.connected')
-      case WebSocketStatus.RECEIVING:
+      case WebSocketStatus.ZIP_FILE_START:
         return t('settings.data.landrop.receiving')
       case WebSocketStatus.DISCONNECTED:
         return t('settings.data.landrop.disconnected')
       case WebSocketStatus.ERROR:
         return t('settings.data.landrop.retry')
+      case WebSocketStatus.ZIP_FILE_END:
+        return t('settings.data.landrop.received')
       default:
         return t('settings.data.landrop.button')
     }
@@ -75,13 +75,13 @@ export default function LandropSettingsScreen() {
           {getButtonText()}
         </Button>
 
-        {status === WebSocketStatus.ERROR && error && (
+        {/* {status === WebSocketStatus.ERROR && error && (
           <Text color="$red10" textAlign="center">
             {error}
           </Text>
-        )}
+        )} */}
 
-        <FileReceiver status={status} filename={receivedFilename} progress={progress} />
+        <FileReceiver filename={filename} progress={progress} />
       </YStack>
     </SafeAreaContainer>
   )
