@@ -1,5 +1,3 @@
-import type { TextStreamPart, ToolSet } from 'ai'
-
 import { AiPlugin, AiRequestContext } from './types'
 
 /**
@@ -54,7 +52,7 @@ export class PluginManager {
    */
   async executeFirst<T>(
     hookName: 'resolveModel' | 'loadTemplate',
-    arg: string,
+    arg: any,
     context: AiRequestContext
   ): Promise<T | null> {
     for (const plugin of this.plugins) {
@@ -76,7 +74,7 @@ export class PluginManager {
    * 执行 Sequential 钩子 - 链式数据转换
    */
   async executeSequential<T>(
-    hookName: 'transformParams' | 'transformResult',
+    hookName: 'transformParams' | 'transformResult' | 'configureModel',
     initialValue: T,
     context: AiRequestContext
   ): Promise<T> {
@@ -126,14 +124,10 @@ export class PluginManager {
   /**
    * 收集所有流转换器（返回数组，AI SDK 原生支持）
    */
-  collectStreamTransforms<TOOLS extends ToolSet>(): ((options: {
-    tools?: TOOLS
-    stopStream: () => void
-  }) => TransformStream<TextStreamPart<TOOLS>, TextStreamPart<TOOLS>>)[] {
-    return this.plugins.map(plugin => plugin.transformStream).filter(Boolean) as ((options: {
-      tools?: TOOLS
-      stopStream: () => void
-    }) => TransformStream<TextStreamPart<TOOLS>, TextStreamPart<TOOLS>>)[]
+  collectStreamTransforms(params: any, context: AiRequestContext) {
+    return this.plugins
+      .filter(plugin => plugin.transformStream)
+      .map(plugin => plugin.transformStream?.(params, context))
   }
 
   /**

@@ -27,7 +27,8 @@ export enum WebSearchSource {
   QWEN = 'qwen',
   HUNYUAN = 'hunyuan',
   ZHIPU = 'zhipu',
-  GROK = 'grok'
+  GROK = 'grok',
+  AISDK = 'ai-sdk'
 }
 
 export type WebSearchResponse = {

@@ -14,7 +14,6 @@ export type GenerateObjectParams = Omit<Parameters<typeof generateObject>[0], 'm
 export type {
   AmazonBedrockProviderSettings,
   AnthropicProviderSettings,
-  // AnthropicVertexProviderSettings,
   AzureOpenAIProviderSettings,
   CerebrasProviderSettings,
   CohereProviderSettings,
@@ -23,7 +22,6 @@ export type {
   FalProviderSettings,
   FireworksProviderSettings,
   GoogleGenerativeAIProviderSettings,
-  // GoogleVertexProviderSettings,
   GroqProviderSettings,
   MistralProviderSettings,
   OllamaProviderSettings,
@@ -33,10 +31,8 @@ export type {
   PerplexityProviderSettings,
   ProviderId,
   ProviderSettingsMap,
-  QwenProviderSettings,
   ReplicateProviderSettings,
   TogetherAIProviderSettings,
   VercelProviderSettings,
-  XaiProviderSettings,
-  ZhipuProviderSettings
+  XaiProviderSettings
 } from './core/providers/registry'

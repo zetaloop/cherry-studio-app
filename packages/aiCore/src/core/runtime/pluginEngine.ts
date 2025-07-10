@@ -63,10 +63,20 @@ export class PluginEngine<T extends ProviderId = ProviderId> {
     methodName: string,
     modelId: string,
     params: TParams,
-    executor: (finalModelId: string, transformedParams: TParams) => Promise<TResult>
+    executor: (finalModelId: string, transformedParams: TParams) => Promise<TResult>,
+    _context?: ReturnType<typeof createContext>
   ): Promise<TResult> {
     // 使用正确的createContext创建请求上下文
-    const context = createContext(this.providerId, modelId, params)
+    const context = _context ? _context : createContext(this.providerId, modelId, params)
+
+    // 🔥 为上下文添加递归调用能力
+    context.recursiveCall = async (newParams: any): Promise<TResult> => {
+      // 递归调用自身，重新走完整的插件流程
+      context.isRecursiveCall = true
+      const result = await this.executeWithPlugins(methodName, modelId, newParams, executor, context)
+      context.isRecursiveCall = false
+      return result
+    }
 
     try {
       // 1. 触发请求开始事件
@@ -104,10 +114,20 @@ export class PluginEngine<T extends ProviderId = ProviderId> {
     methodName: string,
     modelId: string,
     params: TParams,
-    executor: (finalModelId: string, transformedParams: TParams, streamTransforms: any[]) => Promise<TResult>
+    executor: (finalModelId: string, transformedParams: TParams, streamTransforms: any[]) => Promise<TResult>,
+    _context?: ReturnType<typeof createContext>
   ): Promise<TResult> {
     // 创建请求上下文
-    const context = createContext(this.providerId, modelId, params)
+    const context = _context ? _context : createContext(this.providerId, modelId, params)
+
+    // 🔥 为上下文添加递归调用能力
+    context.recursiveCall = async (newParams: any): Promise<TResult> => {
+      // 递归调用自身，重新走完整的插件流程
+      context.isRecursiveCall = true
+      const result = await this.executeStreamWithPlugins(methodName, modelId, newParams, executor, context)
+      context.isRecursiveCall = false
+      return result
+    }
 
     try {
       // 1. 触发请求开始事件
@@ -121,7 +141,7 @@ export class PluginEngine<T extends ProviderId = ProviderId> {
       const transformedParams = await this.pluginManager.executeSequential('transformParams', params, context)
 
       // 4. 收集流转换器
-      const streamTransforms = this.pluginManager.collectStreamTransforms()
+      const streamTransforms = this.pluginManager.collectStreamTransforms(transformedParams, context)
 
       // 5. 执行流式 API 调用
       const result = await executor(finalModelId, transformedParams, streamTransforms)

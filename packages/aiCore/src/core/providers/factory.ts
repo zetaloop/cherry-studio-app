@@ -37,19 +37,6 @@ const configHandlers: {
       resourceName: azureProvider.resourceName
     })
   }
-  // 'google-vertex': (builder, provider) => {
-  //   const vertexBuilder = builder as ProviderConfigBuilder<'google-vertex'>
-  //   const vertexProvider = provider as CompleteProviderConfig<'google-vertex'>
-  //   vertexBuilder
-  //     .withGoogleVertexConfig({
-  //       project: vertexProvider.project,
-  //       location: vertexProvider.location
-  //     })
-  //     .withGoogleCredentials({
-  //       clientEmail: vertexProvider.googleCredentials?.clientEmail || '',
-  //       privateKey: vertexProvider.googleCredentials?.privateKey || ''
-  //     })
-  // }
 }
 
 export class ProviderConfigBuilder<T extends ProviderId = ProviderId> {
@@ -123,42 +110,6 @@ export class ProviderConfigBuilder<T extends ProviderId = ProviderId> {
 
     return this
   }
-
-  /**
-   * Google 特定配置
-   */
-  // withGoogleVertexConfig(options: { project?: string; location?: string }): T extends 'google-vertex' ? this : never
-  // withGoogleVertexConfig(options: any): any {
-  //   if (this.providerId === 'google-vertex') {
-  //     const googleConfig = this.config as CompleteProviderConfig<'google-vertex'>
-
-  //     if (options.project) {
-  //       googleConfig.project = options.project
-  //     }
-
-  //     if (options.location) {
-  //       googleConfig.location = options.location
-  //     }
-  //   }
-
-  //   return this
-  // }
-
-  // withGoogleCredentials(credentials: {
-  //   clientEmail: string
-  //   privateKey: string
-  // }): T extends 'google-vertex' ? this : never
-  // withGoogleCredentials(credentials: any): any {
-  //   if (this.providerId === 'google-vertex') {
-  //     const vertexConfig = this.config as CompleteProviderConfig<'google-vertex'>
-  //     vertexConfig.googleCredentials = {
-  //       clientEmail: credentials.clientEmail,
-  //       privateKey: formatPrivateKey(credentials.privateKey)
-  //     }
-  //   }
-
-  //   return this
-  // }
 
   /**
    * 设置自定义参数
@@ -315,28 +266,6 @@ export class ProviderConfigFactory {
       .withBaseURL(options?.baseURL || 'https://generativelanguage.googleapis.com')
       .build()
   }
-
-  /**
-   * 快速创建 Vertex AI 配置
-   */
-  // static createVertexAI(
-  //   credentials: {
-  //     clientEmail: string
-  //     privateKey: string
-  //   },
-  //   options?: {
-  //     project?: string
-  //     location?: string
-  //   }
-  // ) {
-  //   return this.builder('google-vertex')
-  //     .withGoogleCredentials(credentials)
-  //     .withGoogleVertexConfig({
-  //       project: options?.project,
-  //       location: options?.location
-  //     })
-  //     .build()
-  // }
 
   static createOpenAICompatible(baseURL: string, apiKey: string) {
     return this.builder('openai-compatible').withBaseURL(baseURL).withApiKey(apiKey).build()

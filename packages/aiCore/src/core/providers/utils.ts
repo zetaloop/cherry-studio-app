@@ -29,8 +29,8 @@ function normalizePemFormat(pemKey: string): string {
   // 分离头部、内容和尾部
   const lines = pemKey
     .split('\n')
-    .map(line => line.trim())
-    .filter(line => line.length > 0)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
 
   let keyContent = ''
   let foundBegin = false
@@ -41,12 +41,10 @@ function normalizePemFormat(pemKey: string): string {
       foundBegin = true
       continue
     }
-
     if (line === '-----END PRIVATE KEY-----') {
       foundEnd = true
       break
     }
-
     if (foundBegin && !foundEnd) {
       keyContent += line
     }

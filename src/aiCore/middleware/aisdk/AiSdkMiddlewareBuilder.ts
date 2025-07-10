@@ -1,15 +1,8 @@
-import {
-  extractReasoningMiddleware,
-  LanguageModelV1Middleware,
-  simulateStreamingMiddleware
-} from '@cherrystudio/ai-core'
+import { LanguageModelV2Middleware, simulateStreamingMiddleware } from '@cherrystudio/ai-core'
 
-import { isReasoningModel } from '@/config/models/reasoning'
 import { Model, Provider } from '@/types/assistant'
 import { Chunk } from '@/types/chunk'
 import { MCPTool } from '@/types/mcp'
-
-import thinkingTimeMiddleware from './ThinkingTimeMiddleware'
 
 /**
  * AI SDK 中间件配置项
@@ -20,6 +13,7 @@ export interface AiSdkMiddlewareConfig {
   model?: Model
   provider?: Provider
   enableReasoning?: boolean
+  // 是否开启提示词工具调用
   enableTool?: boolean
   enableWebSearch?: boolean
   mcpTools?: MCPTool[]
@@ -30,7 +24,7 @@ export interface AiSdkMiddlewareConfig {
  */
 export interface NamedAiSdkMiddleware {
   name: string
-  middleware: LanguageModelV1Middleware
+  middleware: LanguageModelV2Middleware
 }
 
 /**
@@ -81,7 +75,7 @@ export class AiSdkMiddlewareBuilder {
   /**
    * 构建最终的中间件数组
    */
-  public build(): LanguageModelV1Middleware[] {
+  public build(): LanguageModelV2Middleware[] {
     return this.middlewares.map(m => m.middleware)
   }
 
@@ -112,31 +106,20 @@ export class AiSdkMiddlewareBuilder {
  * 根据配置构建AI SDK中间件的工厂函数
  * 这里要注意构建顺序，因为有些中间件需要依赖其他中间件的结果
  */
-export function buildAiSdkMiddlewares(config: AiSdkMiddlewareConfig): LanguageModelV1Middleware[] {
+export function buildAiSdkMiddlewares(config: AiSdkMiddlewareConfig): LanguageModelV2Middleware[] {
   const builder = new AiSdkMiddlewareBuilder()
 
-  // 1. 思考模型且有onChunk回调时添加思考时间中间件
-  if (config.onChunk && config.model && isReasoningModel(config.model)) {
-    builder.add({
-      name: 'thinking-time',
-      middleware: thinkingTimeMiddleware()
-    })
-  }
-
-  // 2. 可以在这里根据其他条件添加更多中间件
-  // 例如：工具调用、Web搜索等相关中间件
-
-  // 3. 根据provider添加特定中间件
+  // 1. 根据provider添加特定中间件
   if (config.provider) {
     addProviderSpecificMiddlewares(builder, config)
   }
 
-  // 4. 根据模型类型添加特定中间件
+  // 2. 根据模型类型添加特定中间件
   if (config.model) {
     addModelSpecificMiddlewares(builder, config)
   }
 
-  // 5. 非流式输出时添加模拟流中间件
+  // 3. 非流式输出时添加模拟流中间件
   if (config.streamOutput === false) {
     builder.add({
       name: 'simulate-streaming',
@@ -160,10 +143,10 @@ function addProviderSpecificMiddlewares(builder: AiSdkMiddlewareBuilder, config:
       // Anthropic特定中间件
       break
     case 'openai':
-      builder.add({
-        name: 'thinking-tag-extraction',
-        middleware: extractReasoningMiddleware({ tagName: 'think' })
-      })
+      // builder.add({
+      //   name: 'thinking-tag-extraction',
+      //   middleware: extractReasoningMiddleware({ tagName: 'think' })
+      // })
       break
     case 'gemini':
       // Gemini特定中间件

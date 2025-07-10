@@ -36,18 +36,24 @@ export async function fetchChatCompletion({
   onChunkReceived: (chunk: Chunk) => void
 }) {
   const provider = await getAssistantProvider(assistant)
+
   const AI = new ModernAiProvider(provider)
-  const { params: aiSdkParams, modelId } = await buildStreamTextParams(messages, assistant, {
-    // mcpTools: mcpTools,
+
+  // 使用 transformParameters 模块构建参数
+  const {
+    params: aiSdkParams,
+    modelId,
+    capabilities
+  } = await buildStreamTextParams(messages, assistant, {
     requestOptions: options
   })
+
   const middlewareConfig: AiSdkMiddlewareConfig = {
     streamOutput: assistant.settings?.streamOutput ?? true,
     onChunk: onChunkReceived,
     model: assistant.model,
     provider: provider,
-    enableReasoning: assistant.settings?.reasoning_effort !== undefined
-    // mcpTools
+    enableReasoning: capabilities.enableReasoning
   }
 
   // --- Call AI Completions ---

@@ -8,12 +8,14 @@
  * 3. 暂时保持接口兼容性
  */
 import {
+  AiPlugin,
   createExecutor,
   ProviderConfigFactory,
   type ProviderId,
   type ProviderSettingsMap,
   StreamTextParams
 } from '@cherrystudio/ai-core'
+import { createPromptToolUsePlugin } from '@cherrystudio/ai-core/core/plugins/built-in'
 import { fetch as expoFetch } from 'expo/fetch'
 import { cloneDeep } from 'lodash'
 
@@ -25,8 +27,7 @@ import LegacyAiProvider from '.'
 import AiSdkToChunkAdapter from './AiSdkToChunkAdapter'
 import { AiSdkMiddlewareConfig, buildAiSdkMiddlewares } from './middleware/aisdk/AiSdkMiddlewareBuilder'
 import { CompletionsResult } from './middleware/schemas'
-import reasonPlugin from './plugins/reasonPlugin'
-import textPlugin from './plugins/textPlugin'
+import reasoningTimePlugin from './plugins/reasoningTimePlugin'
 import { getAiSdkProviderId } from './provider/factory'
 
 /**
@@ -83,7 +84,7 @@ function providerToAiSdkConfig(provider: Provider): {
  */
 function isModernSdkSupported(provider: Provider, model?: Model): boolean {
   // 目前支持主要的providers
-  const supportedProviders = ['openai', 'anthropic', 'gemini', 'azure-openai', 'vertexai']
+  const supportedProviders = ['openai', 'anthropic', 'gemini', 'azure-openai']
 
   // 检查provider类型
   if (!supportedProviders.includes(provider.type)) {
@@ -105,11 +106,10 @@ function isModernSdkSupported(provider: Provider, model?: Model): boolean {
 
 export default class ModernAiProvider {
   private legacyProvider: LegacyAiProvider
-  private modernExecutor?: ReturnType<typeof createExecutor>
-  private provider: Provider
+  private config: ReturnType<typeof providerToAiSdkConfig>
 
   constructor(provider: Provider) {
-    this.provider = provider
+    // this.provider = provider
     this.legacyProvider = new LegacyAiProvider(provider)
 
     const customFetch = async (url, options) => {
@@ -124,15 +124,59 @@ export default class ModernAiProvider {
 
     // TODO:如果后续在调用completions时需要切换provider的话,
     // 初始化时不构建中间件，等到需要时再构建
-    const config = providerToAiSdkConfig(provider)
-    config.options.fetch = customFetch
-    this.modernExecutor = createExecutor(config.providerId, config.options, [
-      reasonPlugin({
-        delayInMs: 80,
-        chunkingRegex: /([\u4E00-\u9FFF]{3})|\S+\s+/
-      }),
-      textPlugin
-    ])
+    this.config = providerToAiSdkConfig(provider)
+    this.config.options.fetch = customFetch
+  }
+
+  /**
+   * 根据条件构建插件数组
+   */
+  private buildPlugins(middlewareConfig: AiSdkMiddlewareConfig) {
+    const plugins: AiPlugin[] = []
+    // 1. 总是添加通用插件
+    // plugins.push(textPlugin)
+    // plugins.push(webSearchPlugin)
+
+    // 2. 推理模型时添加推理插件
+    if (middlewareConfig.enableReasoning) {
+      plugins.push(reasoningTimePlugin)
+    }
+
+    // 3. 启用Prompt工具调用时添加工具插件
+    if (middlewareConfig.enableTool && middlewareConfig.mcpTools && middlewareConfig.mcpTools.length > 0) {
+      plugins.push(
+        createPromptToolUsePlugin({
+          enabled: true,
+          createSystemMessage: (systemPrompt, params, context) => {
+            if (context.modelId.includes('o1-mini') || context.modelId.includes('o1-preview')) {
+              if (context.isRecursiveCall) {
+                return null
+              }
+
+              params.messages = [
+                {
+                  role: 'assistant',
+                  content: systemPrompt
+                },
+                ...params.messages
+              ]
+              return null
+            }
+
+            return systemPrompt
+          }
+        })
+      )
+    }
+
+    // if (!middlewareConfig.enableTool && middlewareConfig.mcpTools && middlewareConfig.mcpTools.length > 0) {
+    //   plugins.push(createNativeToolUsePlugin())
+    // }
+    console.log(
+      '最终插件列表:',
+      plugins.map(p => p.name)
+    )
+    return plugins
   }
 
   public async completions(
@@ -140,20 +184,7 @@ export default class ModernAiProvider {
     params: StreamTextParams,
     middlewareConfig: AiSdkMiddlewareConfig
   ): Promise<CompletionsResult> {
-    // const model = params.assistant.model
-
-    // 检查是否应该使用现代化客户端
-    // if (this.modernClient && model && isModernSdkSupported(this.provider, model)) {
-    // try {
     return await this.modernCompletions(modelId, params, middlewareConfig)
-    // } catch (error) {
-    // console.warn('Modern client failed, falling back to legacy:', error)
-    // fallback到原有实现
-    // }
-    // }
-
-    // 使用原有实现
-    // return this.legacyProvider.completions(params, options)
   }
 
   /**
@@ -165,64 +196,41 @@ export default class ModernAiProvider {
     params: StreamTextParams,
     middlewareConfig: AiSdkMiddlewareConfig
   ): Promise<CompletionsResult> {
-    if (!this.modernExecutor) {
-      throw new Error('Modern AI SDK client not initialized')
-    }
+    const plugins = this.buildPlugins(middlewareConfig)
+    // 用构建好的插件数组创建executor
+    const executor = createExecutor(this.config.providerId, this.config.options, plugins)
+    // 动态构建中间件数组
+    const middlewares = buildAiSdkMiddlewares(middlewareConfig)
+    console.log('middlewares', middlewares)
 
-    try {
-      // 合并传入的配置和实例配置
-      const finalConfig: AiSdkMiddlewareConfig = {
-        ...middlewareConfig,
-        provider: this.provider,
-        // 工具相关信息从 params 中获取
-        enableTool: !!Object.keys(params.tools || {}).length
+    // 创建带有中间件的执行器
+    if (middlewareConfig.onChunk) {
+      // 流式处理 - 使用适配器
+      const adapter = new AiSdkToChunkAdapter(middlewareConfig.onChunk, middlewareConfig.mcpTools)
+      console.log('最终params', params)
+      const streamResult = await executor.streamText(
+        modelId,
+        params,
+        middlewares.length > 0 ? { middlewares } : undefined
+      )
+
+      const finalText = await adapter.processStream(streamResult)
+
+      return {
+        getText: () => finalText
       }
+    } else {
+      // 流式处理但没有 onChunk 回调
+      const streamResult = await executor.streamText(
+        modelId,
+        params,
+        middlewares.length > 0 ? { middlewares } : undefined
+      )
+      const finalText = await streamResult.text
 
-      // 动态构建中间件数组
-      const middlewares = buildAiSdkMiddlewares(finalConfig)
-      console.log('构建的中间件:', middlewares)
-
-      // 创建带有中间件的执行器
-      if (middlewareConfig.onChunk) {
-        // 流式处理 - 使用适配器
-        const adapter = new AiSdkToChunkAdapter(middlewareConfig.onChunk)
-        // this.modernExecutor.pluginEngine.use(
-        //   createMCPPromptPlugin({
-        //     mcpTools: middlewareConfig.mcpTools || [],
-        //     assistant: params.assistant,
-        //     onChunk: middlewareConfig.onChunk,
-        //     recursiveCall: this.modernExecutor.streamText,
-        //     recursionDepth: 0,
-        //     maxRecursionDepth: 20
-        //   })
-        // )
-        const streamResult = await this.modernExecutor.streamText(
-          modelId,
-          params,
-          middlewares.length > 0 ? { middlewares } : undefined
-        )
-
-        const finalText = await adapter.processStream(streamResult)
-
-        return {
-          getText: () => finalText
-        }
-      } else {
-        // 流式处理但没有 onChunk 回调
-        const streamResult = await this.modernExecutor.streamText(
-          modelId,
-          params,
-          middlewares.length > 0 ? { middlewares } : undefined
-        )
-        const finalText = await streamResult.text
-
-        return {
-          getText: () => finalText
-        }
+      return {
+        getText: () => finalText
       }
-    } catch (error) {
-      console.error('Modern AI SDK error:', error)
-      throw error
     }
   }
 

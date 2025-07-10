@@ -5,3 +5,6 @@
 export const BUILT_IN_PLUGIN_PREFIX = 'built-in:'
 
 export { createLoggingPlugin } from './logging'
+export { createPromptToolUsePlugin } from './toolUsePlugin/promptToolUsePlugin'
+export type { PromptToolUseConfig, ToolUseRequestContext, ToolUseResult } from './toolUsePlugin/type'
+export { type WebSearchConfig, webSearchPlugin } from './webSearchPlugin'

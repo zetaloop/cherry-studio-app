@@ -25,16 +25,14 @@ import { type VercelProviderSettings } from '@ai-sdk/vercel'
 import { type XaiProviderSettings } from '@ai-sdk/xai'
 import { type OpenRouterProviderSettings } from '@openrouter/ai-sdk-provider'
 import { type OllamaProviderSettings } from 'ollama-ai-provider'
-import { type QwenProviderSettings } from 'qwen-ai-provider'
-import { type ZhipuProviderSettings } from 'zhipu-ai-provider'
 
 // 类型安全的 Provider Settings 映射
 export type ProviderSettingsMap = {
   openai: OpenAIProviderSettings
   'openai-compatible': OpenAICompatibleProviderSettings
+  openrouter: OpenRouterProviderSettings
   anthropic: AnthropicProviderSettings
   google: GoogleGenerativeAIProviderSettings
-  // 'google-vertex': GoogleVertexProviderSettings
   mistral: MistralProviderSettings
   xai: XaiProviderSettings
   azure: AzureOpenAIProviderSettings
@@ -50,14 +48,9 @@ export type ProviderSettingsMap = {
   perplexity: PerplexityProviderSettings
   fal: FalProviderSettings
   vercel: VercelProviderSettings
-  ollama: OllamaProviderSettings
-  qwen: QwenProviderSettings
-  zhipu: ZhipuProviderSettings
-  // 'anthropic-vertex': AnthropicVertexProviderSettings
-  openrouter: OpenRouterProviderSettings
 }
 
-export type ProviderId = keyof ProviderSettingsMap
+export type ProviderId = keyof ProviderSettingsMap & string
 
 // 统一的 Provider 配置接口（所有都使用动态导入）
 export interface ProviderConfig {
@@ -126,13 +119,6 @@ export class AiProviderRegistry {
         creatorFunctionName: 'createGoogleGenerativeAI',
         supportsImageGeneration: true
       },
-      // {
-      //   id: 'google-vertex',
-      //   name: 'Google Vertex AI',
-      //   import: () => import('@ai-sdk/google-vertex/edge'),
-      //   creatorFunctionName: 'createVertex',
-      //   supportsImageGeneration: true
-      // },
       {
         id: 'mistral',
         name: 'Mistral AI',
@@ -247,27 +233,6 @@ export class AiProviderRegistry {
         supportsImageGeneration: false
       },
       {
-        id: 'qwen',
-        name: 'Qwen',
-        import: () => import('qwen-ai-provider'),
-        creatorFunctionName: 'createQwen',
-        supportsImageGeneration: false
-      },
-      {
-        id: 'zhipu',
-        name: 'Zhipu AI',
-        import: () => import('zhipu-ai-provider'),
-        creatorFunctionName: 'createZhipu',
-        supportsImageGeneration: false
-      },
-      // {
-      //   id: 'anthropic-vertex',
-      //   name: 'Anthropic Vertex AI',
-      //   import: () => import('anthropic-vertex-ai'),
-      //   creatorFunctionName: 'createAnthropicVertex',
-      //   supportsImageGeneration: false
-      // },
-      {
         id: 'openrouter',
         name: 'OpenRouter',
         import: () => import('@openrouter/ai-sdk-provider'),
@@ -349,7 +314,6 @@ export const PROVIDER_REGISTRY = aiProviderRegistry.getCompatibleRegistry()
 export type {
   AmazonBedrockProviderSettings,
   AnthropicProviderSettings,
-  // AnthropicVertexProviderSettings,
   AzureOpenAIProviderSettings,
   CerebrasProviderSettings,
   CohereProviderSettings,
@@ -358,7 +322,6 @@ export type {
   FalProviderSettings,
   FireworksProviderSettings,
   GoogleGenerativeAIProviderSettings,
-  // GoogleVertexProviderSettings,
   GroqProviderSettings,
   MistralProviderSettings,
   OllamaProviderSettings,
@@ -366,10 +329,8 @@ export type {
   OpenAIProviderSettings,
   OpenRouterProviderSettings,
   PerplexityProviderSettings,
-  QwenProviderSettings,
   ReplicateProviderSettings,
   TogetherAIProviderSettings,
   VercelProviderSettings,
-  XaiProviderSettings,
-  ZhipuProviderSettings
+  XaiProviderSettings
 }

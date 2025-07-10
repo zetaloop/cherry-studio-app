@@ -178,7 +178,7 @@ export function buildProviderOptions(
       break
 
     case 'gemini':
-    case 'vertexai':
+      // case 'vertexai':
       providerSpecificOptions = buildGeminiProviderOptions(assistant, model, capabilities)
       break
 

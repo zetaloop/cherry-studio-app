@@ -1,15 +1,27 @@
 import type { TextStreamPart, ToolSet } from 'ai'
 
+import { ProviderId } from '../providers/registry'
+
+/**
+ * 递归调用函数类型
+ * 使用 any 是因为递归调用时参数和返回类型可能完全不同
+ */
+export type RecursiveCallFn = (newParams: any) => Promise<any>
+
 /**
  * AI 请求上下文
  */
 export interface AiRequestContext {
-  providerId: string
+  providerId: ProviderId
   modelId: string
   originalParams: any
   metadata: Record<string, any>
   startTime: number
   requestId: string
+  recursiveCall: RecursiveCallFn
+  isRecursiveCall?: boolean
+  mcpTools?: ToolSet
+  [key: string]: any
 }
 
 /**
@@ -26,6 +38,7 @@ export interface AiPlugin {
   // 【Sequential】串行钩子 - 链式执行，支持数据转换
   transformParams?: (params: any, context: AiRequestContext) => any | Promise<any>
   transformResult?: (result: any, context: AiRequestContext) => any | Promise<any>
+  configureModel?: (model: any, context: AiRequestContext) => any | Promise<any>
 
   // 【Parallel】并行钩子 - 不依赖顺序，用于副作用
   onRequestStart?: (context: AiRequestContext) => void | Promise<void>
@@ -33,7 +46,10 @@ export interface AiPlugin {
   onError?: (error: Error, context: AiRequestContext) => void | Promise<void>
 
   // 【Stream】流处理 - 直接使用 AI SDK
-  transformStream?: <TOOLS extends ToolSet>(options: {
+  transformStream?: (
+    params: any,
+    context: AiRequestContext
+  ) => <TOOLS extends ToolSet>(options?: {
     tools: TOOLS
     stopStream: () => void
   }) => TransformStream<TextStreamPart<TOOLS>, TextStreamPart<TOOLS>>

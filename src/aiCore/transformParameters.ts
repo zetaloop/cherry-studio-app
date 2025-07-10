@@ -3,7 +3,16 @@
  * 统一管理从各个 apiClient 提取的参数处理和转换功能
  */
 
-import { type CoreMessage, type StreamTextParams } from '@cherrystudio/ai-core'
+import {
+  AssistantModelMessage,
+  FilePart,
+  ImagePart,
+  ModelMessage,
+  stepCountIs,
+  type StreamTextParams,
+  TextPart,
+  UserModelMessage
+} from '@cherrystudio/ai-core'
 import { aiSdk } from '@cherrystudio/ai-core'
 // import { jsonSchemaToZod } from 'json-schema-to-zod'
 import { File } from 'expo-file-system/next'
@@ -25,9 +34,9 @@ import { DEFAULT_MAX_TOKENS, defaultTimeout } from '@/constants'
 import { getAssistantSettings, getDefaultModel } from '@/services/AssistantService'
 import { Assistant, Model } from '@/types/assistant'
 import { FileTypes } from '@/types/file'
-import { MCPTool, MCPToolInputSchema } from '@/types/mcp'
-import { Message } from '@/types/message'
-import { findFileBlocks, findImageBlocks, getMainTextContent } from '@/utils/messageUtils/find'
+import { MCPTool } from '@/types/mcp'
+import { FileMessageBlock, ImageMessageBlock, Message, ThinkingMessageBlock } from '@/types/message'
+import { findFileBlocks, findImageBlocks, findThinkingBlocks, getMainTextContent } from '@/utils/messageUtils/find'
 import { buildSystemPrompt } from '@/utils/prompt'
 
 import { buildProviderOptions } from './utils/reasoning'
@@ -103,21 +112,26 @@ export async function extractFileContent(message: Message): Promise<string> {
  * 转换消息为 AI SDK 参数格式
  * 基于 OpenAI 格式的通用转换，支持文本、图片和文件
  */
-export async function convertMessageToSdkParam(message: Message, isVisionModel = false): Promise<any> {
+export async function convertMessageToSdkParam(message: Message, isVisionModel = false): Promise<ModelMessage> {
   const content = await getMainTextContent(message)
   const fileBlocks = await findFileBlocks(message)
   const imageBlocks = await findImageBlocks(message)
+  const reasoningBlocks = await findThinkingBlocks(message)
 
-  // 简单消息（无文件无图片）
-  if (fileBlocks.length === 0 && imageBlocks.length === 0) {
-    return {
-      role: message.role === 'system' ? 'user' : message.role,
-      content
-    }
+  if (message.role === 'user' || message.role === 'system') {
+    return convertMessageToUserModelMessage(content, fileBlocks, imageBlocks, isVisionModel)
+  } else {
+    return convertMessageToAssistantModelMessage(content, fileBlocks, reasoningBlocks)
   }
+}
 
-  // 复杂消息（包含文件或图片）
-  const parts: any[] = []
+async function convertMessageToUserModelMessage(
+  content: string,
+  fileBlocks: FileMessageBlock[],
+  imageBlocks: ImageMessageBlock[],
+  isVisionModel = false
+): Promise<UserModelMessage> {
+  const parts: (TextPart | FilePart | ImagePart)[] = []
 
   if (content) {
     parts.push({ type: 'text', text: content })
@@ -128,18 +142,19 @@ export async function convertMessageToSdkParam(message: Message, isVisionModel =
     for (const imageBlock of imageBlocks) {
       if (imageBlock.file) {
         try {
-          const base64 = new File(imageBlock.file.path).base64()
+          const image = new File(imageBlock.file.path)
           parts.push({
-            type: 'image_url',
-            image_url: { url: `data:image/jpg;base64,${base64}` }
+            type: 'image',
+            image: image.base64(),
+            mediaType: image.type || 'image/png'
           })
         } catch (error) {
           console.warn('Failed to load image:', error)
         }
-      } else if (imageBlock.url && imageBlock.url.startsWith('data:')) {
+      } else if (imageBlock.url) {
         parts.push({
-          type: 'image_url',
-          image_url: { url: imageBlock.url }
+          type: 'image',
+          image: imageBlock.url
         })
       }
     }
@@ -147,26 +162,64 @@ export async function convertMessageToSdkParam(message: Message, isVisionModel =
 
   // 处理文件
   for (const fileBlock of fileBlocks) {
-    const file = fileBlock.file
-    if (!file) continue
+    const textPart = await convertFileBlockToTextPart(fileBlock)
 
-    if ([FileTypes.TEXT, FileTypes.DOCUMENT].includes(file.type)) {
-      try {
-        const fileContent = new File(file.path).text().trim()
-        parts.push({
-          type: 'text',
-          text: `${file.origin_name}\n${fileContent.trim()}`
-        })
-      } catch (error) {
-        console.warn('Failed to read file:', error)
-      }
+    if (textPart) {
+      parts.push(textPart)
     }
   }
 
   return {
-    role: message.role === 'system' ? 'user' : message.role,
-    content: parts.length === 1 && parts[0].type === 'text' ? parts[0].text : parts
+    role: 'user',
+    content: parts
   }
+}
+
+async function convertMessageToAssistantModelMessage(
+  content: string,
+  fileBlocks: FileMessageBlock[],
+  thinkingBlocks: ThinkingMessageBlock[]
+): Promise<AssistantModelMessage> {
+  const parts: (TextPart | FilePart)[] = []
+
+  if (content) {
+    parts.push({ type: 'text', text: content })
+  }
+
+  for (const thinkingBlock of thinkingBlocks) {
+    parts.push({ type: 'text', text: thinkingBlock.content })
+  }
+
+  for (const fileBlock of fileBlocks) {
+    const textPart = await convertFileBlockToTextPart(fileBlock)
+
+    if (textPart) {
+      parts.push(textPart)
+    }
+  }
+
+  return {
+    role: 'assistant',
+    content: parts
+  }
+}
+
+async function convertFileBlockToTextPart(fileBlock: FileMessageBlock): Promise<TextPart | null> {
+  const file = fileBlock.file
+
+  if ([FileTypes.TEXT, FileTypes.DOCUMENT].includes(file.type)) {
+    try {
+      const fileContent = new File(file.path).text().trim()
+      return {
+        type: 'text',
+        text: `${file.origin_name}\n${fileContent.trim()}`
+      }
+    } catch (error) {
+      console.warn('Failed to read file:', error)
+    }
+  }
+
+  return null
 }
 
 /**
@@ -196,7 +249,6 @@ export async function buildStreamTextParams(
   assistant: Assistant,
   options: {
     mcpTools?: MCPTool[]
-    // FIXME: 上游没传
     enableTools?: boolean
     requestOptions?: {
       signal?: AbortSignal
@@ -204,18 +256,23 @@ export async function buildStreamTextParams(
       headers?: Record<string, string>
     }
   } = {}
-): Promise<{ params: StreamTextParams; modelId: string }> {
-  const { mcpTools } = options
+): Promise<{
+  params: StreamTextParams
+  modelId: string
+  capabilities: { enableReasoning?: boolean; enableWebSearch?: boolean; enableGenerateImage?: boolean }
+}> {
+  const { mcpTools, enableTools } = options
 
   const model = assistant.model || getDefaultModel()
 
   const { maxTokens, reasoning_effort } = getAssistantSettings(assistant)
 
+  // 这三个变量透传出来，交给下面动态启用插件/中间件
+  // 也可以在外部构建好再传入buildStreamTextParams
   const enableReasoning =
     ((isSupportedThinkingTokenModel(model) || isSupportedReasoningEffortModel(model)) &&
       reasoning_effort !== undefined) ||
-    (isReasoningModel(model) && (!isSupportedThinkingTokenModel(model) || !isSupportedReasoningEffortModel(model)))
-
+    (isReasoningModel(model) && !isSupportedThinkingTokenModel(model) && !isSupportedReasoningEffortModel(model))
   const enableWebSearch =
     (assistant.enableWebSearch && isWebSearchModel(model)) ||
     isOpenRouterBuiltInWebSearchModel(model) ||
@@ -227,12 +284,11 @@ export async function buildStreamTextParams(
     (isSupportedDisableGenerationModel(model) ? assistant.enableGenerateImage || false : true)
 
   // 构建系统提示
-  let systemPrompt = assistant.prompt || ''
-
-  // TODO:根据调用类型判断是否添加systemPrompt
-  if (mcpTools && mcpTools.length > 0 && assistant.settings?.toolUseMode === 'prompt') {
-    systemPrompt = await buildSystemPromptWithTools(systemPrompt, mcpTools, assistant)
-  }
+  // const { tools } = setupToolsConfig({
+  //   mcpTools,
+  //   model,
+  //   enableToolUse: enableTools
+  // })
 
   // 构建真正的 providerOptions
   const providerOptions = buildProviderOptions(assistant, model, {
@@ -244,34 +300,25 @@ export async function buildStreamTextParams(
   // 构建基础参数
   const params: StreamTextParams = {
     messages: sdkMessages,
-    maxTokens: maxTokens || DEFAULT_MAX_TOKENS,
+    maxOutputTokens: maxTokens || DEFAULT_MAX_TOKENS,
     temperature: getTemperature(assistant, model),
     topP: getTopP(assistant, model),
-    system: systemPrompt || undefined,
+    system: assistant.prompt || '',
     abortSignal: options.requestOptions?.signal,
     headers: options.requestOptions?.headers,
     providerOptions,
-    maxSteps: 10
+    // tools,
+    stopWhen: stepCountIs(10)
   }
 
-  // const tools = mcpTools ? convertMcpToolsToAiSdkTools(mcpTools) : {}
-  // console.log('tools', tools)
-  // console.log('enableTools', assistant?.mcpServers?.length)
-
-  // // console.log('tools.length > 0', tools.length > 0)
-  // // 添加工具（如果启用且有工具）
-  // if (!!assistant?.mcpServers?.length && Object.keys(tools).length > 0) {
-  //   params.tools = tools
-  // }
-
-  return { params, modelId: model.id }
+  return { params, modelId: model.id, capabilities: { enableReasoning, enableWebSearch, enableGenerateImage } }
 }
 
 /**
  * 构建非流式的 generateText 参数
  */
 export async function buildGenerateTextParams(
-  messages: CoreMessage[],
+  messages: ModelMessage[],
   assistant: Assistant,
   options: {
     mcpTools?: MCPTool[]
@@ -281,77 +328,3 @@ export async function buildGenerateTextParams(
   // 复用流式参数的构建逻辑
   return await buildStreamTextParams(messages, assistant, options)
 }
-
-/**
- * 将 MCPToolInputSchema 转换为 JSONSchema7 格式
- */
-function convertMcpSchemaToJsonSchema7(schema: MCPToolInputSchema): any {
-  // 创建符合 JSONSchema7 的对象
-  const jsonSchema7: Record<string, any> = {
-    type: 'object',
-    properties: schema.properties || {},
-    required: schema.required || []
-  }
-
-  // 如果有 description，添加它
-  if (schema.description) {
-    jsonSchema7.description = schema.description
-  }
-
-  // 如果有 title，添加它
-  if (schema.title) {
-    jsonSchema7.title = schema.title
-  }
-
-  return jsonSchema7
-}
-
-/**
- * 将 MCPTool 转换为 AI SDK 工具格式
- */
-// export function convertMcpToolsToAiSdkTools(mcpTools: MCPTool[]): Record<string, any> {
-//   const tools: Record<string, any> = {}
-
-//   for (const mcpTool of mcpTools) {
-//     console.log('mcpTool', mcpTool.inputSchema)
-//     tools[mcpTool.name] = tool({
-//       description: mcpTool.description || `Tool from ${mcpTool.serverName}`,
-//       parameters: jsonSchema<Record<string, object>>(convertMcpSchemaToJsonSchema7(mcpTool.inputSchema)),
-//       execute: async params => {
-//         console.log('execute_params', params)
-//         // 创建适配的 MCPToolResponse 对象
-//         const toolResponse: MCPToolResponse = {
-//           id: `tool_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-//           tool: mcpTool,
-//           arguments: params,
-//           status: 'invoking',
-//           toolCallId: `call_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-//         }
-
-//         try {
-//           // 复用现有的 callMCPTool 函数
-//           const result = await callMCPTool(toolResponse)
-
-//           // 返回结果，AI SDK 会处理序列化
-//           if (result.isError) {
-//             throw new Error(result.content?.[0]?.text || 'Tool execution failed')
-//           }
-
-//           console.log('result', result)
-//           // 返回工具执行结果
-//           return {
-//             success: true,
-//             data: result
-//           }
-//         } catch (error) {
-//           console.error(`MCP Tool execution failed: ${mcpTool.name}`, error)
-//           throw new Error(
-//             `Tool ${mcpTool.name} execution failed: ${error instanceof Error ? error.message : String(error)}`
-//           )
-//         }
-//       }
-//     })
-//   }
-
-//   return tools
-// }
