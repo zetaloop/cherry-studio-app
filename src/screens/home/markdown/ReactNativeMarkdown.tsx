@@ -16,7 +16,6 @@ interface Props {
 const ReactNativeMarkdown: FC<Props> = ({ block }) => {
   const { t } = useTranslation()
   const theme = useThemeName()
-  const color = theme === 'dark' ? 'white' : 'black'
 
   const getMessageContent = (block: MainTextMessageBlock | TranslationMessageBlock | ThinkingMessageBlock) => {
     const empty = isEmpty(block.content)
@@ -34,7 +33,7 @@ const ReactNativeMarkdown: FC<Props> = ({ block }) => {
       accentedBackground: '#F7F6F3',
       background: '#ffffff',
       border: '#e1e7e8',
-      text: '#37352f',
+      text: 'black',
       link: '#00b96b',
       codeBg: 'transparent',
       code: '#00b96b',
@@ -45,7 +44,7 @@ const ReactNativeMarkdown: FC<Props> = ({ block }) => {
       accentedBackground: '#2c2d30',
       background: '#191919',
       border: '#3d3d3d',
-      text: '#d4d4d4',
+      text: 'white',
       link: '#00b96b',
       codeBg: 'transparent',
       code: '#00b96b',

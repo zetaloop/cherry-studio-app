@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { View } from 'tamagui'
+import { useThemeName, View } from 'tamagui'
 
 import { useMessageBlocks } from '@/hooks/useMessageBlocks'
 import { Message, MessageBlockType } from '@/types/message'
@@ -12,6 +12,9 @@ interface Props {
 }
 
 const MessageContent: React.FC<Props> = ({ message }) => {
+  const theme = useThemeName()
+  const isDark = theme === 'dark'
+
   const isUser = message.role === 'user'
   const { processedBlocks } = useMessageBlocks(message.id)
 
@@ -22,6 +25,8 @@ const MessageContent: React.FC<Props> = ({ message }) => {
     block => block.type !== MessageBlockType.IMAGE && block.type !== MessageBlockType.FILE
   )
 
+  const userMessageBackgroundColor = isDark ? 'rgba(0, 83, 45, 1)' : 'rgba(0, 185, 107, 1)'
+
   return (
     <View style={isUser ? styles.userContainer : styles.assistantContainer}>
       {mediaBlocks.length > 0 && <MessageBlockRenderer blocks={mediaBlocks} />}
@@ -30,6 +35,7 @@ const MessageContent: React.FC<Props> = ({ message }) => {
           style={[
             styles.contentWrapper,
             isUser ? styles.userMessageContent : styles.assistantMessageContent,
+            isUser && { backgroundColor: userMessageBackgroundColor },
             mediaBlocks.length > 0 && { marginTop: 8 }
           ]}>
           <MessageBlockRenderer blocks={contentBlocks} />
@@ -50,14 +56,14 @@ const styles = StyleSheet.create({
   },
   contentWrapper: {
     paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderTopLeftRadius: 28,
-    borderBottomLeftRadius: 28,
-    borderBottomRightRadius: 28
+    // paddingVertical: 5,
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 24,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24
   },
   userMessageContent: {
-    flex: 1,
-    backgroundColor: 'green'
+    flex: 1
   },
   assistantMessageContent: {
     backgroundColor: 'transparent'
