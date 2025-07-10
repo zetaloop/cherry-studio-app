@@ -2,6 +2,7 @@ import { StreamTextParams } from '@cherrystudio/ai-core'
 import { isEmpty } from 'lodash'
 
 import LegacyAiProvider from '@/aiCore'
+import AiProvider from '@/aiCore'
 import ModernAiProvider from '@/aiCore/index_new'
 import { AiSdkMiddlewareConfig } from '@/aiCore/middleware/aisdk/AiSdkMiddlewareBuilder'
 import { CompletionsParams } from '@/aiCore/middleware/schemas'
@@ -16,7 +17,7 @@ import { createBaseMessageBlock, createTranslationBlock } from '@/utils/messageU
 
 import { updateOneBlock, upsertBlocks } from '../../db/queries/messageBlocks.queries'
 import { getMessageById, upsertMessages } from '../../db/queries/messages.queries'
-import { createBlankAssistant, getAssistantById, getAssistantProvider } from './AssistantService'
+import { createBlankAssistant, getAssistantById, getAssistantProvider, getDefaultModel } from './AssistantService'
 import { createStreamProcessor, StreamProcessorCallbacks } from './StreamProcessingService'
 
 export async function fetchChatCompletion({
@@ -37,7 +38,7 @@ export async function fetchChatCompletion({
 }) {
   const provider = await getAssistantProvider(assistant)
 
-  const AI = new ModernAiProvider(provider)
+  const AI = new ModernAiProvider(assistant.model || getDefaultModel(), provider)
 
   // 使用 transformParameters 模块构建参数
   const {
@@ -62,7 +63,7 @@ export async function fetchChatCompletion({
 }
 
 export async function fetchModels(provider: Provider): Promise<SdkModel[]> {
-  const AI = new ModernAiProvider(provider)
+  const AI = new AiProvider(provider)
 
   try {
     return await AI.models()
@@ -162,7 +163,7 @@ export async function fetchTranslate({
 
   console.log('llmMessages', llmMessages)
 
-  const AI = new ModernAiProvider(provider)
+  const AI = new ModernAiProvider(translateAssistant.model || getDefaultModel(), provider)
   const { params: aiSdkParams, modelId } = await buildStreamTextParams(llmMessages, translateAssistant)
   console.log('modelId', modelId)
   const middlewareConfig: AiSdkMiddlewareConfig = {

@@ -8,6 +8,7 @@
  * 3. 暂时保持接口兼容性
  */
 import {
+  AiCore,
   AiPlugin,
   createExecutor,
   ProviderConfigFactory,
@@ -15,7 +16,7 @@ import {
   type ProviderSettingsMap,
   StreamTextParams
 } from '@cherrystudio/ai-core'
-import { createPromptToolUsePlugin } from '@cherrystudio/ai-core/core/plugins/built-in'
+import { createPromptToolUsePlugin, webSearchPlugin } from '@cherrystudio/ai-core/core/plugins/built-in'
 import { fetch as expoFetch } from 'expo/fetch'
 import { cloneDeep } from 'lodash'
 
@@ -28,38 +29,53 @@ import AiSdkToChunkAdapter from './AiSdkToChunkAdapter'
 import { AiSdkMiddlewareConfig, buildAiSdkMiddlewares } from './middleware/aisdk/AiSdkMiddlewareBuilder'
 import { CompletionsResult } from './middleware/schemas'
 import reasoningTimePlugin from './plugins/reasoningTimePlugin'
+import { createAihubmixProvider } from './provider/aihubmix'
 import { getAiSdkProviderId } from './provider/factory'
+
+function getActualProvider(model: Model, provider: Provider): Provider {
+  // 如果是 vertexai 类型且没有 googleCredentials，转换为 VertexProvider
+  let actualProvider = cloneDeep(provider)
+
+  if (provider.id === 'aihubmix') {
+    actualProvider = createAihubmixProvider(model, actualProvider)
+  }
+
+  if (actualProvider.type === 'gemini') {
+    actualProvider.apiHost = formatApiHost(actualProvider.apiHost, 'v1beta')
+  } else {
+    actualProvider.apiHost = formatApiHost(actualProvider.apiHost)
+  }
+
+  return actualProvider
+}
 
 /**
  * 将 Provider 配置转换为新 AI SDK 格式
  */
-function providerToAiSdkConfig(provider: Provider): {
+function providerToAiSdkConfig(actualProvider: Provider): {
   providerId: ProviderId | 'openai-compatible'
   options: ProviderSettingsMap[keyof ProviderSettingsMap]
 } {
-  // 如果是 vertexai 类型且没有 googleCredentials，转换为 VertexProvider
-  const actualProvider = cloneDeep(provider)
-
-  // if (provider.type === 'vertexai' && !isVertexProvider(provider)) {
-  //   if (!isVertexAIConfigured()) {
-  //     throw new Error('VertexAI is not configured. Please configure project, location and service account credentials.')
-  //   }
-
-  //   actualProvider = createVertexProvider(provider)
-  // }
-
-  if (actualProvider.type === 'openai' || actualProvider.type === 'anthropic') {
-    actualProvider.apiHost = formatApiHost(actualProvider.apiHost)
-  }
-
   const aiSdkProviderId = getAiSdkProviderId(actualProvider)
 
-  if (aiSdkProviderId !== 'openai-compatible') {
-    const options = ProviderConfigFactory.fromProvider(aiSdkProviderId, {
-      ...actualProvider
-      // 使用ai-sdk内置的baseURL
-      // baseURL: actualProvider.apiHost
-    })
+  // 如果provider是openai，则使用strict模式并且默认responses api
+  const openaiResponseOptions =
+    aiSdkProviderId === 'openai'
+      ? {
+          compatibility: 'strict'
+        }
+      : undefined
+
+  if (AiCore.isSupported(aiSdkProviderId) && aiSdkProviderId !== 'openai-compatible') {
+    const options = ProviderConfigFactory.fromProvider(
+      aiSdkProviderId,
+      {
+        baseURL: actualProvider.apiHost,
+        apiKey: actualProvider.apiKey,
+        headers: actualProvider.extra_headers
+      },
+      openaiResponseOptions
+    )
 
     return {
       providerId: aiSdkProviderId as ProviderId,
@@ -91,11 +107,6 @@ function isModernSdkSupported(provider: Provider, model?: Model): boolean {
     return false
   }
 
-  // 对于 vertexai，检查配置是否完整
-  // if (provider.type === 'vertexai' && !isVertexAIConfigured()) {
-  //   return false
-  // }
-
   // 检查是否为图像生成模型（暂时不支持）
   if (model && isDedicatedImageGenerationModel(model)) {
     return false
@@ -107,9 +118,11 @@ function isModernSdkSupported(provider: Provider, model?: Model): boolean {
 export default class ModernAiProvider {
   private legacyProvider: LegacyAiProvider
   private config: ReturnType<typeof providerToAiSdkConfig>
+  private actualProvider: Provider
 
-  constructor(provider: Provider) {
-    // this.provider = provider
+  constructor(model: Model, provider: Provider) {
+    this.actualProvider = getActualProvider(model, provider)
+
     this.legacyProvider = new LegacyAiProvider(provider)
 
     const customFetch = async (url, options) => {
@@ -124,8 +137,12 @@ export default class ModernAiProvider {
 
     // TODO:如果后续在调用completions时需要切换provider的话,
     // 初始化时不构建中间件，等到需要时再构建
-    this.config = providerToAiSdkConfig(provider)
+    this.config = providerToAiSdkConfig(this.actualProvider)
     this.config.options.fetch = customFetch
+  }
+
+  public getActualProvider() {
+    return this.actualProvider
   }
 
   /**
@@ -133,9 +150,13 @@ export default class ModernAiProvider {
    */
   private buildPlugins(middlewareConfig: AiSdkMiddlewareConfig) {
     const plugins: AiPlugin[] = []
+
     // 1. 总是添加通用插件
     // plugins.push(textPlugin)
-    // plugins.push(webSearchPlugin)
+    if (middlewareConfig.enableWebSearch) {
+      // 内置了默认搜索参数，如果改的话可以传config进去
+      plugins.push(webSearchPlugin())
+    }
 
     // 2. 推理模型时添加推理插件
     if (middlewareConfig.enableReasoning) {
@@ -184,24 +205,28 @@ export default class ModernAiProvider {
     params: StreamTextParams,
     middlewareConfig: AiSdkMiddlewareConfig
   ): Promise<CompletionsResult> {
+    console.log('completions', modelId, params, middlewareConfig)
     return await this.modernCompletions(modelId, params, middlewareConfig)
   }
 
   /**
    * 使用现代化AI SDK的completions实现
-   * 使用建造者模式动态构建中间件
    */
   private async modernCompletions(
     modelId: string,
     params: StreamTextParams,
     middlewareConfig: AiSdkMiddlewareConfig
   ): Promise<CompletionsResult> {
+    // try {
+    // 根据条件构建插件数组
     const plugins = this.buildPlugins(middlewareConfig)
+
     // 用构建好的插件数组创建executor
     const executor = createExecutor(this.config.providerId, this.config.options, plugins)
+
     // 动态构建中间件数组
     const middlewares = buildAiSdkMiddlewares(middlewareConfig)
-    console.log('middlewares', middlewares)
+    // console.log('构建的中间件:', middlewares)
 
     // 创建带有中间件的执行器
     if (middlewareConfig.onChunk) {
@@ -232,6 +257,11 @@ export default class ModernAiProvider {
         getText: () => finalText
       }
     }
+    // }
+    // catch (error) {
+    //   console.error('Modern AI SDK error:', error)
+    //   throw error
+    // }
   }
 
   // 代理其他方法到原有实现

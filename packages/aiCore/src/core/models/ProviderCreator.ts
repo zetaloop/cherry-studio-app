@@ -27,24 +27,28 @@ export class ProviderCreationError extends Error {
 export async function createBaseModel<T extends ProviderId>({
   providerId,
   modelId,
-  providerSettings
+  providerSettings,
+  extraModelConfig
   // middlewares
 }: {
   providerId: T
   modelId: string
   providerSettings: ProviderSettingsMap[T]
+  extraModelConfig?: any
   // middlewares?: LanguageModelV1Middleware[]
 }): Promise<LanguageModelV2>
 
 export async function createBaseModel({
   providerId,
   modelId,
-  providerSettings
+  providerSettings,
+  extraModelConfig
   // middlewares
 }: {
   providerId: string
   modelId: string
   providerSettings: ProviderSettingsMap['openai-compatible']
+  extraModelConfig?: any
   // middlewares?: LanguageModelV1Middleware[]
 }): Promise<LanguageModelV2>
 
@@ -67,7 +71,6 @@ export async function createBaseModel({
 
     // 获取Provider配置
     const providerConfig = aiProviderRegistry.getProvider(effectiveProviderId)
-
     if (!providerConfig) {
       throw new ProviderCreationError(`Provider "${effectiveProviderId}" is not registered`, providerId)
     }
@@ -83,7 +86,6 @@ export async function createBaseModel({
         `Creator function "${providerConfig.creatorFunctionName}" not found in the imported module for provider "${effectiveProviderId}"`
       )
     }
-
     // 创建provider实例
     let provider = creatorFunction(providerSettings)
 
@@ -91,7 +93,6 @@ export async function createBaseModel({
     if (providerConfig.id === 'openai' && !isOpenAIChatCompletionOnlyModel(modelId)) {
       provider = provider.responses
     }
-
     // 返回模型实例
     if (typeof provider === 'function') {
       // extraModelConfig:例如google的useSearchGrounding
@@ -113,7 +114,6 @@ export async function createBaseModel({
     if (error instanceof ProviderCreationError) {
       throw error
     }
-
     throw new ProviderCreationError(
       `Failed to create base model for provider "${providerId}": ${error instanceof Error ? error.message : 'Unknown error'}`,
       providerId,
@@ -135,7 +135,6 @@ export async function createImageModel(
   modelId: string,
   options: ProviderSettingsMap['openai-compatible']
 ): Promise<ImageModelV2>
-
 export async function createImageModel(
   providerId: string,
   modelId: string = 'default',
@@ -147,7 +146,6 @@ export async function createImageModel(
     }
 
     const providerConfig = aiProviderRegistry.getProvider(providerId)
-
     if (!providerConfig) {
       throw new ProviderCreationError(`Provider "${providerId}" is not registered`, providerId)
     }
@@ -177,7 +175,6 @@ export async function createImageModel(
     if (error instanceof ProviderCreationError) {
       throw error
     }
-
     throw new ProviderCreationError(
       `Failed to create image model for provider "${providerId}": ${error instanceof Error ? error.message : 'Unknown error'}`,
       providerId,
@@ -189,10 +186,10 @@ export async function createImageModel(
 /**
  * 获取支持的 Providers 列表
  */
-export function getSupportedProviders(): {
+export function getSupportedProviders(): Array<{
   id: string
   name: string
-}[] {
+}> {
   return aiProviderRegistry.getAllProviders().map((provider: ProviderConfig) => ({
     id: provider.id,
     name: provider.name

@@ -4,6 +4,14 @@
  */
 
 // 主要的运行时执行器
+// === 便捷工厂函数 ===
+
+import { LanguageModelV2Middleware } from '@ai-sdk/provider'
+
+import { type ProviderId, type ProviderSettingsMap } from '../../types'
+import { type AiPlugin } from '../plugins'
+import { RuntimeExecutor } from './executor'
+
 export { RuntimeExecutor } from './executor'
 
 // 导出类型
@@ -13,14 +21,6 @@ export type {
   ExecutorConfig,
   RuntimeConfig
 } from './types'
-
-// === 便捷工厂函数 ===
-
-import { LanguageModelV2Middleware } from '@ai-sdk/provider'
-
-import { type ProviderId, type ProviderSettingsMap } from '../../types'
-import { type AiPlugin } from '../plugins'
-import { RuntimeExecutor } from './executor'
 
 /**
  * 创建运行时执行器 - 支持类型安全的已知provider

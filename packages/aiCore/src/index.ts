@@ -87,11 +87,14 @@ export {
   smoothStream,
   stepCountIs
 } from 'ai'
+// 重新导出 Agent
+export { Experimental_Agent as Agent } from 'ai'
 
 // 重新导出所有 Provider Settings 类型
 export type {
   AmazonBedrockProviderSettings,
   AnthropicProviderSettings,
+  AnthropicVertexProviderSettings,
   AzureOpenAIProviderSettings,
   CerebrasProviderSettings,
   CohereProviderSettings,
@@ -100,6 +103,7 @@ export type {
   FalProviderSettings,
   FireworksProviderSettings,
   GoogleGenerativeAIProviderSettings,
+  GoogleVertexProviderSettings,
   GroqProviderSettings,
   MistralProviderSettings,
   OllamaProviderSettings,
@@ -195,7 +199,7 @@ export const createXAIExecutor = (options: ProviderSettingsMap['xai'], plugins?:
 export const DevTools = {
   // 列出所有注册的providers
   listProviders() {
-    return aiProviderRegistry.getAllProviders().map(p => ({
+    return aiProviderRegistry.getAllProviders().map((p) => ({
       id: p.id,
       name: p.name
     }))
@@ -228,7 +232,7 @@ export const DevTools = {
     return {
       supportedProviders: providers.length,
       registeredProviders: providers.length,
-      providers: providers.map(p => ({
+      providers: providers.map((p) => ({
         id: p.id,
         name: p.name
       }))

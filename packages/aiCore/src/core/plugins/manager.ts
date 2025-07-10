@@ -74,7 +74,7 @@ export class PluginManager {
    * 执行 Sequential 钩子 - 链式数据转换
    */
   async executeSequential<T>(
-    hookName: 'transformParams' | 'transformResult' | 'configureModel',
+    hookName: 'transformParams' | 'transformResult',
     initialValue: T,
     context: AiRequestContext
   ): Promise<T> {
@@ -89,6 +89,19 @@ export class PluginManager {
     }
 
     return result
+  }
+
+  /**
+   * 执行 ConfigureContext 钩子 - 串行配置上下文
+   */
+  async executeConfigureContext(context: AiRequestContext): Promise<void> {
+    for (const plugin of this.plugins) {
+      const hook = plugin.configureContext
+
+      if (hook) {
+        await hook(context)
+      }
+    }
   }
 
   /**
