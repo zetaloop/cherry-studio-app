@@ -42,7 +42,7 @@ export default function BasicDataSettingsScreen() {
 
       const asset = result.assets[0]
 
-      if (!asset.name.endsWith('.json')) throw new TypeError('Invalid file type')
+      if (!['.zip', '.bak'].some(ext => asset.name.endsWith(ext))) throw new TypeError('Invalid file type')
 
       const file: Omit<FileType, 'md5'> = {
         id: uuid(),

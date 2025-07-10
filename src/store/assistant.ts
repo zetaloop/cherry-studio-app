@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+import { Assistant } from '@/types/assistant'
+
 export interface AssistantsState {
   tagsOrder: string[]
 }
@@ -14,7 +16,8 @@ const assistantsSlice = createSlice({
   reducers: {
     setTagsOrder: (state, action: PayloadAction<string[]>) => {
       state.tagsOrder = action.payload
-    }
+    },
+    updateAssistants: (state, action: PayloadAction<Assistant[]>) => {}
   }
 })
 

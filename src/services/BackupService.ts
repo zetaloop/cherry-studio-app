@@ -3,7 +3,6 @@ import { unzip } from 'react-native-zip-archive'
 
 import { BackupData, BackupReduxData } from '@/types/databackup'
 import { FileType } from '@/types/file'
-import { ValueJSONed } from '@/types/utils'
 
 import { upsertBlocks } from '../../db/queries/messageBlocks.queries'
 import { updateTopics } from './TopicService'
@@ -36,12 +35,9 @@ export async function restore(backupFile: Omit<FileType, 'md5'>) {
     // read data.json
     const data = JSON.parse(new File(backupDir.uri, 'data.json').text()) as BackupData
 
-    const reduxDataJSON = JSON.parse(data.localStorage['persist:cherry-studio']) as ValueJSONed<BackupReduxData>
-    const reduxData: BackupReduxData = {} as BackupReduxData
+    console.log('data: ', data)
 
-    for (const key of Object.keys(reduxDataJSON) as (keyof BackupReduxData)[]) {
-      reduxData[key] = JSON.parse(reduxDataJSON[key])
-    }
+    const reduxData: BackupReduxData = data.redux as BackupReduxData
 
     // restore data
     await restoreDBData(data.indexedDB)
