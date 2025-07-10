@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TextArea, View, XStack, YStack } from 'tamagui'
 
+import { isReasoningModel } from '@/config/models/reasoning'
 import { useAssistant } from '@/hooks/useAssistant'
 import { sendMessage as _sendMessage } from '@/services/MessagesService'
 import { getUserMessage } from '@/services/MessagesService'
@@ -29,6 +30,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({ topic, updateAssista
   const [text, setText] = useState('')
   const [files, setFiles] = useState<FileType[]>([])
   const [mentions, setMentions] = useState<Model[]>([])
+
+  const isReasoning = isReasoningModel(assistant?.model)
 
   const sendMessage = async () => {
     if (isEmpty(text.trim()) || !assistant) {
@@ -82,18 +85,20 @@ export const MessageInput: React.FC<MessageInputProps> = ({ topic, updateAssista
             <MentionButton mentions={mentions} setMentions={setMentions} />
             <AddFileButton files={files} setFiles={setFiles} />
             <WebsearchButton />
-            <ThinkButton
-              reasoningEffort={assistant.settings?.reasoning_effort}
-              onReasoningEffortChange={async value =>
-                await updateAssistant({
-                  ...assistant,
-                  settings: {
-                    ...assistant.settings,
-                    reasoning_effort: value
-                  }
-                })
-              }
-            />
+            {isReasoning && (
+              <ThinkButton
+                reasoningEffort={assistant.settings?.reasoning_effort}
+                onReasoningEffortChange={async value =>
+                  await updateAssistant({
+                    ...assistant,
+                    settings: {
+                      ...assistant.settings,
+                      reasoning_effort: value
+                    }
+                  })
+                }
+              />
+            )}
           </XStack>
           <XStack gap={5} alignItems="center">
             <VoiceButton />

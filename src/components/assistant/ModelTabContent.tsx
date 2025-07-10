@@ -6,6 +6,7 @@ import { Input, Text, YStack } from 'tamagui'
 import { SettingGroup, SettingRow } from '@/components/settings'
 import { ModelSelect } from '@/components/settings/providers/ModelSelect'
 import { isEmbeddingModel } from '@/config/models/embedding'
+import { isReasoningModel } from '@/config/models/reasoning'
 import { getAllProviders } from '@/services/ProviderService'
 import { Assistant, AssistantSettings, Model, Provider } from '@/types/assistant'
 import { runAsyncFunction } from '@/utils'
@@ -24,6 +25,8 @@ export function ModelTabContent({ assistant, updateAssistant }: ModelTabContentP
   const { t } = useTranslation()
 
   const [providers, setProviders] = useState<Provider[]>([])
+
+  const isReasoning = isReasoningModel(assistant?.model)
 
   useEffect(() => {
     runAsyncFunction(async () => {
@@ -165,13 +168,15 @@ export function ModelTabContent({ assistant, updateAssistant }: ModelTabContentP
             />
           </SettingRow>
         )}
-        <SettingRow>
-          <Text>{t('assistants.settings.reasoning')}</Text>
-          <ReasoningSelect
-            assistant={assistant}
-            onValueChange={value => handleSettingsChange('reasoning_effort', value)}
-          />
-        </SettingRow>
+        {isReasoning && (
+          <SettingRow>
+            <Text>{t('assistants.settings.reasoning')}</Text>
+            <ReasoningSelect
+              assistant={assistant}
+              onValueChange={value => handleSettingsChange('reasoning_effort', value)}
+            />
+          </SettingRow>
+        )}
       </SettingGroup>
     </YStack>
   )
