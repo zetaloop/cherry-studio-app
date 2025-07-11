@@ -12,6 +12,7 @@ import AssistantSettingsScreen from '@/screens/settings/assistant/AssistantSetti
 import BasicDataSettingsScreen from '@/screens/settings/data/BasicDataSettingsScreen'
 import DataSettingsScreen from '@/screens/settings/data/DataSettingsScreen'
 import JoplinSettingsScreen from '@/screens/settings/data/JoplinSettingsScreen'
+import LandropSettingsScreen from '@/screens/settings/data/Landrop/LandropSettingsScreen'
 import NotionSettingsScreen from '@/screens/settings/data/NotionSettingsScreen'
 import NutstoreLoginScreen from '@/screens/settings/data/NutstoreLoginScreen'
 import ObsidianSettingsScreen from '@/screens/settings/data/ObsidianSettingsScreen'
@@ -41,7 +42,7 @@ export default function MainStackNavigator() {
   const welcomeShown = useAppSelector(state => state.app.welcomeShown)
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="LandropSettingsScreen">
       {/* index */}
       {!welcomeShown && <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />}
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -73,6 +74,7 @@ export default function MainStackNavigator() {
       <Stack.Screen name="LanguageChangeScreen" component={LanguageChangeScreen} />
       <Stack.Screen name="DataSettingsScreen" component={DataSettingsScreen} />
       <Stack.Screen name="BasicDataSettingsScreen" component={BasicDataSettingsScreen} />
+      <Stack.Screen name="LandropSettingsScreen" component={LandropSettingsScreen} />
       <Stack.Screen name="NutstoreLoginScreen" component={NutstoreLoginScreen} />
       <Stack.Screen name="NotionSettingsScreen" component={NotionSettingsScreen} />
       <Stack.Screen name="YuqueSettingsScreen" component={YuqueSettingsScreen} />

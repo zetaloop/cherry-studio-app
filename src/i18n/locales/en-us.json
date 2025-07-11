@@ -185,7 +185,25 @@
         "recovery": "Data Recovery",
         "reset": "Data Reset",
         "cloud_backup": "Cloud Backup Settings",
-        "third_party": "Third-party Connections"
+        "third_party": "Third-party Connections",
+        "landrop": {
+          "title": "Landrop",
+          "scan_qr_code": {
+            "title": "Scan QR Code",
+            "description": "Scan QR Code from Cherry Studio"
+          },
+          "status": {
+            "title": "Connection Status",
+            "idle": "Idle",
+            "connecting": "Connecting...",
+            "connected": "Connected",
+            "zip_file_start": "File Transfer Started",
+            "zip_file_end": "File Transfer Completed",
+            "disconnected": "Disconnected",
+            "error": "Connection Error"
+          },
+          "filename": "File Name"
+        }
       },
       "models": {
         "default_model": "Default Model",
