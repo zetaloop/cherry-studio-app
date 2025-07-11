@@ -4,6 +4,7 @@ import { View, XStack } from 'tamagui'
 
 import { MainTextMessageBlock, MessageBlock, MessageBlockStatus, MessageBlockType } from '@/types/message'
 
+import ErrorBlock from './ErrorBlock'
 import FileBlock from './FileBlock'
 import ImageBlock from './ImageBlock'
 import MainTextBlock from './MainTextBlock'
@@ -40,7 +41,6 @@ const filterMediaBlockGroups = (blocks: MessageBlock[]): (MessageBlock[] | Messa
 
 const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ blocks }) => {
   const groupedBlocks = filterMediaBlockGroups(blocks)
-
   return (
     <View flex={1} width="100%">
       {groupedBlocks.map(block => {
@@ -98,6 +98,10 @@ const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ blocks }) => {
             break
           case MessageBlockType.TRANSLATION:
             blockComponent = <TranslationBlock key={block.id} block={block} />
+            break
+          // todo: error无法触发
+          case MessageBlockType.ERROR:
+            blockComponent = <ErrorBlock key={block.id} block={block} />
             break
           default:
             console.warn('Unsupported block type in MessageBlockRenderer:', (block as any).type, block)
