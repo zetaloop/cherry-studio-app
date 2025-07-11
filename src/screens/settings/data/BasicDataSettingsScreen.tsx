@@ -42,7 +42,9 @@ export default function BasicDataSettingsScreen() {
 
       const asset = result.assets[0]
 
-      if (!['.zip', '.bak'].some(ext => asset.name.endsWith(ext))) throw new TypeError('Invalid file type')
+      if (asset.mimeType !== 'application/zip') {
+        throw new Error('Selected file is not a zip archive')
+      }
 
       const file: Omit<FileType, 'md5'> = {
         id: uuid(),

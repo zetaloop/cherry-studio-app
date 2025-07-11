@@ -2,6 +2,7 @@ import { WebSearchState } from '@/store/websearch'
 
 import { Assistant, Provider } from './assistant'
 import { Message, MessageBlock } from './message'
+import { WebSearchProvider } from './websearch'
 
 export type WebDavConfig = {
   webdavHost: string
@@ -29,15 +30,18 @@ export type NutStore = {
 export type BackupData = {
   time: number
   version: number
-  indexedDB: {
-    // files: Omit<FileType, 'md5' | 'count' | 'mime_type'>[]
-    topics: {
-      id: string
-      messages: Message[]
-    }[]
-    message_blocks: MessageBlock[]
-  }
+  indexedDB: IndexedData
   redux: BackupReduxData
+}
+
+export type IndexedData = {
+  // files: Omit<FileType, 'md5' | 'count' | 'mime_type'>[]
+
+  topics: {
+    id: string
+    messages: Message[]
+  }[]
+  message_blocks: MessageBlock[]
 }
 
 export type BackupReduxData = {
@@ -48,5 +52,5 @@ export type BackupReduxData = {
   llm: {
     providers: Provider[]
   }
-  websearch: WebSearchState
+  websearch: WebSearchState & { providers: WebSearchProvider[] }
 }
