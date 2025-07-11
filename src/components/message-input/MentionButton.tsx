@@ -5,7 +5,7 @@ import { Button } from 'tamagui'
 
 import { Model } from '@/types/assistant'
 
-import MentionSheet from '../sheets/MentionSheet'
+import ModelSheet from '../sheets/ModelSheet'
 
 interface MentionButtonProps {
   mentions: Model[]
@@ -29,7 +29,7 @@ export const MentionButton: React.FC<MentionButtonProps> = ({ mentions, setMenti
         onPress={handlePress}
       />
 
-      <MentionSheet ref={bottomSheetModalRef} mentions={mentions} setMentions={setMentions} />
+      <ModelSheet ref={bottomSheetModalRef} mentions={mentions} setMentions={setMentions} />
     </>
   )
 }

@@ -1,75 +1,78 @@
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useNavigation } from '@react-navigation/native'
-import { Settings2 } from '@tamagui/lucide-icons'
-import { sortBy } from 'lodash'
-import React from 'react'
+import { ChevronRight, Settings2 } from '@tamagui/lucide-icons'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Text, useTheme, XStack, YStack } from 'tamagui'
+import { ActivityIndicator } from 'react-native'
+import { Button, Text, XStack, YStack } from 'tamagui'
 
 import { SettingHelpText } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
-import { ModelSelect } from '@/components/settings/providers/ModelSelect'
+import ModelSheet from '@/components/sheets/ModelSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { isEmbeddingModel } from '@/config/models/embedding'
 import { useAssistant } from '@/hooks/useAssistant'
-import { useAllProviders } from '@/hooks/useProviders'
+import { Assistant, Model } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
-import { getModelUniqId } from '@/utils/model'
+
+interface ModelPickerProps {
+  assistant: Assistant
+  onPress: () => void
+}
+
+function ModelPicker({ assistant, onPress }: ModelPickerProps) {
+  const { t } = useTranslation()
+  const model = assistant?.model
+
+  return (
+    <Button chromeless width="100%" onPress={onPress} iconAfter={<ChevronRight size={16} />} padding={0}>
+      <XStack flex={1} alignItems="center" overflow="hidden" justifyContent="space-between">
+        {model ? (
+          <>
+            <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
+              {t(`provider.${model.provider}`)}
+            </Text>
+            <Text flexShrink={0} numberOfLines={1} maxWidth="60%" ellipsizeMode="tail">
+              {model.name}
+            </Text>
+          </>
+        ) : (
+          <Text flex={1} numberOfLines={1} ellipsizeMode="tail">
+            {t('settings.models.empty')}
+          </Text>
+        )}
+      </XStack>
+    </Button>
+  )
+}
 
 export default function AssistantSettingsScreen() {
   const { t } = useTranslation()
-  const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
 
   const { assistant: defaultAssistant, updateAssistant: updateDefaultAssistant } = useAssistant('default')
   const { assistant: topicNamingAssistant, updateAssistant: updateTopicNamingAssistant } = useAssistant('topic_naming')
   const { assistant: translateAssistant, updateAssistant: updateTranslateAssistant } = useAssistant('translate')
 
-  const { providers } = useAllProviders()
-  const selectOptions = providers
-    .filter(p => p.models && p.models.length > 0)
-    .map(p => ({
-      label: p.isSystem ? t(`provider.${p.id}`) : p.name,
-      title: p.name,
-      options: sortBy(p.models, 'name')
-        .filter(m => !isEmbeddingModel(m))
-        .map(m => ({
-          label: `${m.name}`,
-          value: getModelUniqId(m),
-          model: m
-        }))
-    }))
+  const defaultSheetRef = useRef<BottomSheetModal>(null)
+  const topicNamingSheetRef = useRef<BottomSheetModal>(null)
+  const translateSheetRef = useRef<BottomSheetModal>(null)
 
-  const handleDefaultAssistantChange = async (model: string) => {
-    if (!defaultAssistant) return
-
-    const updatedAssistant = {
-      ...defaultAssistant,
-      model: selectOptions.flatMap(o => o.options).find(opt => opt.value === model)?.model
-    }
-
-    await updateDefaultAssistant(updatedAssistant)
+  const handleModelChange = async (
+    assistant: Assistant | undefined,
+    updateAssistant: (assistant: Assistant) => Promise<void>,
+    models: Model[]
+  ) => {
+    if (!assistant) return
+    const newModel = models[0]
+    await updateAssistant({ ...assistant, model: newModel })
   }
 
-  const handleTopicNamingModelChange = async (model: string) => {
-    if (!topicNamingAssistant) return
-
-    const updatedAssistant = {
-      ...topicNamingAssistant,
-      model: selectOptions.flatMap(o => o.options).find(opt => opt.value === model)?.model
-    }
-
-    await updateTopicNamingAssistant(updatedAssistant)
-  }
-
-  const handleTranslateModelChange = async (model: string) => {
-    if (!translateAssistant) return
-
-    const updatedAssistant = {
-      ...translateAssistant,
-      model: selectOptions.flatMap(o => o.options).find(opt => opt.value === model)?.model
-    }
-
-    await updateTranslateAssistant(updatedAssistant)
+  if (!defaultAssistant || !topicNamingAssistant || !translateAssistant) {
+    return (
+      <SafeAreaContainer>
+        <ActivityIndicator />
+      </SafeAreaContainer>
+    )
   }
 
   return (
@@ -77,7 +80,6 @@ export default function AssistantSettingsScreen() {
       <HeaderBar title={t('settings.assistant.title')} onBackPress={() => navigation.goBack()} />
       <YStack padding="$4" backgroundColor="$background" flex={1} gap={24}>
         <YStack gap={8}>
-          {/* todo 这是默认助手设置，是否应该放在此处？ */}
           <XStack justifyContent="space-between" height={20}>
             <Text>{t('settings.assistant.default_assistant.name')}</Text>
             <Button
@@ -88,12 +90,7 @@ export default function AssistantSettingsScreen() {
             />
           </XStack>
           <XStack>
-            <ModelSelect
-              value={defaultAssistant?.model ? getModelUniqId(defaultAssistant.model) : undefined}
-              onValueChange={handleDefaultAssistantChange}
-              selectOptions={selectOptions}
-              placeholder={t('settings.assistant.empty')}
-            />
+            <ModelPicker assistant={defaultAssistant} onPress={() => defaultSheetRef.current?.present()} />
           </XStack>
           <SettingHelpText>{t('settings.assistant.default_assistant.description')}</SettingHelpText>
         </YStack>
@@ -109,12 +106,7 @@ export default function AssistantSettingsScreen() {
             />
           </XStack>
           <XStack>
-            <ModelSelect
-              value={topicNamingAssistant?.model ? getModelUniqId(topicNamingAssistant.model) : undefined}
-              onValueChange={handleTopicNamingModelChange}
-              selectOptions={selectOptions}
-              placeholder={t('settings.assistant.empty')}
-            />
+            <ModelPicker assistant={topicNamingAssistant} onPress={() => topicNamingSheetRef.current?.present()} />
           </XStack>
           <SettingHelpText>{t('settings.assistant.topic_naming_assistant.description')}</SettingHelpText>
         </YStack>
@@ -130,16 +122,30 @@ export default function AssistantSettingsScreen() {
             />
           </XStack>
           <XStack>
-            <ModelSelect
-              value={translateAssistant?.model ? getModelUniqId(translateAssistant.model) : undefined}
-              onValueChange={handleTranslateModelChange}
-              selectOptions={selectOptions}
-              placeholder={t('settings.assistant.empty')}
-            />
+            <ModelPicker assistant={translateAssistant} onPress={() => translateSheetRef.current?.present()} />
           </XStack>
           <SettingHelpText>{t('settings.assistant.translate_assistant.description')}</SettingHelpText>
         </YStack>
       </YStack>
+
+      <ModelSheet
+        ref={defaultSheetRef}
+        mentions={defaultAssistant?.model ? [defaultAssistant.model] : []}
+        setMentions={models => handleModelChange(defaultAssistant, updateDefaultAssistant, models)}
+        multiple={false}
+      />
+      <ModelSheet
+        ref={topicNamingSheetRef}
+        mentions={topicNamingAssistant?.model ? [topicNamingAssistant.model] : []}
+        setMentions={models => handleModelChange(topicNamingAssistant, updateTopicNamingAssistant, models)}
+        multiple={false}
+      />
+      <ModelSheet
+        ref={translateSheetRef}
+        mentions={translateAssistant?.model ? [translateAssistant.model] : []}
+        setMentions={models => handleModelChange(translateAssistant, updateTranslateAssistant, models)}
+        multiple={false}
+      />
     </SafeAreaContainer>
   )
 }
