@@ -8,7 +8,7 @@ import {
   deleteTopicById as _deleteTopicById,
   getTopicById as _getTopicById,
   getTopics,
-  upsertTopics
+  upsertTopics as _upsertTopics
 } from '../../db/queries/topics.queries'
 
 export async function createNewTopic(assistant: Assistant): Promise<Topic> {
@@ -20,11 +20,11 @@ export async function createNewTopic(assistant: Assistant): Promise<Topic> {
     updatedAt: new Date().toISOString(),
     messages: []
   }
-  await upsertTopics(newTopic)
+  await _upsertTopics(newTopic)
   return newTopic
 }
 
-export async function updateTopics(topics: { id: string; messages: Message[] }[]): Promise<void> {
+export async function upsertTopics(topics: { id: string; messages: Message[] }[]): Promise<void> {
   const updatedTopics: Topic[] = topics.map(topic => ({
     ...topic,
     name: t('new_topic'),
@@ -32,7 +32,7 @@ export async function updateTopics(topics: { id: string; messages: Message[] }[]
     updatedAt: topic.messages.at(-1)?.createdAt || new Date().toISOString(),
     assistantId: topic.messages.at(-1)?.assistantId || ''
   }))
-  await upsertTopics(updatedTopics)
+  await _upsertTopics(updatedTopics)
 }
 
 export async function getNewestTopic(): Promise<Topic | null> {

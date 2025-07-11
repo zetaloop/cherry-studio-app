@@ -2,9 +2,9 @@ import { isEmpty } from 'lodash'
 import { FC, memo } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, useColorScheme } from 'react-native'
 import Markdown from 'react-native-markdown-display'
-import { useThemeName, View } from 'tamagui'
+import { View } from 'tamagui'
 
 import { MainTextMessageBlock, ThinkingMessageBlock, TranslationMessageBlock } from '@/types/message'
 import { escapeBrackets, removeSvgEmptyLines } from '@/utils/formats'
@@ -15,7 +15,7 @@ interface Props {
 
 const ReactNativeMarkdown: FC<Props> = ({ block }) => {
   const { t } = useTranslation()
-  const theme = useThemeName()
+  const theme = useColorScheme()
 
   const getMessageContent = (block: MainTextMessageBlock | TranslationMessageBlock | ThinkingMessageBlock) => {
     const empty = isEmpty(block.content)

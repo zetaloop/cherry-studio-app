@@ -97,7 +97,8 @@
       "file": "File",
       "photo": "Photo",
       "camera": "Camera",
-      "clear_all": "Clear All"
+      "clear_all": "Clear All",
+      "close": "Close"
     },
     "errors": {
       "cannotOpenLink": "Cannot open link: {{error}}",
@@ -203,6 +204,25 @@
             "error": "Connection Error"
           },
           "filename": "File Name"
+        },
+        "restore": {
+          "error": "Restore Error",
+          "error_message": "An error occurred during the restore process. Please check the file and try again.",
+          "steps": {
+            "restore_topics": " Restore Topics",
+            "restore_messages_blocks": "Restore Messages and Blocks",
+            "restore_llm_providers": "Restore LLM Providers",
+            "restore_assistants": "Restore Assistants",
+            "restore_websearch": "Restore Web Search"
+          },
+          "progress": {
+            "success": "Restore Successful",
+            "error": "Restore Error",
+            "pending": "Restoring...",
+            "success_description": "Restore Successful, Enjoy your time!",
+            "error_description": "An error occurred during the restore process. Please check the file and try again.",
+            "pending_description": "Restoring data, please wait..."
+          }
         }
       },
       "models": {

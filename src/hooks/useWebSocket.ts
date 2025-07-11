@@ -33,7 +33,7 @@ export function useWebSocket() {
   const writeZipFile = async () => {
     try {
       // 文件路径 Paths.cache + zipFileInfo.current.filename
-      const file = new File(Paths.cache, zipFileInfo.current.filename)
+      const file = new File(Paths.join(Paths.cache, 'Files'), zipFileInfo.current.filename)
 
       if (file.exists) {
         file.delete()
@@ -127,7 +127,7 @@ export function useWebSocket() {
         setProgress(100)
 
         // 写入文件
-        // await writeZipFile()
+        await writeZipFile()
       })
     } catch (error) {
       console.error('Failed to get IP address:', error)
@@ -135,5 +135,10 @@ export function useWebSocket() {
     }
   }
 
-  return { connect, status, progress, filename }
+  const disconnect = () => {
+    socket.current?.disconnect()
+    socket.current = null
+  }
+
+  return { connect, status, progress, filename, disconnect }
 }
