@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start'
   },
   contentWrapper: {
-    paddingHorizontal: 20,
     // paddingVertical: 5,
     borderTopRightRadius: 8,
     borderTopLeftRadius: 24,
@@ -63,7 +62,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 24
   },
   userMessageContent: {
-    flex: 1
+    flex: 1,
+    paddingHorizontal: 20
   },
   assistantMessageContent: {
     backgroundColor: 'transparent'
