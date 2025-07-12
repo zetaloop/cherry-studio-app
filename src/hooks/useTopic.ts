@@ -16,7 +16,7 @@ export function useTopic(topicId: string) {
     await upsertTopics([topic])
   }
 
-  if (!updatedAt) {
+  if (!updatedAt || !rawTopic || rawTopic.length === 0) {
     return {
       topic: null,
       isLoading: true,

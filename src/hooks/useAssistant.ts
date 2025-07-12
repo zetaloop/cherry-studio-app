@@ -16,7 +16,7 @@ export function useAssistant(assistantId: string) {
     await upsertAssistants([assistant])
   }
 
-  if (!updatedAt) {
+  if (!updatedAt || !rawAssistant || rawAssistant.length === 0) {
     return {
       assistant: null,
       isLoading: true,
@@ -42,7 +42,7 @@ export function useAssistants() {
     await upsertAssistants(assistants)
   }
 
-  if (!updatedAt) {
+  if (!updatedAt || !rawAssistants || rawAssistants.length === 0) {
     return {
       assistants: [],
       isLoading: true,

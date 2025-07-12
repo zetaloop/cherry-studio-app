@@ -14,7 +14,7 @@ export function useAllProviders() {
   const query = db.select().from(providersSchema)
   const { data: rawProviders, updatedAt } = useLiveQuery(query)
 
-  if (!updatedAt) {
+  if (!updatedAt || !rawProviders || rawProviders.length === 0) {
     return {
       providers: [],
       isLoading: true
@@ -41,7 +41,7 @@ export function useProvider(providerId: string) {
     await upsertProviders([provider])
   }
 
-  if (!updatedAt) {
+  if (!updatedAt || !rawProvider || rawProvider.length === 0) {
     return {
       provider: null,
       isLoading: true,

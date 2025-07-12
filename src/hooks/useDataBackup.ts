@@ -10,7 +10,7 @@ export function useDataBackupProvider(providerId: string) {
   const query = db.select().from(backup_providers).where(eq(backup_providers.id, providerId))
   const { data: rawProviders, updatedAt } = useLiveQuery(query)
 
-  if (!updatedAt) {
+  if (!updatedAt || !rawProviders || rawProviders.length === 0) {
     return {
       provider: null,
       isLoading: true,

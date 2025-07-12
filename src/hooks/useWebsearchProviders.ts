@@ -11,7 +11,7 @@ export function useWebsearchProviders() {
   const query = db.select().from(websearch_providers)
   const { data: rawProviders, updatedAt } = useLiveQuery(query)
 
-  if (!updatedAt) {
+  if (!updatedAt || !rawProviders || rawProviders.length === 0) {
     return {
       freeProviders: [],
       apiProviders: [],
@@ -39,7 +39,7 @@ export function useAllWebSearchProviders() {
   const query = db.select().from(websearch_providers)
   const { data: rawProviders, updatedAt } = useLiveQuery(query)
 
-  if (!updatedAt) {
+  if (!updatedAt || !rawProviders || rawProviders.length === 0) {
     return {
       providers: [],
       isLoading: true
@@ -66,7 +66,7 @@ export function useWebSearchProvider(providerId: string) {
     await upsertWebSearchProviders([provider])
   }
 
-  if (!updatedAt) {
+  if (!updatedAt || !rawProvider || rawProvider.length === 0) {
     return {
       provider: null,
       isLoading: true,
