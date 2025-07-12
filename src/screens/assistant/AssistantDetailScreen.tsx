@@ -80,13 +80,13 @@ export default function AssistantDetailScreen() {
               paddingVertical={4}
               paddingHorizontal={5}>
               <StyledTab value="prompt">
-                <Text fontSize="12">{t('common.prompt')}</Text>
+                <Text fontSize={12}>{t('common.prompt')}</Text>
               </StyledTab>
               <StyledTab value="model">
-                <Text fontSize="12">{t('common.model')}</Text>
+                <Text fontSize={12}>{t('common.model')}</Text>
               </StyledTab>
               <StyledTab value="tool">
-                <Text fontSize="12">{t('common.tool')}</Text>
+                <Text fontSize={12}>{t('common.tool')}</Text>
               </StyledTab>
             </Tabs.List>
             <YStack flex={1} paddingTop={30}>
