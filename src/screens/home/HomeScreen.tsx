@@ -1,7 +1,8 @@
 import { RouteProp, useRoute } from '@react-navigation/native'
+import { LinearGradient } from '@tamagui/linear-gradient'
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform } from 'react-native'
-import { styled, View, YStack } from 'tamagui'
+import { styled, YStack } from 'tamagui'
 
 import { HeaderBar } from '@/components/header-bar'
 import { MessageInput } from '@/components/message-input/MessageInput'
@@ -12,7 +13,7 @@ import { getDefaultAssistant } from '@/services/AssistantService'
 import { createNewTopic, getNewestTopic, getTopicById } from '@/services/TopicService'
 import { Assistant, Topic } from '@/types/assistant'
 import { RootStackParamList } from '@/types/naviagate'
-import { runAsyncFunction } from '@/utils'
+import { runAsyncFunction, useIsDark } from '@/utils'
 
 import ChatContent from './ChatContent'
 import WelcomeContent from './WelcomeContent'
@@ -20,6 +21,7 @@ import WelcomeContent from './WelcomeContent'
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'HomeScreen'>
 
 const HomeChat = ({ initialTopic }: { initialTopic: Topic }) => {
+  const isDark = useIsDark()
   const { updateAssistant } = useAssistant('default')
   const { topic, isLoading, updateTopic } = useTopic(initialTopic.id)
 
@@ -40,6 +42,11 @@ const HomeChat = ({ initialTopic }: { initialTopic: Topic }) => {
 
   const hasMessages = topic.messages.length > 0
 
+  // 动态颜色配置
+  const gradientColors = isDark
+    ? ['rgba(172, 243, 166, 0.2)', 'rgba(172, 243, 166, 1)', 'rgba(172, 243, 166, 0.2)']
+    : ['rgba(141, 229, 158, 0.3)', 'rgba(129, 223, 148, 1)', 'rgba(141, 229, 158, 0.3)']
+
   return (
     <SafeAreaContainer>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
@@ -47,9 +54,11 @@ const HomeChat = ({ initialTopic }: { initialTopic: Topic }) => {
           <HeaderBar topic={topic} />
 
           {hasMessages ? <ChatContent topic={topic} /> : <WelcomeContent onAssistantSelect={handleAssistantSelect} />}
-          <InputContainer>
-            <MessageInput topic={topic} updateAssistant={updateAssistant} />
-          </InputContainer>
+          <LinearGradient padding={1} borderRadius={12} colors={gradientColors} start={[0, 0]} end={[1, 1]}>
+            <InputContent>
+              <MessageInput topic={topic} updateAssistant={updateAssistant} />
+            </InputContent>
+          </LinearGradient>
         </YStack>
       </KeyboardAvoidingView>
     </SafeAreaContainer>
@@ -98,11 +107,11 @@ const HomeScreen = () => {
   return <HomeChat key={topic.id} initialTopic={topic} />
 }
 
-const InputContainer = styled(View, {
+const InputContent = styled(YStack, {
   paddingHorizontal: 16,
   paddingVertical: 12,
-  backgroundColor: '$gray2',
-  borderRadius: 12
+  borderRadius: 12,
+  backgroundColor: '$background'
 })
 
 export default HomeScreen

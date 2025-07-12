@@ -10,6 +10,7 @@ import { getUserMessage } from '@/services/MessagesService'
 import { Assistant, Model, Topic } from '@/types/assistant'
 import { FileType } from '@/types/file'
 import { MessageInputBaseParams } from '@/types/message'
+import { useIsDark } from '@/utils'
 
 import { AddFileButton } from './AddFileButton'
 import FilePreview from './FilePreview'
@@ -25,6 +26,7 @@ interface MessageInputProps {
 
 export const MessageInput: React.FC<MessageInputProps> = ({ topic, updateAssistant }) => {
   const { t } = useTranslation()
+  const isDark = useIsDark()
   const { assistant, isLoading } = useAssistant(topic.assistantId)
 
   const [text, setText] = useState('')
@@ -77,6 +79,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({ topic, updateAssista
             flex={1}
             value={text}
             onChangeText={setText}
+            lineHeight={22}
+            color={isDark ? '$textSecondaryDark' : '$textSecondaryLight'}
           />
         </XStack>
         {/* button */}
