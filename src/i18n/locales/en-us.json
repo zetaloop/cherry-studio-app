@@ -72,7 +72,9 @@
           "placeholder": "Search assistants"
         }
       },
-      "citation": "+ {{count}} Sources"
+      "citation": "+ {{count}} Sources",
+      "think": "Thinking for {{seconds}} seconds",
+      "think_expand": "Tap to read my mind"
     },
     "common": {
       "cherry_studio": "Cherry Studio",

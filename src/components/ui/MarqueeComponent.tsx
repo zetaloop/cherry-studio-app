@@ -1,6 +1,7 @@
-import { ChevronRight } from '@tamagui/lucide-icons'
+import { ChevronsRight } from '@tamagui/lucide-icons'
 import { AnimatePresence, MotiView } from 'moti'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Spinner, Text, XStack, YStack } from 'tamagui'
 
 import { MessageBlockStatus, ThinkingMessageBlock } from '@/types/message'
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const MarqueeComponent: React.FC<Props> = ({ block, expanded }) => {
+  const { t } = useTranslation()
   const [messages, setMessages] = useState<string[]>([])
   const queueRef = useRef<string>('')
   const processedLengthRef = useRef(0)
@@ -101,7 +103,7 @@ const MarqueeComponent: React.FC<Props> = ({ block, expanded }) => {
       <YStack gap={5} flex={1} position="relative" height="100%">
         <XStack justifyContent="space-between" alignItems="center">
           <Text fontWeight="bold" zIndex={2}>
-            Thinking for {Math.floor((block.thinking_millsec || 0) / 1000)} seconds
+            {t('chat.think', { seconds: Math.floor((block.thinking_millsec || 0) / 1000) })}
           </Text>
           <MotiView
             animate={{
@@ -112,7 +114,7 @@ const MarqueeComponent: React.FC<Props> = ({ block, expanded }) => {
               duration: 150
             }}
             style={{ zIndex: 2 }}>
-            <ChevronRight size={20} />
+            <ChevronsRight size={20} />
           </MotiView>
         </XStack>
         <AnimatePresence>
@@ -128,7 +130,7 @@ const MarqueeComponent: React.FC<Props> = ({ block, expanded }) => {
                 duration: 50
               }}>
               <Text fontSize={12} opacity={0.5}>
-                Tap to read my mind
+                {t('chat.think_expand')}
               </Text>
             </MotiView>
           )}
