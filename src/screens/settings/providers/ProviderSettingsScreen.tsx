@@ -162,7 +162,7 @@ export default function ProviderSettingsScreen() {
                 <SettingRow onPress={onApiService}>
                   <Text>{t('settings.provider.api_service')}</Text>
                   <XStack>
-                    {provider.checked && (
+                    {provider.checked && provider.apiKey && provider.apiHost && (
                       <Text
                         paddingVertical={2}
                         paddingHorizontal={8}

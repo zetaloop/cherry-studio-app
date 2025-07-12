@@ -21,7 +21,7 @@ export const ProviderItem: React.FC<ProviderItemProps> = ({ provider, mode = 'en
 
   // 根据模式决定显示条件和文本
   const shouldShowStatus = mode === 'enabled' ? provider.enabled : provider.checked
-  const statusText = mode === 'enabled' ? t('settings.provider.enabled') : t('settings.provider.checked') // 假设你有这个翻译键
+  const statusText = mode === 'enabled' ? t('settings.provider.enabled') : t('settings.provider.checked')
 
   return (
     <SettingRow onPress={() => navigation.navigate('ProviderSettingsScreen', { providerId: provider.id })}>

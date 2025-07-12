@@ -4,7 +4,7 @@ import { Eye, EyeOff, ShieldCheck } from '@tamagui/lucide-icons'
 import { sortBy } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, Alert } from 'react-native'
 import { Button, Input, Stack, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import ExternalLink from '@/components/ExternalLink'
@@ -118,9 +118,28 @@ export default function ApiServiceScreen() {
     try {
       setIsCheckingApi(true)
       await checkApi(provider, selectedModel)
+      Alert.alert(t('settings.websearch.check_success'), t('settings.websearch.check_success_message'), [
+        {
+          text: t('common.ok'),
+          style: 'cancel',
+          onPress: () => setIsBottomSheetOpen(false)
+        }
+      ])
       await updateProvider({ ...provider, checked: true })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Model check failed:', error)
+      const errorMessage =
+        error && error.message
+          ? ' ' + (error.message.length > 100 ? error.message.substring(0, 100) + '...' : error.message)
+          : ''
+
+      Alert.alert(t('settings.websearch.check_fail'), errorMessage, [
+        {
+          text: t('common.ok'),
+          style: 'cancel',
+          onPress: () => setIsBottomSheetOpen(false)
+        }
+      ])
       await updateProvider({ ...provider, checked: false })
     } finally {
       setIsCheckingApi(false)
