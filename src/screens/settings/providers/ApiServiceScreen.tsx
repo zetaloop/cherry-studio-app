@@ -43,7 +43,7 @@ export default function ApiServiceScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaContainer>
+      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
       </SafeAreaContainer>
     )

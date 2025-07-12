@@ -69,7 +69,7 @@ export default function AssistantSettingsScreen() {
 
   if (!defaultAssistant || !topicNamingAssistant || !translateAssistant) {
     return (
-      <SafeAreaContainer>
+      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
       </SafeAreaContainer>
     )

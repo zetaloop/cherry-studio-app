@@ -99,7 +99,7 @@ const ModelSheet = forwardRef<BottomSheetModal, ModelSheetProps>(({ mentions, se
 
   return (
     <BottomSheetModal
-      snapPoints={['60%']}
+      snapPoints={['50%']}
       enableDynamicSizing={false}
       ref={ref}
       backgroundStyle={{

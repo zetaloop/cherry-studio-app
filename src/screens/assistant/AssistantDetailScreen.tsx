@@ -31,7 +31,7 @@ export default function AssistantDetailScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaContainer>
+      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
       </SafeAreaContainer>
     )

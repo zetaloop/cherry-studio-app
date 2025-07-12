@@ -104,7 +104,7 @@ export default function ProviderSettingsScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaContainer>
+      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
       </SafeAreaContainer>
     )

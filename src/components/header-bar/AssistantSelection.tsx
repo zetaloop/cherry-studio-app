@@ -68,7 +68,7 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
 
   if (isLoading) {
     return (
-      <SafeAreaContainer>
+      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
       </SafeAreaContainer>
     )
