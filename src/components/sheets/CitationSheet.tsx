@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Stack, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
 import { Citation } from '@/types/websearch'
+import { useIsDark } from '@/utils'
 import { getWebsiteBrand } from '@/utils/websearch'
 
 import FallbackFavicon from '../icons/FallbackFavicon'
@@ -13,9 +14,73 @@ interface CitationSheetProps {
   citations: Citation[]
 }
 
+const CitationTitle = ({ number, title }: { number: number; title: string }) => {
+  const isDark = useIsDark()
+  return (
+    <XStack gap={11} alignItems="center">
+      <Stack
+        borderRadius={8}
+        borderWidth={0.5}
+        padding={3}
+        gap={2}
+        justifyContent="center"
+        alignItems="center"
+        borderColor={isDark ? '$green20Dark' : '$green20Light'}
+        backgroundColor={isDark ? '$green10Dark' : '$green10Light'}
+        minWidth={20}
+        minHeight={20}>
+        <Text fontSize={10} textAlign="center" color={isDark ? '$green100Light' : '$green100Dark'}>
+          {number}
+        </Text>
+      </Stack>
+      <Stack flex={1}>
+        <Text lineHeight={20} numberOfLines={1} ellipsizeMode="tail">
+          {title}
+        </Text>
+      </Stack>
+    </XStack>
+  )
+}
+
+const Content = ({ content }: { content: string }) => (
+  <XStack>
+    <Text fontSize={12} lineHeight={16} numberOfLines={2} ellipsizeMode="tail">
+      {content}
+    </Text>
+  </XStack>
+)
+
+const Footer = ({ url, title }: { url: string; title: string }) => (
+  <XStack gap={6} alignItems="center">
+    <FallbackFavicon hostname={new URL(url).hostname} alt={title || ''} />
+    <Text lineHeight={20} fontSize={10}>
+      {getWebsiteBrand(url)}
+    </Text>
+  </XStack>
+)
+
+const CitationCard = ({ citation, onPress }: { citation: Citation; onPress: (url: string) => void }) => {
+  const isDark = useIsDark()
+  return (
+    <View paddingHorizontal={30} paddingVertical={20}>
+      <YStack
+        gap={5}
+        padding={10}
+        backgroundColor={isDark ? '$uiCardDark' : '$uiCardLight'}
+        borderRadius={8}
+        onPress={() => onPress(citation.url)}>
+        <CitationTitle number={citation.number} title={citation.title || ''} />
+        <Content content={citation.content || ''} />
+        <Footer url={citation.url} title={citation.title || ''} />
+      </YStack>
+    </View>
+  )
+}
+
 const CitationSheet = forwardRef<BottomSheetModal, CitationSheetProps>(({ citations }, ref) => {
   const { t } = useTranslation()
   const theme = useTheme()
+  const isDark = useIsDark()
 
   // 添加背景组件渲染函数
   const renderBackdrop = (props: any) => (
@@ -47,63 +112,20 @@ const CitationSheet = forwardRef<BottomSheetModal, CitationSheetProps>(({ citati
       ref={ref}
       backgroundStyle={{
         borderRadius: 30,
-        backgroundColor: 'rgba(18, 18, 19, 1)'
+        backgroundColor: isDark ? 'rgba(18, 18, 19, 1)' : 'rgba(247, 247, 247, 1)'
       }}
       handleIndicatorStyle={{
         backgroundColor: theme.color.val
       }}
       backdropComponent={renderBackdrop}>
       <BottomSheetScrollView showsVerticalScrollIndicator={false}>
-        <Stack justifyContent="center" alignItems="center">
+        <Stack justifyContent="center" alignItems="center" paddingTop="$4">
           <Text fontSize={20} lineHeight={22} fontWeight={600}>
             {t('common.source')}
           </Text>
         </Stack>
         {citations.map((citation, index) => (
-          <View key={index} paddingHorizontal={30} paddingVertical={20}>
-            <YStack
-              gap={5}
-              padding={10}
-              backgroundColor="rgba(25, 25, 28, 1)"
-              borderRadius={8}
-              onPress={() => handlePress(citation.url)}>
-              <XStack gap={11}>
-                <Stack
-                  borderRadius={8}
-                  borderWidth={0.5}
-                  padding={3}
-                  gap={2}
-                  justifyContent="center"
-                  alignItems="center">
-                  <Text
-                    height={14}
-                    width={14}
-                    fontSize={10}
-                    textAlign="center"
-                    alignItems="center"
-                    justifyContent="center">
-                    {citation.number}
-                  </Text>
-                </Stack>
-                <Stack flex={1}>
-                  <Text lineHeight={20} numberOfLines={1} ellipsizeMode="tail">
-                    {citation.title}
-                  </Text>
-                </Stack>
-              </XStack>
-              <XStack>
-                <Text fontSize={12} lineHeight={16} numberOfLines={2} ellipsizeMode="tail">
-                  {citation.content}
-                </Text>
-              </XStack>
-              <XStack gap={6} alignItems="center">
-                <FallbackFavicon hostname={new URL(citation.url).hostname} alt={citation.title || ''} />
-                <Text lineHeight={20} fontSize={10}>
-                  {getWebsiteBrand(citation.url)}
-                </Text>
-              </XStack>
-            </YStack>
-          </View>
+          <CitationCard key={index} citation={citation} onPress={handlePress} />
         ))}
       </BottomSheetScrollView>
     </BottomSheetModal>

@@ -11,6 +11,7 @@ import {
   MdiLightbulbOn90
 } from '@/components/icons/MdiLightbulbIcon'
 import { ReasoningEffortOptions } from '@/types/assistant'
+import { useIsDark } from '@/utils'
 
 interface ReasoningSheetProps {
   value: string
@@ -20,6 +21,7 @@ interface ReasoningSheetProps {
 export const ReasoningSheet = forwardRef<BottomSheetModal, ReasoningSheetProps>(({ value, onValueChange }, ref) => {
   const { t } = useTranslation()
   const theme = useTheme()
+  const isDark = useIsDark()
 
   const handleValueChange = (newValue: ReasoningEffortOptions) => {
     onValueChange(newValue)
@@ -62,7 +64,7 @@ export const ReasoningSheet = forwardRef<BottomSheetModal, ReasoningSheetProps>(
       ref={ref}
       backgroundStyle={{
         borderRadius: 30,
-        backgroundColor: theme.gray2.val
+        backgroundColor: isDark ? 'rgba(18, 18, 19, 1)' : 'rgba(247, 247, 247, 1)'
       }}
       handleIndicatorStyle={{
         backgroundColor: theme.color.val

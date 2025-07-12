@@ -8,6 +8,7 @@ import { Button, Text } from 'tamagui'
 import FallbackFavicon from '@/components/icons/FallbackFavicon'
 import CitationSheet from '@/components/sheets/CitationSheet'
 import { Citation } from '@/types/websearch'
+import { useIsDark } from '@/utils'
 
 interface PreviewIconProps {
   citation: Citation
@@ -31,6 +32,7 @@ interface CitationsListProps {
 
 const CitationsList: React.FC<CitationsListProps> = ({ citations }) => {
   const { t } = useTranslation()
+  const isDark = useIsDark()
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
   const previewItems = citations.slice(0, 3)
@@ -49,7 +51,8 @@ const CitationsList: React.FC<CitationsListProps> = ({ citations }) => {
         borderRadius={16}
         padding={5}
         height={26}
-        backgroundColor="rgba(0, 185, 107, 0.15)"
+        backgroundColor={isDark ? '$green10Dark' : '$green10Light'}
+        borderColor={isDark ? '$green20Dark' : '$green20Light'}
         flexDirection="row"
         alignItems="center"
         onPress={handlePress}>
@@ -59,7 +62,7 @@ const CitationsList: React.FC<CitationsListProps> = ({ citations }) => {
             <PreviewIcon key={i} citation={c} index={i} total={previewItems.length} />
           ))}
         </View>
-        <Text fontSize={10} color="rgba(51, 199, 137, 1)">
+        <Text fontSize={10} color={isDark ? '$green100Dark' : '$green100Light'}>
           {t('chat.citation', { count })}
         </Text>
       </Button>

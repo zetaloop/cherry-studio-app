@@ -8,7 +8,7 @@ import { Button, Text, useTheme, XStack, YStack } from 'tamagui'
 
 import { uploadFiles } from '@/services/FileService'
 import { FileType } from '@/types/file'
-import { uuid } from '@/utils'
+import { useIsDark, uuid } from '@/utils'
 import { getFileType } from '@/utils/file'
 
 interface FileSheetProps {
@@ -19,6 +19,7 @@ interface FileSheetProps {
 const FileSheet = forwardRef<BottomSheetModal, FileSheetProps>(({ files, setFiles }, ref) => {
   const { t } = useTranslation()
   const theme = useTheme()
+  const isDark = useIsDark()
 
   const handleAddImage = async () => {
     try {
@@ -115,7 +116,7 @@ const FileSheet = forwardRef<BottomSheetModal, FileSheetProps>(({ files, setFile
       ref={ref}
       backgroundStyle={{
         borderRadius: 30,
-        backgroundColor: theme.gray2.val
+        backgroundColor: isDark ? 'rgba(18, 18, 19, 1)' : 'rgba(247, 247, 247, 1)'
       }}
       handleIndicatorStyle={{
         backgroundColor: theme.color.val

@@ -12,6 +12,7 @@ import { isEmbeddingModel } from '@/config/models/embedding'
 import { isRerankModel } from '@/config/models/rerank'
 import { useAllProviders } from '@/hooks/useProviders'
 import { Model } from '@/types/assistant'
+import { useIsDark } from '@/utils'
 import { getModelUniqId } from '@/utils/model'
 
 import { ProviderIcon } from '../ui/ProviderIcon'
@@ -26,6 +27,7 @@ interface ModelSheetProps {
 const ModelSheet = forwardRef<BottomSheetModal, ModelSheetProps>(({ mentions, setMentions, multiple }, ref) => {
   const { t } = useTranslation()
   const theme = useTheme()
+  const isDark = useIsDark()
   const [selectedModels, setSelectedModels] = useState<string[]>(() => mentions.map(m => getModelUniqId(m)))
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -104,7 +106,7 @@ const ModelSheet = forwardRef<BottomSheetModal, ModelSheetProps>(({ mentions, se
       ref={ref}
       backgroundStyle={{
         borderRadius: 30,
-        backgroundColor: theme.gray2.val
+        backgroundColor: isDark ? 'rgba(18, 18, 19, 1)' : 'rgba(247, 247, 247, 1)'
       }}
       handleIndicatorStyle={{
         backgroundColor: theme.color.val
@@ -137,7 +139,9 @@ const ModelSheet = forwardRef<BottomSheetModal, ModelSheetProps>(({ mentions, se
                     chromeless
                     paddingHorizontal={8}
                     paddingVertical={8}
-                    backgroundColor={selectedModels.includes(item.value) ? 'rgba(0, 185, 107, 0.2)' : 'transparent'}>
+                    backgroundColor={
+                      selectedModels.includes(item.value) ? (isDark ? '$green20Dark' : '$green20Light') : 'transparent'
+                    }>
                     <XStack gap={8} flex={1} alignItems="center" justifyContent="space-between" width="100%">
                       <XStack gap={8} flex={1} alignItems="center" maxWidth="80%">
                         {/* Model icon */}
