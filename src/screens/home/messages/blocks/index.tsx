@@ -4,6 +4,7 @@ import { View, XStack } from 'tamagui'
 
 import { MainTextMessageBlock, MessageBlock, MessageBlockStatus, MessageBlockType } from '@/types/message'
 
+import CitationBlock from './CitationBlock'
 import ErrorBlock from './ErrorBlock'
 import FileBlock from './FileBlock'
 import ImageBlock from './ImageBlock'
@@ -98,6 +99,9 @@ const MessageBlockRenderer: FC<MessageBlockRendererProps> = ({ blocks }) => {
             break
           case MessageBlockType.TRANSLATION:
             blockComponent = <TranslationBlock key={block.id} block={block} />
+            break
+          case MessageBlockType.CITATION:
+            blockComponent = <CitationBlock key={block.id} block={block} />
             break
           // todo: error无法触发
           case MessageBlockType.ERROR:

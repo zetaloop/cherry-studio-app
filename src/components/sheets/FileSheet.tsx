@@ -84,7 +84,7 @@ const FileSheet = forwardRef<BottomSheetModal, FileSheetProps>(({ files, setFile
     } catch (error) {
       console.error('Error selecting file:', error)
     } finally {
-      ;(ref as React.MutableRefObject<BottomSheetModal>)?.current?.dismiss()
+      ;(ref as React.RefObject<BottomSheetModal>)?.current?.dismiss()
     }
   }
 

@@ -71,7 +71,8 @@
         "search": {
           "placeholder": "Search assistants"
         }
-      }
+      },
+      "citation": "+ {{count}} Sources"
     },
     "common": {
       "cherry_studio": "Cherry Studio",
@@ -98,7 +99,8 @@
       "photo": "Photo",
       "camera": "Camera",
       "clear_all": "Clear All",
-      "close": "Close"
+      "close": "Close",
+      "source": "Source"
     },
     "errors": {
       "cannotOpenLink": "Cannot open link: {{error}}",
