@@ -30,7 +30,7 @@ export function ReasoningSelect({ assistant, onValueChange }: ReasoningSelectPro
   return (
     <>
       <Button
-        width="30%"
+        width="auto"
         backgroundColor="$colorTransparent"
         borderWidth={0}
         iconAfter={ChevronRight}

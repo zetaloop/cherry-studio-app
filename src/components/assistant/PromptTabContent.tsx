@@ -9,6 +9,7 @@ interface PromptTabContentProps {
   assistant: Assistant
   updateAssistant: (assistant: Assistant) => void
 }
+
 export function PromptTabContent({ assistant, updateAssistant }: PromptTabContentProps) {
   const { t } = useTranslation()
 
@@ -17,7 +18,8 @@ export function PromptTabContent({ assistant, updateAssistant }: PromptTabConten
       <YStack width="100%" gap={8}>
         <SettingRowTitle paddingHorizontal={10}>{t('common.name')}</SettingRowTitle>
         <Input
-          padding={15}
+          height={49}
+          padding={16}
           placeholder={t('assistants.name')}
           value={assistant?.name}
           onChangeText={name => updateAssistant({ ...assistant, name })}
@@ -32,6 +34,7 @@ export function PromptTabContent({ assistant, updateAssistant }: PromptTabConten
           value={assistant?.prompt}
           multiline
           onChangeText={prompt => updateAssistant({ ...assistant, prompt })}
+          verticalAlign="top"
         />
       </YStack>
     </YStack>
