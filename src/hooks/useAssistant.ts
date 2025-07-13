@@ -60,12 +60,15 @@ export function useAssistants() {
 }
 
 export function useStarAssistants() {
-  const query = db.query.assistants.findMany({
-    where: eq(assistantsSchema.isStar, true),
-    with: {
-      topics: true
-    }
-  })
+  // bug: https://github.com/drizzle-team/drizzle-orm/issues/2660
+  // const query = db.query.assistants.findMany({
+  //   where: eq(assistantsSchema.isStar, true),
+  //   with: {
+  //     topics: true
+  //   }
+  // })
+
+  const query = db.select().from(assistantsSchema).where(eq(assistantsSchema.isStar, true))
   const { data: rawAssistants, updatedAt } = useLiveQuery(query)
 
   const updateAssistants = async (assistants: Assistant[]) => {

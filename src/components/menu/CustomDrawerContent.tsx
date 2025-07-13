@@ -14,6 +14,7 @@ import { SearchInput } from '@/components/ui/SearchInput'
 import { useStarAssistants } from '@/hooks/useAssistant'
 import { useTopics } from '@/hooks/useTopic'
 import { useIsDark } from '@/utils'
+import { getAssistantWithTopic } from '@/utils/assistants'
 import { getTextPrimaryColor } from '@/utils/color'
 
 import { MenuTab, TabItem } from './MenuTab'
@@ -48,6 +49,8 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
     )
   }
 
+  const assistantWithTopics = getAssistantWithTopic(assistants, topics)
+
   return (
     <YStack flex={1}>
       <BlurView style={{ flex: 1 }} intensity={60} tint="default">
@@ -75,7 +78,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                 </View>
               ) : (
                 <View style={{ flex: 1, minHeight: 200 }}>
-                  <AssistantList assistants={assistants} />
+                  <AssistantList assistants={assistantWithTopics} />
                 </View>
               )}
             </MenuTabContent>
