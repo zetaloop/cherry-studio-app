@@ -2,7 +2,6 @@ import 'react-native-reanimated'
 import '@/i18n'
 
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
 import React from 'react'
 import { Dimensions } from 'react-native'
 import { useTheme } from 'tamagui'
@@ -19,17 +18,14 @@ export default function AppNavigator() {
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
-      screenOptions={({ route }) => {
-        const focusedNestedRouteName = getFocusedRouteNameFromRoute(route)
-
-        const swipeEnabled = focusedNestedRouteName === 'Home'
-        return {
-          drawerStyle: {
-            width: screenWidth * 0.7,
-            backgroundColor: theme.background.val
-          },
-          swipeEnabled: swipeEnabled
-        }
+      screenOptions={{
+        drawerStyle: {
+          width: screenWidth * 0.67,
+          backgroundColor: theme.background.val
+        },
+        swipeEnabled: true,
+        drawerType: 'front',
+        keyboardDismissMode: 'none'
       }}>
       <Drawer.Screen
         name="Main"

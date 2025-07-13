@@ -1,3 +1,4 @@
+import { LinearGradient } from '@tamagui/linear-gradient'
 import React from 'react'
 import { StyleSheet, useColorScheme } from 'react-native'
 import { View } from 'tamagui'
@@ -25,21 +26,23 @@ const MessageContent: React.FC<Props> = ({ message }) => {
     block => block.type !== MessageBlockType.IMAGE && block.type !== MessageBlockType.FILE
   )
 
-  const userMessageBackgroundColor = isDark ? 'rgba(0, 83, 45, 1)' : 'rgba(0, 185, 107, 1)'
+  const gradientColors = isDark ? ['#acf3a633', '#acf3a6ff'] : ['#8de59e4d', '#81df94ff']
 
   return (
     <View style={isUser ? styles.userContainer : styles.assistantContainer}>
       {mediaBlocks.length > 0 && <MessageBlockRenderer blocks={mediaBlocks} />}
       {contentBlocks.length > 0 && (
-        <View
+        <LinearGradient
+          colors={isUser ? gradientColors : ['transparent', 'transparent']}
+          start={[1, 0]}
+          end={[1, 1]}
           style={[
             styles.contentWrapper,
             isUser ? styles.userMessageContent : styles.assistantMessageContent,
-            isUser && { backgroundColor: userMessageBackgroundColor },
             mediaBlocks.length > 0 && { marginTop: 8 }
           ]}>
           <MessageBlockRenderer blocks={contentBlocks} />
-        </View>
+        </LinearGradient>
       )}
     </View>
   )

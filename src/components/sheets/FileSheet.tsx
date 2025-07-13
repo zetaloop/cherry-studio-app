@@ -9,6 +9,7 @@ import { Button, Text, useTheme, XStack, YStack } from 'tamagui'
 import { uploadFiles } from '@/services/FileService'
 import { FileType } from '@/types/file'
 import { useIsDark, uuid } from '@/utils'
+import { getTextColor } from '@/utils/color'
 import { getFileType } from '@/utils/file'
 
 interface FileSheetProps {
@@ -112,11 +113,11 @@ const FileSheet = forwardRef<BottomSheetModal, FileSheetProps>(({ files, setFile
   return (
     <BottomSheetModal
       snapPoints={['25%']}
-      enableDynamicSizing={true}
+      enableDynamicSizing={false}
       ref={ref}
       backgroundStyle={{
         borderRadius: 30,
-        backgroundColor: isDark ? 'rgba(18, 18, 19, 1)' : 'rgba(247, 247, 247, 1)'
+        backgroundColor: isDark ? '#121213ff' : '#f7f7f7ff'
       }}
       handleIndicatorStyle={{
         backgroundColor: theme.color.val
@@ -128,14 +129,14 @@ const FileSheet = forwardRef<BottomSheetModal, FileSheetProps>(({ files, setFile
             <Button
               key={option.key}
               size="$4"
-              color="white"
+              color={getTextColor(isDark)}
               onPress={option.onPress}
               justifyContent="flex-start"
               paddingHorizontal={20}
               chromeless>
               <XStack gap={12} alignItems="center">
                 {option.icon}
-                <Text color="white" fontSize={16}>
+                <Text color={getTextColor(isDark)} fontSize={16}>
                   {option.label}
                 </Text>
               </XStack>

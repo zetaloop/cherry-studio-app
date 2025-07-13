@@ -112,7 +112,7 @@ const CitationSheet = forwardRef<BottomSheetModal, CitationSheetProps>(({ citati
       ref={ref}
       backgroundStyle={{
         borderRadius: 30,
-        backgroundColor: isDark ? 'rgba(18, 18, 19, 1)' : 'rgba(247, 247, 247, 1)'
+        backgroundColor: isDark ? '#121213ff' : '#f7f7f7ff'
       }}
       handleIndicatorStyle={{
         backgroundColor: theme.color.val

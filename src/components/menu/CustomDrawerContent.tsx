@@ -33,10 +33,8 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
   }
 
   const handleDeleteTopic = async (topicId: string) => {
-    // 1. 乐观更新UI：立即从状态中移除该项
     setTopics(prevTopics => prevTopics.filter(topic => topic.id !== topicId))
 
-    // 2. 在后台执行实际的删除操作
     try {
       await deleteTopicById(topicId)
     } catch (error) {

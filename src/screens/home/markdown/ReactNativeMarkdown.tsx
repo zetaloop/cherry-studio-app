@@ -26,14 +26,13 @@ const ReactNativeMarkdown: FC<Props> = ({ block }) => {
 
   const messageContent = getMessageContent(block)
 
-  // Theme colors based on the provided CSS
   const colors = {
     light: {
       accent: '#c1cacc',
       accentedBackground: '#F7F6F3',
       background: '#ffffff',
       border: '#e1e7e8',
-      text: 'black',
+      text: 'rgba(32, 32, 32, 1)',
       link: '#00b96b',
       codeBg: 'transparent',
       code: '#00b96b',
@@ -44,7 +43,7 @@ const ReactNativeMarkdown: FC<Props> = ({ block }) => {
       accentedBackground: '#2c2d30',
       background: '#191919',
       border: '#3d3d3d',
-      text: 'white',
+      text: 'rgba(249, 249, 249, 1)',
       link: '#00b96b',
       codeBg: 'transparent',
       code: '#00b96b',
