@@ -9,7 +9,7 @@ import { Button, Text, useTheme, XStack, YStack } from 'tamagui'
 import { uploadFiles } from '@/services/FileService'
 import { FileType } from '@/types/file'
 import { useIsDark, uuid } from '@/utils'
-import { getTextColor } from '@/utils/color'
+import { getTextPrimaryColor } from '@/utils/color'
 import { getFileType } from '@/utils/file'
 
 interface FileSheetProps {
@@ -129,14 +129,14 @@ const FileSheet = forwardRef<BottomSheetModal, FileSheetProps>(({ files, setFile
             <Button
               key={option.key}
               size="$4"
-              color={getTextColor(isDark)}
+              color={getTextPrimaryColor(isDark)}
               onPress={option.onPress}
               justifyContent="flex-start"
               paddingHorizontal={20}
               chromeless>
               <XStack gap={12} alignItems="center">
                 {option.icon}
-                <Text color={getTextColor(isDark)} fontSize={16}>
+                <Text color={getTextPrimaryColor(isDark)} fontSize={16}>
                   {option.label}
                 </Text>
               </XStack>

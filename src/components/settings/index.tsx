@@ -5,7 +5,7 @@ import { Text, View } from 'tamagui'
 export const SettingContainer = styled(YStack, {
   flex: 1,
   padding: '$4',
-  gap: '24',
+  gap: '20',
   backgroundColor: '$background',
   onPress: Keyboard.dismiss,
   overflow: 'hidden'

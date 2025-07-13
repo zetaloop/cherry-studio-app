@@ -1,30 +1,35 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { Trash2 } from '@tamagui/lucide-icons'
 import { MotiView } from 'moti'
-import { FC, useRef } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import React from 'react'
 import { RectButton } from 'react-native-gesture-handler'
 import ReanimatedSwipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated'
 import { Stack, Text, XStack, YStack } from 'tamagui'
 
+import i18n from '@/i18n'
+import { deleteAssistantById } from '@/services/AssistantService'
 import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 import { useIsDark } from '@/utils'
+import { getTextPrimaryColor, getTextSecondaryColor } from '@/utils/color'
+
+type TimeFormat = 'time' | 'date'
 
 interface AssistantItemProps {
   assistant: Assistant
-  onDelete: (assistantId: string) => Promise<void>
+  timeFormat?: TimeFormat // Added timeFormat parameter
 }
 
 interface RenderRightActionsProps {
   progress: SharedValue<number>
   assistant: Assistant
-  onDelete: (assistantId: string) => Promise<void>
   swipeableRef: React.RefObject<SwipeableMethods | null>
 }
 
-const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, assistant, onDelete, swipeableRef }) => {
+const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, assistant, swipeableRef }) => {
   const animatedStyle = useAnimatedStyle(() => {
     const translateX = interpolate(progress.value, [0, 1], [50, 0])
 
@@ -33,9 +38,13 @@ const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, assistant, 
     }
   })
 
-  const handleDelete = () => {
-    swipeableRef.current?.close()
-    onDelete(assistant.id)
+  const handleDelete = async () => {
+    try {
+      swipeableRef.current?.close()
+      await deleteAssistantById(assistant.id)
+    } catch (error) {
+      console.error('Delete Assistant error', error)
+    }
   }
 
   return (
@@ -53,35 +62,59 @@ const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, assistant, 
   )
 }
 
-const AssistantItem: FC<AssistantItemProps> = ({ assistant, onDelete }) => {
+const AssistantItem: FC<AssistantItemProps> = ({ assistant, timeFormat = 'time' }) => {
   const isDark = useIsDark()
   const swipeableRef = useRef<SwipeableMethods>(null)
   const navigation = useNavigation<NavigationProps>()
+  const [currentLanguage, setCurrentLanguage] = useState<string>(i18n.language)
+
+  useEffect(() => {
+    const fetchCurrentLanguage = async () => {
+      const storedLanguage = await AsyncStorage.getItem('language')
+
+      if (storedLanguage) {
+        setCurrentLanguage(storedLanguage)
+      }
+    }
+
+    fetchCurrentLanguage()
+  }, [])
 
   const renderRightActions = (progress: SharedValue<number>, _: SharedValue<number>) => {
-    return (
-      <RenderRightActions progress={progress} assistant={assistant} onDelete={onDelete} swipeableRef={swipeableRef} />
-    )
+    return <RenderRightActions progress={progress} assistant={assistant} swipeableRef={swipeableRef} />
   }
 
   const editAssistant = () => {
     navigation.navigate('AssistantDetailScreen', { assistantId: assistant.id })
   }
 
-  // get the newest update time from assistant's topics
-  const updateTime = new Date(
-    assistant.topics?.reduce((latest, topic) => {
-      console.log('topic.updatedAt', topic)
-      const topicUpdateTime = new Date(topic.updatedAt).getTime()
-      return topicUpdateTime > latest ? topicUpdateTime : latest
-    }, 0) ?? Date.now()
-  ).toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
+  const displayTime = useMemo(() => {
+    const latestTimestamp =
+      assistant.topics?.reduce((latest, topic) => {
+        const topicUpdateTime = new Date(topic.updatedAt).getTime()
+        return topicUpdateTime > latest ? topicUpdateTime : latest
+      }, 0) ?? 0
+
+    if (latestTimestamp === 0) {
+      return '' // Return empty if no topic activity
+    }
+
+    const date = new Date(latestTimestamp)
+
+    if (timeFormat === 'date') {
+      return date.toLocaleDateString(currentLanguage, {
+        month: 'short',
+        day: 'numeric'
+      })
+    }
+
+    // Default to 'time' format
+    return date.toLocaleTimeString(currentLanguage, {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    })
+  }, [assistant.topics, timeFormat, currentLanguage])
 
   return (
     <ReanimatedSwipeable ref={swipeableRef} renderRightActions={renderRightActions} friction={1} rightThreshold={40}>
@@ -95,12 +128,17 @@ const AssistantItem: FC<AssistantItemProps> = ({ assistant, onDelete }) => {
         onPress={editAssistant}>
         <XStack gap={14} maxWidth="70%">
           <Text fontSize={35}>{assistant.emoji}</Text>
-          <YStack gap={2} flex={1}>
-            <Text fontSize={16} numberOfLines={1} ellipsizeMode="tail" fontWeight="500">
+          <YStack gap={2} flex={1} justifyContent="center">
+            <Text
+              fontSize={14}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              fontWeight="600"
+              color={getTextPrimaryColor(isDark)}>
               {assistant.name}
             </Text>
-            <Text fontSize={12} color="$gray10">
-              {updateTime}
+            <Text fontSize={12} lineHeight={18} color={getTextSecondaryColor(isDark)}>
+              {displayTime}
             </Text>
           </YStack>
         </XStack>

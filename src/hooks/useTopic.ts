@@ -32,3 +32,22 @@ export function useTopic(topicId: string) {
     updateTopic
   }
 }
+
+export function useTopics() {
+  const query = db.select().from(topicSchema)
+  const { data: rawTopics, updatedAt } = useLiveQuery(query)
+
+  if (!updatedAt || !rawTopics || rawTopics.length === 0) {
+    return {
+      topics: [],
+      isLoading: true
+    }
+  }
+
+  const processedTopics = rawTopics.map(transformDbToTopic)
+
+  return {
+    topics: processedTopics,
+    isLoading: false
+  }
+}

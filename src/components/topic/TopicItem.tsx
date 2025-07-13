@@ -1,32 +1,34 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { Trash2 } from '@tamagui/lucide-icons'
 import { MotiView } from 'moti'
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react' // CHANGED: Imported useMemo
 import React from 'react'
 import { RectButton } from 'react-native-gesture-handler'
 import ReanimatedSwipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated'
-import { Stack, Text, XStack, YStack } from 'tamagui'
+import { Text, XStack } from 'tamagui'
 
-import { Assistant, Topic } from '@/types/assistant'
+import i18n from '@/i18n'
+import { deleteTopicById } from '@/services/TopicService'
+import { Topic } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
-import { runAsyncFunction, useIsDark } from '@/utils'
+import { useIsDark } from '@/utils'
 
-import { getAssistantById } from '../../../db/queries/assistants.queries'
+type TimeFormat = 'time' | 'date'
 
 interface TopicItemProps {
   topic: Topic
-  onDelete: (topicId: string) => Promise<void>
+  timeFormat?: TimeFormat
 }
 
 interface RenderRightActionsProps {
   progress: SharedValue<number>
   topic: Topic
-  onDelete: (topicId: string) => Promise<void>
   swipeableRef: React.RefObject<SwipeableMethods | null>
 }
 
-const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, topic, onDelete, swipeableRef }) => {
+const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, topic, swipeableRef }) => {
   const animatedStyle = useAnimatedStyle(() => {
     const translateX = interpolate(progress.value, [0, 1], [50, 0])
 
@@ -35,9 +37,13 @@ const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, topic, onDe
     }
   })
 
-  const handleDelete = () => {
-    swipeableRef.current?.close()
-    onDelete(topic.id)
+  const handleDelete = async () => {
+    try {
+      swipeableRef.current?.close()
+      await deleteTopicById(topic.id)
+    } catch (error) {
+      console.error('Delete Topic error', error)
+    }
   }
 
   return (
@@ -55,39 +61,44 @@ const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, topic, onDe
   )
 }
 
-const TopicItem: FC<TopicItemProps> = ({ topic, onDelete }) => {
+const TopicItem: FC<TopicItemProps> = ({ topic, timeFormat = 'time' }) => {
   const isDark = useIsDark()
+  const [currentLanguage, setCurrentLanguage] = useState<string>(i18n.language)
   const swipeableRef = useRef<SwipeableMethods>(null)
   const navigation = useNavigation<NavigationProps>()
-  const [assistant, setAssistant] = useState<Assistant | null>(null)
 
   const renderRightActions = (progress: SharedValue<number>, _: SharedValue<number>) => {
-    return <RenderRightActions progress={progress} topic={topic} onDelete={onDelete} swipeableRef={swipeableRef} />
+    return <RenderRightActions progress={progress} topic={topic} swipeableRef={swipeableRef} />
   }
 
   const openTopic = () => {
     navigation.navigate('HomeScreen', { topicId: topic.id })
   }
 
-  const updateTime = new Date(topic.updatedAt).toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
+  const date = new Date(topic.updatedAt)
+  const displayTime =
+    timeFormat === 'date'
+      ? date.toLocaleDateString(currentLanguage, {
+          month: 'short',
+          day: 'numeric'
+        })
+      : date.toLocaleTimeString(currentLanguage, {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        })
 
   useEffect(() => {
-    runAsyncFunction(async () => {
-      try {
-        const assistantData = await getAssistantById(topic.assistantId)
-        setAssistant(assistantData)
-      } catch (error) {
-        console.error('Failed to fetch assistant:', error)
-      }
-    })
-  }, [topic.assistantId])
+    const fetchCurrentLanguage = async () => {
+      const storedLanguage = await AsyncStorage.getItem('language')
 
+      if (storedLanguage) {
+        setCurrentLanguage(storedLanguage)
+      }
+    }
+
+    fetchCurrentLanguage()
+  }, [])
   return (
     <ReanimatedSwipeable ref={swipeableRef} renderRightActions={renderRightActions} friction={1} rightThreshold={40}>
       <XStack
@@ -95,35 +106,15 @@ const TopicItem: FC<TopicItemProps> = ({ topic, onDelete }) => {
         backgroundColor={isDark ? '$uiCardDark' : '$uiCardLight'}
         justifyContent="space-between"
         alignItems="center"
-        paddingVertical={3}
+        paddingVertical={15}
         paddingHorizontal={20}
         onPress={openTopic}>
-        <XStack gap={14} maxWidth="70%">
-          <Text fontSize={35}>{assistant?.emoji}</Text>
-          <YStack gap={2} flex={1}>
-            <Text fontSize={16} numberOfLines={1} ellipsizeMode="tail" fontWeight="500">
-              {topic.name}
-            </Text>
-            <Text fontSize={12} color="$gray10">
-              {updateTime}
-            </Text>
-          </YStack>
-        </XStack>
-        <Stack
-          borderRadius={24}
-          borderWidth={0.5}
-          padding={3}
-          gap={2}
-          justifyContent="center"
-          alignItems="center"
-          borderColor={isDark ? '$green20Dark' : '$green20Light'}
-          backgroundColor={isDark ? '$green10Dark' : '$green10Light'}
-          minWidth={20}
-          minHeight={20}>
-          <Text fontSize={10} textAlign="center" color={isDark ? '$green100Light' : '$green100Dark'}>
-            {topic.messages.length}
-          </Text>
-        </Stack>
+        <Text fontSize={16} numberOfLines={1} ellipsizeMode="tail" fontWeight="500">
+          {topic.name}
+        </Text>
+        <Text fontSize={12} color="$gray10">
+          {displayTime}
+        </Text>
       </XStack>
     </ReanimatedSwipeable>
   )

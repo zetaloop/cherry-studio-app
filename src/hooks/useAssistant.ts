@@ -58,3 +58,33 @@ export function useAssistants() {
     updateAssistants
   }
 }
+
+export function useStarAssistants() {
+  const query = db.query.assistants.findMany({
+    where: eq(assistantsSchema.isStar, true),
+    with: {
+      topics: true
+    }
+  })
+  const { data: rawAssistants, updatedAt } = useLiveQuery(query)
+
+  const updateAssistants = async (assistants: Assistant[]) => {
+    await upsertAssistants(assistants)
+  }
+
+  if (!updatedAt || !rawAssistants || rawAssistants.length === 0) {
+    return {
+      assistants: [],
+      isLoading: true,
+      updateAssistants
+    }
+  }
+
+  const processedAssistants = rawAssistants.map(provider => transformDbToAssistant(provider))
+
+  return {
+    assistants: processedAssistants,
+    isLoading: false,
+    updateAssistants
+  }
+}

@@ -1,53 +1,34 @@
-import { DrawerContentComponentProps, DrawerItemList, useDrawerStatus } from '@react-navigation/drawer'
-import { FlashList } from '@shopify/flash-list'
+import { DrawerContentComponentProps, DrawerItemList } from '@react-navigation/drawer'
 import { Settings } from '@tamagui/lucide-icons'
 import { BlurView } from 'expo-blur'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ActivityIndicator } from 'react-native'
 import { Avatar, Button, Text, View, XStack, YStack } from 'tamagui'
 
+import { AssistantList } from '@/components/assistant/AssistantList'
 import { MenuTabContent } from '@/components/menu/MenuTabContent'
-import { deleteAssistantById, getRecentAssistants, getStarredAssistants } from '@/services/AssistantService'
-import { deleteTopicById, getTopics } from '@/services/TopicService'
-import { Assistant, Topic } from '@/types/assistant'
-import { runAsyncFunction, useIsDark } from '@/utils'
-import { getTextColor } from '@/utils/color'
+import { GroupedTopicList } from '@/components/topic/GroupTopicList'
+import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
+import { SearchInput } from '@/components/ui/SearchInput'
+import { useStarAssistants } from '@/hooks/useAssistant'
+import { useTopics } from '@/hooks/useTopic'
+import { useIsDark } from '@/utils'
+import { getTextPrimaryColor } from '@/utils/color'
 
-import AssistantItem from '../assistant/AssistantItem'
-import TopicItem from '../topic/TopicItem'
-import { SearchInput } from '../ui/SearchInput'
 import { MenuTab, TabItem } from './MenuTab'
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { t } = useTranslation()
   const isDark = useIsDark()
-  const [topics, setTopics] = useState<Topic[]>([])
-  const [assistants, setAssistants] = useState<Assistant[]>([])
+  const { topics, isLoading: isLoadingTopics } = useTopics()
+  const { assistants, isLoading: isLoadingAssistants } = useStarAssistants()
   const [activeTab, setActiveTab] = useState<string>('topic')
-  const isDrawerOpen = useDrawerStatus() === 'open'
 
   const menuTabs: TabItem[] = [
     { id: 'assistant', label: t('menu.assistant.title') },
     { id: 'topic', label: t('menu.topic.title') }
   ]
-
-  const refreshTopics = async () => {
-    try {
-      const topicsData = await getTopics()
-      setTopics(topicsData)
-    } catch (error) {
-      console.error('Failed to fetch topics:', error)
-    }
-  }
-
-  const refreshAssistants = async () => {
-    try {
-      const assistantsData = await getStarredAssistants()
-      setAssistants(assistantsData)
-    } catch (error) {
-      console.error('Failed to fetch assistants:', error)
-    }
-  }
 
   const handleAssistantsSeeAll = () => {
     props.navigation.navigate('Main', { screen: 'AssistantScreen' })
@@ -59,48 +40,13 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
     console.log('Navigate to all topics')
   }
 
-  const handleDeleteTopic = async (topicId: string) => {
-    setTopics(prevTopics => prevTopics.filter(topic => topic.id !== topicId))
-
-    try {
-      await deleteTopicById(topicId)
-    } catch (error) {
-      console.error('Failed to delete topic in background:', error)
-      await refreshTopics()
-    }
+  if (isLoadingTopics || isLoadingAssistants) {
+    return (
+      <SafeAreaContainer>
+        <ActivityIndicator />
+      </SafeAreaContainer>
+    )
   }
-
-  const handleDeleteAssistant = async (assistantId: string) => {
-    setAssistants(prevAssistants => prevAssistants.filter(assistant => assistant.id !== assistantId))
-
-    try {
-      await deleteAssistantById(assistantId)
-    } catch (error) {
-      console.error('Failed to delete assistant in background:', error)
-      await refreshAssistants()
-    }
-  }
-
-  const renderTopicItem = ({ item }: { item: Topic }) => <TopicItem topic={item} onDelete={handleDeleteTopic} />
-
-  const renderAssistantItem = ({ item }: { item: Assistant }) => (
-    <AssistantItem assistant={item} onDelete={handleDeleteAssistant} />
-  )
-
-  useEffect(() => {
-    if (isDrawerOpen) {
-      runAsyncFunction(async () => {
-        try {
-          const topicsData = await getTopics()
-          setTopics(topicsData)
-          const assistantData = await getRecentAssistants()
-          setAssistants(assistantData)
-        } catch (error) {
-          console.error('Failed to fetch topics:', error)
-        }
-      })
-    }
-  }, [isDrawerOpen])
 
   return (
     <YStack flex={1}>
@@ -115,31 +61,21 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
               tabs={menuTabs}
               activeTab={activeTab}
               onTabChange={setActiveTab}
-              inactiveTextColor={getTextColor(isDark)}
+              inactiveTextColor={getTextPrimaryColor(isDark)}
             />
 
             <SearchInput placeholder={t('common.search_placeholder')} />
 
             <MenuTabContent
               title={activeTab === 'topic' ? t('menu.topic.recent') : t('menu.assistant.recent')}
-              onSeeAllPress={handleTopicSeeAll}>
+              onSeeAllPress={activeTab === 'topic' ? handleTopicSeeAll : handleAssistantsSeeAll}>
               {activeTab === 'topic' ? (
                 <View style={{ flex: 1, minHeight: 200 }}>
-                  <FlashList
-                    ItemSeparatorComponent={() => <YStack height={20} />}
-                    data={topics}
-                    renderItem={renderTopicItem}
-                    estimatedItemSize={50}
-                  />
+                  <GroupedTopicList topics={topics} />
                 </View>
               ) : (
                 <View style={{ flex: 1, minHeight: 200 }}>
-                  <FlashList
-                    ItemSeparatorComponent={() => <YStack height={20} />}
-                    data={assistants}
-                    renderItem={renderAssistantItem}
-                    estimatedItemSize={50}
-                  />
+                  <AssistantList assistants={assistants} />
                 </View>
               )}
             </MenuTabContent>
