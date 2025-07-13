@@ -32,6 +32,7 @@ export function PromptTabContent({ assistant, updateAssistant }: PromptTabConten
           value={assistant?.prompt}
           multiline
           onChangeText={prompt => updateAssistant({ ...assistant, prompt })}
+          verticalAlign="top"
         />
       </YStack>
     </YStack>
