@@ -11,7 +11,7 @@ import { useAssistant } from '@/hooks/useAssistant'
 import { useTopic } from '@/hooks/useTopic'
 import { getDefaultAssistant } from '@/services/AssistantService'
 import { createNewTopic, getNewestTopic, getTopicById } from '@/services/TopicService'
-import { Assistant, Topic } from '@/types/assistant'
+import { Topic } from '@/types/assistant'
 import { RootStackParamList } from '@/types/naviagate'
 import { runAsyncFunction, useIsDark } from '@/utils'
 
@@ -23,14 +23,7 @@ type HomeScreenRouteProp = RouteProp<RootStackParamList, 'HomeScreen'>
 const HomeChat = ({ initialTopic }: { initialTopic: Topic }) => {
   const isDark = useIsDark()
   const { updateAssistant } = useAssistant('default')
-  const { topic, isLoading, updateTopic } = useTopic(initialTopic.id)
-
-  const handleAssistantSelect = async (selectedAssistant: Assistant) => {
-    runAsyncFunction(async () => {
-      const newTopic = await createNewTopic(selectedAssistant)
-      updateTopic(newTopic)
-    })
-  }
+  const { topic, isLoading } = useTopic(initialTopic.id)
 
   if (!topic || isLoading) {
     return (
@@ -43,9 +36,7 @@ const HomeChat = ({ initialTopic }: { initialTopic: Topic }) => {
   const hasMessages = topic.messages.length > 0
 
   // 动态颜色配置
-  const gradientColors = isDark
-    ? ['rgba(172, 243, 166, 0.2)', 'rgba(172, 243, 166, 1)', 'rgba(172, 243, 166, 0.2)']
-    : ['rgba(141, 229, 158, 0.3)', 'rgba(129, 223, 148, 1)', 'rgba(141, 229, 158, 0.3)']
+  const gradientColors = isDark ? ['#acf3a633', '#acf3a6ff', '#acf3a633'] : ['#8de59e4d', '#81df94ff', '#8de59e4d']
 
   return (
     <SafeAreaContainer>
@@ -53,7 +44,7 @@ const HomeChat = ({ initialTopic }: { initialTopic: Topic }) => {
         <YStack paddingHorizontal={12} backgroundColor="$background" flex={1} onPress={Keyboard.dismiss}>
           <HeaderBar topic={topic} />
 
-          {hasMessages ? <ChatContent topic={topic} /> : <WelcomeContent onAssistantSelect={handleAssistantSelect} />}
+          {hasMessages ? <ChatContent topic={topic} /> : <WelcomeContent />}
           <LinearGradient padding={1} borderRadius={12} colors={gradientColors} start={[0, 0]} end={[1, 1]}>
             <InputContent>
               <MessageInput topic={topic} updateAssistant={updateAssistant} />
@@ -65,6 +56,7 @@ const HomeChat = ({ initialTopic }: { initialTopic: Topic }) => {
   )
 }
 
+// todo: 当侧边栏删除当前主页的topic会进入加载状态
 const HomeScreen = () => {
   const [topic, setTopic] = useState<Topic | null>(null)
   const route = useRoute<HomeScreenRouteProp>()

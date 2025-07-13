@@ -5,14 +5,9 @@ import { Image, ScrollView, styled, Text, XStack, YStack } from 'tamagui'
 
 import AssistantItemCard from '@/components/assistant/AssistantItemCard'
 import { useAssistants } from '@/hooks/useAssistant'
-import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
 
-interface WelcomeContentProps {
-  onAssistantSelect: (assistant: Assistant) => void
-}
-
-const WelcomeContent = ({ onAssistantSelect }: WelcomeContentProps) => {
+const WelcomeContent = () => {
   const { t } = useTranslation()
   const navigation = useNavigation<NavigationProps>()
   const { assistants: systemAssistants } = useAssistants()
@@ -36,7 +31,7 @@ const WelcomeContent = ({ onAssistantSelect }: WelcomeContentProps) => {
                 key={assistant.id}
                 assistant={assistant}
                 setIsBottomSheetOpen={() => {}}
-                onAssistantPress={() => onAssistantSelect(assistant)}
+                onAssistantPress={() => {}}
               />
             ))}
           </XStack>

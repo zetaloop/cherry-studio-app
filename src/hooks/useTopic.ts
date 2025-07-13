@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import { useLiveQuery } from 'drizzle-orm/expo-sqlite'
 
 import { Topic } from '@/types/assistant'
@@ -48,6 +48,28 @@ export function useTopics() {
 
   return {
     topics: processedTopics,
+    isLoading: false
+  }
+}
+
+export function useNewestTopic(): { topic: Topic | null; isLoading: boolean } {
+  const query = db.select().from(topicSchema).orderBy(desc(topicSchema.created_at)).limit(1)
+
+  const { data: rawTopics, updatedAt } = useLiveQuery(query)
+
+  if (!updatedAt || !rawTopics || rawTopics.length === 0) {
+    return {
+      topic: null,
+      isLoading: true
+    }
+  }
+
+  const newestRawTopic = rawTopics[0]
+
+  const processedTopic = transformDbToTopic(newestRawTopic)
+
+  return {
+    topic: processedTopic,
     isLoading: false
   }
 }
