@@ -29,7 +29,7 @@ export const MentionButton: React.FC<MentionButtonProps> = ({ mentions, setMenti
         onPress={handlePress}
       />
 
-      <ModelSheet ref={bottomSheetModalRef} mentions={mentions} setMentions={setMentions} />
+      <ModelSheet ref={bottomSheetModalRef} mentions={mentions} setMentions={setMentions} multiple={true} />
     </>
   )
 }

@@ -96,7 +96,7 @@ const MarqueeComponent: React.FC<Props> = ({ block, expanded }) => {
             animate={{ width: 20, height: 20, opacity: 1, marginRight: 10 }}
             exit={{ width: 0, height: 0, opacity: 0, marginRight: 0 }}
             transition={{ type: 'timing', duration: 150 }}>
-            <Spinner size="small" color="rgba(0, 185, 107, 1)" />
+            <Spinner size="small" color="$colorBrand" />
           </MotiView>
         )}
       </AnimatePresence>

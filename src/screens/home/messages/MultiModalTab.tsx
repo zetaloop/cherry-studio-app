@@ -1,13 +1,13 @@
 import { AnimatePresence } from 'moti'
 // 1. 从 React 中导入 useState
 import React, { FC, useState } from 'react'
-import { ScrollView, styled, Tabs, Text, View, XStack } from 'tamagui'
+import { ScrollView, Tabs, Text, View, XStack } from 'tamagui'
 
 import { MultiModalIcon } from '@/components/icons/MultiModelIcon'
 import { Assistant } from '@/types/assistant'
 import { GroupedMessage } from '@/types/message'
 import { useIsDark } from '@/utils'
-import { getTextPrimaryColor } from '@/utils/color'
+import { getGreenColor, getTextPrimaryColor } from '@/utils/color'
 
 import MessageItem from './Message'
 import MessageFooter from './MessageFooter'
@@ -40,9 +40,8 @@ const MultiModalTab: FC<MultiModalTabProps> = ({ assistant, messages }) => {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {messages.map((_message, index) => {
                 const tabValue = index.toString()
-                console.log('current', currentTab, tabValue)
                 return (
-                  <StyledTab
+                  <Tabs.Tab
                     key={tabValue}
                     value={tabValue}
                     paddingHorizontal={10}
@@ -50,15 +49,14 @@ const MultiModalTab: FC<MultiModalTabProps> = ({ assistant, messages }) => {
                     borderRadius={48}
                     justifyContent="center"
                     alignItems="center"
-                    height={26}
-                    active={currentTab === tabValue}>
+                    height={26}>
                     <Text
                       fontSize={12}
                       lineHeight={17}
-                      color={currentTab === tabValue ? '$green100' : getTextPrimaryColor(isDark)}>
+                      color={currentTab === tabValue ? getGreenColor(isDark, 100) : getTextPrimaryColor(isDark)}>
                       @{_message.model?.name}({_message.model?.provider})
                     </Text>
-                  </StyledTab>
+                  </Tabs.Tab>
                 )
               })}
             </ScrollView>
@@ -88,23 +86,5 @@ const MultiModalTab: FC<MultiModalTabProps> = ({ assistant, messages }) => {
     </View>
   )
 }
-
-const StyledTab = styled(Tabs.Tab, {
-  variants: {
-    active: {
-      // todo active tab background not work
-      true: {
-        backgroundColor: '$green10',
-        borderWidth: 1,
-        borderColor: '$green20'
-      },
-      false: {
-        borderColor: '$gray20',
-        borderWidth: 1,
-        backgroundColor: '$gray20'
-      }
-    }
-  }
-})
 
 export default MultiModalTab
