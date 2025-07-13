@@ -5,6 +5,7 @@ import { safeJsonParse } from '@/utils/json'
 
 import { db } from '..'
 import { assistants } from '../schema'
+import { transformDbToTopic } from './topics.queries'
 
 /**
  * 将数据库记录转换为 Assistant 类型。
@@ -12,6 +13,9 @@ import { assistants } from '../schema'
  * @returns 一个 Assistant 对象。
  */
 export function transformDbToAssistant(dbRecord: any): Assistant {
+  const topics = Array.isArray(dbRecord.topics)
+    ? dbRecord.topics.map(transformDbToTopic) // 👈 关键改动在这里
+    : []
   return {
     id: dbRecord.id,
     name: dbRecord.name,
@@ -30,7 +34,8 @@ export function transformDbToAssistant(dbRecord: any): Assistant {
     knowledgeRecognition: dbRecord.knowledge_recognition,
     tags: safeJsonParse(dbRecord.tags, []),
     group: safeJsonParse(dbRecord.group, []),
-    topics: [] // 初始化 topics 为一个空数组
+    topics: topics,
+    isStar: dbRecord.isStar
   }
 }
 
@@ -57,7 +62,8 @@ function transformAssistantToDb(assistant: Assistant): any {
     // mcp_servers: assistant.mcpServers ? JSON.stringify(assistant.mcpServers) : null,
     knowledge_recognition: assistant.knowledgeRecognition,
     tags: assistant.tags ? JSON.stringify(assistant.tags) : null,
-    group: assistant.group ? JSON.stringify(assistant.group) : null
+    group: assistant.group ? JSON.stringify(assistant.group) : null,
+    isStar: assistant.isStar || false
   }
 }
 
@@ -71,6 +77,21 @@ export async function getAllAssistants(): Promise<Assistant[]> {
     return result.map(transformDbToAssistant)
   } catch (error) {
     console.error('Error getting all assistants:', error)
+    throw error
+  }
+}
+
+export async function getStarredAssistants(): Promise<Assistant[]> {
+  try {
+    const results = await db.query.assistants.findMany({
+      where: eq(assistants.isStar, true),
+      with: {
+        topics: true
+      }
+    })
+    return results.map(transformDbToAssistant)
+  } catch (error) {
+    console.error('Error getting star assistants:', error)
     throw error
   }
 }
@@ -111,6 +132,15 @@ export async function upsertAssistants(assistantsToUpsert: Assistant[]) {
     await Promise.all(upsertPromises)
   } catch (error) {
     console.error('Error upserting assistants:', error)
+    throw error
+  }
+}
+
+export async function deleteAssistantById(id: string) {
+  try {
+    await db.delete(assistants).where(eq(assistants.id, id))
+  } catch (error) {
+    console.error(`Error deleting assistant with ID ${id}:`, error)
     throw error
   }
 }

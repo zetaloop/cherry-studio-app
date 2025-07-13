@@ -516,6 +516,10 @@
         "title": "Topic",
         "recent": "Recent Topics"
       },
+      "assistant": {
+        "title": "Assistant",
+        "recent": "Recent Assistant"
+      },
       "search_placeholder": "Search...",
       "see_all": "See All"
     },

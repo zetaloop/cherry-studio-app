@@ -35,11 +35,11 @@ const extendedConfig = {
       purple100: '#9c96f9ff',
       purple20: '#9c96f933',
       green100Light: '#81df94ff',
-      green100: '#acf3a6ff',
+      green100Dark: '#acf3a6ff',
       green20Light: '#8de59e4d',
-      green20: '#acf3a633',
+      green20Dark: '#acf3a633',
       green10Light: '#8de59e26',
-      green10: '#acf3a61a',
+      green10Dark: '#acf3a61a',
       orange100Light: '#ffb26eff',
       orange20: '#ffb26e33',
       blue100: '#6fb1faff',
@@ -68,10 +68,8 @@ const extendedConfig = {
       textPrimaryDark: '#f9f9f9ff',
       textSecondaryLight: '#646464ff',
       textSecondaryDark: '#cececeff',
-      textDeleteLight: '#dc3e42ff',
-      textDeleteDark: '#dc3e42ff',
-      textLinkLight: '#0090ffff',
-      textLinkDark: '#0090ffff'
+      textDelete: '#dc3e42ff',
+      textLink: '#0090ffff'
     }
   }
 }

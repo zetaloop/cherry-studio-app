@@ -6,11 +6,11 @@ import React from 'react'
 import { RectButton } from 'react-native-gesture-handler'
 import ReanimatedSwipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated'
-import { Text, XStack, YStack } from 'tamagui'
+import { Stack, Text, XStack, YStack } from 'tamagui'
 
 import { Assistant, Topic } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
-import { runAsyncFunction } from '@/utils'
+import { runAsyncFunction, useIsDark } from '@/utils'
 
 import { getAssistantById } from '../../../db/queries/assistants.queries'
 
@@ -49,13 +49,14 @@ const RenderRightActions: FC<RenderRightActionsProps> = ({ progress, topic, onDe
           justifyContent: 'center'
         }}
         onPress={handleDelete}>
-        <Trash2 color="#C94040" size={20} />
+        <Trash2 color="$textDelete" size={20} />
       </RectButton>
     </MotiView>
   )
 }
 
 const TopicItem: FC<TopicItemProps> = ({ topic, onDelete }) => {
+  const isDark = useIsDark()
   const swipeableRef = useRef<SwipeableMethods>(null)
   const navigation = useNavigation<NavigationProps>()
   const [assistant, setAssistant] = useState<Assistant | null>(null)
@@ -91,7 +92,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic, onDelete }) => {
     <ReanimatedSwipeable ref={swipeableRef} renderRightActions={renderRightActions} friction={1} rightThreshold={40}>
       <XStack
         borderRadius={30}
-        backgroundColor="rgba(255, 255, 255, 0.2)"
+        backgroundColor={isDark ? '$uiCardDark' : '$uiCardLight'}
         justifyContent="space-between"
         alignItems="center"
         paddingVertical={3}
@@ -108,16 +109,21 @@ const TopicItem: FC<TopicItemProps> = ({ topic, onDelete }) => {
             </Text>
           </YStack>
         </XStack>
-        <XStack
-          height={20}
-          width={20}
-          paddingVertical={4}
-          backgroundColor="rgba(255, 255, 255, 0.3)"
-          borderRadius={99}
+        <Stack
+          borderRadius={24}
+          borderWidth={0.5}
+          padding={3}
+          gap={2}
+          justifyContent="center"
           alignItems="center"
-          justifyContent="center">
-          <Text fontSize={10}>{topic.messages.length}</Text>
-        </XStack>
+          borderColor={isDark ? '$green20Dark' : '$green20Light'}
+          backgroundColor={isDark ? '$green10Dark' : '$green10Light'}
+          minWidth={20}
+          minHeight={20}>
+          <Text fontSize={10} textAlign="center" color={isDark ? '$green100Light' : '$green100Dark'}>
+            {topic.messages.length}
+          </Text>
+        </Stack>
       </XStack>
     </ReanimatedSwipeable>
   )

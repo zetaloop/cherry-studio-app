@@ -4,7 +4,12 @@ import i18n from '@/i18n'
 import { Assistant, AssistantSettings, Model, Provider, Topic } from '@/types/assistant'
 import { uuid } from '@/utils'
 
-import { getAssistantById as _getAssistantById, upsertAssistants } from '../../db/queries/assistants.queries'
+import {
+  deleteAssistantById as _deleteAssistantById,
+  getAssistantById as _getAssistantById,
+  getStarredAssistants as _getStarredAssistants,
+  upsertAssistants
+} from '../../db/queries/assistants.queries'
 import { getProviderById } from '../../db/queries/providers.queries'
 
 export async function getDefaultAssistant(): Promise<Assistant> {
@@ -117,4 +122,31 @@ export function createBlankAssistant() {
     type: 'assistant'
   }
   return blankAssistant
+}
+
+export async function getStarredAssistants(): Promise<Assistant[]> {
+  try {
+    return await _getStarredAssistants()
+  } catch (error) {
+    console.error('Failed to get starred assistants:', error)
+    return []
+  }
+}
+
+export async function deleteAssistantById(assistantId: string) {
+  try {
+    await _deleteAssistantById(assistantId)
+  } catch (error) {
+    console.error('Failed to delete Assistant', error)
+  }
+}
+
+export async function getRecentAssistants(): Promise<Assistant[]> {
+  try {
+    const starredAssistants = await getStarredAssistants()
+    return starredAssistants.filter(assistant => assistant.topics.length > 0)
+  } catch (error) {
+    console.error('Failed to get starred assistants:', error)
+    return []
+  }
 }

@@ -7,7 +7,7 @@ import { uuid } from '@/utils'
 import {
   deleteTopicById as _deleteTopicById,
   getTopicById as _getTopicById,
-  getTopics,
+  getTopics as _getTopics,
   upsertTopics as _upsertTopics
 } from '../../db/queries/topics.queries'
 
@@ -66,5 +66,14 @@ export async function getTopicById(topicId: string): Promise<Topic | null> {
   } catch (error) {
     console.error('Failed to get topic by ID:', error)
     return null
+  }
+}
+
+export async function getTopics(): Promise<Topic[]> {
+  try {
+    return await _getTopics()
+  } catch (error) {
+    console.error('Failed to get topics')
+    return []
   }
 }

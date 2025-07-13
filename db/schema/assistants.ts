@@ -21,5 +21,6 @@ export const assistants = sqliteTable('assistants', {
   // mcpServers: blob('mcp_servers'),
   knowledge_recognition: text('knowledge_recognition'),
   tags: text('tags'),
-  group: text('group')
+  group: text('group'),
+  isStar: integer('isStar', { mode: 'boolean' })
 })

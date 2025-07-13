@@ -21,6 +21,7 @@ export const SearchInput = ({ placeholder, onChangeText, value }: SearchInputPro
         placeholder={placeholder}
         onChangeText={onChangeText}
         value={value}
+        fontSize={16}
       />
       <Stack
         position="absolute"
