@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { BookmarkMinus, ChevronDown, Settings2 } from '@tamagui/lucide-icons'
 import { BlurView } from 'expo-blur'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native'
 import { Button, Popover, Text, useWindowDimensions, XStack, YStack } from 'tamagui'
 
@@ -55,6 +56,7 @@ interface AssistantSelectionProps {
 }
 
 export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistantId }) => {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const { width } = useWindowDimensions()
   const navigation = useNavigation<NavigationProps>()
@@ -63,7 +65,10 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
   const navigateToAssistantDetailScreen = () => {
     if (!assistant) return
     setOpen(false)
-    navigation.navigate('AssistantDetailScreen', { assistantId: assistant.id })
+    // 防止selection在AssistantDetailScreen闪现
+    setTimeout(() => {
+      navigation.navigate('AssistantDetailScreen', { assistantId: assistant.id })
+    }, 200)
   }
 
   if (isLoading) {
@@ -75,7 +80,11 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
   }
 
   if (!assistant) {
-    return <Text>未找到助手。</Text>
+    return (
+      <SafeAreaContainer style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>{t('assistants.error.notFound')}</Text>
+      </SafeAreaContainer>
+    )
   }
 
   return (

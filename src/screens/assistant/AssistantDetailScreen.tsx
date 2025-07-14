@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { styled, Tabs, Text, useTheme, View, XStack, YStack } from 'tamagui'
+import { styled, Tabs, Text, XStack, YStack } from 'tamagui'
 
 import { ModelTabContent } from '@/components/assistant/ModelTabContent'
 import { PromptTabContent } from '@/components/assistant/PromptTabContent'
@@ -21,7 +21,7 @@ type AssistantDetailRouteProp = RouteProp<RootStackParamList, 'AssistantDetailSc
 
 export default function AssistantDetailScreen() {
   const { t } = useTranslation()
-  const theme = useTheme()
+
   const navigation = useNavigation()
   const route = useRoute<AssistantDetailRouteProp>()
 
@@ -39,9 +39,9 @@ export default function AssistantDetailScreen() {
 
   if (!assistant) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <SafeAreaContainer style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>{t('assistants.error.notFound')}</Text>
-      </View>
+      </SafeAreaContainer>
     )
   }
 
