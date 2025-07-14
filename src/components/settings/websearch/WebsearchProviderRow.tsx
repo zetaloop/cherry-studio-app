@@ -33,16 +33,19 @@ export const WebsearchProviderRow = ({ provider, need_config }: WebsearchProvide
         <WebsearchProviderIcon provider={provider} />
         <Text>{provider.name}</Text>
       </XStack>
-      <XStack gap={10}>
+      <XStack gap={10} justifyContent="center" alignItems="center">
         {provider.apiKey && (
           <Text
             borderRadius={8}
-            backgroundColor={getGreenColor(isDark, 20)}
+            borderWidth={0.5}
+            backgroundColor={getGreenColor(isDark, 10)}
+            borderColor={getGreenColor(isDark, 20)}
             color={getGreenColor(isDark, 100)}
             paddingVertical={2}
             paddingHorizontal={8}
             justifyContent="center"
-            alignItems="center">
+            alignItems="center"
+            fontSize={12}>
             {t('common.added')}
           </Text>
         )}
