@@ -43,7 +43,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 
   if (isLoadingTopics || isLoadingAssistants) {
     return (
-      <SafeAreaContainer>
+      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
       </SafeAreaContainer>
     )

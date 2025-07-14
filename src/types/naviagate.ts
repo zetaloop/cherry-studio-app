@@ -3,6 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 export type RootStackParamList = {
   WelcomeScreen: undefined
   HomeScreen: { topicId?: string }
+  ChatScreen: { topicId: string }
   SettingsScreen: undefined
   DataSettingsScreen: undefined
   BasicDataSettingsScreen: undefined

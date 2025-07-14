@@ -72,7 +72,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic, timeFormat = 'time' }) => {
   }
 
   const openTopic = () => {
-    navigation.navigate('HomeScreen', { topicId: topic.id })
+    navigation.navigate('ChatScreen', { topicId: topic.id })
   }
 
   const date = new Date(topic.updatedAt)
