@@ -40,7 +40,7 @@ const extendedConfig = {
       green20Dark: '#acf3a633',
       green10Light: '#8de59e26',
       green10Dark: '#acf3a61a',
-      orange100Light: '#ffb26eff',
+      orange100: '#ffb26eff',
       orange20: '#ffb26e33',
       blue100: '#6fb1faff',
       blue20: '#6fb1fa33',

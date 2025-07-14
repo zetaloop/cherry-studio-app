@@ -1,9 +1,11 @@
-import { CheckCircle, Circle, XCircle } from '@tamagui/lucide-icons'
+import { CircleCheck, TriangleAlert, XCircle } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Dialog, Paragraph, Spinner, Unspaced, XStack, YStack } from 'tamagui'
 
 import { RestoreStepId, StepStatus } from '@/services/BackupService'
+import { useIsDark } from '@/utils'
+import { getGreenColor } from '@/utils/color'
 
 export interface RestoreStep {
   id: RestoreStepId
@@ -19,22 +21,51 @@ interface RestoreProgressModalProps {
   onClose: () => void
 }
 
-const getIconForStatus = (status: StepStatus) => {
+const getIconForStatus = (isDark: boolean, status: StepStatus) => {
   switch (status) {
     case 'in_progress':
-      return <Spinner size="small" color="$blue10" />
+      return <Spinner size="small" color="$textLink" />
     case 'completed':
-      return <CheckCircle size={20} color="$green10" />
+      return <CircleCheck size={20} color={getGreenColor(isDark, 100)} />
     case 'error':
-      return <XCircle size={20} color="$red10" />
+      return <XCircle size={20} color="$red100" />
     case 'pending':
     default:
-      return <Circle size={20} color="$gray8" />
+      return <TriangleAlert size={20} color="$orange100" />
+  }
+}
+
+const getBackgroundColor = (isDark: boolean, status: StepStatus) => {
+  switch (status) {
+    case 'in_progress':
+      return '$blue100'
+    case 'completed':
+      return getGreenColor(isDark, 10)
+    case 'error':
+      return '$red20'
+    case 'pending':
+    default:
+      return '$orange20'
+  }
+}
+
+const getFontColor = (isDark: boolean, status: StepStatus) => {
+  switch (status) {
+    case 'in_progress':
+      return '$textLink'
+    case 'completed':
+      return getGreenColor(isDark, 100)
+    case 'error':
+      return '$red'
+    case 'pending':
+    default:
+      return '$orange100'
   }
 }
 
 export function RestoreProgressModal({ isOpen, steps, overallStatus, onClose }: RestoreProgressModalProps) {
   const { t } = useTranslation()
+  const isDark = useIsDark()
   const isDone = overallStatus === 'success' || overallStatus === 'error'
   const title =
     overallStatus === 'success'
@@ -74,9 +105,19 @@ export function RestoreProgressModal({ isOpen, steps, overallStatus, onClose }: 
 
           <YStack gap="$3" paddingVertical="$2">
             {steps.map(step => (
-              <XStack key={step.id} alignItems="center" gap="$3">
-                {getIconForStatus(step.status)}
-                <Paragraph flex={1}>{step.title}</Paragraph>
+              <XStack
+                key={step.id}
+                alignItems="center"
+                gap={13}
+                paddingVertical={12}
+                paddingLeft={12}
+                paddingRight={15}
+                borderRadius={17}
+                backgroundColor={getBackgroundColor(isDark, step.status)}>
+                {getIconForStatus(isDark, step.status)}
+                <Paragraph flex={1} color={getFontColor(isDark, step.status)}>
+                  {step.title}
+                </Paragraph>
               </XStack>
             ))}
           </YStack>
