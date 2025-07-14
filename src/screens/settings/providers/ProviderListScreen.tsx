@@ -52,14 +52,6 @@ export default function ProviderListScreen() {
     console.log('Provider Type:', selectedProviderType)
   }
 
-  if (isLoading) {
-    return (
-      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator />
-      </SafeAreaContainer>
-    )
-  }
-
   return (
     <SafeAreaContainer>
       <HeaderBar
@@ -70,22 +62,28 @@ export default function ProviderListScreen() {
           onPress: onAddProvider
         }}
       />
-      <SettingContainer>
-        <SearchInput placeholder={t('settings.provider.search')} value={searchQuery} onChangeText={setSearchQuery} />
+      {isLoading ? (
+        <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator />
+        </SafeAreaContainer>
+      ) : (
+        <SettingContainer>
+          <SearchInput placeholder={t('settings.provider.search')} value={searchQuery} onChangeText={setSearchQuery} />
 
-        <YStack flex={1} gap={8}>
-          <Text>{t('settings.provider.title')}</Text>
-          <CustomRadialGradientBackground style={{ radius: 2 }}>
-            <ScrollView backgroundColor="$colorTransparent">
-              <SettingGroup>
-                {providers.map(p => (
-                  <ProviderItem key={p.id} provider={p} mode="checked" />
-                ))}
-              </SettingGroup>
-            </ScrollView>
-          </CustomRadialGradientBackground>
-        </YStack>
-      </SettingContainer>
+          <YStack flex={1} gap={8}>
+            <Text>{t('settings.provider.title')}</Text>
+            <CustomRadialGradientBackground style={{ radius: 2 }}>
+              <ScrollView backgroundColor="$colorTransparent">
+                <SettingGroup>
+                  {providers.map(p => (
+                    <ProviderItem key={p.id} provider={p} mode="checked" />
+                  ))}
+                </SettingGroup>
+              </ScrollView>
+            </CustomRadialGradientBackground>
+          </YStack>
+        </SettingContainer>
+      )}
 
       <AddProviderSheet
         bottomSheetRef={bottomSheetRef}

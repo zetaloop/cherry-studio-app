@@ -21,7 +21,8 @@ export default function AppNavigator() {
           width: screenWidth * 0.8,
           backgroundColor: 'transparent'
         },
-        swipeEnabled: true,
+        // 无法根据具体route设定开启，希望只在ChatScreen开启，但是当swipeEnabled为true时，所有界面都会开启
+        swipeEnabled: false,
         drawerType: 'front',
         keyboardDismissMode: 'none'
       }}>

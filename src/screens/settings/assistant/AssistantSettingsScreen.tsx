@@ -6,35 +6,40 @@ import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native'
 import { Button, Text, XStack, YStack } from 'tamagui'
 
-import { SettingHelpText } from '@/components/settings'
+import { SettingContainer, SettingHelpText } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import ModelSheet from '@/components/sheets/ModelSheet'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { useAssistant } from '@/hooks/useAssistant'
 import { Assistant, Model } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
+import { useIsDark } from '@/utils'
 
-interface ModelPickerProps {
-  assistant: Assistant
-  onPress: () => void
-}
-
-function ModelPicker({ assistant, onPress }: ModelPickerProps) {
+function ModelPicker({ assistant, onPress }: { assistant: Assistant; onPress: () => void }) {
   const { t } = useTranslation()
+  const isDark = useIsDark()
   const model = assistant?.model
 
   return (
-    <Button chromeless width="100%" onPress={onPress} iconAfter={<ChevronRight size={16} />} padding={0}>
+    <Button
+      chromeless
+      width="100%"
+      height="100%"
+      paddingHorizontal={16}
+      paddingVertical={15}
+      onPress={onPress}
+      iconAfter={<ChevronRight size={16} />}
+      backgroundColor={isDark ? '$uiCardDark' : '$uiCardLight'}>
       <XStack flex={1} alignItems="center" overflow="hidden" justifyContent="space-between">
         {model ? (
-          <>
-            <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
+          <XStack flex={1} justifyContent="space-between">
+            <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail" fontWeight="bold">
               {t(`provider.${model.provider}`)}
             </Text>
-            <Text flexShrink={0} numberOfLines={1} maxWidth="60%" ellipsizeMode="tail">
+            <Text flexShrink={0} numberOfLines={1} maxWidth="60%" ellipsizeMode="tail" fontSize={12}>
               {model.name}
             </Text>
-          </>
+          </XStack>
         ) : (
           <Text flex={1} numberOfLines={1} ellipsizeMode="tail">
             {t('settings.models.empty')}
@@ -42,6 +47,58 @@ function ModelPicker({ assistant, onPress }: ModelPickerProps) {
         )}
       </XStack>
     </Button>
+  )
+}
+
+interface AssistantSettingItemProps {
+  assistantId: string
+  titleKey: string
+  descriptionKey: string
+  assistant: Assistant
+  updateAssistant: (assistant: Assistant) => Promise<void>
+}
+
+function AssistantSettingItem({
+  assistantId,
+  titleKey,
+  descriptionKey,
+  assistant,
+  updateAssistant
+}: AssistantSettingItemProps) {
+  const { t } = useTranslation()
+  const navigation = useNavigation<NavigationProps>()
+  const sheetRef = useRef<BottomSheetModal>(null)
+
+  const handleModelChange = async (models: Model[]) => {
+    const newModel = models[0]
+    await updateAssistant({ ...assistant, model: newModel })
+  }
+
+  return (
+    <>
+      <YStack gap={8}>
+        <XStack justifyContent="space-between" height={20}>
+          <Text>{t(titleKey)}</Text>
+          <Button
+            size={14}
+            icon={<Settings2 size={14} color="$textLink" />}
+            backgroundColor="$colorTransparent"
+            onPress={() => navigation.navigate('AssistantDetailScreen', { assistantId })}
+          />
+        </XStack>
+        <XStack>
+          <ModelPicker assistant={assistant} onPress={() => sheetRef.current?.present()} />
+        </XStack>
+        <SettingHelpText>{t(descriptionKey)}</SettingHelpText>
+      </YStack>
+
+      <ModelSheet
+        ref={sheetRef}
+        mentions={assistant.model ? [assistant.model] : []}
+        setMentions={handleModelChange}
+        multiple={false}
+      />
+    </>
   )
 }
 
@@ -53,21 +110,9 @@ export default function AssistantSettingsScreen() {
   const { assistant: topicNamingAssistant, updateAssistant: updateTopicNamingAssistant } = useAssistant('topic_naming')
   const { assistant: translateAssistant, updateAssistant: updateTranslateAssistant } = useAssistant('translate')
 
-  const defaultSheetRef = useRef<BottomSheetModal>(null)
-  const topicNamingSheetRef = useRef<BottomSheetModal>(null)
-  const translateSheetRef = useRef<BottomSheetModal>(null)
+  const isLoading = !defaultAssistant || !topicNamingAssistant || !translateAssistant
 
-  const handleModelChange = async (
-    assistant: Assistant | undefined,
-    updateAssistant: (assistant: Assistant) => Promise<void>,
-    models: Model[]
-  ) => {
-    if (!assistant) return
-    const newModel = models[0]
-    await updateAssistant({ ...assistant, model: newModel })
-  }
-
-  if (!defaultAssistant || !topicNamingAssistant || !translateAssistant) {
+  if (isLoading) {
     return (
       <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator />
@@ -75,77 +120,45 @@ export default function AssistantSettingsScreen() {
     )
   }
 
+  const assistantItems = [
+    {
+      id: 'default',
+      titleKey: 'settings.assistant.default_assistant.name',
+      descriptionKey: 'settings.assistant.default_assistant.description',
+      assistant: defaultAssistant,
+      updateAssistant: updateDefaultAssistant
+    },
+    {
+      id: 'topic_naming',
+      titleKey: 'settings.assistant.topic_naming_assistant.name',
+      descriptionKey: 'settings.assistant.topic_naming_assistant.description',
+      assistant: topicNamingAssistant,
+      updateAssistant: updateTopicNamingAssistant
+    },
+    {
+      id: 'translate',
+      titleKey: 'settings.assistant.translate_assistant.name',
+      descriptionKey: 'settings.assistant.translate_assistant.description',
+      assistant: translateAssistant,
+      updateAssistant: updateTranslateAssistant
+    }
+  ]
+
   return (
     <SafeAreaContainer>
       <HeaderBar title={t('settings.assistant.title')} onBackPress={() => navigation.goBack()} />
-      <YStack padding="$4" backgroundColor="$background" flex={1} gap={24}>
-        <YStack gap={8}>
-          <XStack justifyContent="space-between" height={20}>
-            <Text>{t('settings.assistant.default_assistant.name')}</Text>
-            <Button
-              size={14}
-              icon={<Settings2 size={14} />}
-              backgroundColor="$colorTransparent"
-              onPress={() => navigation.navigate('AssistantDetailScreen', { assistantId: 'default' })}
-            />
-          </XStack>
-          <XStack>
-            <ModelPicker assistant={defaultAssistant} onPress={() => defaultSheetRef.current?.present()} />
-          </XStack>
-          <SettingHelpText>{t('settings.assistant.default_assistant.description')}</SettingHelpText>
-        </YStack>
-
-        <YStack gap={8}>
-          <XStack justifyContent="space-between" height={20}>
-            <Text>{t('settings.assistant.topic_naming_assistant.name')}</Text>
-            <Button
-              size={14}
-              icon={<Settings2 size={14} />}
-              onPress={() => navigation.navigate('AssistantDetailScreen', { assistantId: 'topic_naming' })}
-              backgroundColor="$colorTransparent"
-            />
-          </XStack>
-          <XStack>
-            <ModelPicker assistant={topicNamingAssistant} onPress={() => topicNamingSheetRef.current?.present()} />
-          </XStack>
-          <SettingHelpText>{t('settings.assistant.topic_naming_assistant.description')}</SettingHelpText>
-        </YStack>
-
-        <YStack gap={8}>
-          <XStack justifyContent="space-between" height={20}>
-            <Text>{t('settings.assistant.translate_assistant.name')}</Text>
-            <Button
-              size={14}
-              icon={<Settings2 size={14} />}
-              backgroundColor="$colorTransparent"
-              onPress={() => navigation.navigate('AssistantDetailScreen', { assistantId: 'translate' })}
-            />
-          </XStack>
-          <XStack>
-            <ModelPicker assistant={translateAssistant} onPress={() => translateSheetRef.current?.present()} />
-          </XStack>
-          <SettingHelpText>{t('settings.assistant.translate_assistant.description')}</SettingHelpText>
-        </YStack>
-      </YStack>
-
-      <ModelSheet
-        ref={defaultSheetRef}
-        mentions={defaultAssistant?.model ? [defaultAssistant.model] : []}
-        setMentions={models => handleModelChange(defaultAssistant, updateDefaultAssistant, models)}
-        multiple={false}
-      />
-      <ModelSheet
-        ref={topicNamingSheetRef}
-        mentions={topicNamingAssistant?.model ? [topicNamingAssistant.model] : []}
-        setMentions={models => handleModelChange(topicNamingAssistant, updateTopicNamingAssistant, models)}
-        multiple={false}
-      />
-      <ModelSheet
-        ref={translateSheetRef}
-        mentions={translateAssistant?.model ? [translateAssistant.model] : []}
-        setMentions={models => handleModelChange(translateAssistant, updateTranslateAssistant, models)}
-        multiple={false}
-      />
+      <SettingContainer>
+        {assistantItems.map(item => (
+          <AssistantSettingItem
+            key={item.id}
+            assistantId={item.id}
+            titleKey={item.titleKey}
+            descriptionKey={item.descriptionKey}
+            assistant={item.assistant}
+            updateAssistant={item.updateAssistant}
+          />
+        ))}
+      </SettingContainer>
     </SafeAreaContainer>
   )
 }

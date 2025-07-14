@@ -11,7 +11,6 @@ import { Accordion, Button, Separator, Text, XStack, YStack } from 'tamagui'
 import { SettingContainer, SettingGroup, SettingGroupTitle, SettingRow } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { AddModelSheet } from '@/components/settings/providers/AddModelSheet'
-import AuthCard from '@/components/settings/providers/AuthCard'
 import { ModelGroup } from '@/components/settings/providers/ModelGroup'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
@@ -149,7 +148,7 @@ export default function ProviderSettingsScreen() {
           contentContainerStyle={{ flexGrow: 1 }}>
           <YStack flex={1} gap={24}>
             {/* Auth Card */}
-            <AuthCard provider={provider} />
+            {/* <AuthCard provider={provider} /> */}
 
             {/* Manage Card */}
             <YStack gap={8}>
@@ -226,6 +225,7 @@ export default function ProviderSettingsScreen() {
           </YStack>
         </KeyboardAwareScrollView>
       </SettingContainer>
+
       <AddModelSheet bottomSheetRef={bottomSheetRef} isOpen={isBottomSheetOpen} onClose={handleBottomSheetClose} />
     </SafeAreaContainer>
   )

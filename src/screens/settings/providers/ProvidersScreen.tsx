@@ -48,6 +48,7 @@ export default function ProvidersScreen() {
           onPress: onAddProvider
         }}
       />
+
       <SettingContainer>
         <SearchInput placeholder={t('settings.provider.search')} value={searchQuery} onChangeText={setSearchQuery} />
 
@@ -57,7 +58,7 @@ export default function ProvidersScreen() {
           <YStack flex={1} gap={8} paddingVertical={8}>
             <SettingGroupTitle>{t('settings.provider.title')}</SettingGroupTitle>
             <CustomRadialGradientBackground style={{ radius: 2 }}>
-              <ScrollView backgroundColor="$colorTransparent">
+              <ScrollView backgroundColor="$colorTransparent" showsVerticalScrollIndicator={false}>
                 <SettingGroup>
                   {providers
                     .filter(p => p.enabled)
