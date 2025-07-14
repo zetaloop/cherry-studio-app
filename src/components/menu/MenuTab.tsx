@@ -1,7 +1,6 @@
 // src/components/menu/MenuTab.tsx (重构后)
-import { AnimatePresence } from 'moti'
 import React, { FC } from 'react'
-import { StackProps, Tabs, Text } from 'tamagui'
+import { Stack, StackProps, Tabs, Text } from 'tamagui'
 
 import { useIsDark } from '@/utils'
 import { getGreenColor, getTextPrimaryColor } from '@/utils/color'
@@ -55,7 +54,7 @@ export const MenuTab: FC<MenuTabProps> = ({ tabs, activeTab, onTabChange, childr
         })}
       </Tabs.List>
 
-      <AnimatePresence exitBeforeEnter>{children}</AnimatePresence>
+      <Stack flex={1}>{children}</Stack>
     </Tabs>
   )
 }

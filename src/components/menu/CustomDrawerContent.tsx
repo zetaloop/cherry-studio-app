@@ -1,6 +1,7 @@
 import { DrawerContentComponentProps, DrawerItemList } from '@react-navigation/drawer'
 import { Settings } from '@tamagui/lucide-icons'
 import { BlurView } from 'expo-blur'
+import { MotiView } from 'moti'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native'
@@ -12,7 +13,6 @@ import { GroupedTopicList } from '@/components/topic/GroupTopicList'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { useStarAssistants } from '@/hooks/useAssistant'
 import { useTopics } from '@/hooks/useTopic'
-import { useIsDark } from '@/utils'
 import { getAssistantWithTopic } from '@/utils/assistants'
 
 import { SearchInput } from '../ui/SearchInput'
@@ -20,7 +20,7 @@ import { MenuTab, TabItem } from './MenuTab'
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { t } = useTranslation()
-  const isDark = useIsDark()
+
   const { topics, isLoading: isLoadingTopics } = useTopics()
   const { assistants, isLoading: isLoadingAssistants } = useStarAssistants()
   const [activeTab, setActiveTab] = useState<string>('topic')
@@ -58,36 +58,48 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 
           <YStack backgroundColor="transparent" paddingTop={20} flex={1}>
             <MenuTab tabs={menuTabs} activeTab={activeTab} onTabChange={setActiveTab}>
-              <Tabs.Content
-                key="topic"
-                value="topic"
-                flex={1}
-                animation="quick"
-                enterStyle={{ opacity: 0, y: 20 }}
-                exitStyle={{ opacity: 0, y: -20 }}>
-                <SearchInput placeholder={t('common.search_placeholder')} />
+              <Tabs.Content key="topic" value="topic" flex={1}>
+                <MotiView
+                  style={{ flex: 1 }}
+                  from={{ opacity: 0, translateY: 10 }}
+                  animate={{
+                    translateY: 0,
+                    opacity: 1
+                  }}
+                  exit={{ opacity: 1, translateY: -10 }}
+                  transition={{
+                    type: 'timing'
+                  }}>
+                  <SearchInput placeholder={t('common.search_placeholder')} />
 
-                <MenuTabContent title={t('menu.topic.recent')} onSeeAllPress={handleTopicSeeAll}>
-                  <View flex={1} minHeight={200}>
-                    <GroupedTopicList topics={topics} />
-                  </View>
-                </MenuTabContent>
+                  <MenuTabContent title={t('menu.topic.recent')} onSeeAllPress={handleTopicSeeAll}>
+                    <View flex={1} minHeight={200}>
+                      <GroupedTopicList topics={topics} />
+                    </View>
+                  </MenuTabContent>
+                </MotiView>
               </Tabs.Content>
 
-              <Tabs.Content
-                key="assistant"
-                value="assistant"
-                flex={1}
-                animation="quick"
-                enterStyle={{ opacity: 0, y: 20 }}
-                exitStyle={{ opacity: 0, y: -20 }}>
-                <SearchInput placeholder={t('common.search_placeholder')} />
+              <Tabs.Content key="assistant" value="assistant" flex={1}>
+                <MotiView
+                  style={{ flex: 1 }}
+                  from={{ opacity: 0, translateY: 10 }}
+                  animate={{
+                    translateY: 0,
+                    opacity: 1
+                  }}
+                  exit={{ opacity: 1, translateY: -10 }}
+                  transition={{
+                    type: 'timing'
+                  }}>
+                  <SearchInput placeholder={t('common.search_placeholder')} />
 
-                <MenuTabContent title={t('menu.assistant.recent')} onSeeAllPress={handleAssistantsSeeAll}>
-                  <View flex={1} minHeight={200}>
-                    <AssistantList assistants={assistantWithTopics} />
-                  </View>
-                </MenuTabContent>
+                  <MenuTabContent title={t('menu.assistant.recent')} onSeeAllPress={handleAssistantsSeeAll}>
+                    <View flex={1} minHeight={200}>
+                      <AssistantList assistants={assistantWithTopics} />
+                    </View>
+                  </MenuTabContent>
+                </MotiView>
               </Tabs.Content>
             </MenuTab>
           </YStack>
