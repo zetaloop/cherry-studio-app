@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start'
   },
   contentWrapper: {
-    // paddingVertical: 5,
     borderTopRightRadius: 8,
     borderTopLeftRadius: 24,
     borderBottomLeftRadius: 24,
@@ -69,7 +68,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   assistantMessageContent: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    paddingHorizontal: 10
   }
 })
 
