@@ -1,5 +1,5 @@
+import { MotiScrollView } from 'moti'
 import React from 'react'
-import { ScrollView } from 'tamagui'
 
 import { useAssistant } from '@/hooks/useAssistant'
 import { Topic } from '@/types/assistant'
@@ -18,9 +18,19 @@ const ChatContent = ({ topic }: ChatContentProps) => {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <MotiScrollView
+      from={{ opacity: 0, translateY: 10 }}
+      animate={{
+        translateY: 0,
+        opacity: 1
+      }}
+      exit={{ opacity: 1, translateY: -10 }}
+      transition={{
+        type: 'timing'
+      }}
+      showsVerticalScrollIndicator={false}>
       <Messages key={topic.id} assistant={assistant} topic={topic} />
-    </ScrollView>
+    </MotiScrollView>
   )
 }
 

@@ -63,8 +63,8 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                 value="topic"
                 flex={1}
                 animation="quick"
-                enterStyle={{ opacity: 0, x: -20 }}
-                exitStyle={{ opacity: 0, x: 20 }}>
+                enterStyle={{ opacity: 0, y: 20 }}
+                exitStyle={{ opacity: 0, y: -20 }}>
                 <SearchInput placeholder={t('common.search_placeholder')} />
 
                 <MenuTabContent title={t('menu.topic.recent')} onSeeAllPress={handleTopicSeeAll}>
@@ -79,8 +79,8 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                 value="assistant"
                 flex={1}
                 animation="quick"
-                enterStyle={{ opacity: 0, x: 20 }}
-                exitStyle={{ opacity: 0, x: -20 }}>
+                enterStyle={{ opacity: 0, y: 20 }}
+                exitStyle={{ opacity: 0, y: -20 }}>
                 <SearchInput placeholder={t('common.search_placeholder')} />
 
                 <MenuTabContent title={t('menu.assistant.recent')} onSeeAllPress={handleAssistantsSeeAll}>
@@ -96,6 +96,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
         <XStack paddingHorizontal={20} paddingBottom={40} justifyContent="space-between" alignItems="center">
           <XStack gap={10} alignItems="center">
             <Avatar circular size={48}>
+              {/* todo: set user avatar */}
               <Avatar.Image accessibilityLabel="Cam" src={require('@/assets/images/favicon.png')} />
               <Avatar.Fallback delayMs={600} backgroundColor="$blue10" />
             </Avatar>

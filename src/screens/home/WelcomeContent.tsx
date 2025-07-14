@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
+import { MotiView } from 'moti'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, ScrollView, styled, Text, XStack, YStack } from 'tamagui'
@@ -17,7 +18,17 @@ const WelcomeContent = () => {
   }
 
   return (
-    <>
+    <MotiView
+      style={{ flex: 1 }}
+      from={{ opacity: 0, translateY: 10 }}
+      animate={{
+        translateY: 0,
+        opacity: 1
+      }}
+      exit={{ opacity: 1, translateY: -10 }}
+      transition={{
+        type: 'timing'
+      }}>
       {/* assistant market(Temporary) */}
       <YStack gap={17} paddingHorizontal={20} paddingTop={40}>
         <XStack justifyContent="space-between">
@@ -54,7 +65,7 @@ const WelcomeContent = () => {
           </Text>
         </YStack>
       </ContentContainer>
-    </>
+    </MotiView>
   )
 }
 

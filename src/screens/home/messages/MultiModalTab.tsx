@@ -1,5 +1,5 @@
-import { AnimatePresence } from 'moti'
 // 1. 从 React 中导入 useState
+import { MotiView } from 'moti'
 import React, { FC, useState } from 'react'
 import { ScrollView, Tabs, Text, View, XStack } from 'tamagui'
 
@@ -63,25 +63,23 @@ const MultiModalTab: FC<MultiModalTabProps> = ({ assistant, messages }) => {
           </XStack>
         </Tabs.List>
 
-        <AnimatePresence exitBeforeEnter>
-          {messages.map((message, index) => (
-            <Tabs.Content
-              key={index}
-              value={index.toString()}
-              animation="quick"
-              enterStyle={{
-                opacity: 0,
-                y: 10
+        {messages.map((message, index) => (
+          <Tabs.Content key={index} value={index.toString()}>
+            <MotiView
+              from={{ opacity: 0, translateY: 10 }}
+              animate={{
+                translateY: 0,
+                opacity: 1
               }}
-              exitStyle={{
-                opacity: 0,
-                y: -10
+              exit={{ opacity: 1, translateY: -10 }}
+              transition={{
+                type: 'timing'
               }}>
               <MessageItem message={message} />
               <MessageFooter assistant={assistant} message={message} />
-            </Tabs.Content>
-          ))}
-        </AnimatePresence>
+            </MotiView>
+          </Tabs.Content>
+        ))}
       </Tabs>
     </View>
   )
