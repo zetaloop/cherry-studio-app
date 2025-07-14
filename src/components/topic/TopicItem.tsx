@@ -99,6 +99,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic, timeFormat = 'time' }) => {
 
     fetchCurrentLanguage()
   }, [])
+
   return (
     <ReanimatedSwipeable ref={swipeableRef} renderRightActions={renderRightActions} friction={1} rightThreshold={40}>
       <XStack

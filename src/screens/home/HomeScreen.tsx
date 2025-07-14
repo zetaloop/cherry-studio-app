@@ -18,11 +18,11 @@ const HomeScreen = () => {
         const newestTopic = await getNewestTopic()
 
         if (newestTopic) {
-          navigation.navigate('ChatScreen', { topicId: newestTopic.id })
+          navigation.replace('ChatScreen', { topicId: newestTopic.id })
         } else {
           const defaultAssistant = await getDefaultAssistant()
           const newTopic = await createNewTopic(defaultAssistant)
-          navigation.navigate('ChatScreen', { topicId: newTopic.id })
+          navigation.replace('ChatScreen', { topicId: newTopic.id })
         }
       } catch (error) {
         console.error('There is some errors in Home Screen', error)

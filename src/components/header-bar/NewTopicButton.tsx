@@ -18,7 +18,7 @@ export const NewTopicButton: React.FC<NewTopicButtonProps> = ({ assistant }) => 
 
   const handleAddNewTopic = async () => {
     const newTopic = await createNewTopic(assistant)
-    navigation.navigate('HomeScreen', { topicId: newTopic.id })
+    navigation.navigate('ChatScreen', { topicId: newTopic.id })
   }
 
   return (
