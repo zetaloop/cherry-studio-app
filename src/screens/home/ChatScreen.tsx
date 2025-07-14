@@ -20,11 +20,9 @@ type ChatScreenRouteProp = RouteProp<RootStackParamList, 'ChatScreen'>
 const ChatScreen = () => {
   const route = useRoute<ChatScreenRouteProp>()
   const { topicId } = route.params
-  console.log('topicId', topicId)
   const isDark = useIsDark()
   const { updateAssistant } = useAssistant('default')
   const { topic, isLoading } = useTopic(topicId)
-  console.log('useTopic', topic?.id)
 
   if (!topic || isLoading) {
     return (

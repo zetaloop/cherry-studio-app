@@ -4,19 +4,18 @@ import { BlurView } from 'expo-blur'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native'
-import { Avatar, Button, Text, View, XStack, YStack } from 'tamagui'
+import { Avatar, Button, Tabs, Text, View, XStack, YStack } from 'tamagui'
 
 import { AssistantList } from '@/components/assistant/AssistantList'
 import { MenuTabContent } from '@/components/menu/MenuTabContent'
 import { GroupedTopicList } from '@/components/topic/GroupTopicList'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
-import { SearchInput } from '@/components/ui/SearchInput'
 import { useStarAssistants } from '@/hooks/useAssistant'
 import { useTopics } from '@/hooks/useTopic'
 import { useIsDark } from '@/utils'
 import { getAssistantWithTopic } from '@/utils/assistants'
-import { getTextPrimaryColor } from '@/utils/color'
 
+import { SearchInput } from '../ui/SearchInput'
 import { MenuTab, TabItem } from './MenuTab'
 
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
@@ -33,12 +32,10 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 
   const handleAssistantsSeeAll = () => {
     props.navigation.navigate('Main', { screen: 'AssistantScreen' })
-    console.log('Navigate to all assistants')
   }
 
   const handleTopicSeeAll = () => {
     props.navigation.navigate('Main', { screen: 'TopicScreen' })
-    console.log('Navigate to all topics')
   }
 
   if (isLoadingTopics || isLoadingAssistants) {
@@ -60,28 +57,39 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           </YStack>
 
           <YStack backgroundColor="transparent" paddingTop={20} flex={1}>
-            <MenuTab
-              tabs={menuTabs}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              inactiveTextColor={getTextPrimaryColor(isDark)}
-            />
+            <MenuTab tabs={menuTabs} activeTab={activeTab} onTabChange={setActiveTab}>
+              <Tabs.Content
+                key="topic"
+                value="topic"
+                flex={1}
+                animation="quick"
+                enterStyle={{ opacity: 0, x: -20 }}
+                exitStyle={{ opacity: 0, x: 20 }}>
+                <SearchInput placeholder={t('common.search_placeholder')} />
 
-            <SearchInput placeholder={t('common.search_placeholder')} />
+                <MenuTabContent title={t('menu.topic.recent')} onSeeAllPress={handleTopicSeeAll}>
+                  <View flex={1} minHeight={200}>
+                    <GroupedTopicList topics={topics} />
+                  </View>
+                </MenuTabContent>
+              </Tabs.Content>
 
-            <MenuTabContent
-              title={activeTab === 'topic' ? t('menu.topic.recent') : t('menu.assistant.recent')}
-              onSeeAllPress={activeTab === 'topic' ? handleTopicSeeAll : handleAssistantsSeeAll}>
-              {activeTab === 'topic' ? (
-                <View style={{ flex: 1, minHeight: 200 }}>
-                  <GroupedTopicList topics={topics} />
-                </View>
-              ) : (
-                <View style={{ flex: 1, minHeight: 200 }}>
-                  <AssistantList assistants={assistantWithTopics} />
-                </View>
-              )}
-            </MenuTabContent>
+              <Tabs.Content
+                key="assistant"
+                value="assistant"
+                flex={1}
+                animation="quick"
+                enterStyle={{ opacity: 0, x: 20 }}
+                exitStyle={{ opacity: 0, x: -20 }}>
+                <SearchInput placeholder={t('common.search_placeholder')} />
+
+                <MenuTabContent title={t('menu.assistant.recent')} onSeeAllPress={handleAssistantsSeeAll}>
+                  <View flex={1} minHeight={200}>
+                    <AssistantList assistants={assistantWithTopics} />
+                  </View>
+                </MenuTabContent>
+              </Tabs.Content>
+            </MenuTab>
           </YStack>
         </YStack>
 

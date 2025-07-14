@@ -1,9 +1,10 @@
-import React from 'react'
-import { FC } from 'react'
-import { ColorTokens, StackProps, Text, View, XStack, YStack } from 'tamagui'
+// src/components/menu/MenuTab.tsx (重构后)
+import { AnimatePresence } from 'moti'
+import React, { FC } from 'react'
+import { StackProps, Tabs, Text } from 'tamagui'
 
 import { useIsDark } from '@/utils'
-import { getGreenColor } from '@/utils/color'
+import { getGreenColor, getTextPrimaryColor } from '@/utils/color'
 
 export type TabItem = {
   id: string
@@ -14,29 +15,47 @@ interface MenuTabProps extends StackProps {
   tabs: TabItem[]
   activeTab: string
   onTabChange: (id: string) => void
-  inactiveTextColor: ColorTokens
+  children: React.ReactNode
 }
 
-export const MenuTab: FC<MenuTabProps> = ({ tabs, activeTab, onTabChange, inactiveTextColor, ...stackProps }) => {
+export const MenuTab: FC<MenuTabProps> = ({ tabs, activeTab, onTabChange, children, ...stackProps }) => {
   const isDark = useIsDark()
+  const inactiveTextColor = getTextPrimaryColor(isDark)
+
   return (
-    <XStack width="100%" paddingTop={4} paddingHorizontal={5} paddingBottom={20} {...stackProps}>
-      {tabs.map(tab => {
-        const isActive = activeTab === tab.id
-        return (
-          <YStack key={tab.id} flex={1} gap={10} alignItems="center" onPress={() => onTabChange(tab.id)}>
-            <Text lineHeight={17} color={isActive ? getGreenColor(isDark, 100) : inactiveTextColor}>
-              {tab.label}
-            </Text>
-            <View
-              width="100%"
-              height={4}
-              backgroundColor={isActive ? getGreenColor(isDark, 100) : 'transparent'}
-              borderRadius={100}
-            />
-          </YStack>
-        )
-      })}
-    </XStack>
+    <Tabs
+      value={activeTab}
+      onValueChange={onTabChange}
+      orientation="horizontal"
+      flexDirection="column"
+      flex={1}
+      gap={20}
+      {...stackProps}>
+      <Tabs.List disablePassBorderRadius borderBottomWidth={1} borderColor="$borderColor" backgroundColor="transparent">
+        {tabs.map(tab => {
+          const isActive = activeTab === tab.id
+          return (
+            <Tabs.Tab
+              key={tab.id}
+              value={tab.id}
+              flex={1}
+              paddingVertical={12}
+              backgroundColor="transparent"
+              borderBottomWidth={isActive ? 2 : 0}
+              borderColor={isActive ? getGreenColor(isDark, 100) : 'transparent'}
+              focusStyle={{
+                borderBottomWidth: isActive ? 4 : 0,
+                borderColor: isActive ? getGreenColor(isDark, 100) : 'transparent'
+              }}>
+              <Text lineHeight={17} color={isActive ? getGreenColor(isDark, 100) : inactiveTextColor}>
+                {tab.label}
+              </Text>
+            </Tabs.Tab>
+          )
+        })}
+      </Tabs.List>
+
+      <AnimatePresence exitBeforeEnter>{children}</AnimatePresence>
+    </Tabs>
   )
 }
