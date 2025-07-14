@@ -1,7 +1,7 @@
 import BottomSheet from '@gorhom/bottom-sheet'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ChevronRight, HeartPulse, Plus, Settings, Settings2 } from '@tamagui/lucide-icons'
-import { debounce, groupBy } from 'lodash'
+import { groupBy } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native'
@@ -16,17 +16,18 @@ import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { CustomSwitch } from '@/components/ui/Switch'
 import { useProvider } from '@/hooks/useProviders'
-import { Model, Provider } from '@/types/assistant'
+import { Model } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
+import { useIsDark } from '@/utils'
+import { getGreenColor } from '@/utils/color'
 
 type ProviderSettingsRouteProp = RouteProp<RootStackParamList, 'ProviderSettingsScreen'>
 
 export default function ProviderSettingsScreen() {
   const { t } = useTranslation()
+  const isDark = useIsDark()
   const navigation = useNavigation<NavigationProps>()
   const route = useRoute<ProviderSettingsRouteProp>()
-  const [searchText, setSearchText] = useState('')
-  const [debouncedSearchText, setDebouncedSearchText] = useState('')
 
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
@@ -43,27 +44,7 @@ export default function ProviderSettingsScreen() {
   const { providerId } = route.params
   const { provider, isLoading, updateProvider } = useProvider(providerId)
 
-  // Debounce search text
-  const debouncedSetSearchText = debounce(setDebouncedSearchText, 300)
-
-  React.useEffect(() => {
-    debouncedSetSearchText(searchText)
-
-    return () => {
-      debouncedSetSearchText.cancel()
-    }
-  }, [searchText, debouncedSetSearchText])
-
-  // 根据搜索文本过滤和分组模型
-  const getModelGroups = (debouncedSearchText: string, provider: Provider | null) => {
-    if (!provider) return {}
-    const filteredModels = debouncedSearchText // Use debouncedSearchText
-      ? provider.models.filter(model => model.name.toLowerCase().includes(debouncedSearchText.toLowerCase()))
-      : provider.models
-    return groupBy(filteredModels, 'group')
-  }
-
-  const modelGroups = getModelGroups(debouncedSearchText, provider)
+  const modelGroups = groupBy(provider?.models, 'group')
 
   // 对分组进行排序
   const sortedModelGroups = Object.entries(modelGroups).sort(([a], [b]) => a.localeCompare(b))
@@ -160,15 +141,18 @@ export default function ProviderSettingsScreen() {
                 </SettingRow>
                 <SettingRow onPress={onApiService}>
                   <Text>{t('settings.provider.api_service')}</Text>
-                  <XStack>
+                  <XStack justifyContent="center" alignItems="center">
                     {provider.checked && provider.apiKey && provider.apiHost && (
                       <Text
                         paddingVertical={2}
                         paddingHorizontal={8}
                         borderRadius={8}
-                        backgroundColor="$gray4"
+                        backgroundColor={getGreenColor(isDark, 10)}
+                        borderColor={getGreenColor(isDark, 20)}
+                        color={getGreenColor(isDark, 100)}
+                        borderWidth={0.5}
                         fontWeight="bold"
-                        fontSize={14}>
+                        fontSize={12}>
                         {t('settings.provider.checked')}
                       </Text>
                     )}
@@ -181,7 +165,7 @@ export default function ProviderSettingsScreen() {
             <Separator />
 
             {/* Search Card */}
-            <SearchInput placeholder={t('settings.models.search')} value={searchText} onChangeText={setSearchText} />
+            <SearchInput placeholder={t('settings.models.search')} />
 
             {/* Model List Card with Accordion */}
             <YStack flex={1}>
@@ -218,7 +202,7 @@ export default function ProviderSettingsScreen() {
                 </Accordion>
               ) : (
                 <Text textAlign="center" color="$gray10" paddingVertical={24}>
-                  {searchText ? t('settings.models.no_results') : t('models.no_models')}
+                  {t('models.no_models')}
                 </Text>
               )}
             </YStack>

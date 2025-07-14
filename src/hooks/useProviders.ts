@@ -33,7 +33,6 @@ export function useAllProviders() {
  * @param providerId
  */
 export function useProvider(providerId: string) {
-  console.log('useProvider', providerId)
   const query = db.select().from(providersSchema).where(eq(providersSchema.id, providerId))
   const { data: rawProvider, updatedAt } = useLiveQuery(query)
 

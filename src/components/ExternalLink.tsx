@@ -12,7 +12,7 @@ interface ExternalLinkProps {
   onError?: (error: Error) => void
 }
 
-const ExternalLink: React.FC<ExternalLinkProps> = ({ href, children, color = '$blue10', size, onError }) => {
+const ExternalLink: React.FC<ExternalLinkProps> = ({ href, children, color = '$textLink', size, onError }) => {
   const { t } = useTranslation()
 
   const handlePress = async () => {

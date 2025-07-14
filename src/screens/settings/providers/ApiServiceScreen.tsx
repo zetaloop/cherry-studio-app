@@ -161,7 +161,7 @@ export default function ApiServiceScreen() {
             <SettingGroupTitle>{t('settings.provider.api_key')}</SettingGroupTitle>
             <Button
               size={16}
-              icon={<ShieldCheck size={16} color={provider.checked ? 'green' : 'white'} />}
+              icon={<ShieldCheck size={16} color={provider.checked ? '$textLink' : 'white'} />}
               backgroundColor="$colorTransparent"
               circular
               onPress={handleOpenBottomSheet}
