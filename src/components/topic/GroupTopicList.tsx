@@ -19,7 +19,6 @@ export function GroupedTopicList({ topics }: GroupedTopicListProps) {
   const { t } = useTranslation()
 
   const listData = useMemo(() => {
-    // 1. 使用通用的分组函数
     const groupedTopics = groupItemsByDate(topics, topic => new Date(topic.updatedAt))
 
     const groupOrder: DateGroupKey[] = ['today', 'yesterday', 'thisWeek', 'lastWeek', 'lastMonth', 'older']
@@ -38,13 +37,10 @@ export function GroupedTopicList({ topics }: GroupedTopicListProps) {
       const topicList = groupedTopics[key]
 
       if (topicList.length > 0) {
-        // 添加分组头
         data.push({ type: 'header', title: groupTitles[key] })
 
-        // 2. 使用抽离的函数来获取时间格式
         const format = getTimeFormatForGroup(key)
 
-        // 添加该分组下的 Topic 项
         topicList.forEach(topic => {
           data.push({ type: 'topic', topic, timeFormat: format })
         })

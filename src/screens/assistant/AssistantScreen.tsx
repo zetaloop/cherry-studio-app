@@ -1,28 +1,33 @@
 import { useNavigation } from '@react-navigation/native'
+import { FlashList } from '@shopify/flash-list'
 import { PenSquare } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, ScrollView, useTheme, XStack, YStack } from 'tamagui'
+import { ActivityIndicator } from 'react-native'
+import { Button, Text, XStack, YStack } from 'tamagui'
 
 import AssistantItem from '@/components/assistant/AssistantItem'
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { useAssistants } from '@/hooks/useAssistant'
+import { useStarAssistants } from '@/hooks/useAssistant'
+import { useTopics } from '@/hooks/useTopic'
 import { createAssistant } from '@/services/AssistantService'
 import { NavigationProps } from '@/types/naviagate'
+import { getAssistantWithTopic } from '@/utils/assistants'
 
 export default function AssistantScreen() {
   const { t } = useTranslation()
-  const theme = useTheme()
   const navigation = useNavigation<NavigationProps>()
 
   // 筛选状态
   const [showTags, setShowTags] = useState(false)
   const [showSaved, setShowSaved] = useState(false)
   const [showRecents, setShowRecents] = useState(false)
-  const { assistants } = useAssistants()
+  const { topics } = useTopics()
+  const { assistants, isLoading } = useStarAssistants()
+  const assistantWithTopics = getAssistantWithTopic(assistants, topics)
 
   const onAddAssistant = async () => {
     const newAssistant = await createAssistant()
@@ -45,6 +50,14 @@ export default function AssistantScreen() {
     setShowTags(!showTags)
     // 在这里处理筛选逻辑
     console.log('Filter by tags:', !showTags)
+  }
+
+  if (isLoading) {
+    return (
+      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator />
+      </SafeAreaContainer>
+    )
   }
 
   return (
@@ -88,13 +101,19 @@ export default function AssistantScreen() {
             {t('button.recents')}
           </Button>
         </XStack>
-        <ScrollView flex={1} gap={20}>
-          <YStack gap={24}>
-            {assistants.map(assistant => (
-              <AssistantItem key={assistant.id} assistant={assistant} />
-            ))}
-          </YStack>
-        </ScrollView>
+
+        <FlashList
+          data={assistantWithTopics}
+          renderItem={({ item }) => <AssistantItem assistant={item} />}
+          keyExtractor={item => item.id}
+          estimatedItemSize={80}
+          ItemSeparatorComponent={() => <YStack height={16} />}
+          ListEmptyComponent={
+            <YStack flex={1} justifyContent="center" alignItems="center" paddingTop="$8">
+              <Text>{t('common.no_results_found')}</Text>
+            </YStack>
+          }
+        />
       </SettingContainer>
     </SafeAreaContainer>
   )

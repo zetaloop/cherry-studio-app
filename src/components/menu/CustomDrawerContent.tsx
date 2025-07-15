@@ -74,7 +74,8 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 
                   <MenuTabContent title={t('menu.topic.recent')} onSeeAllPress={handleTopicSeeAll}>
                     <View flex={1} minHeight={200}>
-                      <GroupedTopicList topics={topics} />
+                      {/* 只显示7条 */}
+                      <GroupedTopicList topics={topics.slice(0, 7)} />
                     </View>
                   </MenuTabContent>
                 </MotiView>

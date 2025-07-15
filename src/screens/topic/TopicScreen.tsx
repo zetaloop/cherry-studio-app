@@ -11,16 +11,20 @@ import { GroupedTopicList } from '@/components/topic/GroupTopicList'
 import SafeAreaContainer from '@/components/ui/SafeAreaContainer'
 import { SearchInput } from '@/components/ui/SearchInput'
 import { useTopics } from '@/hooks/useTopic'
+import { getDefaultAssistant } from '@/services/AssistantService'
+import { createNewTopic } from '@/services/TopicService'
+import { NavigationProps } from '@/types/naviagate'
 
 export default function TopicScreen() {
   const { t } = useTranslation()
   const theme = useTheme()
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProps>()
   const { topics, isLoading } = useTopics()
 
-  const onAddTopic = () => {
-    // Navigate to the topic creation page or open a modal
-    console.log('Navigate to add topic page')
+  const handleAddNewTopic = async () => {
+    const defaultAssistant = await getDefaultAssistant()
+    const newTopic = await createNewTopic(defaultAssistant)
+    navigation.navigate('ChatScreen', { topicId: newTopic.id })
   }
 
   if (isLoading) {
@@ -38,7 +42,7 @@ export default function TopicScreen() {
         onBackPress={() => navigation.goBack()}
         rightButton={{
           icon: <PenSquare size={24} />,
-          onPress: onAddTopic
+          onPress: handleAddNewTopic
         }}
       />
       <SettingContainer>
