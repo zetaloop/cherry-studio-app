@@ -1,11 +1,11 @@
 import BottomSheet from '@gorhom/bottom-sheet'
 import { BookmarkMinus } from '@tamagui/lucide-icons'
-import { BlurView } from 'expo-blur'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-native-markdown-display'
 import { Button, Text, useTheme, View, XStack, YStack } from 'tamagui'
 
+import { BlurView } from '@/components/ui/BlurView'
 import { ISheet } from '@/components/ui/Sheet'
 import { useSize } from '@/hooks/useSize'
 import { Assistant } from '@/types/assistant'
