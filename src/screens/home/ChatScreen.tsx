@@ -59,7 +59,7 @@ const ChatScreen = () => {
           <HeaderBar topic={topic} />
 
           {hasMessages ? <ChatContent key={topic.id} topic={topic} /> : <WelcomeContent key={topic.id} />}
-          <LinearGradient padding={1} borderRadius={12} colors={gradientColors} start={[0, 0]} end={[1, 1]}>
+          <LinearGradient padding={1} borderRadius={20} colors={gradientColors} start={[0, 0]} end={[1, 1]}>
             <InputContent>
               <MessageInput topic={topic} updateAssistant={updateAssistant} />
             </InputContent>
@@ -73,7 +73,7 @@ const ChatScreen = () => {
 const InputContent = styled(YStack, {
   paddingHorizontal: 16,
   paddingVertical: 12,
-  borderRadius: 12,
+  borderRadius: 20,
   backgroundColor: '$background'
 })
 

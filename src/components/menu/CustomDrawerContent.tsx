@@ -97,7 +97,8 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 
                   <MenuTabContent title={t('menu.assistant.recent')} onSeeAllPress={handleAssistantsSeeAll}>
                     <View flex={1} minHeight={200}>
-                      <AssistantList assistants={assistantWithTopics} />
+                      {/* 只显示7条 */}
+                      <AssistantList assistants={assistantWithTopics.slice(0, 7)} />
                     </View>
                   </MenuTabContent>
                 </MotiView>

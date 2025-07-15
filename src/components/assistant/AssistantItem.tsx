@@ -137,9 +137,11 @@ const AssistantItem: FC<AssistantItemProps> = ({ assistant, timeFormat = 'time' 
               color={getTextPrimaryColor(isDark)}>
               {assistant.name}
             </Text>
-            <Text fontSize={12} lineHeight={18} color={getTextSecondaryColor(isDark)}>
-              {displayTime}
-            </Text>
+            {displayTime && (
+              <Text fontSize={12} lineHeight={18} color={getTextSecondaryColor(isDark)}>
+                {displayTime}
+              </Text>
+            )}
           </YStack>
         </XStack>
         <Stack
