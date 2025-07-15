@@ -1,5 +1,6 @@
 import { MotiScrollView } from 'moti'
-import React from 'react'
+import React, { useRef } from 'react'
+import { ScrollView } from 'react-native'
 
 import { useAssistant } from '@/hooks/useAssistant'
 import { Topic } from '@/types/assistant'
@@ -12,13 +13,19 @@ interface ChatContentProps {
 
 const ChatContent = ({ topic }: ChatContentProps) => {
   const { assistant, isLoading } = useAssistant(topic.assistantId)
+  const scrollViewRef = useRef<ScrollView>(null)
 
   if (isLoading || !assistant) {
     return null
   }
 
+  const handleContentSizeChange = () => {
+    scrollViewRef.current?.scrollToEnd({ animated: true })
+  }
+
   return (
     <MotiScrollView
+      ref={scrollViewRef}
       from={{ opacity: 0, translateY: 10 }}
       animate={{
         translateY: 0,
@@ -28,7 +35,8 @@ const ChatContent = ({ topic }: ChatContentProps) => {
       transition={{
         type: 'timing'
       }}
-      showsVerticalScrollIndicator={false}>
+      showsVerticalScrollIndicator={false}
+      onContentSizeChange={handleContentSizeChange}>
       <Messages key={topic.id} assistant={assistant} topic={topic} />
     </MotiScrollView>
   )

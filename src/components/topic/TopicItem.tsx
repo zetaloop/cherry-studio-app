@@ -110,7 +110,7 @@ const TopicItem: FC<TopicItemProps> = ({ topic, timeFormat = 'time' }) => {
         paddingVertical={15}
         paddingHorizontal={20}
         onPress={openTopic}>
-        <Text fontSize={16} numberOfLines={1} ellipsizeMode="tail" fontWeight="500">
+        <Text fontSize={16} numberOfLines={1} ellipsizeMode="tail" fontWeight="500" maxWidth="80%">
           {topic.name}
         </Text>
         <Text fontSize={12} color="$gray10">

@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Keyboard } from 'react-native'
 import { TextArea, View, XStack, YStack } from 'tamagui'
 
 import { isReasoningModel } from '@/config/models/reasoning'
@@ -42,6 +43,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ topic, updateAssista
 
     setText('')
     setFiles([])
+    Keyboard.dismiss()
 
     try {
       const baseUserMessage: MessageInputBaseParams = { assistant, topic, content: text }

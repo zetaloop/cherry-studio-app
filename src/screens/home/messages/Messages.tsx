@@ -13,12 +13,9 @@ import MessageGroup from './MessageGroup'
 interface MessagesProps {
   assistant: Assistant
   topic: Topic
-  setActiveTopic?: (topic: Topic) => void
-  onComponentUpdate?(): void
-  onFirstUpdate?(): void
 }
 
-const Messages: FC<MessagesProps> = ({ assistant, topic, setActiveTopic, onComponentUpdate, onFirstUpdate }) => {
+const Messages: FC<MessagesProps> = ({ assistant, topic }) => {
   const { messages } = useMessages(topic.id)
   const groupedMessages = Object.entries(getGroupedMessages(messages))
 
