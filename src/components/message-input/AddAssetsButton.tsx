@@ -1,18 +1,18 @@
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
-import { CirclePlus } from '@tamagui/lucide-icons'
 import React, { useRef } from 'react'
 import { Button } from 'tamagui'
 
 import { FileType } from '@/types/file'
 
+import { AssetsIcon } from '../icons/AssetsIcon'
 import FileSheet from '../sheets/FileSheet'
 
-interface AddFileButtonProps {
+interface AddAssetsButtonProps {
   files: FileType[]
   setFiles: (files: FileType[]) => void
 }
 
-export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles }) => {
+export const AddAssetsButton: React.FC<AddAssetsButtonProps> = ({ files, setFiles }) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
   const handlePress = () => {
@@ -21,7 +21,7 @@ export const AddFileButton: React.FC<AddFileButtonProps> = ({ files, setFiles })
 
   return (
     <>
-      <Button chromeless size={24} icon={<CirclePlus size={24} />} onPress={handlePress} />
+      <Button chromeless size={24} icon={<AssetsIcon size={24} />} onPress={handlePress} />
 
       <FileSheet ref={bottomSheetModalRef} files={files} setFiles={setFiles} />
     </>

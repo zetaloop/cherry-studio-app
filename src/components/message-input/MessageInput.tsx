@@ -1,4 +1,5 @@
 import { isEmpty } from 'lodash'
+import { AnimatePresence, MotiView } from 'moti'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Keyboard } from 'react-native'
@@ -13,7 +14,7 @@ import { FileType } from '@/types/file'
 import { MessageInputBaseParams } from '@/types/message'
 import { useIsDark } from '@/utils'
 
-import { AddFileButton } from './AddFileButton'
+import { AddAssetsButton } from './AddAssetsButton'
 import FilePreview from './FilePreview'
 import { MentionButton } from './MentionButton'
 import { SendButton } from './SendButton'
@@ -88,8 +89,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ topic, updateAssista
         {/* button */}
         <XStack justifyContent="space-between" alignItems="center">
           <XStack gap={5} alignItems="center">
-            <MentionButton mentions={mentions} setMentions={setMentions} />
-            <AddFileButton files={files} setFiles={setFiles} />
+            <AddAssetsButton files={files} setFiles={setFiles} />
             <WebsearchButton />
             {isReasoning && (
               <ThinkButton
@@ -107,8 +107,28 @@ export const MessageInput: React.FC<MessageInputProps> = ({ topic, updateAssista
             )}
           </XStack>
           <XStack gap={5} alignItems="center">
-            <VoiceButton />
-            <SendButton onSend={sendMessage} />
+            <MentionButton mentions={mentions} setMentions={setMentions} />
+            <AnimatePresence exitBeforeEnter>
+              {text ? (
+                <MotiView
+                  key="send-button"
+                  from={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ type: 'timing', duration: 100 }}>
+                  <SendButton onSend={sendMessage} />
+                </MotiView>
+              ) : (
+                <MotiView
+                  key="voice-button"
+                  from={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ type: 'timing', duration: 100 }}>
+                  <VoiceButton />
+                </MotiView>
+              )}
+            </AnimatePresence>
           </XStack>
         </XStack>
       </YStack>
