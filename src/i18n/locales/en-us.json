@@ -54,7 +54,9 @@
       "placeholder": "Ask something casually",
       "start_check_model": "Let's Start",
       "save": "Save",
-      "recents": "Recents"
+      "recents": "Recents",
+      "checking": "Checking...",
+      "success": "Successful!"
     },
     "chat": {
       "default.name": "Default",
@@ -274,7 +276,7 @@
         "title": "Model Provider",
         "search": "Search Providers...",
         "enabled": "On",
-        "checked": "Checked",
+        "added": "Added",
         "auth": {
           "title": "{{provider}} Service",
           "login": "Log in",

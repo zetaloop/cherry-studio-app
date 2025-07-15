@@ -23,8 +23,8 @@ export const ProviderItem: React.FC<ProviderItemProps> = ({ provider, mode = 'en
   const navigation = useNavigation<NavigationProps>()
 
   // 根据模式决定显示条件和文本
-  const shouldShowStatus = mode === 'enabled' ? provider.enabled : provider.checked
-  const statusText = mode === 'enabled' ? t('settings.provider.enabled') : t('settings.provider.checked')
+  const shouldShowStatus = mode === 'enabled' ? provider.enabled : provider.apiKey
+  const statusText = mode === 'enabled' ? t('settings.provider.enabled') : t('settings.provider.added')
 
   return (
     <SettingRow onPress={() => navigation.navigate('ProviderSettingsScreen', { providerId: provider.id })}>

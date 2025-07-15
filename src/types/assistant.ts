@@ -87,7 +87,6 @@ export type Provider = {
   apiVersion?: string
   models: Model[]
   enabled?: boolean
-  checked?: boolean
   isSystem?: boolean
   isAuthed?: boolean
   rateLimit?: number
@@ -104,3 +103,5 @@ export type ProviderType =
   | 'qwenlm'
   | 'azure-openai'
   | 'vertexai'
+
+export type ApiStatus = 'idle' | 'processing' | 'success' | 'error'

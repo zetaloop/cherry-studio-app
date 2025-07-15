@@ -142,7 +142,7 @@ export default function ProviderSettingsScreen() {
                 <SettingRow onPress={onApiService}>
                   <Text>{t('settings.provider.api_service')}</Text>
                   <XStack justifyContent="center" alignItems="center">
-                    {provider.checked && provider.apiKey && provider.apiHost && (
+                    {provider.apiKey && provider.apiHost && (
                       <Text
                         paddingVertical={2}
                         paddingHorizontal={8}
@@ -153,7 +153,7 @@ export default function ProviderSettingsScreen() {
                         borderWidth={0.5}
                         fontWeight="bold"
                         fontSize={12}>
-                        {t('settings.provider.checked')}
+                        {t('settings.provider.added')}
                       </Text>
                     )}
                     <ChevronRight color="$white9" width={6} height={12} />

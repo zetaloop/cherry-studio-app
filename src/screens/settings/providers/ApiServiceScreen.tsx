@@ -16,7 +16,7 @@ import { isEmbeddingModel } from '@/config/models/embedding'
 import { PROVIDER_CONFIG } from '@/config/providers'
 import { useProvider } from '@/hooks/useProviders'
 import { checkApi } from '@/services/ApiService'
-import { Model } from '@/types/assistant'
+import { ApiStatus, Model } from '@/types/assistant'
 import { NavigationProps, RootStackParamList } from '@/types/naviagate'
 import { getModelUniqId } from '@/utils/model'
 
@@ -33,7 +33,7 @@ export default function ApiServiceScreen() {
 
   const [showApiKey, setShowApiKey] = useState(false)
   const [selectedModel, setSelectedModel] = useState<Model | undefined>()
-  const [isCheckingApi, setIsCheckingApi] = useState(false)
+  const [checkApiStatus, setCheckApiStatus] = useState<ApiStatus>('idle')
 
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
@@ -84,6 +84,7 @@ export default function ApiServiceScreen() {
   }
 
   const handleBottomSheetClose = () => {
+    bottomSheetRef.current?.close()
     setIsBottomSheetOpen(false)
   }
 
@@ -116,16 +117,9 @@ export default function ApiServiceScreen() {
     if (!selectedModel) return
 
     try {
-      setIsCheckingApi(true)
+      setCheckApiStatus('processing')
       await checkApi(provider, selectedModel)
-      Alert.alert(t('settings.websearch.check_success'), t('settings.websearch.check_success_message'), [
-        {
-          text: t('common.ok'),
-          style: 'cancel',
-          onPress: () => setIsBottomSheetOpen(false)
-        }
-      ])
-      await updateProvider({ ...provider, checked: true })
+      setCheckApiStatus('success')
     } catch (error: any) {
       console.error('Model check failed:', error)
       const errorMessage =
@@ -133,16 +127,20 @@ export default function ApiServiceScreen() {
           ? ' ' + (error.message.length > 100 ? error.message.substring(0, 100) + '...' : error.message)
           : ''
 
+      setCheckApiStatus('error')
+
       Alert.alert(t('settings.websearch.check_fail'), errorMessage, [
         {
           text: t('common.ok'),
           style: 'cancel',
-          onPress: () => setIsBottomSheetOpen(false)
+          onPress: () => handleBottomSheetClose()
         }
       ])
-      await updateProvider({ ...provider, checked: false })
     } finally {
-      setIsCheckingApi(false)
+      setTimeout(() => {
+        setCheckApiStatus('idle')
+        handleBottomSheetClose()
+      }, 500)
     }
   }
 
@@ -161,7 +159,7 @@ export default function ApiServiceScreen() {
             <SettingGroupTitle>{t('settings.provider.api_key')}</SettingGroupTitle>
             <Button
               size={16}
-              icon={<ShieldCheck size={16} color={provider.checked ? '$textLink' : 'white'} />}
+              icon={<ShieldCheck size={16} color="$textLink" />}
               backgroundColor="$colorTransparent"
               circular
               onPress={handleOpenBottomSheet}
@@ -222,7 +220,7 @@ export default function ApiServiceScreen() {
         selectOptions={selectOptions}
         apiKey={provider?.apiKey || ''}
         onStartModelCheck={handleStartModelCheck}
-        isCheckingApi={isCheckingApi}
+        checkApiStatus={checkApiStatus}
       />
     </SafeAreaContainer>
   )
