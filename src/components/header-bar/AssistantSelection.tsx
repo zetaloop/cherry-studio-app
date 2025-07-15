@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
 import { BookmarkMinus, ChevronDown, Settings2 } from '@tamagui/lucide-icons'
-import { BlurView } from 'expo-blur'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator } from 'react-native'
 import { Button, Popover, Text, useWindowDimensions, XStack, YStack } from 'tamagui'
 
+import { BlurView } from '@/components/ui/BlurView'
 import { useAssistant } from '@/hooks/useAssistant'
 import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
@@ -101,7 +101,7 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
         animation="quick"
         width={width}
         padding={0}
-        backgroundColor="#ffffffaa"
+        backgroundColor="transparent"
         elevation={0}
         overflow="hidden"
         borderRadius="$3">
