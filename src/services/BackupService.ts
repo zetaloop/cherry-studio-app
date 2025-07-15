@@ -1,8 +1,9 @@
 import { Directory, File, Paths } from 'expo-file-system/next'
 import { unzip } from 'react-native-zip-archive'
 
-import { BackupData, BackupReduxData, IndexedData } from '@/types/databackup'
+import { BackupData, ExportIndexedData, ExportReduxData } from '@/types/databackup'
 import { FileType } from '@/types/file'
+import { Message } from '@/types/message'
 
 import { upsertAssistants } from '../../db/queries/assistants.queries'
 import { upsertBlocks } from '../../db/queries/messageBlocks.queries'
@@ -13,7 +14,6 @@ import { upsertTopics } from './TopicService'
 
 const fileStorageDir = new Directory(Paths.cache, 'Files')
 
-// 定义进度的步骤ID和状态
 export type RestoreStepId =
   | 'restore_topics'
   | 'restore_messages_blocks'
@@ -32,8 +32,7 @@ export type ProgressUpdate = {
 type OnProgressCallback = (update: ProgressUpdate) => void
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-// 我们将把恢复逻辑拆分得更细，以便报告进度
-async function restoreIndexedDbData(data: IndexedData, onProgress: OnProgressCallback) {
+async function restoreIndexedDbData(data: ExportIndexedData, onProgress: OnProgressCallback) {
   onProgress({ step: 'restore_topics', status: 'in_progress' })
   await upsertTopics(data.topics)
   onProgress({ step: 'restore_topics', status: 'completed' })
@@ -41,12 +40,12 @@ async function restoreIndexedDbData(data: IndexedData, onProgress: OnProgressCal
 
   onProgress({ step: 'restore_messages_blocks', status: 'in_progress' })
   await upsertBlocks(data.message_blocks)
-  await upsertMessages(data.topics.flatMap(t => t.messages))
+  await upsertMessages(data.messages)
   onProgress({ step: 'restore_messages_blocks', status: 'completed' })
   await sleep(1000) // Mock delay
 }
 
-async function restoreReduxData(data: BackupReduxData, onProgress: OnProgressCallback) {
+async function restoreReduxData(data: ExportReduxData, onProgress: OnProgressCallback) {
   onProgress({ step: 'restore_llm_providers', status: 'in_progress' })
   await upsertProviders(data.llm.providers)
   onProgress({ step: 'restore_llm_providers', status: 'completed' })
@@ -64,31 +63,59 @@ async function restoreReduxData(data: BackupReduxData, onProgress: OnProgressCal
 }
 
 export async function restore(backupFile: Omit<FileType, 'md5'>, onProgress: OnProgressCallback) {
-  console.log('start to restore data...')
-
   if (!fileStorageDir.exists) {
     fileStorageDir.create({ intermediates: true, overwrite: true })
   }
 
   try {
-    // 1. Unzip
     const dataDir = Paths.join(fileStorageDir, backupFile.name.replace('.zip', ''))
     const backupDir = new Directory(dataDir)
     await unzip(backupFile.path, backupDir.uri)
 
-    // 2. Read data.json
     const data = JSON.parse(new File(dataDir, 'data.json').text()) as BackupData
-    console.log('data: ', data)
 
-    const reduxData: BackupReduxData = data.redux as BackupReduxData
-    const indexedData: IndexedData = data.indexedDB as IndexedData
+    const { reduxData, indexedData } = transformBackupData(data)
 
-    // 3. Restore data by calling sub-functions
     await restoreIndexedDbData(indexedData, onProgress)
     await restoreReduxData(reduxData, onProgress)
   } catch (error) {
     console.log('restore error: ', error)
-    // 在发生错误时，将所有正在进行的步骤标记为错误
-    throw error // 重新抛出错误，以便UI层可以捕获它
+    throw error
+  }
+}
+
+function transformBackupData(data: BackupData): { reduxData: ExportReduxData; indexedData: ExportIndexedData } {
+  const topicsFromRedux = data.redux.assistants.assistants.flatMap(a => a.topics)
+
+  const allMessages = data.indexedDB.topics.flatMap(t => t.messages)
+
+  const messagesByTopicId = allMessages.reduce<Record<string, Message[]>>((acc, message) => {
+    const { topicId } = message
+
+    if (!acc[topicId]) {
+      acc[topicId] = []
+    }
+
+    acc[topicId].push(message)
+    return acc
+  }, {})
+
+  // 4. 遍历 redux 中的 topics，并将分组后的 messages 附加到每个 topic 上
+  const topicsWithMessages = topicsFromRedux.map(topic => {
+    const correspondingMessages = messagesByTopicId[topic.id] || []
+
+    return {
+      ...topic,
+      messages: correspondingMessages
+    }
+  })
+
+  return {
+    reduxData: data.redux as ExportReduxData,
+    indexedData: {
+      topics: topicsWithMessages,
+      message_blocks: data.indexedDB.message_blocks,
+      messages: allMessages
+    }
   }
 }

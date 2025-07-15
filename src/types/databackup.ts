@@ -1,6 +1,6 @@
 import { WebSearchState } from '@/store/websearch'
 
-import { Assistant, Provider } from './assistant'
+import { Assistant, Provider, Topic } from './assistant'
 import { Message, MessageBlock } from './message'
 import { WebSearchProvider } from './websearch'
 
@@ -30,11 +30,11 @@ export type NutStore = {
 export type BackupData = {
   time: number
   version: number
-  indexedDB: IndexedData
-  redux: BackupReduxData
+  indexedDB: ImportIndexedData
+  redux: ImportReduxData
 }
 
-export type IndexedData = {
+export type ImportIndexedData = {
   // files: Omit<FileType, 'md5' | 'count' | 'mime_type'>[]
 
   topics: {
@@ -44,7 +44,7 @@ export type IndexedData = {
   message_blocks: MessageBlock[]
 }
 
-export type BackupReduxData = {
+export type ImportReduxData = {
   assistants: {
     defaultAssistant: Assistant
     assistants: Assistant[]
@@ -54,3 +54,11 @@ export type BackupReduxData = {
   }
   websearch: WebSearchState & { providers: WebSearchProvider[] }
 }
+
+export type ExportIndexedData = {
+  topics: Topic[]
+  message_blocks: MessageBlock[]
+  messages: Message[]
+}
+
+export type ExportReduxData = ImportReduxData

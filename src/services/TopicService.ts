@@ -1,7 +1,6 @@
 import { t } from 'i18next'
 
 import { Assistant, Topic } from '@/types/assistant'
-import { Message } from '@/types/message'
 import { uuid } from '@/utils'
 
 import {
@@ -24,13 +23,13 @@ export async function createNewTopic(assistant: Assistant): Promise<Topic> {
   return newTopic
 }
 
-export async function upsertTopics(topics: { id: string; messages: Message[] }[]): Promise<void> {
+export async function upsertTopics(topics: Topic[]): Promise<void> {
   const updatedTopics: Topic[] = topics.map(topic => ({
     ...topic,
-    name: t('new_topic'),
-    createdAt: topic.messages.at(0)?.createdAt || new Date().toISOString(),
-    updatedAt: topic.messages.at(-1)?.createdAt || new Date().toISOString(),
-    assistantId: topic.messages.at(-1)?.assistantId || ''
+    name: topic.name ? topic.name : t('new_topic'),
+    createdAt: topic.createdAt,
+    updatedAt: topic.updatedAt,
+    assistantId: topic.assistantId
   }))
   await _upsertTopics(updatedTopics)
 }
