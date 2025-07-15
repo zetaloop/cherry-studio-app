@@ -37,7 +37,7 @@ const MessageContent: React.FC<Props> = ({ message }) => {
           start={[1, 0]}
           end={[1, 1]}
           style={[
-            styles.contentWrapper,
+            isUser ? styles.contentWrapper : undefined,
             isUser ? styles.userMessageContent : styles.assistantMessageContent,
             mediaBlocks.length > 0 && { marginTop: 8 }
           ]}>

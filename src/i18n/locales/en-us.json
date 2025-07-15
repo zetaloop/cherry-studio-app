@@ -117,7 +117,8 @@
       "cannotOpenLink": "Cannot open link: {{error}}",
       "linkErrorTitle": "Link Opening Error",
       "deviceCannotHandleLink": "Your device cannot handle this link: {{href}}",
-      "cannotOpenLinkTitle": "Cannot Open Link"
+      "cannotOpenLinkTitle": "Cannot Open Link",
+      "error_title": "Error"
     },
     "history": {
       "topics.empty": " No topics found",
