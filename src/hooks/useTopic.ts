@@ -17,7 +17,7 @@ export function useTopic(topicId: string) {
     await upsertTopics([topic])
   }
 
-  if (!updatedAt || !rawTopic || rawTopic.length === 0) {
+  if (!updatedAt) {
     return {
       topic: null,
       isLoading: true,
@@ -38,7 +38,7 @@ export function useTopics() {
   const query = db.select().from(topicSchema).orderBy(desc(topicSchema.created_at))
   const { data: rawTopics, updatedAt } = useLiveQuery(query)
 
-  if (!updatedAt || !rawTopics || rawTopics.length === 0) {
+  if (!updatedAt) {
     return {
       topics: [],
       isLoading: true
@@ -58,7 +58,7 @@ export function useNewestTopic(): { topic: Topic | null; isLoading: boolean } {
 
   const { data: rawTopics, updatedAt } = useLiveQuery(query)
 
-  if (!updatedAt || !rawTopics || rawTopics.length === 0) {
+  if (!updatedAt) {
     return {
       topic: null,
       isLoading: true
