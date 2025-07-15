@@ -58,7 +58,6 @@ export function useAllWebSearchProviders() {
  * @param providerId
  */
 export function useWebSearchProvider(providerId: string) {
-  console.log('useWebSearchProvider', providerId)
   const query = db.select().from(websearch_providers).where(eq(websearch_providers.id, providerId))
   const { data: rawProvider, updatedAt } = useLiveQuery(query)
 

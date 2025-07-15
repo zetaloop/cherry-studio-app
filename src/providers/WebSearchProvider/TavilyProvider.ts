@@ -1,4 +1,4 @@
-import { TavilyClient } from '@agentic/tavily'
+import { fetch } from 'expo/fetch'
 
 import { WebSearchState } from '@/store/websearch'
 import { WebSearchProvider, WebSearchProviderResponse } from '@/types/websearch'
@@ -6,8 +6,6 @@ import { WebSearchProvider, WebSearchProviderResponse } from '@/types/websearch'
 import BaseWebSearchProvider from './BaseWebSearchProvider'
 
 export default class TavilyProvider extends BaseWebSearchProvider {
-  private tvly: TavilyClient
-
   constructor(provider: WebSearchProvider) {
     super(provider)
     console.log('TavilyProvider initialized with provider:', provider)
@@ -19,8 +17,6 @@ export default class TavilyProvider extends BaseWebSearchProvider {
     if (!this.apiHost) {
       throw new Error('API host is required for Tavily provider')
     }
-
-    this.tvly = new TavilyClient({ apiKey: this.apiKey, apiBaseUrl: this.apiHost })
   }
 
   public async search(query: string, websearch: WebSearchState): Promise<WebSearchProviderResponse> {
@@ -29,17 +25,37 @@ export default class TavilyProvider extends BaseWebSearchProvider {
         throw new Error('Search query cannot be empty')
       }
 
-      const result = await this.tvly.search({
+      const url = new URL('/search', this.apiHost).toString()
+
+      const requestBody = {
         query,
+        search_depth: 'basic',
         max_results: Math.max(1, websearch.maxResults)
+      }
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
       })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`API request failed with status ${response.status}: ${errorText}`)
+      }
+
+      const result = await response.json()
+
       return {
         query: result.query,
-        results: result.results.slice(0, websearch.maxResults).map(result => {
+        results: result.results.slice(0, websearch.maxResults).map((res: any) => {
           return {
-            title: result.title || 'No title',
-            content: result.content || '',
-            url: result.url || ''
+            title: res.title || 'No title',
+            content: res.content || '',
+            url: res.url || ''
           }
         })
       }
