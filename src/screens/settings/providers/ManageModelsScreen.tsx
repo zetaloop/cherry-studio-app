@@ -273,6 +273,7 @@ export default function ManageModelsScreen() {
                 {sortedModelGroups.length > 0 ? (
                   <Accordion overflow="hidden" type="multiple">
                     <FlashList
+                      showsVerticalScrollIndicator={false}
                       data={sortedModelGroups}
                       renderItem={renderModelGroupItem}
                       keyExtractor={([groupName]) => groupName}

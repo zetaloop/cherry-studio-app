@@ -1,7 +1,7 @@
 import { CircleCheck, TriangleAlert, XCircle } from '@tamagui/lucide-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Dialog, Paragraph, Spinner, Unspaced, XStack, YStack } from 'tamagui'
+import { Button, Dialog, Paragraph, Spinner, Text, Unspaced, XStack, YStack } from 'tamagui'
 
 import { RestoreStepId, StepStatus } from '@/services/BackupService'
 import { useIsDark } from '@/utils'
@@ -124,8 +124,13 @@ export function RestoreProgressModal({ isOpen, steps, overallStatus, onClose }: 
 
           <Unspaced>
             <Dialog.Close asChild>
-              <Button onPress={onClose} disabled={!isDone} theme={overallStatus === 'error' ? 'red' : 'green'}>
-                {isDone ? t('common.close') : t('settings.data.restore.progress.pending')}
+              <Button
+                onPress={onClose}
+                disabled={!isDone}
+                backgroundColor={overallStatus === 'error' ? '$red10' : getGreenColor(isDark, 10)}>
+                <Text color={overallStatus === 'error' ? '$red100' : getGreenColor(isDark, 100)}>
+                  {isDone ? t('common.close') : t('settings.data.restore.progress.pending')}
+                </Text>
               </Button>
             </Dialog.Close>
           </Unspaced>

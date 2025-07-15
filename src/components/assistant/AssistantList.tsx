@@ -55,6 +55,7 @@ export function AssistantList({ assistants }: AssistantListProps) {
   return (
     <FlashList
       data={listData}
+      showsVerticalScrollIndicator={false}
       renderItem={renderItem}
       keyExtractor={item => item.assistant.id}
       estimatedItemSize={50}

@@ -26,6 +26,7 @@ const Messages: FC<MessagesProps> = ({ assistant, topic }) => {
   return (
     <View style={{ flex: 1, minHeight: 200 }}>
       <FlashList
+        showsVerticalScrollIndicator={false}
         data={groupedMessages}
         renderItem={renderMessageGroup}
         keyExtractor={([key, group]) => `${key}-${group[0]?.id}`}

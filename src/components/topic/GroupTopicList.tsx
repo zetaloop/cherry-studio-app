@@ -69,6 +69,7 @@ export function GroupedTopicList({ topics }: GroupedTopicListProps) {
     <FlashList
       data={listData}
       renderItem={renderItem}
+      showsVerticalScrollIndicator={false}
       keyExtractor={(item, index) => {
         if (item.type === 'header') {
           return `header-${item.title}-${index}`

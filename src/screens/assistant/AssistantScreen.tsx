@@ -103,6 +103,7 @@ export default function AssistantScreen() {
         </XStack>
 
         <FlashList
+          showsVerticalScrollIndicator={false}
           data={assistantWithTopics}
           renderItem={({ item }) => <AssistantItem assistant={item} />}
           keyExtractor={item => item.id}
