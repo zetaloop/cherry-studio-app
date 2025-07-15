@@ -14,7 +14,7 @@ export async function createNewTopic(assistant: Assistant): Promise<Topic> {
   const newTopic: Topic = {
     id: uuid(),
     assistantId: assistant.id,
-    name: t('new_topic'),
+    name: t('topics.new_topic'),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     messages: []

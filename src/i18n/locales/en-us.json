@@ -534,7 +534,8 @@
     },
     "topics": {
       "title": "Topic",
-      "title.recent": "Recent Topics"
+      "title.recent": "Recent Topics",
+      "new_topic": "New Topic"
     }
   }
 }

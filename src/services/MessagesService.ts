@@ -22,12 +22,12 @@ import {
   createThinkingBlock,
   resetAssistantMessage
 } from '@/utils/messageUtils/create'
-import { getMainTextContent } from '@/utils/messageUtils/find'
 import { getTopicQueue } from '@/utils/queue'
 
 import { removeManyBlocks, updateOneBlock, upsertBlocks } from '../../db/queries/messageBlocks.queries'
 import { getMessageById, getMessagesByTopicId, upsertMessages } from '../../db/queries/messages.queries'
 import { getTopicById, updateTopicMessages } from '../../db/queries/topics.queries'
+import { fetchTopicNaming } from './ApiService'
 import { getDefaultModel } from './AssistantService'
 import { OrchestrationService } from './OrchestrationService'
 import { createStreamProcessor, StreamProcessorCallbacks } from './StreamProcessingService'
@@ -556,24 +556,8 @@ export async function fetchAndProcessAssistantResponseImpl(
             await updateOneBlock({ id: possibleBlockId, changes })
           }
 
-          const endTime = Date.now()
-          const duration = endTime - startTime
-          const content = getMainTextContent(finalAssistantMsg)
-
-          // if (!isOnHomePage() && duration > 60 * 1000) {
-          //   await notificationService.send({
-          //     id: uuid(),
-          //     type: 'success',
-          //     title: t('notification.assistant'),
-          //     message: content.length > 50 ? content.slice(0, 47) + '...' : content,
-          //     silent: false,
-          //     timestamp: Date.now(),
-          //     source: 'assistant'
-          //   })
-          // }
-
           // 更新topic的name
-          // autoRenameTopic(assistant, topicId)
+          await fetchTopicNaming(topicId)
 
           if (
             response &&
@@ -607,7 +591,6 @@ export async function fetchAndProcessAssistantResponseImpl(
     }
     const streamProcessorCallbacks = createStreamProcessor(callbacks)
 
-    const startTime = Date.now()
     const orchestrationService = new OrchestrationService()
     await orchestrationService.handleUserMessage(
       {

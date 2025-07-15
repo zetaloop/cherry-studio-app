@@ -1,5 +1,6 @@
 import { StreamTextParams } from '@cherrystudio/ai-core'
-import { isEmpty } from 'lodash'
+import { t } from 'i18next'
+import { isEmpty, takeRight } from 'lodash'
 
 import LegacyAiProvider from '@/aiCore'
 import AiProvider from '@/aiCore'
@@ -14,11 +15,13 @@ import { Chunk, ChunkType } from '@/types/chunk'
 import { AssistantMessageStatus, Message, MessageBlock, MessageBlockStatus, MessageBlockType } from '@/types/message'
 import { SdkModel } from '@/types/sdk'
 import { createBaseMessageBlock, createTranslationBlock } from '@/utils/messageUtils/create'
+import { filterMainTextMessages } from '@/utils/messageUtils/filters'
 
 import { updateOneBlock, upsertBlocks } from '../../db/queries/messageBlocks.queries'
 import { getMessageById, upsertMessages } from '../../db/queries/messages.queries'
 import { createBlankAssistant, getAssistantById, getAssistantProvider, getDefaultModel } from './AssistantService'
 import { createStreamProcessor, StreamProcessorCallbacks } from './StreamProcessingService'
+import { getTopicById, upsertTopics } from './TopicService'
 
 export async function fetchChatCompletion({
   messages,
@@ -161,11 +164,9 @@ export async function fetchTranslate({
   }
   const llmMessages = await convertMessagesToSdkMessages([message], translateAssistant.model)
 
-  console.log('llmMessages', llmMessages)
-
   const AI = new ModernAiProvider(translateAssistant.model || getDefaultModel(), provider)
   const { params: aiSdkParams, modelId } = await buildStreamTextParams(llmMessages, translateAssistant)
-  console.log('modelId', modelId)
+
   const middlewareConfig: AiSdkMiddlewareConfig = {
     streamOutput: translateAssistant.settings?.streamOutput ?? true,
     onChunk: streamProcessorCallbacks,
@@ -247,5 +248,66 @@ export async function checkApi(provider: Provider, model: Model): Promise<void> 
     } else {
       throw error
     }
+  }
+}
+
+export async function fetchTopicNaming(topicId: string) {
+  console.log('Fetching topic naming...')
+  const topic = await getTopicById(topicId)
+
+  if (!topic) {
+    console.error(`[fetchTopicNaming] Topic with ID ${topicId} not found.`)
+    return
+  }
+
+  if (topic.name !== t('topics.new_topic')) {
+    return
+  }
+
+  let callbacks: StreamProcessorCallbacks = {}
+
+  callbacks = {
+    onTextComplete: async finalText => {
+      await upsertTopics([
+        {
+          ...topic,
+          name: finalText
+        }
+      ])
+    }
+  }
+  const streamProcessorCallbacks = createStreamProcessor(callbacks)
+  const topicNamingAssistant = await getAssistantById('topic_naming')
+
+  if (!topicNamingAssistant.model) {
+    throw new Error('Translate assistant model is not defined')
+  }
+
+  const provider = await getAssistantProvider(topicNamingAssistant)
+
+  // 总结上下文总是取最后5条消息
+  const contextMessages = takeRight(topic.messages, 5)
+
+  // LLM对多条消息的总结有问题，用单条结构化的消息表示会话内容会更好
+  const mainTextMessages = await filterMainTextMessages(contextMessages)
+
+  const llmMessages = await convertMessagesToSdkMessages(mainTextMessages, topicNamingAssistant.model)
+
+  const AI = new ModernAiProvider(topicNamingAssistant.model || getDefaultModel(), provider)
+  const { params: aiSdkParams, modelId } = await buildStreamTextParams(llmMessages, topicNamingAssistant)
+
+  const middlewareConfig: AiSdkMiddlewareConfig = {
+    streamOutput: topicNamingAssistant.settings?.streamOutput ?? true,
+    onChunk: streamProcessorCallbacks,
+    model: topicNamingAssistant.model,
+    provider: provider,
+    enableReasoning: topicNamingAssistant.settings?.reasoning_effort !== undefined
+  }
+
+  try {
+    return (await AI.completions(modelId, aiSdkParams, middlewareConfig)).getText() || ''
+  } catch (error: any) {
+    console.error('Error during translation:', error)
+    return ''
   }
 }
