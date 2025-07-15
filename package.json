@@ -11,7 +11,8 @@
     "test": "jest --watchAll",
     "lint": "oxlint --fix",
     "check:i18n": "node scripts/check-i18n.js",
-    "check": "yarn check:i18n && oxlint"
+    "check": "yarn check:i18n && oxlint",
+    "eas-build-pre-install": "corepack enable && yarn set version 4"
   },
   "jest": {
     "preset": "jest-expo"
