@@ -12,7 +12,7 @@ import CategoryAssistantsTab from '@/components/assistant/market/CategoryAssista
 import { SettingContainer } from '@/components/settings'
 import { HeaderBar } from '@/components/settings/HeaderBar'
 import { SearchInput } from '@/components/ui/SearchInput'
-import { useAssistants } from '@/hooks/useAssistant'
+import { useBuiltInAssistants } from '@/hooks/useAssistant'
 import { Assistant } from '@/types/assistant'
 import { groupByCategories } from '@/utils/assistants'
 
@@ -31,8 +31,8 @@ export default function AssistantMarketScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
   const [selectedAssistant, setSelectedAssistant] = useState<Assistant | null>(null)
-  //TODO: hook 会反复执行引起性能问题
-  const { assistants: systemAssistants } = useAssistants()
+
+  const { assistants: builtInAssistants } = useBuiltInAssistants()
 
   const handleBottomSheetClose = () => {
     setIsBottomSheetOpen(false)
@@ -77,11 +77,11 @@ export default function AssistantMarketScreen() {
     )
   }
 
-  const baseFilteredAssistants = getBaseFilteredAssistants(systemAssistants, debouncedSearchText)
+  const baseFilteredAssistants = getBaseFilteredAssistants(builtInAssistants, debouncedSearchText)
 
   const assistantGroupsForDisplay = groupByCategories(baseFilteredAssistants)
 
-  const assistantGroupsForTabs = groupByCategories(systemAssistants)
+  const assistantGroupsForTabs = groupByCategories(builtInAssistants)
 
   // 过滤助手逻辑 for CategoryAssistantsTab
   const filterAssistants =
@@ -189,7 +189,6 @@ export default function AssistantMarketScreen() {
           flexDirection="column"
           flex={1}>
           {renderTabList}
-          {/* TODO: 有时可以滚动有时不可以 */}
           {renderTabContents}
         </Tabs>
       </SettingContainer>

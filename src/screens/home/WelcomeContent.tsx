@@ -2,16 +2,16 @@ import { useNavigation } from '@react-navigation/native'
 import { MotiView } from 'moti'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, ScrollView, styled, Text, XStack, YStack } from 'tamagui'
+import { ScrollView, Text, XStack, YStack } from 'tamagui'
 
 import AssistantItemCard from '@/components/assistant/AssistantItemCard'
-import { useAssistants } from '@/hooks/useAssistant'
+import { useBuiltInAssistants } from '@/hooks/useAssistant'
 import { NavigationProps } from '@/types/naviagate'
 
 const WelcomeContent = () => {
   const { t } = useTranslation()
   const navigation = useNavigation<NavigationProps>()
-  const { assistants: systemAssistants } = useAssistants()
+  const { assistants: builtInAssistants } = useBuiltInAssistants()
 
   const handleSeeAllPress = () => {
     navigation.navigate('AssistantMarketScreen')
@@ -37,7 +37,7 @@ const WelcomeContent = () => {
         </XStack>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <XStack gap={20}>
-            {systemAssistants.slice(0, 3).map(assistant => (
+            {builtInAssistants.slice(0, 7).map(assistant => (
               <AssistantItemCard
                 key={assistant.id}
                 assistant={assistant}
@@ -48,31 +48,8 @@ const WelcomeContent = () => {
           </XStack>
         </ScrollView>
       </YStack>
-
-      {/* 主要内容区域 */}
-      <ContentContainer>
-        <Image
-          source={require('@/assets/images/adaptive-icon.png')}
-          width={100}
-          height={100}
-          resizeMode="contain"
-          borderRadius={50}
-          overflow="hidden"
-        />
-        <YStack alignItems="center" space="$2">
-          <Text fontSize="$3" color="$color11" textAlign="center" maxWidth={300}>
-            {t('chat.welcome')}
-          </Text>
-        </YStack>
-      </ContentContainer>
     </MotiView>
   )
 }
-
-const ContentContainer = styled(YStack, {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center'
-})
 
 export default WelcomeContent

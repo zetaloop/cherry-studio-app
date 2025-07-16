@@ -20,7 +20,7 @@ const AssistantItemRow: FC<AssistantItemRowProps> = ({ assistant, setIsBottomShe
   }
 
   return (
-    <CustomRadialGradientBackground style={{ height: 66, radius: 8 }}>
+    <CustomRadialGradientBackground style={{ height: 60, radius: 8 }}>
       <XStack
         paddingVertical={10}
         paddingHorizontal={20}

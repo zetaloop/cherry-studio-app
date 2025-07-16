@@ -1,16 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
 import { BookmarkMinus, ChevronDown, Settings2 } from '@tamagui/lucide-icons'
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { ActivityIndicator } from 'react-native'
 import { Button, Popover, Text, useWindowDimensions, XStack, YStack } from 'tamagui'
 
 import { BlurView } from '@/components/ui/BlurView'
-import { useAssistant } from '@/hooks/useAssistant'
 import { Assistant } from '@/types/assistant'
 import { NavigationProps } from '@/types/naviagate'
-
-import SafeAreaContainer from '../ui/SafeAreaContainer'
 
 interface AssistantDetailsProps {
   assistant: Assistant
@@ -52,15 +47,13 @@ const AssistantDetails: React.FC<AssistantDetailsProps> = ({ assistant, onEdit }
 )
 
 interface AssistantSelectionProps {
-  assistantId: string
+  assistant: Assistant
 }
 
-export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistantId }) => {
-  const { t } = useTranslation()
+export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistant }) => {
   const [open, setOpen] = useState(false)
   const { width } = useWindowDimensions()
   const navigation = useNavigation<NavigationProps>()
-  const { assistant, isLoading } = useAssistant(assistantId)
 
   const navigateToAssistantDetailScreen = () => {
     if (!assistant) return
@@ -69,22 +62,6 @@ export const AssistantSelection: React.FC<AssistantSelectionProps> = ({ assistan
     setTimeout(() => {
       navigation.navigate('AssistantDetailScreen', { assistantId: assistant.id })
     }, 200)
-  }
-
-  if (isLoading) {
-    return (
-      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator />
-      </SafeAreaContainer>
-    )
-  }
-
-  if (!assistant) {
-    return (
-      <SafeAreaContainer style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>{t('assistants.error.notFound')}</Text>
-      </SafeAreaContainer>
-    )
   }
 
   return (
