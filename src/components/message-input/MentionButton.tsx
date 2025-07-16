@@ -4,6 +4,8 @@ import React, { useRef } from 'react'
 import { Button } from 'tamagui'
 
 import { Model } from '@/types/assistant'
+import { useIsDark } from '@/utils'
+import { getGreenColor } from '@/utils/color'
 
 import ModelSheet from '../sheets/ModelSheet'
 
@@ -13,6 +15,7 @@ interface MentionButtonProps {
 }
 
 export const MentionButton: React.FC<MentionButtonProps> = ({ mentions, setMentions }) => {
+  const isDark = useIsDark()
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
   const handlePress = () => {
@@ -25,7 +28,7 @@ export const MentionButton: React.FC<MentionButtonProps> = ({ mentions, setMenti
         chromeless
         size={24}
         icon={<AtSign size={24} />}
-        color={mentions.length > 0 ? '$colorBrand' : undefined}
+        color={mentions.length > 0 ? getGreenColor(isDark, 100) : undefined}
         onPress={handlePress}
       />
 

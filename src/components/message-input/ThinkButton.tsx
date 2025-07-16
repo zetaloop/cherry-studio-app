@@ -3,6 +3,8 @@ import React, { useRef } from 'react'
 import { Button } from 'tamagui'
 
 import { ReasoningEffortOptions } from '@/types/assistant'
+import { useIsDark } from '@/utils'
+import { getGreenColor } from '@/utils/color'
 
 import {
   MdiLightbulbAutoOutline,
@@ -19,6 +21,7 @@ interface ThinkButtonProps {
 }
 
 export const ThinkButton: React.FC<ThinkButtonProps> = ({ reasoningEffort, onReasoningEffortChange }) => {
+  const isDark = useIsDark()
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
   const getIcon = () => {
@@ -54,7 +57,7 @@ export const ThinkButton: React.FC<ThinkButtonProps> = ({ reasoningEffort, onRea
         size={24}
         icon={getIcon()}
         onPress={handlePress}
-        color={reasoningEffort !== undefined ? '$colorBrand' : undefined}
+        color={reasoningEffort !== undefined ? getGreenColor(isDark, 100) : undefined}
       />
 
       <ReasoningSheet ref={bottomSheetModalRef} value={reasoningEffort || 'auto'} onValueChange={handleValueChange} />
