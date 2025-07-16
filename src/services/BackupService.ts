@@ -60,7 +60,7 @@ async function restoreReduxData(data: ExportReduxData, onProgress: OnProgressCal
     (assistant, index) =>
       ({
         ...assistant,
-        type: index === 0 ? 'built_in' : 'external',
+        type: index === 0 ? 'system' : 'external',
         isStar: true
       }) as Assistant
   )
