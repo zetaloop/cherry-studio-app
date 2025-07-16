@@ -34,9 +34,10 @@ import {
   TextDeltaChunk,
   ThinkingDeltaChunk
 } from '@/types/chunk'
-import { MCPCallToolResponse, MCPTool, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
+import { MCPCallToolResponse, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
 import type { Message } from '@/types/message'
 import { AnthropicSdkMessageParam, AnthropicSdkParams, AnthropicSdkRawChunk, AnthropicSdkRawOutput } from '@/types/sdk'
+import { MCPTool } from '@/types/tool'
 import { WebSearchSource } from '@/types/websearch'
 import { addImageFileToContents } from '@/utils/formats'
 import { findFileBlocks, findImageBlocks, getMainTextContent } from '@/utils/messageUtils/find'

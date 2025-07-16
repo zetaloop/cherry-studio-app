@@ -54,7 +54,7 @@ export const ThinkButton: React.FC<ThinkButtonProps> = ({ reasoningEffort, onRea
         size={24}
         icon={getIcon()}
         onPress={handlePress}
-        color={reasoningEffort !== undefined ? 'rgba(0, 185, 107, 1)' : undefined}
+        color={reasoningEffort !== undefined ? '$colorBrand' : undefined}
       />
 
       <ReasoningSheet ref={bottomSheetModalRef} value={reasoningEffort || 'auto'} onValueChange={handleValueChange} />

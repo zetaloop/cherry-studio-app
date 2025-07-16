@@ -1,7 +1,9 @@
+import { ExternalToolResult } from '@/types'
 import { Assistant, Model, Topic, Usage } from '@/types/assistant'
 import { FileType, FileTypes } from '@/types/file'
 import {
   AssistantMessageStatus,
+  CitationMessageBlock,
   Message,
   MessageBlock,
   MessageBlockStatus,
@@ -14,6 +16,7 @@ import { formatErrorMessage, isAbortError } from '@/utils/error'
 import {
   createAssistantMessage,
   createBaseMessageBlock,
+  createCitationBlock,
   createErrorBlock,
   createFileBlock,
   createImageBlock,
@@ -278,7 +281,7 @@ export async function fetchAndProcessAssistantResponseImpl(
     let lastBlockType: MessageBlockType | null = null
     // 专注于块内部的生命周期处理
     let initialPlaceholderBlockId: string | null = null
-    const citationBlockId: string | null = null
+    let citationBlockId: string | null = null
     let mainTextBlockId: string | null = null
     let thinkingBlockId: string | null = null
     const imageBlockId: string | null = null
@@ -463,6 +466,25 @@ export async function fetchAndProcessAssistantResponseImpl(
 
         thinkingBlockId = null
       },
+      onExternalToolInProgress: async () => {
+        console.log('[onExternalToolInProgress] External tool is in progress...')
+        const citationBlock = createCitationBlock(assistantMsgId, {}, { status: MessageBlockStatus.PROCESSING })
+        citationBlockId = citationBlock.id
+        await handleBlockTransition(citationBlock, MessageBlockType.CITATION)
+      },
+      onExternalToolComplete: async (externalToolResult: ExternalToolResult) => {
+        if (citationBlockId) {
+          const changes: Partial<CitationMessageBlock> = {
+            response: externalToolResult.webSearch,
+            knowledge: externalToolResult.knowledge,
+            status: MessageBlockStatus.SUCCESS
+          }
+          await updateOneBlock({ id: citationBlockId, changes })
+        } else {
+          console.error('[onExternalToolComplete] citationBlockId is null. Cannot update.')
+        }
+      },
+
       onError: async error => {
         console.dir(error, { depth: null })
         const isErrorTypeAbort = isAbortError(error)

@@ -1,7 +1,7 @@
 import { GenerateImageParams } from '@/config/models/image'
 import { isOpenAILLMModel } from '@/config/models/webSearch'
 import { Model, Provider } from '@/types/assistant'
-import { MCPCallToolResponse, MCPTool, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
+import { MCPCallToolResponse, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
 import {
   RequestOptions,
   SdkInstance,
@@ -13,6 +13,7 @@ import {
   SdkTool,
   SdkToolCall
 } from '@/types/sdk'
+import { MCPTool } from '@/types/tool'
 
 import { AnthropicAPIClient } from './anthropic/AnthropicAPIClient'
 import { BaseApiClient } from './BaseApiClient'

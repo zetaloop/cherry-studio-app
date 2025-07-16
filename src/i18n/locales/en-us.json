@@ -392,15 +392,13 @@
         }
       },
       "websearch": {
+        "empty": "No Provider yet...",
         "api_service": "API Service",
         "api_host": "API Host",
         "api_host.placeholder": "Please enter API host",
         "api_key": "API Key",
         "api_key.placeholder": "Please enter API key",
         "api_key.get": "Get API Key",
-        "tavily": {
-          "api_key.placeholder": "Enter Tavily API Key"
-        },
         "title": "Web Search",
         "selectPlaceholder": "Please Select Web Search Provider...",
         "searchWithDates": "Search with dates included",
@@ -412,6 +410,7 @@
         "blacklist_description": "Results from the following websites will not appear in search results",
         "subscribe.title": "Blacklist Subscription",
         "provider": {
+          "title": "Web Search Provider",
           "free": {
             "title": "Free Service Providers"
           },

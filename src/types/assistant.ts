@@ -1,6 +1,7 @@
 import OpenAI from 'openai'
 
 import { Message } from './message'
+import { WebSearchProvider } from './websearch'
 
 export type Assistant = {
   id: string
@@ -15,6 +16,7 @@ export type Assistant = {
   settings?: Partial<AssistantSettings>
   /** enableWebSearch 代表使用模型内置网络搜索功能 */
   enableWebSearch?: boolean
+  webSearchProviderId?: WebSearchProvider['id']
   enableGenerateImage?: boolean
   knowledgeRecognition?: 'off' | 'on'
   tags?: string[] // 助手标签

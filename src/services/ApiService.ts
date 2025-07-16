@@ -49,7 +49,8 @@ export async function fetchChatCompletion({
     modelId,
     capabilities
   } = await buildStreamTextParams(messages, assistant, {
-    requestOptions: options
+    requestOptions: options,
+    webSearchProviderId: assistant.webSearchProviderId
   })
 
   const middlewareConfig: AiSdkMiddlewareConfig = {

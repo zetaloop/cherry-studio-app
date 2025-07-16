@@ -25,7 +25,7 @@ export const MentionButton: React.FC<MentionButtonProps> = ({ mentions, setMenti
         chromeless
         size={24}
         icon={<AtSign size={24} />}
-        color={mentions.length > 0 ? 'rgba(0, 185, 107, 1)' : undefined}
+        color={mentions.length > 0 ? '$colorBrand' : undefined}
         onPress={handlePress}
       />
 

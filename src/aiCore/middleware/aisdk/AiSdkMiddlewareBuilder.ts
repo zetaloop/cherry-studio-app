@@ -2,7 +2,7 @@ import { LanguageModelV2Middleware, simulateStreamingMiddleware } from '@cherrys
 
 import { Model, Provider } from '@/types/assistant'
 import { Chunk } from '@/types/chunk'
-import { MCPTool } from '@/types/mcp'
+import { MCPTool } from '@/types/tool'
 
 /**
  * AI SDK 中间件配置项

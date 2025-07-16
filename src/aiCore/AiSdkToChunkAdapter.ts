@@ -6,7 +6,7 @@
 import { TextStreamPart, ToolSet } from '@cherrystudio/ai-core'
 
 import { Chunk, ChunkType } from '@/types/chunk'
-import { MCPTool } from '@/types/mcp'
+import { BaseTool } from '@/types/tool'
 import { WebSearchSource } from '@/types/websearch'
 
 import { ToolCallChunkHandler } from './chunk/handleTooCallChunk'
@@ -31,7 +31,7 @@ export class AiSdkToChunkAdapter {
   toolCallHandler: ToolCallChunkHandler
   constructor(
     private onChunk: (chunk: Chunk) => void,
-    private mcpTools: MCPTool[] = []
+    private mcpTools: BaseTool[] = []
   ) {
     this.toolCallHandler = new ToolCallChunkHandler(onChunk, mcpTools)
   }

@@ -1,9 +1,15 @@
 import { fetch } from 'expo/fetch'
 
 import { WebSearchState } from '@/store/websearch'
-import { WebSearchProvider, WebSearchProviderResponse } from '@/types/websearch'
+import { WebSearchProvider, WebSearchProviderResponse, WebSearchProviderResult } from '@/types/websearch'
 
 import BaseWebSearchProvider from './BaseWebSearchProvider'
+
+interface RawSearchResult {
+  title?: string
+  content?: string
+  url?: string
+}
 
 export default class TavilyProvider extends BaseWebSearchProvider {
   constructor(provider: WebSearchProvider) {
@@ -20,6 +26,8 @@ export default class TavilyProvider extends BaseWebSearchProvider {
   }
 
   public async search(query: string, websearch: WebSearchState): Promise<WebSearchProviderResponse> {
+    const { maxResults, contentLimit } = websearch
+
     try {
       if (!query.trim()) {
         throw new Error('Search query cannot be empty')
@@ -49,15 +57,29 @@ export default class TavilyProvider extends BaseWebSearchProvider {
 
       const result = await response.json()
 
-      return {
-        query: result.query,
-        results: result.results.slice(0, websearch.maxResults).map((res: any) => {
+      const { results: rawResults } = result
+
+      const formattedResults: WebSearchProviderResult[] = rawResults
+        .slice(0, maxResults)
+        .map((res: RawSearchResult) => {
+          const title = res.title || 'No title'
+          const url = res.url || ''
+
+          const content =
+            contentLimit !== undefined && contentLimit > 0
+              ? (res.content || '').slice(0, contentLimit)
+              : res.content || ''
+
           return {
-            title: res.title || 'No title',
-            content: res.content || '',
-            url: res.url || ''
+            title,
+            content,
+            url
           }
         })
+
+      return {
+        query,
+        results: formattedResults
       }
     } catch (error) {
       console.error('Tavily search failed:', error)

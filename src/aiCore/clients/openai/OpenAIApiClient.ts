@@ -22,7 +22,7 @@ import { estimateTextTokens } from '@/services/TokenService'
 import { Assistant, Model, Provider } from '@/types/assistant'
 // For Copilot token
 import { ChunkType } from '@/types/chunk'
-import { MCPCallToolResponse, MCPTool, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
+import { MCPCallToolResponse, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
 import { Message } from '@/types/message'
 import {
   OpenAISdkMessageParam,
@@ -32,6 +32,7 @@ import {
   OpenAISdkRawOutput,
   ReasoningEffortOptionalParams
 } from '@/types/sdk'
+import { MCPTool } from '@/types/tool'
 import { WebSearchSource } from '@/types/websearch'
 import { addImageFileToContents } from '@/utils/formats'
 import { findFileBlocks, findImageBlocks } from '@/utils/messageUtils/find'

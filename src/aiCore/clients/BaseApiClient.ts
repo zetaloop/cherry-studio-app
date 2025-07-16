@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash'
 import { GenerateImageParams } from '@/config/models/image'
 import { DEFAULT_TIMEOUT } from '@/constants'
 import { Assistant, Model, Provider } from '@/types/assistant'
-import { MCPCallToolResponse, MCPTool, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
+import { MCPCallToolResponse, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
 import { Message } from '@/types/message'
 import {
   RequestOptions,
@@ -16,6 +16,7 @@ import {
   SdkTool,
   SdkToolCall
 } from '@/types/sdk'
+import { MCPTool } from '@/types/tool'
 import { addAbortController, removeAbortController } from '@/utils/abortController'
 import { isJSON, parseJSON } from '@/utils/json'
 import { getMainTextContent } from '@/utils/messageUtils/find'

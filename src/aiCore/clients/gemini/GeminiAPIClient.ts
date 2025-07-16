@@ -26,7 +26,7 @@ import { estimateTextTokens } from '@/services/TokenService'
 import { Assistant, Model, Provider } from '@/types/assistant'
 import { ChunkType, LLMWebSearchCompleteChunk } from '@/types/chunk'
 import { FileType } from '@/types/file'
-import { MCPCallToolResponse, MCPTool, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
+import { MCPCallToolResponse, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
 import { Message } from '@/types/message'
 import {
   GeminiOptions,
@@ -36,6 +36,7 @@ import {
   GeminiSdkRawOutput,
   GeminiSdkToolCall
 } from '@/types/sdk'
+import { MCPTool } from '@/types/tool'
 import { WebSearchSource } from '@/types/websearch'
 import { findFileBlocks, findImageBlocks } from '@/utils/messageUtils/find'
 

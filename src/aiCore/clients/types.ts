@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import OpenAI from 'openai'
 
 import { Assistant, Model, Provider } from '@/types/assistant'
-import { MCPTool, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
+import { MCPToolResponse, ToolCallResponse } from '@/types/mcp'
 import {
   AnthropicSdkRawChunk,
   OpenAISdkRawChunk,
@@ -13,6 +13,7 @@ import {
   SdkTool,
   SdkToolCall
 } from '@/types/sdk'
+import { MCPTool } from '@/types/tool'
 
 import { CompletionsParams, GenericChunk } from '../middleware/schemas'
 

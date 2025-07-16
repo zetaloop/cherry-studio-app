@@ -1,11 +1,29 @@
 import { Globe } from '@tamagui/lucide-icons'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { Button } from 'tamagui'
 
-export const WebsearchButton: React.FC = () => {
-  const { t } = useTranslation()
-  const globeIcon = <Globe size={24} />
+import { Assistant } from '@/types/assistant'
 
-  return <Button chromeless size={24} icon={globeIcon} />
+interface WebsearchButtonProps {
+  assistant: Assistant
+  updateAssistant: (assistant: Assistant) => Promise<void>
+}
+
+export const WebsearchButton: React.FC<WebsearchButtonProps> = ({ assistant, updateAssistant }) => {
+  const handlePress = () => {
+    updateAssistant({
+      ...assistant,
+      enableWebSearch: !assistant.enableWebSearch
+    })
+  }
+
+  return (
+    <Button
+      chromeless
+      size={24}
+      icon={<Globe size={24} />}
+      onPress={handlePress}
+      color={assistant.enableWebSearch ? '$colorBrand' : undefined}
+    />
+  )
 }

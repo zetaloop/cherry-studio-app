@@ -24,6 +24,8 @@ export const webSearchPlugin = (config: WebSearchPluginConfig = DEFAULT_WEB_SEAR
       const { providerId } = context
 
       // console.log('providerId', providerId)
+      // const modelToProviderId = getModelToProviderId(modelId)
+      // console.log('modelToProviderId', modelToProviderId)
       switch (providerId) {
         case 'openai': {
           if (config.openai) {
@@ -73,13 +75,14 @@ export const webSearchPlugin = (config: WebSearchPluginConfig = DEFAULT_WEB_SEAR
         //   break
         // }
       }
+      // console.log('params', params)
 
       return params
     }
   })
 
 // 导出类型定义供开发者使用
-export type { WebSearchPluginConfig } from './helper'
+export type { AnthropicSearchInput, AnthropicSearchOutput, WebSearchPluginConfig } from './helper'
 
 // 默认导出
 export default webSearchPlugin

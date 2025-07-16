@@ -90,7 +90,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ topic, updateAssista
         <XStack justifyContent="space-between" alignItems="center">
           <XStack gap={5} alignItems="center">
             <AddAssetsButton files={files} setFiles={setFiles} />
-            <WebsearchButton />
+            <WebsearchButton assistant={assistant} updateAssistant={updateAssistant} />
             {isReasoning && (
               <ThinkButton
                 reasoningEffort={assistant.settings?.reasoning_effort}

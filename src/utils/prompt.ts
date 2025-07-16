@@ -1,5 +1,5 @@
 import { Assistant } from '@/types/assistant'
-import { MCPTool } from '@/types/mcp'
+import { MCPTool } from '@/types/tool'
 
 export const buildSystemPrompt = async (
   userSystemPrompt: string,

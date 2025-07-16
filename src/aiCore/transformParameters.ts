@@ -33,12 +33,15 @@ import { isWebSearchModel } from '@/config/models/webSearch'
 import { DEFAULT_MAX_TOKENS, defaultTimeout } from '@/constants'
 import { getAssistantSettings, getDefaultModel } from '@/services/AssistantService'
 import { Assistant, Model } from '@/types/assistant'
+import { ExtractResults } from '@/types/extract'
 import { FileTypes } from '@/types/file'
-import { MCPTool } from '@/types/mcp'
 import { FileMessageBlock, ImageMessageBlock, Message, ThinkingMessageBlock } from '@/types/message'
+import { MCPTool } from '@/types/tool'
 import { findFileBlocks, findImageBlocks, findThinkingBlocks, getMainTextContent } from '@/utils/messageUtils/find'
 import { buildSystemPrompt } from '@/utils/prompt'
 
+import { AiSdkTool } from './tools/types'
+import { webSearchTool } from './tools/WebSearchTool'
 import { buildProviderOptions } from './utils/reasoning'
 
 const { tool } = aiSdk
@@ -106,6 +109,40 @@ export async function extractFileContent(message: Message): Promise<string> {
   }
 
   return ''
+}
+
+/**
+ * 提取外部工具搜索关键词和问题
+ * 从用户消息中提取用于网络搜索和知识库搜索的关键词
+ */
+export async function extractSearchKeywords(
+  lastUserMessage: Message,
+  assistant: Assistant,
+  options: {
+    shouldWebSearch?: boolean
+    shouldKnowledgeSearch?: boolean
+    lastAnswer?: Message
+  } = {}
+): Promise<ExtractResults | undefined> {
+  // todo
+  const { shouldWebSearch = false, shouldKnowledgeSearch = false, lastAnswer } = options
+
+  if (!lastUserMessage) return undefined
+
+  return await getFallbackResult()
+
+  async function getFallbackResult(): Promise<ExtractResults> {
+    const fallbackContent = await getMainTextContent(lastUserMessage)
+    return {
+      websearch: shouldWebSearch ? { question: [fallbackContent || 'search'] } : undefined,
+      knowledge: shouldKnowledgeSearch
+        ? {
+            question: [fallbackContent || 'search'],
+            rewrite: fallbackContent || 'search'
+          }
+        : undefined
+    }
+  }
 }
 
 /**
@@ -250,6 +287,7 @@ export async function buildStreamTextParams(
   options: {
     mcpTools?: MCPTool[]
     enableTools?: boolean
+    webSearchProviderId?: string
     requestOptions?: {
       signal?: AbortSignal
       timeout?: number
@@ -261,7 +299,7 @@ export async function buildStreamTextParams(
   modelId: string
   capabilities: { enableReasoning?: boolean; enableWebSearch?: boolean; enableGenerateImage?: boolean }
 }> {
-  const { mcpTools, enableTools } = options
+  const { mcpTools, enableTools, webSearchProviderId } = options
 
   const model = assistant.model || getDefaultModel()
 
@@ -284,6 +322,8 @@ export async function buildStreamTextParams(
     (isSupportedDisableGenerationModel(model) ? assistant.enableGenerateImage || false : true)
 
   // 构建系统提示
+  const tools: Record<string, AiSdkTool> = {}
+
   // const { tools } = setupToolsConfig({
   //   mcpTools,
   //   model,
@@ -297,6 +337,12 @@ export async function buildStreamTextParams(
     enableGenerateImage
   })
 
+  if (webSearchProviderId) {
+    tools['builtin_web_search'] = webSearchTool(webSearchProviderId)
+  }
+
+  console.log('tools', tools)
+
   // 构建基础参数
   const params: StreamTextParams = {
     messages: sdkMessages,
@@ -307,7 +353,7 @@ export async function buildStreamTextParams(
     abortSignal: options.requestOptions?.signal,
     headers: options.requestOptions?.headers,
     providerOptions,
-    // tools,
+    tools,
     stopWhen: stepCountIs(10)
   }
 

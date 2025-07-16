@@ -8,7 +8,7 @@ import { isVisionModel } from '@/config/models/vision'
 import { estimateTextTokens } from '@/services/TokenService'
 import { Model, Provider } from '@/types/assistant'
 import { ChunkType } from '@/types/chunk'
-import { MCPCallToolResponse, MCPTool, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
+import { MCPCallToolResponse, MCPToolResponse, ToolCallResponse } from '@/types/mcp'
 import { Message } from '@/types/message'
 import {
   OpenAIResponseSdkMessageParam,
@@ -18,6 +18,7 @@ import {
   OpenAIResponseSdkTool,
   OpenAIResponseSdkToolCall
 } from '@/types/sdk'
+import { MCPTool } from '@/types/tool'
 import { WebSearchSource } from '@/types/websearch'
 import { addImageFileToContents } from '@/utils/formats'
 import { findFileBlocks, findImageBlocks } from '@/utils/messageUtils/find'
