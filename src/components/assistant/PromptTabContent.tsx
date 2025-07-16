@@ -1,3 +1,4 @@
+import { MotiView } from 'moti'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input, TextArea, YStack } from 'tamagui'
@@ -14,7 +15,17 @@ export function PromptTabContent({ assistant, updateAssistant }: PromptTabConten
   const { t } = useTranslation()
 
   return (
-    <YStack flex={1} gap={30}>
+    <MotiView
+      style={{ flex: 1, gap: 30 }}
+      from={{ opacity: 0, translateY: 10 }}
+      animate={{
+        translateY: 0,
+        opacity: 1
+      }}
+      exit={{ opacity: 1, translateY: -10 }}
+      transition={{
+        type: 'timing'
+      }}>
       <YStack width="100%" gap={8}>
         <SettingRowTitle paddingHorizontal={10}>{t('common.name')}</SettingRowTitle>
         <Input
@@ -37,6 +48,6 @@ export function PromptTabContent({ assistant, updateAssistant }: PromptTabConten
           verticalAlign="top"
         />
       </YStack>
-    </YStack>
+    </MotiView>
   )
 }

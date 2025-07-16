@@ -1,3 +1,4 @@
+import * as FileSystem from 'expo-file-system'
 import { File, Paths } from 'expo-file-system/next'
 import { useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
@@ -32,6 +33,7 @@ export function useWebSocket() {
   // 写入文件的函数
   const writeZipFile = async () => {
     try {
+      await FileSystem.makeDirectoryAsync(Paths.join(Paths.cache, 'Files'), { intermediates: true })
       // 文件路径 Paths.cache + zipFileInfo.current.filename
       const file = new File(Paths.join(Paths.cache, 'Files'), zipFileInfo.current.filename)
 

@@ -1,12 +1,14 @@
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { ChevronRight } from '@tamagui/lucide-icons'
+import { MotiView } from 'moti'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Text, XStack, YStack } from 'tamagui'
+import { Button, Input, Text, XStack } from 'tamagui'
 
 import { SettingGroup, SettingRow } from '@/components/settings'
 import { isReasoningModel } from '@/config/models/reasoning'
 import { Assistant, AssistantSettings, Model } from '@/types/assistant'
+import { useIsDark } from '@/utils'
 
 import ModelSheet from '../sheets/ModelSheet'
 import { CustomSlider } from '../ui/CustomSlider'
@@ -20,6 +22,7 @@ interface ModelTabContentProps {
 
 export function ModelTabContent({ assistant, updateAssistant }: ModelTabContentProps) {
   const { t } = useTranslation()
+  const isDark = useIsDark()
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const [model, setModel] = useState<Model[]>(assistant?.model ? [assistant.model] : [])
@@ -62,27 +65,46 @@ export function ModelTabContent({ assistant, updateAssistant }: ModelTabContentP
   const settings = assistant.settings || {}
 
   return (
-    <YStack flex={1} gap={30}>
+    <MotiView
+      style={{ flex: 1, gap: 30 }}
+      from={{ opacity: 0, translateY: 10 }}
+      animate={{
+        translateY: 0,
+        opacity: 1
+      }}
+      exit={{ opacity: 1, translateY: -10 }}
+      transition={{
+        type: 'timing'
+      }}>
       <SettingGroup>
-        <Button chromeless width="100%" onPress={handlePress}>
-          <XStack flex={1} alignItems="center" overflow="hidden" justifyContent="space-between">
-            {model.length > 0 ? (
-              <>
-                <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
-                  {t(`provider.${model[0].provider}`)}
+        <SettingRow>
+          <Button
+            chromeless
+            width="100%"
+            height="100%"
+            paddingHorizontal={16}
+            paddingVertical={15}
+            iconAfter={<ChevronRight size={16} />}
+            backgroundColor={isDark ? '$uiCardDark' : '$uiCardLight'}
+            onPress={handlePress}>
+            <XStack flex={1} alignItems="center" overflow="hidden" justifyContent="space-between">
+              {model.length > 0 ? (
+                <>
+                  <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
+                    {t(`provider.${model[0].provider}`)}
+                  </Text>
+                  <Text flexShrink={0} numberOfLines={1} maxWidth="60%" ellipsizeMode="tail">
+                    {model[0].name}
+                  </Text>
+                </>
+              ) : (
+                <Text flex={1} numberOfLines={1} ellipsizeMode="tail">
+                  {t('settings.models.empty')}
                 </Text>
-                <Text flexShrink={0} numberOfLines={1} maxWidth="60%" ellipsizeMode="tail">
-                  {model[0].name}
-                </Text>
-              </>
-            ) : (
-              <Text flex={1} numberOfLines={1} ellipsizeMode="tail">
-                {t('settings.models.empty')}
-              </Text>
-            )}
-          </XStack>
-          <ChevronRight size={16} />
-        </Button>
+              )}
+            </XStack>
+          </Button>
+        </SettingRow>
         <SettingRow>
           <CustomSlider
             label={t('assistants.settings.temperature')}
@@ -150,6 +172,6 @@ export function ModelTabContent({ assistant, updateAssistant }: ModelTabContentP
         )}
       </SettingGroup>
       <ModelSheet ref={bottomSheetModalRef} mentions={model} setMentions={setModel} multiple={false} />
-    </YStack>
+    </MotiView>
   )
 }

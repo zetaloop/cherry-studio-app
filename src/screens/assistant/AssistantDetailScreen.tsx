@@ -89,7 +89,7 @@ export default function AssistantDetailScreen() {
                 <Text fontSize={12}>{t('common.tool')}</Text>
               </StyledTab>
             </Tabs.List>
-            <YStack flex={1} paddingTop={30}>
+            <YStack flex={1} paddingTop={10}>
               <Tabs.Content value="prompt" flex={1} gap={30}>
                 <PromptTabContent assistant={assistant} updateAssistant={updateAssistant} />
               </Tabs.Content>

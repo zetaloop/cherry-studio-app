@@ -1,16 +1,16 @@
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { ChevronRight } from '@tamagui/lucide-icons'
+import { MotiView } from 'moti'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator } from 'react-native'
 import { Button, Text, XStack, YStack } from 'tamagui'
 
 import { useWebsearchProviders } from '@/hooks/useWebsearchProviders'
 import { Assistant } from '@/types/assistant'
+import { useIsDark } from '@/utils'
 
-import { SettingGroup } from '../settings'
+import { SettingGroup, SettingRow, SettingRowTitle } from '../settings'
 import WebsearchSheet from '../sheets/WebsearchSheet'
-import SafeAreaContainer from '../ui/SafeAreaContainer'
 
 interface ToolTabContentProps {
   assistant: Assistant
@@ -19,8 +19,9 @@ interface ToolTabContentProps {
 
 export function ToolTabContent({ assistant, updateAssistant }: ToolTabContentProps) {
   const { t } = useTranslation()
+  const isDark = useIsDark()
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-  const { apiProviders, isLoading } = useWebsearchProviders()
+  const { apiProviders } = useWebsearchProviders()
   const [providerId, setProviderId] = useState<string | undefined>(assistant.webSearchProviderId)
 
   useEffect(() => {
@@ -34,38 +35,50 @@ export function ToolTabContent({ assistant, updateAssistant }: ToolTabContentPro
     bottomSheetModalRef.current?.present()
   }
 
-  if (isLoading) {
-    return (
-      <SafeAreaContainer style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator />
-      </SafeAreaContainer>
-    )
-  }
-
   const provider = apiProviders.find(p => p.id === providerId)
 
   return (
-    <YStack flex={1} gap={30}>
+    <MotiView
+      style={{ flex: 1, gap: 30 }}
+      from={{ opacity: 0, translateY: 10 }}
+      animate={{
+        translateY: 0,
+        opacity: 1
+      }}
+      exit={{ opacity: 1, translateY: -10 }}
+      transition={{
+        type: 'timing'
+      }}>
       <SettingGroup>
-        <Button chromeless width="100%" onPress={handlePress}>
-          <XStack flex={1} alignItems="center" overflow="hidden" justifyContent="space-between">
-            <Text flexShrink={1} numberOfLines={1} ellipsizeMode="tail">
-              {t('settings.websearch.provider.title')}
-            </Text>
-            <XStack maxWidth="45%" gap={5}>
-              {provider ? (
-                <Text flexShrink={0} numberOfLines={1} ellipsizeMode="tail">
-                  {provider.name}
-                </Text>
-              ) : (
-                <Text flex={1} numberOfLines={1} ellipsizeMode="tail">
-                  {t('settings.websearch.empty')}
-                </Text>
-              )}
-              <ChevronRight size={16} />
-            </XStack>
-          </XStack>
-        </Button>
+        <YStack flex={1}>
+          <SettingRowTitle paddingHorizontal={16}>{t('settings.websearch.provider.title')}</SettingRowTitle>
+
+          <SettingRow>
+            <Button
+              chromeless
+              width="100%"
+              height="100%"
+              paddingHorizontal={16}
+              paddingVertical={15}
+              iconAfter={<ChevronRight size={16} />}
+              backgroundColor={isDark ? '$uiCardDark' : '$uiCardLight'}
+              onPress={handlePress}>
+              <XStack flex={1} alignItems="center" overflow="hidden" justifyContent="space-between">
+                <XStack maxWidth="45%" gap={5}>
+                  {provider ? (
+                    <Text flexShrink={0} numberOfLines={1} ellipsizeMode="tail">
+                      {provider.name}
+                    </Text>
+                  ) : (
+                    <Text flex={1} numberOfLines={1} ellipsizeMode="tail">
+                      {t('settings.websearch.empty')}
+                    </Text>
+                  )}
+                </XStack>
+              </XStack>
+            </Button>
+          </SettingRow>
+        </YStack>
       </SettingGroup>
       <WebsearchSheet
         ref={bottomSheetModalRef}
@@ -73,6 +86,6 @@ export function ToolTabContent({ assistant, updateAssistant }: ToolTabContentPro
         setProviderId={setProviderId}
         providers={apiProviders}
       />
-    </YStack>
+    </MotiView>
   )
 }
