@@ -81,10 +81,10 @@ export async function restore(backupFile: Omit<FileType, 'md5'>, onProgress: OnP
 
   try {
     const dataDir = Paths.join(fileStorageDir, backupFile.name.replace('.zip', ''))
-    const backupDir = new Directory(dataDir)
-    await unzip(backupFile.path, backupDir.uri)
+    await unzip(backupFile.path, fileStorageDir.uri)
+    const dataFile = new File(dataDir, 'data.json')
 
-    const data = JSON.parse(new File(dataDir, 'data.json').text()) as BackupData
+    const data = JSON.parse(dataFile.text()) as BackupData
 
     const { reduxData, indexedData } = transformBackupData(data)
 
