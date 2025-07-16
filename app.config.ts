@@ -1,6 +1,6 @@
 export default {
   expo: {
-    name: 'cherry-studio-app',
+    name: 'Cherry Studio',
     slug: 'cherry-studio',
     version: '1.0.0',
     orientation: 'portrait',
