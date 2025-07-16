@@ -125,11 +125,11 @@ export function useWebSocket() {
       // 文件接收结束
       socket.current.on('zip-file-end', async () => {
         console.log('zip-file-end')
-        setStatus(WebSocketStatus.ZIP_FILE_END)
-        setProgress(100)
 
         // 写入文件
         await writeZipFile()
+        setStatus(WebSocketStatus.ZIP_FILE_END)
+        setProgress(100)
       })
     } catch (error) {
       console.error('Failed to get IP address:', error)

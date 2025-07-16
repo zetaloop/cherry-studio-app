@@ -31,7 +31,7 @@ export default function LandropSettingsScreen() {
   // 收到文件名后开始恢复
   useEffect(() => {
     const handleRestore = async () => {
-      if (filename) {
+      if (status === WebSocketStatus.ZIP_FILE_END) {
         const zip = new File(Paths.join(Paths.cache, 'Files'), filename)
         await startRestore({
           name: zip.name,
@@ -43,7 +43,7 @@ export default function LandropSettingsScreen() {
     }
 
     handleRestore()
-  }, [filename, startRestore])
+  }, [filename, startRestore, status])
 
   const handleQRCodeScanned = (ip: string) => {
     setScannedIP(ip)
@@ -59,7 +59,7 @@ export default function LandropSettingsScreen() {
     <SafeAreaContainer style={{ flex: 1, backgroundColor: theme.background.val }}>
       <HeaderBar title={t('settings.data.landrop.scan_qr_code.title')} onBackPress={() => navigation.goBack()} />
 
-      {!isModalOpen && <QRCodeScanner onQRCodeScanned={handleQRCodeScanned} />}
+      {!isModalOpen && !scannedIP && <QRCodeScanner onQRCodeScanned={handleQRCodeScanned} />}
       <RestoreProgressModal
         isOpen={isModalOpen}
         steps={restoreSteps}
