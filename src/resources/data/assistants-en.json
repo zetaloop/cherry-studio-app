@@ -5,7 +5,7 @@
     "emoji": "😀",
     "prompt": "",
     "topics": [],
-    "type": "assistant"
+    "type": "built_in"
   },
   {
     "id": "translate",
@@ -13,7 +13,7 @@
     "emoji": "🌐",
     "prompt": "You are a translation assistant. Please translate the following text into English.",
     "topics": [],
-    "type": "assistant"
+    "type": "built_in"
   },
   {
     "id": "topic_naming",
@@ -21,7 +21,7 @@
     "emoji": "🏷️",
     "prompt": "You are a topic naming assistant. Please suggest a name for the following topic.",
     "topics": [],
-    "type": "assistant"
+    "type": "built_in"
   },
   {
     "id": "1",

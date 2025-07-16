@@ -1,6 +1,7 @@
 import { Directory, File, Paths } from 'expo-file-system/next'
 import { unzip } from 'react-native-zip-archive'
 
+import { Assistant } from '@/types/assistant'
 import { BackupData, ExportIndexedData, ExportReduxData } from '@/types/databackup'
 import { FileType } from '@/types/file'
 import { Message } from '@/types/message'
@@ -52,7 +53,18 @@ async function restoreReduxData(data: ExportReduxData, onProgress: OnProgressCal
   await sleep(1000) // Mock delay
 
   onProgress({ step: 'restore_assistants', status: 'in_progress' })
-  await upsertAssistants([data.assistants.defaultAssistant, ...data.assistants.assistants])
+  const allSourceAssistants = [data.assistants.defaultAssistant, ...data.assistants.assistants]
+
+  // default assistant为built_in, 其余为external
+  const assistants = allSourceAssistants.map(
+    (assistant, index) =>
+      ({
+        ...assistant,
+        type: index === 0 ? 'built_in' : 'external',
+        isStar: true
+      }) as Assistant
+  )
+  await upsertAssistants(assistants)
   onProgress({ step: 'restore_assistants', status: 'completed' })
   await sleep(1000) // Mock delay
 

@@ -8,7 +8,7 @@ export type Assistant = {
   name: string
   prompt: string
   topics: Topic[]
-  type: string
+  type: 'built_in' | 'external'
   emoji?: string
   description?: string
   model?: Model

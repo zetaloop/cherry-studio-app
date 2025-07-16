@@ -7,7 +7,7 @@ export const assistants = sqliteTable('assistants', {
   // knowledgeIds: text('knowledge_ids'),
   // todo add foreign key
   // .references(() => knowledges.id),
-  type: text('type').notNull().default('assistant'),
+  type: text('type').notNull().default('built_in'),
   emoji: text('emoji'),
   description: text('description'),
   model: text('model'),

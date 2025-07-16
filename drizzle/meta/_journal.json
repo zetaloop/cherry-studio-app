@@ -148,6 +148,13 @@
       "when": 1752645748731,
       "tag": "0020_left_makkari",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1752646809022,
+      "tag": "0021_wandering_talkback",
+      "breakpoints": true
     }
   ]
 }

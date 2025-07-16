@@ -22,6 +22,7 @@ import m0017 from './0017_bright_titanium_man.sql';
 import m0018 from './0018_fat_iron_monger.sql';
 import m0019 from './0019_careful_lady_ursula.sql';
 import m0020 from './0020_left_makkari.sql';
+import m0021 from './0021_wandering_talkback.sql';
 
   export default {
     journal,
@@ -46,7 +47,8 @@ m0016,
 m0017,
 m0018,
 m0019,
-m0020
+m0020,
+m0021
     }
   }
   
