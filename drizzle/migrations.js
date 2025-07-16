@@ -21,7 +21,7 @@ import m0016 from './0016_mute_phantom_reporter.sql';
 import m0017 from './0017_bright_titanium_man.sql';
 import m0018 from './0018_fat_iron_monger.sql';
 import m0019 from './0019_careful_lady_ursula.sql';
-import m0020 from './0020_hard_sprite.sql';
+import m0020 from './0020_left_makkari.sql';
 
   export default {
     journal,

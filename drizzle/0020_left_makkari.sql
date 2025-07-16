@@ -1,0 +1,1 @@
+ALTER TABLE `assistants` ADD `websearch_provider_id` text;

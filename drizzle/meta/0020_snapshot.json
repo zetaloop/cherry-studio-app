@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "6e972ce1-5411-49c9-a034-c0225591612d",
+  "id": "84842e83-b3db-4580-b6e5-e73d7eb0223f",
   "prevId": "60275439-de29-4534-a93b-b9f10e85f70d",
   "tables": {
     "assistants": {
@@ -128,30 +128,9 @@
             "id"
           ],
           "isUnique": true
-        },
-        "idx_assistant_websearch_provider_id": {
-          "name": "idx_assistant_websearch_provider_id",
-          "columns": [
-            "id"
-          ],
-          "isUnique": false
         }
       },
-      "foreignKeys": {
-        "assistants_websearch_provider_id_websearch_providers_id_fk": {
-          "name": "assistants_websearch_provider_id_websearch_providers_id_fk",
-          "tableFrom": "assistants",
-          "tableTo": "websearch_providers",
-          "columnsFrom": [
-            "websearch_provider_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "cascade"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
