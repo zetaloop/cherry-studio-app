@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native'
 import { File, Paths } from 'expo-file-system/next'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react' // Import useRef
 import { useTranslation } from 'react-i18next'
+import { Alert } from 'react-native'
 import { useTheme } from 'tamagui'
 
 import { RestoreProgressModal } from '@/components/settings/data/RestoreProgressModal'
@@ -21,14 +22,17 @@ export default function LandropSettingsScreen() {
   const [scannedIP, setScannedIP] = useState<string | null>(null)
   const { isModalOpen, restoreSteps, overallStatus, startRestore, closeModal } = useRestore()
 
-  // 监听 WebSocket 状态变化，在断开连接时重置扫描状态
+  const hasScannedRef = useRef(false)
+
   useEffect(() => {
     if (status === WebSocketStatus.DISCONNECTED) {
       setScannedIP(null)
+
+      hasScannedRef.current = false
     }
   }, [status])
 
-  // 收到文件名后开始恢复
+  // 文件发送完毕后开始恢复
   useEffect(() => {
     const handleRestore = async () => {
       if (status === WebSocketStatus.ZIP_FILE_END) {
@@ -46,8 +50,18 @@ export default function LandropSettingsScreen() {
   }, [filename, startRestore, status])
 
   const handleQRCodeScanned = (ip: string) => {
+    if (hasScannedRef.current) {
+      return
+    }
+
+    hasScannedRef.current = true
+
     setScannedIP(ip)
     connect(ip)
+    Alert.alert(
+      t('settings.data.landrop.scan_qr_code.success'),
+      t('settings.data.landrop.scan_qr_code.success_description')
+    )
   }
 
   const handleModalClose = () => {

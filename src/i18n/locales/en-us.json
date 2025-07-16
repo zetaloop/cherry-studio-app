@@ -205,7 +205,9 @@
           "title": "Landrop",
           "scan_qr_code": {
             "title": "Scan QR Code",
-            "description": "Scan QR Code from Cherry Studio"
+            "description": "Scan QR Code from Cherry Studio",
+            "success": "Connection Successful 🎉",
+            "success_description": "You can now Click Send Button to Restore Data!"
           },
           "status": {
             "title": "Connection Status",
